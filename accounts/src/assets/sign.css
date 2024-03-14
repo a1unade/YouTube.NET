@@ -86,11 +86,17 @@ h1{
 }
 
 .right-button{
-    background-color:  rgb(26, 115, 232);
+    background-color: rgb(26, 115, 232);
     color: #fff;
     border-radius: 5px;
     max-height: 38px;
 }
+
+.right-button:hover{
+    background-color: rgb(20, 100, 200);
+    box-shadow: 2px 2px 4px #ccc;
+}
+
 
 
   
