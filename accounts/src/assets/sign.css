@@ -1,0 +1,98 @@
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    height: 100vh;
+    max-width: 450px; 
+}
+
+h1{
+    margin-bottom: 0px;
+}
+
+.sign-container{
+    padding: 48px 40px 36px;
+    color: rgb(32,33,36);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+.sign-container h1{
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.sign-container span{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.input-container{
+    text-align: left;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-container a{
+    font-size: 14px;
+    color: rgb(26, 115, 232);
+}
+
+.input-container input{
+    height: 54px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    padding-left: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.input-container input:focus {
+    border: 1px solid rgb(26, 115, 232);
+}
+
+.input-container input:focus::placeholder {
+    color: transparent;
+}
+
+.sign-buttons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.left-button{
+    background-color: transparent;
+    color: rgb(26, 115, 232);
+    font-size: 14px;
+    border: none;
+    max-height: 35px;
+    min-width: 120px;
+    padding: 0px;
+    border-radius: 3px;
+}
+
+.left-button:hover{
+    border: none;
+    background-color: #eee;
+    color: #6200ee;
+}
+
+.right-button{
+    background-color:  rgb(26, 115, 232);
+    color: #fff;
+    border-radius: 5px;
+    max-height: 38px;
+}
+
+
+  
+
+
