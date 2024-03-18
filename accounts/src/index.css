@@ -1,7 +1,7 @@
 :root {
   line-height: 1.5;
   font-weight: 400;
-  font-family: "Google Sans","Noto Sans Myanmar UI",arial,sans-serif;
+  font-family: "Google Sans", "Noto Sans Myanmar UI", arial, sans-serif;
   color: rgba(255, 255, 255, 0.87);
 
   font-synthesis: none;
@@ -15,6 +15,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -37,9 +38,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -49,9 +52,11 @@ button:focus-visible {
   :root {
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }

@@ -1,30 +1,38 @@
-import React from "react";
-import '../../assets/sign.css'
-import Google_logo from "./components/Google_logo";
+import React, { useState } from "react";
+import '../../assets/sign.css';
+import Google_logo from '../components/Google_logo';
+import Email from "./components/Email";
+import Password from "./components/Password";
+import Footer from "../components/Footer";
 
 const Sign = () => {
-    return(
+    const [containerContent, setContainerContent] = useState(0);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const renderContainerContent = () => {
+        switch (containerContent) {
+            case 0:
+                return (
+                    <Email setEmail={setEmail} email={email} setContainerContent={setContainerContent} containerContent={containerContent} />
+                );
+            case 1:
+                return (
+                    <Password setContainerContent={setContainerContent} containerContent={containerContent} setPassword={setPassword} email={email} password={password} />
+                );
+            default:
+                return null;
+        }
+    }
+
+    return (
         <>
             <div className="content">
                 <div className="sign-container">
-                    <div>
-                        <Google_logo />
-                        <h1>Вход</h1>
-                        <span>Перейдите на YouTube</span>
-                    </div>
-                    <div className="input-container">
-                        <input type="email" placeholder="Телефон или адрес эл. почты"></input>
-                        <a href=""><b>Забыли адрес электронной почты?</b></a>
-                    </div>
-                    <div className="input-container">
-                        <span>Работаете на чужом компьютере? Включите гостевой режим.</span>
-                        <a href=""><b>Подробнее об использовании гостевого режима</b></a>
-                    </div>
-                    <div className="sign-buttons">
-                        <button className="left-button">Создать аккаунт</button>
-                        <button className="right-button">Далее</button>
-                    </div>
+                    <Google_logo />
+                    {renderContainerContent()}
                 </div>
+                <Footer />
             </div>
         </>
     );
