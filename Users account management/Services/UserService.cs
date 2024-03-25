@@ -34,6 +34,7 @@ namespace Users_account_management.Services
             var newUser = mapper.Map<User>(userDto);
             dbContext.Users.Add(newUser);
             dbContext.SaveChanges();
+            
             return true;
         }
 
