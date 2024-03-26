@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import '../../assets/player.css';
-import { useParams } from "react-router-dom";
-import apiClient from "../../utils/apiClient";
+import { useParams } from 'react-router-dom';
+import apiClient from '../../utils/apiClient';
 
 const Player = () => {
     const [video, setVideo] = useState(null);
@@ -19,9 +19,9 @@ const Player = () => {
     console.log(video)
     return (
         <>
-            <div className="content">
+            <div className='content'>
                 <div>
-                    <iframe width="1080" height="720" src={`https://www.youtube.com/embed/${id}?autoplay=1`} frameBorder={0} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScree=""></iframe>
+                    <iframe width='1080' height='720' src={`https://www.youtube.com/embed/${id}?autoplay=1`} frameBorder={0} allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowFullScree=''></iframe>
                 </div>
             </div>
         </>

@@ -3,12 +3,22 @@ body {
     font-family: "Roboto", "Arial", sans-serif;
 }
 
+.main-page{
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+}
+
+.main-page h3{
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
 .content {
     display: flex;
     max-width: fit-content;
     justify-content: center;
     align-items: center;
-    margin-right: 50px;
 }
 
 .videos-list {
@@ -20,7 +30,7 @@ body {
 .video {
     display: flex;
     flex-direction: column;
-    width: 350px;
+    width: 320px;
     height: 300px;
     margin-left: 40px;
     margin-bottom: 40px;
@@ -58,7 +68,6 @@ body {
 .video-info {
     display: flex;
     flex-direction: row;
-    padding: 10px;
 }
 
 .video-details {
@@ -75,7 +84,7 @@ body {
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
-    margin-right: 20px;
+    cursor: pointer;
 }
 
 .author-image img {
@@ -94,8 +103,12 @@ body {
     margin: 0;
 }
 
+.info ul li {
+    max-width: 200px;
+}
+
 .info ul li:not(:last-child) {
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 .info ul li:first-child {
@@ -103,5 +116,5 @@ body {
 }
 
 .info ul li:last-child {
-    margin-left: 10px;
+    margin-left: 12px;
 }
