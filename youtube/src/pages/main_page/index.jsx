@@ -19,6 +19,21 @@ const Main = () => {
     }, []);
 
     const toggleMenu = () => {
+        if (isOpen) {
+            document.getElementById('main-page').style.marginLeft = '60px';
+            var videos = document.getElementsByClassName('video');
+            for (var i = 0; i < videos.length; i++) {
+                videos[i].style.width = '360px';
+                videos[i].style.height = '320px';
+            }
+        } else {
+            document.getElementById('main-page').style.marginLeft = '220px';
+            var videos = document.getElementsByClassName('video');
+            for (var i = 0; i < videos.length; i++) {
+                videos[i].style.width = '320px';
+                videos[i].style.height = '300px';
+            }
+        }
         setOpen(!isOpen);
     }
 
