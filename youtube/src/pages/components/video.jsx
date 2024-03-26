@@ -27,7 +27,7 @@ const Video = ({ video }) => {
             <>
                 <div className="video">
                     <div className="preview" id={`preview-${video.id}`} onClick={() => navigate(`/watch/${video.id}`)}>
-                        <img src={video.snippet.thumbnails.maxres.url}></img>
+                        <img src={video.snippet.thumbnails.medium.url}></img>
                     </div>
                     {/* player
 
@@ -35,9 +35,11 @@ const Video = ({ video }) => {
                         <iframe width="350" height="197" src={`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&modestbranding=1`} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
                     </div> */
                     }
-                    <div className="video-info">
-                        <div className="author-image" onClick={() => navigate(`/channel/${channel.snippet.customUrl}`)}>
-                            <img src={channel.snippet.thumbnails.high.url} alt='' />
+                    <div className="video-info" title={video.snippet.localized.title}>
+                        <div style={{ marginRight: 20 }}>
+                            <div className="author-image" onClick={() => navigate(`/channel/${channel.snippet.customUrl}`)}>
+                                <img src={channel.snippet.thumbnails.high.url} alt='' />
+                            </div>
                         </div>
                         <div className="video-details">
                             <div className="video-name">
