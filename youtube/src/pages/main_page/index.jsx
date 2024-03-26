@@ -19,12 +19,6 @@ const Main = () => {
     }, []);
 
     const toggleMenu = () => {
-        if (isOpen) {
-            document.getElementById('main-page').style = 'margin-left: 60px';
-        }
-        else {
-            document.getElementById('main-page').style = 'margin-left: 220px';
-        }
         setOpen(!isOpen);
     }
 
