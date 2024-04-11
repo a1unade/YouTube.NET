@@ -1,3 +1,9 @@
+## Postgres Docker
+
+```bash
+docker run --name youtube-pg -p 5460:5432 -e POSTGRES_PASSWORD=youtube -d postgres:13.3
+```
+
 ## Первый спринт 
 
 1) Главная страница
