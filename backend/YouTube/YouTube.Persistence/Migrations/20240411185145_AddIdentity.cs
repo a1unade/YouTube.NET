@@ -161,11 +161,9 @@ namespace YouTube.Persistence.Migrations
                 name: "UserInfos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Nickname = table.Column<string>(type: "text", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uuid", nullable: false)
+                    Nickname = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,12 +171,6 @@ namespace YouTube.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_UserInfos_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserInfos_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -226,11 +218,6 @@ namespace YouTube.Persistence.Migrations
                 table: "UserInfos",
                 column: "UserId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserInfos_UserId1",
-                table: "UserInfos",
-                column: "UserId1");
         }
 
         /// <inheritdoc />

@@ -8,9 +8,12 @@ namespace YouTube.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.HasKey(x => x.Id);
+            
             builder.HasOne(u => u.UserInfo)
-                .WithOne()
-                .HasForeignKey<UserInfo>(ui => ui.UserId);
+                .WithOne(x => x.User)
+                .HasForeignKey<UserInfo>(x => x.UserId)
+                .HasPrincipalKey<User>(x => x.Id);
         }
     }
 }

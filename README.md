@@ -1,7 +1,7 @@
 ## Postgres Docker
 
 ```bash
-docker run --name youtube-pg -p 5460:5432 -e POSTGRES_PASSWORD=youtube -d postgres:13.3
+docker run --name youtube -p 5432:5432 -e POSTGRES_PASSWORD=youtube -d postgres:13.3
 ```
 
 ## Первый спринт 

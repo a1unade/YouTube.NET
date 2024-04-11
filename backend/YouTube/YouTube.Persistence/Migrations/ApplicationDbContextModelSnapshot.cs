@@ -17,7 +17,7 @@ namespace YouTube.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-preview.3.24172.4")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -219,11 +219,9 @@ namespace YouTube.Persistence.Migrations
 
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
@@ -232,15 +230,10 @@ namespace YouTube.Persistence.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("UserInfos");
                 });
@@ -298,15 +291,9 @@ namespace YouTube.Persistence.Migrations
 
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("YouTube.Domain.Entities.User", null)
+                    b.HasOne("YouTube.Domain.Entities.User", "User")
                         .WithOne("UserInfo")
                         .HasForeignKey("YouTube.Domain.Entities.UserInfo", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("YouTube.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

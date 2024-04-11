@@ -25,7 +25,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5460;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=youtube;Database=postgres;");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
