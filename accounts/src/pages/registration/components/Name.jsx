@@ -1,5 +1,5 @@
 import React from "react";
-import { validateName, validateSurname } from "../../utils/validator";
+import { validateName, validateSurname } from "../../../utils/validator";
 import { Link } from 'react-router-dom';
 
 const Name = ({ setContainerContent, containerContent, name, setName, surname, setSurname }) => {

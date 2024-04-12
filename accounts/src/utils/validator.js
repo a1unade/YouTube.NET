@@ -1,4 +1,4 @@
-import errors from './errorMessages'
+import errors from './errorMessages.js'
 
 export const validateEmail = (email, phoneCheck) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

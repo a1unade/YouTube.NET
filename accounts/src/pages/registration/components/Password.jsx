@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { validatePassword } from "../../utils/validator";
-import errors from "../../utils/errorMessages";
+import { validatePassword } from "../../../utils/validator";
+import errors from "../../../utils/errorMessages";
 
 const Password = ({ setContainerContent, containerContent }) => {
     const [password, setPassword] = useState('');

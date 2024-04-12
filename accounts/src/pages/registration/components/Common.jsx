@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { validateBirthDate } from "../../utils/validator";
-import errors from "../../utils/errorMessages.js"
+import { validateBirthDate } from "../../../utils/validator";
+import errors from "../../../utils/errorMessages.js"
 
 const Common = ({ setContainerContent, containerContent, setBirth, gender, setGender }) => {
     const [day, setDay] = useState(''); // день рождения

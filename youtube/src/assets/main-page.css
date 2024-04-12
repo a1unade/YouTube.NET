@@ -1,0 +1,21 @@
+body {
+    color: #0f0f0f;
+    font-family: "Roboto", "Arial", sans-serif;
+}
+
+.main-page{
+    display: flex;
+    flex-direction: column;
+}
+
+.main-page h3{
+    margin-left: 40px;
+    margin-bottom: 20px;
+}
+
+.content {
+    display: flex;
+    max-width: fit-content;
+    justify-content: center;
+    align-items: center;
+}
