@@ -8,8 +8,13 @@ const Routing = () => {
         <Routes>
             <Route path='/' element={<Main />} />
             <Route path='/watch/:id' element={<Player />} />
-            <Route path='/channel/:customUrl' element={'channel'} />
             <Route path='/search/:request' element={<Search />} />
+            <Route path="/channel/:customUrl" element={<ChannelPage />}></Route>
+            <Route path="/channel/:customUrl/featured" element={<Featured />} />
+            <Route path="/channel/:customUrl/videos"  element={<Videos />} />
+            <Route path="/channel/:customUrl/playlists"  element={<Playlists />} />
+            <Route path="/channel/:customUrl/community" element={<Community />} />
+            <Route path="/channel/VideoGames" element={<VideoGames/>} />
         </Routes>
     );
 }
