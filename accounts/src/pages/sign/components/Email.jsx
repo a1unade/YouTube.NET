@@ -1,5 +1,5 @@
 import React from "react";
-import { validateEmail } from "../../utils/validator";
+import { validateEmail } from "../../../utils/validator";
 import { useNavigate } from 'react-router-dom';
 
 const Email = ({ setEmail, email, setContainerContent, containerContent }) => {

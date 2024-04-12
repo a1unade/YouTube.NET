@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../../../assets/header.css';
 import { useNavigate } from 'react-router-dom';
 import { Logo, Search, AddVideo, Notifications } from '../../../assets/Icons.jsx';
 import UserMenu from './components/UserMenu.jsx';
@@ -8,7 +7,7 @@ const Header = ({ toggleMenu }) => {
     const navigate = useNavigate()
     const [isDetailsOpen, setDetailsOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
-
+    const [search, setSearch] = useState('');
     const handleBlur = () => {
         setIsFocused(false);
     };
@@ -29,8 +28,8 @@ const Header = ({ toggleMenu }) => {
                     </div>
                 </div>
                 <div className='horizontal-flex-container'>
-                    <input type='text' placeholder='Введите запрос' className={`search-bar ${isFocused ? 'active' : ''}`} onBlur={handleBlur} />
-                    <button className='center-box-with-text'>
+                    <input type='text' placeholder='Введите запрос' onChange={(e) => setSearch(e.target.value)} value={search} className={`search-bar ${isFocused ? 'active' : ''}`} onBlur={handleBlur} />
+                    <button className='center-box-with-text' onClick={() => navigate(`/search/${search.replace(/ /g, '+')}`)}>
                         <Search className='svg-container' />
                     </button>
                 </div>

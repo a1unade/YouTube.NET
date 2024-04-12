@@ -67,6 +67,7 @@ const UserMenu = () => {
                         </div>
                         <p className='sidebar-text'>Отправить отзыв</p>
                     </button>
+                    <a href="http://localhost:4173/sign-in">Войти</a>
                 </div>
             </div>
         </>

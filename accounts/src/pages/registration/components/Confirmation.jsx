@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import errors from "../../utils/errorMessages";
+import errors from "../../../utils/errorMessages";
 
 const Confirmation = ({ email, setContainerContent, containerContent }) => {
     const [code, setCode] = useState('');

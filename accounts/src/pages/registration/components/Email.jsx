@@ -1,5 +1,5 @@
 import React from "react";
-import { validateEmail } from "../../utils/validator";
+import { validateEmail } from "../../../utils/validator";
 
 const Email = ({ email, setEmail, setContainerContent, containerContent }) => {
     const handleNextButtonClick = () => {
