@@ -2,6 +2,16 @@ import { Routes, Route } from 'react-router-dom';
 import Main from './pages/main_page';
 import Player from './pages/player';
 import Search from './pages/search';
+import Featured from './pages/channel_page/Featured.jsx'
+import Videos from './pages/channel_page/Videos.jsx'
+import Playlists from './pages/channel_page/Playlists.jsx'
+import Community from './pages/channel_page/Community.jsx'
+import VideoGames from './pages/channel_page/VideoGames.jsx'
+import ChannelPage from './pages/channel_page/ChannelPage.jsx';
+
+
+
+
 
 const Routing = () => {
     return (
