@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import AboutChannel from './AboutChannel';
 import { useEffect, useState } from "react";
 import apiClient from "../../utils/apiClient.js";
+import {SubscriptionBell} from "../../assets/Icons.jsx";
 
 
 const ChannelPage = () => {
@@ -108,18 +109,17 @@ const ChannelPage = () => {
                 </div>
                 <div className='subscription'>
                   {isFollow
-                    ? <button id='isFollow' onClick={() => setIsFollow(false)}>Подписаться</button>
-                    : <button id='noFollow' onClick={() => setIsFollow(true)}>
-                      <img src="notification.png" />Вы подписаны
-                    </button>
+                    ? <button id='True' onClick={() => setIsFollow(false)}>Подписаться</button>
+                    : <button id='False' onClick={() => setIsFollow(true)}>
+                        <SubscriptionBell/> Вы подписаны
+                      </button>
                   }
                 </div>
               </div>
             </div>
           </div>
-          <Menu channelName={owners.snippet.customUrl} />
+          <Menu channelName={owners.snippet.customUrl}/>
         </div>
-
       </>
     );
   }

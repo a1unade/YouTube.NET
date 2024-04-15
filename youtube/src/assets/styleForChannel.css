@@ -118,31 +118,6 @@
     margin-bottom: 16px;
 }
 
-#isFollow {
-    margin-top: 20px;
-    color: white;
-    background-color: black;
-    height: 36px;
-    font-size: 14px;
-    line-height: 36px;
-    border-radius: 18px;
-    border: none;
-    font-size: 14px;
-    padding: 0px 10px;
-}
-
-#noFollow {
-    margin-top: 20px;
-    background-color: rgba(0, 0, 0, 0.05);
-    height: 36px;
-    line-height: 36px;
-    border-radius: 18px;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    color: rgb(0, 0, 0);
-    padding-right: 10px;
-}
 
 .subscription button img {
     width: 16px;
@@ -215,9 +190,7 @@
     margin-left: 10px;
 }
 
-.about-channel-references span {
-    color: #065fd4;
-}
+
 
 .about-full-info {
     flex-direction: column;
@@ -333,8 +306,10 @@
     font-size: 14px;
     font-weight: 500;
     color: rgb(0, 0, 0);
-
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-right: 14px;
+
 }
 
 .reproduce svg {
@@ -524,5 +499,275 @@
 }
 
 
+/* Стили для не каналов основных каналов
+*/
+
+.for-you{
+    margin-bottom: 20px;
+}
+
+
+.videogames{
+    padding: 0 0 30px 10px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.recomendation-span span{
+    margin-left: 0;
+    font-weight: 700;
+    font-size: 20px;
+}
+.recomendation-span {
+    margin-bottom: 10px;
+}
+.catalog {
+    display: flex;
+    width: 100%;
+    text-align: center;
+
+
+}
+
+.film {
+    margin-top: 50px;
+    position: fixed;
+    top: 0;
+    width: 90%;
+}
+
+
+.films-catalog span {
+    color: #606060;
+    font-weight: 600;
+}
+.films-catalog{
+    position:fixed;
+    left: 50%;
+    top:35%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.films-container {
+    position:absolute;
+    padding-top: 140px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.films-message {
+    text-align: center;
+}
+
+.film-menu{
+    margin-left: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.trend-list{
+    height: 100%;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+.trend-image img{
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+}
+
+
+
+.sport-header img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.sport-header {
+    margin-left: 60px;
+    min-width: 1150px;
+    background-color: #e7e7e7;
+    padding: 20px;
+    align-items: center;
+}
+
+.sport-description {
+    display: flex;
+    justify-content: space-between;
+}
+.sport-main-description {
+    flex: 1;
+}
+
+.sport-description {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+
+#isFollow {
+    margin-top: 20px;
+    color: white;
+    background-color: black;
+    height: 36px;
+    font-size: 14px;
+    line-height: 36px;
+    border-radius: 18px;
+    border: none;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+
+#True{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    margin-top: 20px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+    background-color: rgb(0, 0, 0) !important;
+    color: white !important;
+    padding: 12px;
+}
+
+#True:hover{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    margin-top: 20px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+    background-color: rgb(31, 31, 31) !important;
+    color: white !important;
+    padding: 12px;
+}
+
+#False{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    margin-top: 20px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+    background-color: rgba(0,0,0,0.05) !important;
+    color: #000000 !important;
+    padding: 12px;
+}
+
+#False:hover{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    margin-top: 20px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.12) !important;
+    color: #000000 !important;
+    padding: 12px;
+}
+
+
+.sport-main-description{
+    margin-top: 10px;
+}
+.sport-main-description h2{
+    margin: 0;
+}
+.sport-main-description span {
+    font-weight: 400;
+    font-size: 14px;
+    color: #606060;
+}
+
+
+.sport-main-content {
+    max-width: 1200px;
+    padding: 20px;
+    margin-left: 60px;
+
+}
+.sport-full-playlist{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.sport-full-playlist span {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.sport-full-playlist button {
+    font-weight: 600;
+    font-size: 14px;
+   color:#065fd4;
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 10px 14px 10px 14px;
+
+}
+
+.sport-full-playlist button:hover{
+    background-color: rgb(62 166 255 / 30%);
+    padding: 10px 14px 10px 14px;
+    border-radius: 18px;
+}
+
+.music-button {
+    max-width: 400px;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.music-button span{
+    margin-left: 0;
+}
+
+
+.music-button button{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    background-color: white;
+    height: 36px;
+    line-height: 36px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 14px;
+    margin-bottom: 14px;
+}
 
 

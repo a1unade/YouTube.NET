@@ -1,4 +1,3 @@
-import React from 'react';
 import MenuButton from './components/MenuButton.jsx'
 import '../../../assets/left-menu.css';
 
@@ -38,11 +37,11 @@ function LeftMenu({ isOpen }) {
                             <div className='best-youtube-section-title-container'>
                                 <p className='youtube-title-style'>Навигатор</p>
                             </div>
-                            <MenuButton title={'В тренде'} />
-                            <MenuButton title={'Музыка'} />
-                            <MenuButton title={'Фильмы'} />
-                            <MenuButton title={'Видеоигры'} />
-                            <MenuButton title={'Спорт'} />
+                            <a href="/feed/trending/news"><MenuButton title={'В тренде'} /></a>
+                            <a href="/channel/Music"> <MenuButton title={'Музыка'} /></a>
+                            <a href="/feed"><MenuButton title={'Фильмы'} /></a>
+                            <a href="/channel/VideoGames"><MenuButton title={'Видеоигры'} /></a>
+                            <a href="/channel/Sport"><MenuButton title={'Спорт'} /></a>
                         </div>
                         <div className='first-container'>
                             <div className='best-youtube-section-title-container'>
