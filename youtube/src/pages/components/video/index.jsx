@@ -28,20 +28,20 @@ const Video = ({id}) => {
     }, [id]);
 
     const renderVideoContent = () => {
-        switch (currentPage) {
-            case '/':
+        switch (true) {
+            case currentPage === '/':
                 return (
                     <>
                         <MainVideo video={video} channel={channel}/>
                     </>
                 );
-            case '/search/котики':
+            case currentPage.includes('/search/'):
                 return (
                     <>
                         <SearchVideo video={video} channel={channel}/>
                     </>
                 );
-            case '/watch/sEpXl-AbvrA':
+            case currentPage.includes('/watch/'):
                 return (
                     <>
                         <MainVideo video={video} channel={channel}/>

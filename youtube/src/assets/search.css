@@ -1,4 +1,28 @@
 .search-results {
     display: flex;
     flex-direction: column;
+    width: 100lh;
+}
+
+.search-results-author-info{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Для поиска */
+
+.search-video {
+    display: flex;
+    flex-direction: row;
+    width: 1200px;
+    height: 300px;
+    cursor: pointer;
+}
+
+.search-video .preview {
+    width: 500px;
+    height: 400px;
 }
