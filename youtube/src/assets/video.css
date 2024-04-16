@@ -99,7 +99,7 @@
 
 /* Для поиска */
 
-.search-video{
+.search-video {
     display: flex;
     flex-direction: row;
     width: 1200px;

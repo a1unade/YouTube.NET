@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 import Main from './pages/main_page';
 import Player from './pages/player';
 import Search from './pages/search';
@@ -19,10 +19,6 @@ import TrendVideoGames from "./pages/channel_page/channel_navigation/TrendVideoG
 import TrendNews from "./pages/channel_page/channel_navigation/TrendNews.jsx";
 import MusicCommunity from "./pages/channel_page/channel_navigation/MusicCommunity.jsx";
 import MusicFeatured from "./pages/channel_page/channel_navigation/MusicFeatured.jsx";
-
-
-
-
 
 const Routing = () => {
     return (
@@ -47,7 +43,6 @@ const Routing = () => {
             <Route path="/feed/trending/videogames" element={<TrendVideoGames/>} />
             <Route path="/channel/Music/community" element={<MusicCommunity/>} />
             <Route path="/channel/Music/featured" element={<MusicFeatured/>} />
-
         </Routes>
     );
 }
