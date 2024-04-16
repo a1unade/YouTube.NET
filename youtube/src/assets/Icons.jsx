@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 export const AddVideo = ({className}) => {
     return (
         <div className={className}>
@@ -119,6 +120,7 @@ export const YoutubeMusic = () => {
 export const Logo = () => {
     return (
         <>
+            {/* eslint-disable-next-line no-undef */}
             <div className='main-logo' onClick={() => navigate('/')} title='Главная страница YouTube'>
                 <svg viewBox='0 0 90 20' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
                     <g>
@@ -151,6 +153,7 @@ export const Logo = () => {
     )
 }
 
+// eslint-disable-next-line react/prop-types
 export const Notifications = ({className}) => {
     return (
         <div className={className}>
@@ -214,6 +217,7 @@ export const PremiumIcon = () => {
     );
 }
 
+// eslint-disable-next-line react/prop-types
 export const Search = ({className}) => {
     return (
         <div className={className}>
@@ -545,6 +549,24 @@ export const ButtonLikeIcon = () => {
                               strokeMiterlimit="4" stroke="rgb(0,0,0)" strokeOpacity="1"
                               strokeWidth="4"
                               d=" M-19.986000061035156,-4.03000020980835 C-19.986000061035156,-4.03000020980835 -36.020999908447266,-3.996999979019165 -36.020999908447266,-3.996999979019165 C-36.020999908447266,-3.996999979019165 -36.00199890136719,31.993000030517578 -36.00199890136719,31.993000030517578 C-36.00199890136719,31.993000030517578 -20.030000686645508,32.02299880981445 -20.030000686645508,32.02299880981445 C-20.030000686645508,32.02299880981445 -19.986000061035156,-4.03000020980835 -19.986000061035156,-4.03000020980835z"></path>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    );
+}
+
+export const ButtonDislikeIcon = () => {
+    return (
+        <div style={{width: 40, height: 15, display: 'block', fill: 'currentColor'}}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false"
+                 style={{pointerEvents: 'none', display: 'inherit', width: '100%', height: '100%'}}>
+                <path
+                    d="M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21 c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z M10.4,19.67C10.21,19.88,9.92,20,9.62,20c-0.26,0-0.5-0.11-0.63-0.3 c-0.07-0.1-0.15-0.26-0.09-0.47l1.52-4.94l0.4-1.29H9.46H5.23c-0.41,0-0.8-0.17-1.03-0.46c-0.12-0.15-0.25-0.4-0.18-0.72l1.34-6 C5.46,5.35,5.97,5,6.57,5H16v8.61L10.4,19.67z M20,13h-3V5h3V13z"></path>
+            </svg>
+        </div>
+    );
+}
 export const SubscriptionBell = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96"
@@ -641,16 +663,4 @@ export const GlobeCountry = () => {
                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM3 12c0-.7.09-1.37.24-2.02L8 14.71v.79c0 1.76 1.31 3.22 3 3.46v1.98c-4.49-.5-8-4.32-8-8.94zm8.5 6C10.12 18 9 16.88 9 15.5v-1.21l-5.43-5.4C4.84 5.46 8.13 3 12 3c1.05 0 2.06.19 3 .53V5c0 .55-.45 1-1 1h-3v2c0 .55-.45 1-1 1H8v3h6c.55 0 1 .45 1 1v4h2c.55 0 1 .45 1 1v.69C16.41 20.12 14.31 21 12 21v-3h-.5zm7.47-.31C18.82 16.73 18 16 17 16h-1v-3c0-1.1-.9-2-2-2H9v-1h1c1.1 0 2-.9 2-2V7h2c1.1 0 2-.9 2-2V3.95c2.96 1.48 5 4.53 5 8.05 0 2.16-.76 4.14-2.03 5.69z"></path>
         </svg>
     )
-}
-
-export const ButtonDislikeIcon = () => {
-    return (
-        <div style={{width: 40, height: 15, display: 'block', fill: 'currentColor'}}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false"
-                 style={{pointerEvents: 'none', display: 'inherit', width: '100%', height: '100%'}}>
-                <path
-                    d="M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21 c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z M10.4,19.67C10.21,19.88,9.92,20,9.62,20c-0.26,0-0.5-0.11-0.63-0.3 c-0.07-0.1-0.15-0.26-0.09-0.47l1.52-4.94l0.4-1.29H9.46H5.23c-0.41,0-0.8-0.17-1.03-0.46c-0.12-0.15-0.25-0.4-0.18-0.72l1.34-6 C5.46,5.35,5.97,5,6.57,5H16v8.61L10.4,19.67z M20,13h-3V5h3V13z"></path>
-            </svg>
-        </div>
-    );
 }
