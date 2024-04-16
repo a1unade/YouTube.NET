@@ -12,8 +12,10 @@ const App = () => {
   const toggleMenu = () => {
     if (isOpen) {
       document.getElementById('page').style.marginLeft = '100px';
+      document.body.classList.remove('menu-opened');
     } else {
       document.getElementById('page').style.marginLeft = '260px';
+      document.body.classList.add('menu-opened');
     }
     setOpen(!isOpen);
   };

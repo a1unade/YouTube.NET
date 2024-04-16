@@ -19,6 +19,11 @@ import TrendVideoGames from "./pages/channel_page/channel_navigation/TrendVideoG
 import TrendNews from "./pages/channel_page/channel_navigation/TrendNews.jsx";
 import MusicCommunity from "./pages/channel_page/channel_navigation/MusicCommunity.jsx";
 import MusicFeatured from "./pages/channel_page/channel_navigation/MusicFeatured.jsx";
+import ContentAdd from "./pages/admin_panel/ContentAdd.jsx";
+import AdminAddVideo from "./pages/admin_panel/AdminAddVideo.jsx";
+import AdminAddPlaylist from "./pages/admin_panel/AdminAddPlaylist.jsx";
+import Brending from "./pages/admin_panel/Brending.jsx";
+import MainDetails from "./pages/admin_panel/MainDetails.jsx";
 
 
 
@@ -47,6 +52,18 @@ const Routing = () => {
             <Route path="/feed/trending/videogames" element={<TrendVideoGames/>} />
             <Route path="/channel/Music/community" element={<MusicCommunity/>} />
             <Route path="/channel/Music/featured" element={<MusicFeatured/>} />
+
+
+            <Route path="/channel/edit/id" element={<ContentAdd/>} />
+            <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>} />
+            <Route path="/channel/edit/channelId/playlist" element={<AdminAddPlaylist/>} />
+
+
+            <Route path="/channel/edit/images" element={<Brending/>} />
+            <Route path="/channel/edit/details" element={<MainDetails/>} />
+
+
+
 
         </Routes>
     );
