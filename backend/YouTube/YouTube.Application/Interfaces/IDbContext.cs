@@ -14,4 +14,6 @@ public interface IDbContext
     /// Информация о пользователе
     /// </summary>
     public DbSet<UserInfo> UserInfos { get; set; }
+    
+    public DbSet<Subscription> Subscriptions{ get; set; }
 }
