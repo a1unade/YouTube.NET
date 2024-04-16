@@ -23,27 +23,26 @@ import MusicFeatured from "./pages/channel_page/channel_navigation/MusicFeatured
 const Routing = () => {
     return (
         <Routes>
-            <Route path='/' element={<Main/>}/>
-            <Route path='/watch/:id' element={<Player/>}/>
-            <Route path='/search/:request' element={<Search/>}/>
-            <Route path="/channel/:customUrl" element={<ChannelPage/>}></Route>
-            <Route path="/channel/:customUrl/featured" element={<Featured/>}/>
-            <Route path="/channel/:customUrl/videos" element={<Videos/>}/>
-            <Route path="/channel/:customUrl/playlists" element={<Playlists/>}/>
-            <Route path="/channel/:customUrl/community" element={<Community/>}/>
-            <Route path="/channel/VideoGames" element={<VideoGames/>}/>
-            <Route path="/channel/Music" element={<Music/>}/>
-            <Route path="/channel/Sport" element={<Sport/>}/>
-            <Route path="/feed" element={<Films/>}/>
-            <Route path="/feed/Catalog" element={<FilmsCatalog/>}/>
-            <Route path="/feed/Purchases" element={<FilmsPurchases/>}/>
-            <Route path="/feed/trending/news" element={<TrendNews/>}/>
-            <Route path="/feed/trending/music" element={<TrendMusic/>}/>
-            <Route path="/feed/trending/films" element={<TrendFilm/>}/>
-            <Route path="/feed/trending/videogames" element={<TrendVideoGames/>}/>
-            <Route path="/channel/Music/community" element={<MusicCommunity/>}/>
-            <Route path="/channel/Music/featured" element={<MusicFeatured/>}/>
-
+            <Route path='/' element={<Main />} />
+            <Route path='/watch/:id' element={<Player />} />
+            <Route path='/search/:request' element={<Search />} />
+            <Route path="/channel/:customUrl" element={<ChannelPage />}></Route>
+            <Route path="/channel/:customUrl/featured" element={<Featured />} />
+            <Route path="/channel/:customUrl/videos"  element={<Videos />} />
+            <Route path="/channel/:customUrl/playlists"  element={<Playlists />} />
+            <Route path="/channel/:customUrl/community" element={<Community />} />
+            <Route path="/channel/VideoGames" element={<VideoGames/>} />
+            <Route path="/channel/Music" element={<Music/>} />
+            <Route path="/channel/Sport" element={<Sport/>} />
+            <Route path="/feed" element={<Films/>} />
+            <Route path="/feed/Catalog" element={<FilmsCatalog/>} />
+            <Route path="/feed/Purchases" element={<FilmsPurchases/>} />
+            <Route path="/feed/trending/news" element={<TrendNews/>} />
+            <Route path="/feed/trending/music" element={<TrendMusic/>} />
+            <Route path="/feed/trending/films" element={<TrendFilm/>} />
+            <Route path="/feed/trending/videogames" element={<TrendVideoGames/>} />
+            <Route path="/channel/Music/community" element={<MusicCommunity/>} />
+            <Route path="/channel/Music/featured" element={<MusicFeatured/>} />
         </Routes>
     );
 }

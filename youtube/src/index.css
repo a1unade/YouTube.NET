@@ -4,6 +4,7 @@
 @import url('./assets/video.css');
 @import url('./assets/search.css');
 @import url('./assets/player.css');
+@import url('./assets/styleForChannel.css');
 
 :root {
     line-height: 1.5;
