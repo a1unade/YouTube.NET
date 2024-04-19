@@ -68,6 +68,7 @@ const VideoInfo = ({video}) => {
             <hr className="separator" style={{marginTop: 10}}/>
 
 
-        </>);
+        </>
+    );
 };
 export default VideoInfo;

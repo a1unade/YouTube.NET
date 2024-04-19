@@ -17,10 +17,11 @@
 }
 
 .admin-menu {
+    justify-content: space-between;
+    min-width: 1200px;
     margin-left: 23px;
     margin-top: 20px;
     display: flex;
-    flex-wrap: wrap;
 }
 
 .admin-menu-btn {
@@ -283,7 +284,7 @@
 
 .reference-input{
     padding: 10px;
-gap: 20px;
+    gap: 20px;
     display: flex;
     flex-direction: row;
     border: 1px solid black;
@@ -312,12 +313,82 @@ gap: 20px;
 }
 
 .references-container{
-
+    margin-top: 10px;
     display: flex;
     width: max-content;
     flex-direction: row;
     gap: 30px;
+    margin-bottom: 20px;
 }
+
+.submit-buttons button{
+    border: none;
+    background-color: transparent;
+    color:#065fd4;
+    margin-right: 5px;
+}
+
+#submit-button{
+    background-color: #CCCCCC;
+    border-radius: 3px;
+    color: white;
+}
+
+#submit-button:hover {
+    background-color: #065fd4;
+    transition: 0.6s;
+}
+.channel-edit-container
+{
+    margin-top: 10px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+.brending-image-title{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.brending-image {
+    background-color: #f9f9f9;
+    min-width: 290px;
+    min-height: 160px;
+    justify-content: center; /* Выравнивание по горизонтали */
+    text-align: center;
+}
+
+.brending-image svg {
+    width: 290px;
+    height: 160px;
+}
+
+.brending-image img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    margin-top: 10px;
+}
+.brending-title{
+    max-width: 330px;
+    max-height: 120px;
+    margin-left: 20px;
+    line-height: 20px;
+
+}
+
+
+.brending-title span{
+    font-size: 13px;
+    font-weight: 400;
+
+}
+
+.channel-settings-buttons{
+    margin-top: -10px;
+}
+
 
 
 

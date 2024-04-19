@@ -19,24 +19,68 @@ const SettingsMenu = () => {
         }
     }, [location.pathname/*, channelId*/]);
 
+    function RedirectToChannel() {
+        window.location.href = "https://youtube.com/"; // Замените на ваш URL канала
+    }
+
+    function ClearInputs() {
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
+        inputs.forEach(input => {
+            input.value = '';
+        });
+    }
+
+    function handleSubmit() {
+        // Добавьте код для отправки данных, например, с помощью AJAX запроса
+        // Например:
+        // const formData = new FormData(document.getElementById('yourFormId'));
+        // fetch('/submit', {
+        //     method: 'POST',
+        //     body: formData
+        // })
+        // .then(response => {
+        //     // Обработка успешного ответа
+        // })
+        // .catch(error => {
+        //     // Обработка ошибки
+        // });
+    }
+
     return (
         <>
             <div className="admin-menu">
-                <a href={`/channel/edit/images`}>
-                    <button
-                        className={`admin-menu-btn ${activeButton === 1 ? 'admin-active' : ''}`}
-                        onClick={() => setActiveButton(1)}>
-                        Брендинг
-                    </button>
-                </a>
-                <a href={`/channel/edit/details`}>
-                    <button
-                        className={`admin-menu-btn ${activeButton === 2 ? 'admin-active' : ''}`}
-                        onClick={() => setActiveButton(2)}>
-                        Основные сведения
-                    </button>
-                </a>
+                <div className="menu-panel">
+                    <a href={`/channel/edit/images`}>
+                        <button
+                            className={`admin-menu-btn ${activeButton === 1 ? 'admin-active' : ''}`}
+                            onClick={() => setActiveButton(1)}>
+                            Брендинг
+                        </button>
+                    </a>
+                    <a href={`/channel/edit/details`}>
+                        <button
+                            className={`admin-menu-btn ${activeButton === 2 ? 'admin-active' : ''}`}
+                            onClick={() => setActiveButton(2)}>
+                            Основные сведения
+                        </button>
+                    </a>
+                </div>
+
+                <div className="channel-settings-buttons">
+                    <div className="submit-buttons">
+                        <button onClick={() => RedirectToChannel()}>
+                            ПЕРЕЙТИ НА КАНАЛ
+                        </button>
+                        <button onClick={() => ClearInputs()}>
+                            ОТМЕНА
+                        </button>
+                        <button id="submit-button" onClick={() => handleSubmit()}>
+                            ОПУБЛИКОВАТЬ
+                        </button>
+                    </div>
+                </div>
             </div>
+
             <hr className="separator"/>
         </>
     );

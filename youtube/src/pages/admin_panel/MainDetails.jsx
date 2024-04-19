@@ -9,6 +9,9 @@ const MainDetails = () => {
         setComponents([...components, <ReferencesEdit key={components.length} />]);
     };
     function updateCharacterCount(e) {
+        if(e.target.value.length === 0){
+            charCountElement.textContent = `0/1000`
+        }
         const maxLength = 0;
         const currentLength = e.target.value.length;
         const remainingCharacters = maxLength + currentLength;
@@ -17,6 +20,8 @@ const MainDetails = () => {
             charCountElement.textContent = `${remainingCharacters}/1000`;
         }
     }
+
+
     return(
         <>
 
@@ -146,19 +151,6 @@ const MainDetails = () => {
                             <label>Электронная почта</label>
                             <input type="email" placeholder="Адрес электронной почты"/>
                         </div>
-                    </div>
-                </div>
-                <div className="channel-settings-buttons">
-                    <div className="submit-buttons">
-                        <button>
-                            ПЕРЕЙТИ НА КАНАЛ
-                        </button>
-                        <button>
-                            ОТМЕНА
-                        </button>
-                        <button>
-                            ОПУБЛИКОВАТЬ
-                        </button>
                     </div>
                 </div>
 
