@@ -17,12 +17,17 @@ public static class ServiceCollectionExtensions
 
     private static void AddServices(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole<Guid>>()
+        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
+            })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         
         services
             .AddTransient<IMediator, Mediator>()
-            .AddTransient<IAuthService, AuthService>();
+            .AddTransient<IAuthService, AuthService>()
+            .AddTransient<IEmailService, EmailService>();
     }
 }

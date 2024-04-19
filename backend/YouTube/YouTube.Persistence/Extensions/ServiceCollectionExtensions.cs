@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         //services.AddMappings();
         services.AddDbContext(configuration);
         services.AddRepositories();
+        services.AddHttpContextAccessor();
     }
 
     //private static void AddMappings(this IServiceCollection services)
@@ -21,7 +22,7 @@ public static class ServiceCollectionExtensions
     //    services.AddAutoMapper(Assembly.GetExecutingAssembly());
     //}
 
-    public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+    private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Postgres");
         

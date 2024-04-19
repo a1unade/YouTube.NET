@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 import Main from './pages/main_page';
 import Player from './pages/player';
 import Search from './pages/search';
@@ -25,10 +25,6 @@ import AdminAddPlaylist from "./pages/admin_panel/AdminAddPlaylist.jsx";
 import Brending from "./pages/admin_panel/Brending.jsx";
 import MainDetails from "./pages/admin_panel/MainDetails.jsx";
 
-
-
-
-
 const Routing = () => {
     return (
         <Routes>
@@ -52,19 +48,11 @@ const Routing = () => {
             <Route path="/feed/trending/videogames" element={<TrendVideoGames/>} />
             <Route path="/channel/Music/community" element={<MusicCommunity/>} />
             <Route path="/channel/Music/featured" element={<MusicFeatured/>} />
-
-
             <Route path="/channel/edit/id" element={<ContentAdd/>} />
             <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>} />
             <Route path="/channel/edit/channelId/playlist" element={<AdminAddPlaylist/>} />
-
-
             <Route path="/channel/edit/images" element={<Brending/>} />
             <Route path="/channel/edit/details" element={<MainDetails/>} />
-
-
-
-
         </Routes>
     );
 }

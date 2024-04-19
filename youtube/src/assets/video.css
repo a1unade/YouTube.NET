@@ -96,13 +96,3 @@
 .info ul li:last-child {
     margin-left: 12px;
 }
-
-/* Для поиска */
-
-.search-video{
-    display: flex;
-    flex-direction: row;
-    width: 1200px;
-    height: 300px;
-    cursor: pointer;
-}

@@ -1,7 +1,7 @@
-import {useNavigate} from 'react-router-dom';
-import {formatDate, formatViews} from "../../../../utils/formatFunctions";
+import {useNavigate} from "react-router-dom";
+import {formatDate, formatViews} from "../../../../utils/formatFunctions.js";
 
-const MainVideo = ({video, channel}) => {
+const ChannelVideo = ({video}) => {
     const navigate = useNavigate();
     return (
         <>
@@ -10,17 +10,11 @@ const MainVideo = ({video, channel}) => {
                     <img src={video.snippet.thumbnails.medium.url}></img>
                 </div>
                 <div className="main-video-info" title={video.snippet.localized.title}>
-                    <div style={{marginRight: 20}}>
-                        <div className="author-image" onClick={() => navigate(`/channel/${channel.snippet.customUrl}`)}>
-                            <img src={channel.snippet.thumbnails.default.url} alt=''/>
-                        </div>
-                    </div>
                     <div className="main-video-details">
                         <div className="main-video-name">
                             <span><b>{video.snippet.localized.title}</b></span>
                         </div>
                         <div className="info">
-                            <span>{video.snippet.channelTitle}</span>
                             <ul>
                                 <li>{formatViews(video.statistics.viewCount, 'views')}</li>
                                 <li>{formatDate(video.snippet.publishedAt)}</li>
@@ -33,4 +27,4 @@ const MainVideo = ({video, channel}) => {
     );
 }
 
-export default MainVideo;
+export default ChannelVideo;

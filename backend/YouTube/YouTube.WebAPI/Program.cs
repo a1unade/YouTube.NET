@@ -24,5 +24,6 @@ app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
+app.UseCors();
 
 app.Run();

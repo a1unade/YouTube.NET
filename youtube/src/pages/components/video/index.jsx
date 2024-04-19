@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import React, {useEffect, useState} from "react";
+import {useLocation} from 'react-router-dom';
 import MainVideo from "./components/MainVideo";
 import SearchVideo from "./components/SearchVideo";
 import apiClient from "../../../utils/apiClient";
 
-const Video = ({ id }) => {
+const Video = ({id}) => {
     const [channel, setChannel] = useState(null);
     const [video, setVideo] = useState(null);
     const location = useLocation();
@@ -28,17 +28,23 @@ const Video = ({ id }) => {
     }, [id]);
 
     const renderVideoContent = () => {
-        switch (currentPage) {
-            case '/':
+        switch (true) {
+            case currentPage === '/':
                 return (
                     <>
-                        <MainVideo video={video} channel={channel} />
+                        <MainVideo video={video} channel={channel}/>
                     </>
                 );
-            case '/search/котики':
+            case currentPage.includes('/search/'):
                 return (
                     <>
-                        <SearchVideo video={video} channel={channel} />
+                        <SearchVideo video={video} channel={channel}/>
+                    </>
+                );
+            case currentPage.includes('/watch/'):
+                return (
+                    <>
+                        <MainVideo video={video} channel={channel}/>
                     </>
                 );
             default:
@@ -48,8 +54,7 @@ const Video = ({ id }) => {
 
     if (!channel || !video) {
         return ("");
-    }
-    else {
+    } else {
         return (
             <>
                 {renderVideoContent()}

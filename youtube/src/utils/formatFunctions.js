@@ -24,8 +24,17 @@ export const formatDate = (date) => {
     }
 }
 
-export const formatViews = (count) => {
-    const titles = ['просмотр', 'просмотра', 'просмотров']
+export const formatViews = (count, type) => {
+    let titles = [''];
+
+    if (type === 'followers') {
+        titles = ['подписчик', 'подписчика', 'подписчиков'];
+    } else if (type === 'views') {
+        titles = ['просмотр', 'просмотра', 'просмотров'];
+    } else if (type === 'likes') {
+        titles = ['', '', ''];
+    }
+
     const cases = [2, 0, 1, 1, 1, 2];
 
     if (count < 1000 && count >= 0) {
@@ -57,8 +66,3 @@ export const formatViews = (count) => {
         return '';
     }
 }
-
-export default {
-    formatDate,
-    formatViews
-};

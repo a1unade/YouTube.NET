@@ -17,20 +17,21 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
         : base(options)
     {
     }
-
+    
     public ApplicationDbContext()
     {
         Database.EnsureCreated();
     }
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5412;Username=postgres;Password=youtube;Database=postgres;");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserInfoConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }

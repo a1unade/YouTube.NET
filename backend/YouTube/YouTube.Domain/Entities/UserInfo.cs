@@ -10,9 +10,24 @@ public class UserInfo : BaseEntity
     public Guid UserId { get; set; }
         
     /// <summary>
-    /// Никнейм
+    /// Имя пользователя
     /// </summary>
-    public string Nickname { get; set; }
+    public string Name { get; set; }
+    
+    /// <summary>
+    /// Фамилия пользователя
+    /// </summary>
+    public string? Surname { get; set; }
+    
+    /// <summary>
+    /// Дата рождения пользователя
+    /// </summary>
+    public DateTime BirthDate { get; set; }
+    
+    /// <summary>
+    /// Пол пользователя
+    /// </summary>
+    public string Gender { get; set; }
 
     /// <summary>
     /// Навигационное свойство для связи с User

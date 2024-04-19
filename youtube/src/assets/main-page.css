@@ -3,12 +3,20 @@ body {
     font-family: "Roboto", "Arial", sans-serif;
 }
 
-.main-page{
+.main-page {
     display: flex;
     flex-direction: column;
 }
 
-.main-page h3{
+.main-page .main-video {
+    width: 350px;
+}
+
+.menu-opened .main-page .main-video {
+    width: 320px;
+}
+
+.main-page h3 {
     margin-left: 40px;
     margin-bottom: 20px;
 }
