@@ -12,7 +12,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
 {
     public DbSet<User> Users { get; set; }
     public DbSet<UserInfo> UserInfos { get; set; }
-
+    public DbSet<Subscription> Subscriptions { get; set; }
     public ApplicationDbContext(DbContextOptions<DbContext> options, IConfiguration configuration) 
         : base(options)
     {
@@ -32,6 +32,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserInfoConfiguration());
+        modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
         
         base.OnModelCreating(modelBuilder);
     }

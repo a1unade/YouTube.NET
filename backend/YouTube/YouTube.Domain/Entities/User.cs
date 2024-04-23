@@ -8,4 +8,5 @@ public class User : IdentityUser<Guid>
     /// Информация о пользователе пользователя
     /// </summary>
     public UserInfo UserInfo { get; set; }
+    public ICollection<Subscription> Subscriptions { get; set; } = new HashSet<Subscription>();
 }

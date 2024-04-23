@@ -152,6 +152,36 @@ namespace YouTube.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Subscriptions");
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -299,6 +329,17 @@ namespace YouTube.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("YouTube.Domain.Entities.User", "User")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
                 {
                     b.HasOne("YouTube.Domain.Entities.User", "User")
@@ -312,6 +353,8 @@ namespace YouTube.Persistence.Migrations
 
             modelBuilder.Entity("YouTube.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Subscriptions");
+
                     b.Navigation("UserInfo")
                         .IsRequired();
                 });
