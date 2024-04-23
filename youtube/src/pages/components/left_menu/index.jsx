@@ -53,8 +53,8 @@ function LeftMenu({isOpen}) {
                             <MenuButton title={'YouTube Premium'}/>
                         </div>
                         <div style={{marginTop: 20}} className='first-container'>
-                            <MenuButton title={'Настройки'}/>
-                            <MenuButton title={'Отправить отзыв'}/>
+                            <a href="/settings/account"><MenuButton title={'Настройки'}/></a>
+                                <MenuButton title={'Отправить отзыв'}/>
                         </div>
                         <div className='content-section-with-links-and-copyright'>
                             <a href='https://www.youtube.com/about/'>О сервисе</a>

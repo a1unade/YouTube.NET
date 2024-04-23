@@ -1,0 +1,133 @@
+.account-block {
+    padding: 20px;
+    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
+    width: 1050px; /* Фиксированная ширина блока */
+    margin: 0 auto; /* Центрирование блока по горизонтали */
+    padding-left: 200px; 
+    padding-right: 200px;
+}
+
+.block-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.info-header {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 18px;
+}
+
+.info-email {
+    font-size: 14px;
+    color: #555;
+}
+
+.user-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-left: 100px;
+}
+
+.divider {
+    margin-top: 12px;
+    border-top: 1px solid #ddd;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.channel-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.channel-info {
+    display: flex;
+    align-items: flex-start;
+    font-size: 12px;
+    color: #777;
+}
+
+.channel-name-container {
+    display: flex;
+    align-items: center;
+}
+
+.channel-name-label {
+    font-size: 15px;
+    font-weight: 500;
+    margin-right: 10px;
+    color: black;
+}
+
+.channel-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 125px;
+}
+
+.channel-avatar-name {
+    display: flex;
+    align-items: center;
+}
+
+.channel-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.channel-name {
+    font-size: 14px;
+    color: black;
+}
+
+.studio-container {
+    margin-top: 20px;
+}
+
+.studio-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3f51b5; 
+    text-decoration: none;
+}
+
+.subscription-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.subscription-info {
+    font-size: 12px;
+    color: #777;
+}
+
+.subscription-details {
+    display: flex;
+    margin-left: 125px;
+}
+
+.text-container {
+    margin-left: auto; /* Размещаем блок с текстом справа */
+    text-align: left; /* Выравниваем текст по правому краю */
+    vertical-align: middle;
+}
+
+.text-name-label {
+    font-size: 14px;
+    margin-right: 10px;
+    color: black;
+    margin-top: 0px;
+}
+

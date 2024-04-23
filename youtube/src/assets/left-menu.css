@@ -16,6 +16,13 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.app {
+    display: flex;
+    align-items: flex-start;
+    height: 100vh;
+    width: 65lh;
+}
+
 .sidebar-container {
     margin-top: 20px;
     margin-bottom: 100px;

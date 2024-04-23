@@ -1,0 +1,70 @@
+.payments-block {
+    padding: 20px;
+    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
+    width: 1050px; 
+    margin: 0 auto; 
+    padding-left: 200px; 
+    padding-right: 200px;
+}
+
+.block-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.payments-info {
+    display: flex;
+    align-items: center;
+}
+
+.info-header {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 18px;
+}
+
+.divider {
+    margin-top: 12px;
+    border-top: 1px solid #ddd;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.subscription-table {
+    border-collapse: collapse; /* Объединение границ ячеек */
+}
+
+.column-header {
+    padding: 10px;
+    background-color: #f0f0f0;
+    text-align: left;
+    font-weight: bold;
+}
+
+.subscription-table th,
+.subscription-table td {
+    padding: 12px;
+    border: 1px solid #ddd; /* Граница ячеек */
+}
+
+/* Задаем ширину каждого столбца */
+.subscription-table th:nth-child(1),
+.subscription-table td:nth-child(1) {
+    width: 30%; /* Ширина первого столбца */
+}
+
+.subscription-table th:nth-child(2),
+.subscription-table td:nth-child(2) {
+    width: 35%; /* Ширина второго столбца */
+}
+
+.subscription-table th:nth-child(3),
+.subscription-table td:nth-child(3) {
+    width: 25%; /* Ширина третьего столбца */
+}
+
+.subscription-table th:nth-child(4),
+.subscription-table td:nth-child(4) {
+    width: 20%; /* Ширина четвертого столбца */
+}
