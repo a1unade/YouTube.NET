@@ -1,8 +1,10 @@
-import React from "react";
 import { validateName, validateSurname } from "../../../utils/validator";
 import { Link } from 'react-router-dom';
+import {useActions} from "../../../hooks/useActions.js";
 
+// eslint-disable-next-line react/prop-types
 const Name = ({ setContainerContent, containerContent, name, setName, surname, setSurname }) => {
+    const {updateUserName, updateUserSurname} = useActions();
     const handleNextButtonClick = () => {
         const nameMessage = validateName(name);
         const surnameMessage = validateSurname(surname);
@@ -25,6 +27,10 @@ const Name = ({ setContainerContent, containerContent, name, setName, surname, s
         }
 
         if (surnameMessage.length === 0 && nameMessage.length === 0) {
+            updateUserName(name);
+            // eslint-disable-next-line react/prop-types
+            if(surname.length !== 0) updateUserSurname(surname);
+
             setContainerContent(containerContent + 1);
         }
     }

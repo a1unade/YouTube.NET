@@ -20,7 +20,7 @@ public class SubscriptionController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Subscribe(SubscriptionDto subscriptionDto)
     {
-        UserResponse result = await _subscriptionService.SubscribeAsync(subscriptionDto);
+        AuthResponse result = await _subscriptionService.SubscribeAsync(subscriptionDto);
 
         if (result.Type == UserResponseTypes.Success)
             return Ok(result);
@@ -31,7 +31,7 @@ public class SubscriptionController : ControllerBase
     [HttpDelete("{subscriptionId}")]
     public async Task<IActionResult> CancelSubscription(int subscriptionId)
     {
-        UserResponse result = await _subscriptionService.CancelSubscriptionAsync(subscriptionId);
+        AuthResponse result = await _subscriptionService.CancelSubscriptionAsync(subscriptionId);
 
         if (result.Type == UserResponseTypes.Success)
             return Ok(result);

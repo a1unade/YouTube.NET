@@ -17,6 +17,8 @@ public static class ServiceCollectionExtensions
 
     private static void AddServices(this IServiceCollection services)
     {
+        services.AddSignalR();
+        
         services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 options.User.RequireUniqueEmail = true;

@@ -1,5 +1,6 @@
 using YouTube.Application.Extensions;
 using YouTube.Infrastructure.Extensions;
+using YouTube.Infrastructure.SignalR;
 using YouTube.Persistence.Extensions;
 
 
@@ -19,6 +20,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(b => b
+    .WithOrigins("http://localhost:5173") 
+    .AllowAnyMethod()                     
+    .AllowAnyHeader()                      
+    .AllowCredentials());  
+
+app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
 
 app.MapControllers();
 app.UseAuthentication();

@@ -33,7 +33,7 @@ public class EmailService: IEmailService
             From = {new MailboxAddress("YouTube", "jinx.httpserver@yandex.ru")},
             To = {new MailboxAddress("", email)},
             Subject = subject,
-            Body = new BodyBuilder { TextBody = messageBody }.ToMessageBody()
+            Body = new BodyBuilder { HtmlBody = messageBody }.ToMessageBody()
         };
     }
 }

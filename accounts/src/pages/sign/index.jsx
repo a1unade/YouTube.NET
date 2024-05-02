@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import '../../assets/sign.css';
 import Google_logo from '../components/Google_logo';
 import Email from "./components/Email";

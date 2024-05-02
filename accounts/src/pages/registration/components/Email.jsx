@@ -1,7 +1,9 @@
-import React from "react";
 import { validateEmail } from "../../../utils/validator";
+import {useActions} from "../../../hooks/useActions.js";
 
+// eslint-disable-next-line react/prop-types
 const Email = ({ email, setEmail, setContainerContent, containerContent }) => {
+    const {updateUserEmail} = useActions();
     const handleNextButtonClick = () => {
         const message = validateEmail(email, false);
         if (message.length > 0) {
@@ -13,6 +15,7 @@ const Email = ({ email, setEmail, setContainerContent, containerContent }) => {
             }, 500);
         }
         else {
+            updateUserEmail(email)
             setContainerContent(containerContent + 1);
         }
     }
