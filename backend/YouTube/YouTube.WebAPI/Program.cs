@@ -13,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -21,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.UseRouting();
 app.UseCors(b => b
     .WithOrigins("http://localhost:5173") 
     .AllowAnyMethod()                     
@@ -32,7 +35,5 @@ app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
-app.UseCors();
 
 app.Run();

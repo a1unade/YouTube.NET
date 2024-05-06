@@ -2,8 +2,10 @@ import MenuButton from './components/MenuButton.jsx'
 import '../../../assets/left-menu.css';
 
 function LeftMenu({isOpen}) {
+
     return (
         <>
+
             {isOpen ?
                 <div className='left-menu'>
                     <div className='sidebar-container'>
@@ -82,7 +84,11 @@ function LeftMenu({isOpen}) {
                     </a>
                     <MenuButton title={'Подписки'}/>
                     <MenuButton title={'Вы'}/>
+                    <script
+                        src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+
                 </div>
+
             }
         </>
     );
