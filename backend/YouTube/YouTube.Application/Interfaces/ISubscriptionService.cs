@@ -7,7 +7,7 @@ namespace YouTube.Application.Interfaces;
 
 public interface ISubscriptionService
 {
-    Task<UserResponse> SubscribeAsync(SubscriptionDto subscriptionDto);
-    Task<UserResponse> CancelSubscriptionAsync(int subscriptionId);
+    Task<AuthResponse> SubscribeAsync(SubscriptionDto subscriptionDto);
+    Task<AuthResponse> CancelSubscriptionAsync(int subscriptionId);
     Task<List<Subscription>>  GetSubscriptionsAsync();
 }

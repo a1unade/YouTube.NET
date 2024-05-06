@@ -19,7 +19,7 @@ public class SubscriptionService : ISubscriptionService
         _emailService = emailService;
     }
 
-    public async Task<UserResponse> SubscribeAsync(SubscriptionDto subscriptionDto)
+    public async Task<AuthResponse> SubscribeAsync(SubscriptionDto subscriptionDto)
     {
         var subscription = new Subscription
         {
@@ -35,20 +35,20 @@ public class SubscriptionService : ISubscriptionService
         await _emailService.SendEmailAsync(subscription.User.Email,"Подтверждение почты", $"{subscription.Amount}");
         
 
-        return new UserResponse { Type = UserResponseTypes.Success, Message = "Подписка успешно оформлена" };
+        return new AuthResponse { Type = UserResponseTypes.Success, Message = "Подписка успешно оформлена" };
     }
 
-    public async Task<UserResponse> CancelSubscriptionAsync(int subscriptionId)
+    public async Task<AuthResponse> CancelSubscriptionAsync(int subscriptionId)
     {
         var subscription = await _dbContext.Subscriptions.FindAsync(subscriptionId);
 
         if (subscription == null)
-            return new UserResponse { Type = UserResponseTypes.Error, Message = "Подписка не найдена" };
+            return new AuthResponse { Type = UserResponseTypes.Error, Message = "Подписка не найдена" };
         
         subscription.IsActive = false;
         await _dbContext.SaveChangesAsync();
 
-        return new UserResponse { Type = UserResponseTypes.Success, Message = "Подписка успешно отменена" };
+        return new AuthResponse { Type = UserResponseTypes.Success, Message = "Подписка успешно отменена" };
     }
     public async Task<List<Subscription>> GetSubscriptionsAsync()
     {
