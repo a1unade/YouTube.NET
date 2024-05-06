@@ -28,7 +28,9 @@ public static class ServiceCollectionExtensions
         services
             .AddTransient<IMediator, Mediator>()
             .AddTransient<IAuthService, AuthService>()
-            .AddTransient<IEmailService, EmailService>();
+            .AddTransient<IEmailService, EmailService>()
+            .AddScoped<IVideoService, VideoService>()
+            .AddTransient<IYandexService, YandexService>();
         services.AddTransient<ISubscriptionService, SubscriptionService>();
     }
 }
