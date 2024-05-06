@@ -1,9 +1,11 @@
-import React from "react";
 import { validateEmail } from "../../../utils/validator";
 import { useNavigate } from 'react-router-dom';
+import {useActions} from "../../../hooks/useActions.js";
 
+// eslint-disable-next-line react/prop-types
 const Email = ({ setEmail, email, setContainerContent, containerContent }) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const {updateUserEmail} = useActions()
 
     const handleNextButtonClick = () => {
         const message = validateEmail(email, true);
@@ -15,6 +17,8 @@ const Email = ({ setEmail, email, setContainerContent, containerContent }) => {
                 document.getElementById("email").classList.remove("shake");
             }, 500);
         } else {
+            updateUserEmail(email);
+
             setContainerContent(containerContent + 1);
         }
     }
@@ -24,8 +28,8 @@ const Email = ({ setEmail, email, setContainerContent, containerContent }) => {
             <h1>Вход</h1>
             <span>Перейдите на YouTube</span>
             <div className="input-container">
-                <input type="email" value={email} id="email" placeholder="Телефон или адрес эл. почты" onChange={(e) => setEmail(e.target.value)}></input>
-                <label>Телефон или адрес эл. почты</label>
+                <input type="email" value={email} id="email" placeholder="Адрес эл. почты" onChange={(e) => setEmail(e.target.value)}></input>
+                <label>Адрес эл. почты</label>
                 <div id="error" className="error-message hidden">
                     <span>
                         <svg aria-hidden="true" fill="currentColor" focusable="false" width="16px" height="16px" viewBox="0 0 24 24" xmlns="https://www.w3.org/2000/svg">

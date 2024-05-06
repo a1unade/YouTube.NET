@@ -10,7 +10,7 @@
 }
 
 h1 {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .sign-container {
@@ -112,7 +112,7 @@ select:not(:required:invalid) {
     border: none;
     max-height: 35px;
     min-width: 120px;
-    padding: 0px;
+    padding: 0;
     border-radius: 3px;
 }
 
@@ -134,6 +134,7 @@ select:not(:required:invalid) {
     box-shadow: 2px 2px 4px #ccc;
 }
 
+/*noinspection ALL*/
 .shake {
     animation: shake 0.5s;
 }
@@ -224,7 +225,7 @@ select:not(:required:invalid) {
     opacity: 0;
     top: 50px;
     left: 50px;
-    font-size: 0px;
+    font-size: 0;
 }
 
 .input-container input:focus+label,
@@ -266,10 +267,12 @@ select:not(:required:invalid) {
     padding-right: 5px;
 }
 
+/*noinspection ALL*/
 .input-container input.error {
     border-color: rgb(217, 48, 37);
 }
 
+/*noinspection ALL*/
 .input-container select.error {
     border-color: rgb(217, 48, 37);
 }
@@ -280,7 +283,7 @@ select:not(:required:invalid) {
     border: none;
     max-height: 35px;
     min-width: fit-content;
-    padding: 0px;
+    padding: 0;
     border-radius: 3px;
 }
 
@@ -310,7 +313,6 @@ select:not(:required:invalid) {
     margin-top: 20px;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
 }
 
 .user-image {
@@ -334,12 +336,12 @@ select:not(:required:invalid) {
 }
 
 .user-info p {
-    margin: 0px;
+    margin: 0;
 }
 
 .user-info span {
     font-size: 12px;
-    margin: 0px;
+    margin: 0;
     color: rgb(95, 99, 104);
 }
 

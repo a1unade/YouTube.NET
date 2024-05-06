@@ -1,5 +1,4 @@
-import React from "react";
-
+// eslint-disable-next-line react/prop-types
 const Check = ({ setContainerContent, containerContent, name, email }) => {
     return (
         <>
@@ -9,9 +8,9 @@ const Check = ({ setContainerContent, containerContent, name, email }) => {
                     <span>Вы можете использовать этот адрес электронной почты для входа в аккаунт.</span>
                 </div>
             </div>
-            <div className="user">
+            <div className="user" style={{justifyContent: "flex-start"}}>
                 <div className="user-image">
-                    <img src="https://avatars.githubusercontent.com/u/113981832?v=4"></img>
+                    <img src="https://avatars.githubusercontent.com/u/113981832?v=4" alt="img"></img>
                 </div>
                 <div className="user-info">
                     <p><b>{name}</b></p>

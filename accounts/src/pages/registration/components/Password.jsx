@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { validatePassword } from "../../../utils/validator";
 import errors from "../../../utils/errorMessages";
+import {useSelector} from "react-redux";
+import {apiClient} from "../../../utils/apiClient.js";
+import {useNavigate} from "react-router-dom";
 
+// eslint-disable-next-line react/prop-types
 const Password = ({ setContainerContent, containerContent }) => {
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
+    const {email} = useSelector(state => state.email);
+    const {name} = useSelector(state => state.name);
+    const {surname} = useSelector(state => state.surname);
+    const {birthdate} = useSelector(state => state.birthdate);
+    const {gender} = useSelector(state => state.gender);
+    const navigate = useNavigate();
+    console.log(useSelector(state => state))
 
-    const makePasswordVisibile = () => {
+    const makePasswordVisible = () => {
         const passwordInput = document.getElementById("password");
         const confirmInput = document.getElementById("confirm");
         const showPasswordButton = document.getElementById("showPasswordButton");
@@ -22,7 +33,25 @@ const Password = ({ setContainerContent, containerContent }) => {
         }
     }
 
-    const handleNextButtonClick = () => {
+    const register = async () => {
+        try {
+            const response = await apiClient.post('Auth/register', {
+                    email,
+                    password,
+                    name,
+                    surname,
+                    birthdate,
+                    gender
+                });
+            setContainerContent(containerContent + 1)
+            console.log(response.data);
+        } catch (error) {
+            console.error('Ошибка при регистрации:', error);
+            navigate('/error');
+        }
+    }
+
+    const handleNextButtonClick = async () => {
         const message = validatePassword(password);
         if (message.length > 0) {
             document.getElementById("password").classList.add("error", "shake");
@@ -44,7 +73,7 @@ const Password = ({ setContainerContent, containerContent }) => {
         }
 
         if (message.length === 0 && password === confirm) {
-            setContainerContent(containerContent + 1);
+            await register();
         }
     }
 
@@ -77,7 +106,7 @@ const Password = ({ setContainerContent, containerContent }) => {
                 </div>
             </div>
             <div className="sign-buttons" style={{ marginTop: 10 }}>
-                <button className="password-button" id="showPasswordButton" onClick={makePasswordVisibile}>Показать пароль</button>
+                <button className="password-button" id="showPasswordButton" onClick={makePasswordVisible}>Показать пароль</button>
             </div>
             <div className="sign-buttons">
                 <button className="left-button" onClick={() => setContainerContent(containerContent - 1)}>Назад</button>

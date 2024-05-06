@@ -1,7 +1,9 @@
-import React from "react";
+// eslint-disable-next-line react/prop-types
+import {apiClient} from "../../../utils/apiClient.js";
 
+// eslint-disable-next-line react/prop-types
 const Password = ({ setContainerContent, containerContent, setPassword, email, password }) => {
-    const makePasswordVisibile = () => {
+    const makePasswordVisible = () => {
         const passwordInput = document.getElementById("password");
         const showPasswordButton = document.getElementById("showPasswordButton");
 
@@ -11,6 +13,19 @@ const Password = ({ setContainerContent, containerContent, setPassword, email, p
         } else {
             passwordInput.type = "password";
             showPasswordButton.textContent = "Показать пароль";
+        }
+    }
+
+    const login = async () => {
+        try {
+            const response = await apiClient.post('Auth/login', {
+                email,
+                password
+            });
+
+            console.log(response.data);
+        } catch (error) {
+            console.error('Ошибка при регистрации:', error);
         }
     }
 
@@ -33,11 +48,11 @@ const Password = ({ setContainerContent, containerContent, setPassword, email, p
                 <label>Введите пароль</label>
             </div>
             <div className="sign-buttons" style={{ marginTop: 10 }}>
-                <button className="password-button" id="showPasswordButton" onClick={makePasswordVisibile}>Показать пароль</button>
+                <button className="password-button" id="showPasswordButton" onClick={makePasswordVisible}>Показать пароль</button>
             </div>
             <div className="sign-buttons">
                 <button className="left-button" onClick={() => setContainerContent(containerContent - 1)}>Сменить аккаунт</button>
-                <button className="right-button">Далее</button>
+                <button className="right-button" onClick={async () => await login()}>Далее</button>
             </div>
         </>
     );

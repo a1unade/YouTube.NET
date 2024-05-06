@@ -1,5 +1,6 @@
 using YouTube.Application.Extensions;
 using YouTube.Infrastructure.Extensions;
+using YouTube.Infrastructure.SignalR;
 using YouTube.Persistence.Extensions;
 
 
@@ -11,15 +12,7 @@ builder.Services.AddApplicationLayer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+
 
 var app = builder.Build();
 
@@ -31,7 +24,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors();
+app.UseCors(b => b
+    .WithOrigins("http://localhost:5173") 
+    .AllowAnyMethod()                     
+    .AllowAnyHeader()                      
+    .AllowCredentials());  
+
+app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
+
 app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();

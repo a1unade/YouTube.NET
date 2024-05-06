@@ -8,17 +8,26 @@ public interface IAuthService
     /// <summary>
     /// Регистрация пользователя
     /// </summary>
-    Task<UserResponse> RegisterAsync(RegisterDto registerDto);
+    Task<AuthResponse> RegisterAsync(RegisterDto registerDto);
     
     /// <summary>
     /// Подтверждение почты
     /// </summary>
-    Task<UserResponse> ConfirmEmailAsync(string userId, string token);
+    Task<AuthResponse> ConfirmEmailAsync(string userId, string token);
 
     /// <summary>
     /// Удаление пользователей из бд (для проверки функционала)
     /// </summary>
     Task DeleteAllUsersAsync();
+
+    /// <summary>
+    /// Получение пользователя по адресу электронной почты
+    /// </summary>
+    /// <param name="email">Адрес электронной почты пользователя</param>
+    /// <returns>Пользователь при success</returns>
+    Task<UserResponse> GetUserByEmailAsync(string email);
+
+    Task<AuthResponse> SignInAsync(LoginDto loginDto);
 
     // /// <summary>
     // /// Смена пароля

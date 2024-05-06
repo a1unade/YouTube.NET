@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Google_logo from "../components/Google_logo";
 import Footer from "../components/Footer";
 import Name from "./components/Name";
@@ -35,11 +35,11 @@ const Register = () => {
                 );
             case 3:
                 return (
-                    <Confirmation email={email} setContainerContent={setContainerContent} containerContent={containerContent} />
+                    <Password setContainerContent={setContainerContent} containerContent={containerContent} />
                 );
             case 4:
                 return (
-                    <Password setContainerContent={setContainerContent} containerContent={containerContent} />
+                    <Confirmation email={email} setContainerContent={setContainerContent} containerContent={containerContent} />
                 );
             case 5:
                 return (

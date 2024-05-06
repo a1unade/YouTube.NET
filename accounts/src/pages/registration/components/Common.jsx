@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { validateBirthDate } from "../../../utils/validator";
 import errors from "../../../utils/errorMessages.js"
+import {useActions} from "../../../hooks/useActions.js";
 
+// eslint-disable-next-line react/prop-types
 const Common = ({ setContainerContent, containerContent, setBirth, gender, setGender }) => {
     const [day, setDay] = useState(''); // день рождения
     const [month, setMonth] = useState(''); // месяц рождения
     const [year, setYear] = useState(''); // год рождения
+    const {updateUserGender, updateUserBirthdate} = useActions();
 
     const handleNextButtonClick = () => {
         const dateMessage = validateBirthDate(year, month, day);
@@ -23,6 +26,7 @@ const Common = ({ setContainerContent, containerContent, setBirth, gender, setGe
             }, 500);
         }
 
+        // eslint-disable-next-line react/prop-types
         if (gender.length === 0) {
             document.getElementById("gender").classList.add("error", "shake");
             document.getElementById("gender-error").classList.remove("hidden");
@@ -32,8 +36,12 @@ const Common = ({ setContainerContent, containerContent, setBirth, gender, setGe
             }, 500);
         }
 
+        // eslint-disable-next-line react/prop-types
         if (gender.length > 0 && dateMessage.length === 0) {
             setBirth(new Date(year, month, day));
+            updateUserGender(gender);
+            updateUserBirthdate(`${year}-${month}-${day}`);
+
             setContainerContent(containerContent + 1);
         }
     }

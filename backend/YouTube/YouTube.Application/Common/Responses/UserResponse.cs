@@ -4,13 +4,30 @@ namespace YouTube.Application.Common.Responses;
 
 public class UserResponse
 {
+    public UserResponseTypes ResponseType { get; set; }
+    
     /// <summary>
-    /// Тип ответа
+    /// Имя пользователя
     /// </summary>
-    public UserResponseTypes Type { get; set; }
-
+    public string? Name { get; set; }
+    
     /// <summary>
-    /// Описание ответа
+    /// Фамилия пользователя
     /// </summary>
-    public string Message { get; set; } = "";
+    public string? Susrname { get; set; }
+    
+    /// <summary>
+    /// Пол пользователя
+    /// </summary>
+    public string? Gender { get; set; }
+    
+    /// <summary>
+    /// Дата рождения пользвователя
+    /// </summary>
+    public string? BirthDate { get; set; }
+    
+    /// <summary>
+    /// Электронная почта пользователя
+    /// </summary>
+    public string? Email { get; set; }
 }
