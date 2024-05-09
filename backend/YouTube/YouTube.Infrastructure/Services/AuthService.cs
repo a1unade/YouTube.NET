@@ -136,12 +136,40 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
 
             if (isPasswordCorrect)
                 return new AuthResponse
-                    { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.LoginSuccess };
+                    { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.LoginSuccess, UserId = user.Id.ToString()};
 
             return new AuthResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.LoginWrongPassword };
         }
         
         return new AuthResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.UserNotFound };
+    }
+    
+    public async Task<UserResponse> GetUserByIdAsync(string id)
+    {
+        try
+        {
+            User? user = await userManager.Users.AsNoTracking()
+                .Include(u => u.UserInfo)
+                .FirstOrDefaultAsync(u => u.Id.ToString() == id);
+
+            return new UserResponse
+            {
+                ResponseType = UserResponseTypes.Success,
+                Email = user!.Email,
+                Name = user.UserInfo.Name,
+                Susrname = user.UserInfo.Surname,
+                Gender = user.UserInfo.Gender,
+                BirthDate = user.UserInfo.BirthDate.ToString()
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("GetUserByEmail: " + ex.Message);
+            Console.ResetColor();
+            
+            return new UserResponse { ResponseType = UserResponseTypes.Error };
+        }
     }
     
     // TODO: фича для сброса пароля

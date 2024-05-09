@@ -4,6 +4,7 @@ import errors from "../../../utils/errorMessages";
 import {useSelector} from "react-redux";
 import {apiClient} from "../../../utils/apiClient.js";
 import {useNavigate} from "react-router-dom";
+import {useActions} from "../../../hooks/useActions.js";
 
 // eslint-disable-next-line react/prop-types
 const Password = ({ setContainerContent, containerContent }) => {
@@ -15,7 +16,7 @@ const Password = ({ setContainerContent, containerContent }) => {
     const {birthdate} = useSelector(state => state.birthdate);
     const {gender} = useSelector(state => state.gender);
     const navigate = useNavigate();
-    console.log(useSelector(state => state))
+    const {updateUserId} = useActions();
 
     const makePasswordVisible = () => {
         const passwordInput = document.getElementById("password");
@@ -43,7 +44,13 @@ const Password = ({ setContainerContent, containerContent }) => {
                     birthdate,
                     gender
                 });
-            setContainerContent(containerContent + 1)
+            if(response.data.type === 0){
+                updateUserId(response.data.userId);
+                setContainerContent(containerContent + 1);
+            }
+            else{
+                navigate("/error");
+            }
             console.log(response.data);
         } catch (error) {
             console.error('Ошибка при регистрации:', error);

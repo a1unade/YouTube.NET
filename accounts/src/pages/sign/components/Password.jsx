@@ -1,8 +1,11 @@
 // eslint-disable-next-line react/prop-types
 import {apiClient} from "../../../utils/apiClient.js";
+import {useNavigate} from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const Password = ({ setContainerContent, containerContent, setPassword, email, password }) => {
+    const navigate = useNavigate();
+
     const makePasswordVisible = () => {
         const passwordInput = document.getElementById("password");
         const showPasswordButton = document.getElementById("showPasswordButton");
@@ -23,6 +26,12 @@ const Password = ({ setContainerContent, containerContent, setPassword, email, p
                 password
             });
 
+            if (response.data.type === 0){
+                window.location.replace(`http://localhost:5173/auth/${response.data.userId}`);
+            }
+            else {
+                navigate("/error")
+            }
             console.log(response.data);
         } catch (error) {
             console.error('Ошибка при регистрации:', error);

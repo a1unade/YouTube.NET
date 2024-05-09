@@ -5,6 +5,8 @@ import './index.css';
 import Routing from './Routing';
 import Header from './pages/components/header/index.jsx';
 import LeftMenu from './pages/components/left_menu/index.jsx';
+import {Provider} from "react-redux";
+import store from "./store"
 
 const App = () => {
     const [isOpen, setOpen] = useState(false);
@@ -20,15 +22,17 @@ const App = () => {
 
     return (
         <>
-            <BrowserRouter>
-                <div>
-                    <LeftMenu isOpen={isOpen}/>
-                    <Header toggleMenu={toggleMenu}/>
-                </div>
-                <div id='page' className='routing'>
-                    <Routing/>
-                </div>
-            </BrowserRouter>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <div>
+                        <LeftMenu isOpen={isOpen}/>
+                        <Header toggleMenu={toggleMenu}/>
+                    </div>
+                    <div id='page' className='routing'>
+                        <Routing/>
+                    </div>
+                </BrowserRouter>
+            </Provider>
         </>
     );
 };

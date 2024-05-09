@@ -29,6 +29,8 @@ public interface IAuthService
 
     Task<AuthResponse> SignInAsync(LoginDto loginDto);
 
+    Task<UserResponse> GetUserByIdAsync(string id);
+
     // /// <summary>
     // /// Смена пароля
     // /// </summary>

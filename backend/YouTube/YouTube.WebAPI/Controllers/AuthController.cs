@@ -50,4 +50,8 @@ public class AuthController(IAuthService authService) : ControllerBase
 
         return Ok(new { Message = "Пользователи были удалены"});
     }
+
+    [HttpGet("getUserById")]
+    public async Task<UserResponse> GetUserById(string userId) => 
+        await authService.GetUserByIdAsync(userId);
 }

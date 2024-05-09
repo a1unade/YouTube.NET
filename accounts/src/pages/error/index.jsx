@@ -7,7 +7,7 @@ const Error = () => {
             <div className="sign-container">
                 <Google_logo/>
                 <div className="header">
-                    <h1 style={{maxWidth: 300}}>Подтвердите адрес электронной почты</h1>
+                    <h1 style={{maxWidth: 300}}>Ошибка</h1>
                     <div className="notice" style={{marginLeft: 0, marginTop: 30, maxWidth: 350}}>
                         {/* eslint-disable-next-line react/no-unescaped-entities */}
                         <span style={{fontSize: 14, lineHeight: 1.5}}>

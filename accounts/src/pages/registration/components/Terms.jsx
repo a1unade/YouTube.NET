@@ -1,5 +1,8 @@
 // eslint-disable-next-line react/prop-types
+import {useSelector} from "react-redux";
+
 const Terms = ({ setContainerContent }) => {
+    const {userId} = useSelector(state => state.id);
     return (
         <>
             <div className="header">
@@ -37,7 +40,7 @@ const Terms = ({ setContainerContent }) => {
             </div>
             <div className="sign-buttons">
                 <button className="left-button" onClick={() => setContainerContent(0)}>Отмена</button>
-                <button className="right-button">Принимаю</button>
+                <button className="right-button" onClick={() => window.location.replace(`http://localhost:5173/auth/${userId}`)}>Принимаю</button>
             </div>
         </>
     );

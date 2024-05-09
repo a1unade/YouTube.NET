@@ -26,6 +26,7 @@ import Branding from "./pages/admin_panel/Brending.jsx";
 import MainDetails from "./pages/admin_panel/MainDetails.jsx";
 import AccountSettings from "./pages/settings/AccountSettings.jsx";
 import PaymentsSettings from "./pages/settings/PaymentsSettings.jsx";
+import Auth from "./pages/auth/index.jsx";
 
 const Routing = () => {
     return (
@@ -57,6 +58,7 @@ const Routing = () => {
             <Route path="/channel/edit/details" element={<MainDetails/>}/>
             <Route path={"/settings/account"} element={<AccountSettings/>}/>
             <Route path={"/settings/payments"} element={<PaymentsSettings/>}/>
+            <Route path={"/auth/:id"} element={<Auth/>}/>
         </Routes>
     );
 }

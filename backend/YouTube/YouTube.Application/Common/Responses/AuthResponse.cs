@@ -13,4 +13,9 @@ public class AuthResponse
     /// Описание ответа
     /// </summary>
     public string Message { get; set; } = "";
+    
+    /// <summary>
+    /// ID пользователя
+    /// </summary>
+    public string? UserId { get; set; }
 }
