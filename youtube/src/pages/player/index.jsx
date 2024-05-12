@@ -22,7 +22,7 @@ const Player = () => {
     setShowMap(true);
   };
   const [showMap, setShowMap] = useState(false);
-  const apiKey = "67dcffa9-ca2a-4454-af6c-fed236fd37be";
+  const apiKey = ""; //KeyApi
   const locationName = "USA";
 
   const handleFocus = () => {
