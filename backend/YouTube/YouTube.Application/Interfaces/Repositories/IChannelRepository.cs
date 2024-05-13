@@ -5,5 +5,6 @@ namespace YouTube.Application.Interfaces.Repositories;
 
 public interface IChannelRepository
 {
+    Task CreateChannel(string name, Guid userId, CancellationToken cancellationToken);
     Task<Channel?> GetByName(string name, CancellationToken cancellationToken);
 }

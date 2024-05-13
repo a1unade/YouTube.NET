@@ -14,6 +14,18 @@ public class ChannelRepository : IChannelRepository
         _context = context;
     }
 
+    public async Task CreateChannel(string name, Guid userId, CancellationToken cancellationToken)
+    {
+        var channel = new Channel()
+        {
+            Name = name,
+            CreateDate = DateTime.Today,
+            UserId = userId
+        };
+        await _context.Channels.AddAsync(channel, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<Channel?> GetByName(string name, CancellationToken cancellationToken)
     {
         return await _context.Channels

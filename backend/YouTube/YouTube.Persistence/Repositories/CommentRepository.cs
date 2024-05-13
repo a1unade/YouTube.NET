@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
@@ -22,5 +23,19 @@ public class CommentRepository : ICommentRepository
             .ToListAsync(cancellationToken);
 
         return result;
+    }
+
+    public async Task AddComment(string text, int videoId, Guid userId, CancellationToken cancellationToken)
+    {
+        var comment = new Comment()
+        {
+            CommentText = text,
+            VideoId = videoId,
+            UserId = userId,
+            PostDate = DateTime.Today
+        };
+
+        await _context.Comments.AddAsync(comment, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }

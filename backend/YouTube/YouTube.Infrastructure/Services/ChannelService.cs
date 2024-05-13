@@ -1,5 +1,7 @@
+using YouTube.Application.Common.Responses;
 using YouTube.Application.Common.Responses.ChannelResponse;
 using YouTube.Application.Common.Responses.VideoResponse;
+using YouTube.Application.DTOs.Channel;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
@@ -14,6 +16,16 @@ public class ChannelService : IChannelService
     {
         _channelRepository = channelRepository;
         _videoRepository = videoRepository;
+    }
+
+    public async Task<BaseResponse> CreateChannel(CreateChannelDto request, CancellationToken cancellationToken)
+    {
+        await _channelRepository.CreateChannel(request.ChannelName, request.UserId, cancellationToken);
+
+        return new BaseResponse()
+        {
+            IsSuccessfully = true
+        };
     }
     public async Task<ChannelItemResponse> GetByName(string name, CancellationToken cancellationToken)
     {
