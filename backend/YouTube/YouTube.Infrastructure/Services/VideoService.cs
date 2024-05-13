@@ -1,48 +1,49 @@
-using Microsoft.AspNetCore.Http;
+using YouTube.Application.Common.Responses.CommentResponse;
+using YouTube.Application.Common.Responses.VideoResponse;
 using YouTube.Application.Interfaces;
-using YouTube.Domain.Entities;
+using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Infrastructure.Services;
 
 public class VideoService : IVideoService
 {
-    private readonly string _uploadsFolder;
+    private readonly ICommentRepository _commentRepository;
 
-    public VideoService()
+    public VideoService(ICommentRepository commentRepository)
     {
-        _uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+        _commentRepository = commentRepository;
     }
 
-    public async Task<IEnumerable<string>> GetAllVideo()
+    public async Task<VideoCommentListResponse> GetVideoCommentList(int id, CancellationToken cancellationToken)
     {
-        if (!Directory.Exists(_uploadsFolder))
+        var comments = await _commentRepository.GetVideoComment(id, cancellationToken);
+
+        if (comments.Count == 0)
+            return new VideoCommentListResponse()
+            {
+                IsSuccessfully = true,
+                Message = "0 Comments"
+            };
+
+        var result = new List<CommentItem>();
+
+        foreach (var comment in comments)
         {
-            return Enumerable.Empty<string>();
+            result.Add(new CommentItem()
+            {
+                CommentText = comment.CommentText,
+                Id = comment.Id,
+                DisLikeCount = comment.DisLikeCount,
+                LikeCount = comment.LikeCount,
+                PostDate = comment.PostDate,
+                UserName = comment.UserInfo.Name
+            });
         }
 
-        var videoFiles = Directory.GetFiles(_uploadsFolder)
-            .Select(filePath => Path.GetFileName(filePath));
-
-        return await Task.FromResult(videoFiles);
-    }
-
-    public async Task AddVideo(IFormFile video)
-    {
-        User user = new User()
+        return new VideoCommentListResponse()
         {
-            Id = Guid.NewGuid()
+            IsSuccessfully = true,
+            Comments = result
         };
-        if (!Directory.Exists(_uploadsFolder))
-        {
-            Directory.CreateDirectory(_uploadsFolder);
-        } 
-        //var uniqueFileName =  user.Id + Path.GetExtension(video.FileName);
-
-
-        var filePath = Path.Combine(_uploadsFolder, /*uniqueFileName*/ video.FileName);
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await video.CopyToAsync(stream);
-        }
     }
 }

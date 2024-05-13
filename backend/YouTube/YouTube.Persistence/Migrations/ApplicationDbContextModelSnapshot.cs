@@ -152,6 +152,114 @@ namespace YouTube.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BannerImgFileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("BannerImgId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int?>("MainImgId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("SubCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BannerImgFileId");
+
+                    b.HasIndex("MainImgId")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Channels");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("DisLikeCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("LikeCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime>("PostDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("VideoId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VideoId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.StaticFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StaticFiles");
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.Subscription", b =>
                 {
                     b.Property<int>("Id")
@@ -247,6 +355,21 @@ namespace YouTube.Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.UserChannelSub", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ChannelId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "ChannelId");
+
+                    b.HasIndex("ChannelId");
+
+                    b.ToTable("UserChannelSubs");
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -256,6 +379,9 @@ namespace YouTube.Persistence.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("Country")
+                        .HasColumnType("text");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("text");
@@ -263,6 +389,9 @@ namespace YouTube.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Premium")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Surname")
                         .HasColumnType("text");
@@ -276,6 +405,60 @@ namespace YouTube.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("UserInfos");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Video", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChannelId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("0");
+
+                    b.Property<int>("DisLikeCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LikeCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("PathInDisk")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PreviewImgId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("PreviewImgId")
+                        .IsUnique();
+
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -329,6 +512,48 @@ namespace YouTube.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
+                {
+                    b.HasOne("YouTube.Domain.Entities.StaticFile", "BannerImgFile")
+                        .WithMany()
+                        .HasForeignKey("BannerImgFileId");
+
+                    b.HasOne("YouTube.Domain.Entities.StaticFile", "MainImgFile")
+                        .WithOne("Channel")
+                        .HasForeignKey("YouTube.Domain.Entities.Channel", "MainImgId");
+
+                    b.HasOne("YouTube.Domain.Entities.UserInfo", "UserInfo")
+                        .WithOne("Channel")
+                        .HasForeignKey("YouTube.Domain.Entities.Channel", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BannerImgFile");
+
+                    b.Navigation("MainImgFile");
+
+                    b.Navigation("UserInfo");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("YouTube.Domain.Entities.UserInfo", "UserInfo")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("YouTube.Domain.Entities.Video", "Video")
+                        .WithMany("Comments")
+                        .HasForeignKey("VideoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserInfo");
+
+                    b.Navigation("Video");
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.Subscription", b =>
                 {
                     b.HasOne("YouTube.Domain.Entities.User", "User")
@@ -338,6 +563,25 @@ namespace YouTube.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.UserChannelSub", b =>
+                {
+                    b.HasOne("YouTube.Domain.Entities.Channel", "Channel")
+                        .WithMany("UserChannelSubs")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("YouTube.Domain.Entities.UserInfo", "UserInfo")
+                        .WithMany("ChannelSubs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("UserInfo");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
@@ -351,12 +595,62 @@ namespace YouTube.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Video", b =>
+                {
+                    b.HasOne("YouTube.Domain.Entities.Channel", "Channel")
+                        .WithMany("Videos")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("YouTube.Domain.Entities.StaticFile", "StaticFile")
+                        .WithOne("Video")
+                        .HasForeignKey("YouTube.Domain.Entities.Video", "PreviewImgId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("StaticFile");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
+                {
+                    b.Navigation("UserChannelSubs");
+
+                    b.Navigation("Videos");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.StaticFile", b =>
+                {
+                    b.Navigation("Channel")
+                        .IsRequired();
+
+                    b.Navigation("Video")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.User", b =>
                 {
                     b.Navigation("Subscriptions");
 
                     b.Navigation("UserInfo")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
+                {
+                    b.Navigation("Channel")
+                        .IsRequired();
+
+                    b.Navigation("ChannelSubs");
+
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Video", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

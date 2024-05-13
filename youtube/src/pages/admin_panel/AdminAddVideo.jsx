@@ -9,6 +9,7 @@ const AdminAddVideo = () => {
     const [uploading, setUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const handleFileChange = (event) => {
+        console.log(event.target.files[0])
         setSelectedFile(event.target.files[0]);
     };
     const video = {
@@ -25,23 +26,31 @@ const AdminAddVideo = () => {
         event.preventDefault();
         setUploading(true);
 
-        const formData = new FormData();
-        formData.append('video', selectedFile);
+
+
 
         try {
-            const response = await axios.post('http://localhost:5041/api/Channel/upload', formData, {
+            const formData = new FormData();
+            formData.append('video',selectedFile);
+
+            const response = await axios.post('http://localhost:5041/Yandex/UploadFileToDisk\n', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('Response:', response);
-            setUploadSuccess(true);
+
+            console.log('Файл успешно загружен:', response.data);
+            setUploading(true)
+            setUploadSuccess(true)
         } catch (error) {
-            console.error('Ошибка при отправке запроса:', error);
-        } finally {
-            setUploading(false);
+            setUploading(false)
+            console.error('Ошибка при загрузке файла:', error);
         }
     };
+
+
+
+
     return (
         <>
             <ContentAdd></ContentAdd>
@@ -102,6 +111,7 @@ const AdminAddVideo = () => {
                     </button>
                 </form>
             </div>
+            {/*<video src="https://downloader.disk.yandex.ru/disk/c6631babf2ba5612b7b91995e4bcc96584a95b023ee9f4c74b16d7f4a381b3a9/6639844d/fKqInKw3d7bLFOeFnMGnhDH1Z-voPfuALnTn4H9kzgjwczVfmnswgCs8yOJFDNoJUxvr-16KqQ0TCJVok7b3UwuktwEMYuLTXrZrBbdqSkKr8npumZHI4midPdWhecNq?uid=1130000064761911&filename=%D0%B0%D1%83%D1%86%D0%B0%D1%83%D1%86&disposition=attachment&hash=&limit=0&content_type=video%2Fmp4&owner_uid=1130000064761911&fsize=1479412&hid=732514b69dea9ed802bbac80e37b48f7&media_type=video&tknv=v2&etag=065b70582b558a310e3aeec7b1befaa7"/>*/}
         </>
     );
 };

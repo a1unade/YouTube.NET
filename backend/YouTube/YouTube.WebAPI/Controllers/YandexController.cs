@@ -1,174 +1,145 @@
-using System.Net.Http.Headers;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using YandexDisk.Client.Http;
-using YandexDisk.Client.Protocol;
-using YouTube.Application.DTOs.DiskResponse;
+using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class YandexController : ControllerBase
 {
+    private readonly IYandexService _yandexService;
     private readonly IConfiguration _configuration;
 
-    public YandexController(IConfiguration configuration)
+    public YandexController(IYandexService yandexService, IConfiguration configuration)
     {
+        _yandexService = yandexService;
         _configuration = configuration;
     }
-    
+
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetDiskInfo()
+    public async Task<IActionResult> GetAllFilesOnDisk(CancellationToken cancellationToken)
     {
-        string accessToken = _configuration["Yandex:Token"]!;
+        var yandex = await _yandexService.GetAllFilesOnDisk(cancellationToken);
 
-        using (HttpClient client = new HttpClient())
-        {
-            client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken); // Всегда надо добавлять
-
-            string url = "https://cloud-api.yandex.net/v1/disk/";
-
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseBody);
-                    return Ok(responseBody);
-                }
-                else
-                {
-                    Console.WriteLine($"Ошибка: {response.StatusCode}");
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Ошибка HTTP запроса: {e.Message}");
-                return StatusCode(500); 
-            }
-        }
+        return Ok(yandex);
     }
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetAllFilesOnDisk()
-    {
-        try
-        {
-            string accessToken = _configuration["Yandex:Token"]!;
 
-            // Создание HTTP клиента
-            using (HttpClient client = new HttpClient())
-            {
-                // Установка заголовка Authorization
-                client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken);
-
-                // URL для запроса списка всех файлов
-                string url = "https://cloud-api.yandex.net/v1/disk/resources/files";
-
-                // Отправка GET запроса
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                // Проверка успешности запроса
-                if (response.IsSuccessStatusCode)
-                {
-                    // Чтение содержимого ответа
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(responseBody);
-
-                    // Возвращаем ответ в виде строки
-                    return Ok(responseBody);
-                }
-                else
-                {
-                    // Обработка ошибки
-                    Console.WriteLine($"Ошибка: {response.StatusCode}");
-                    return StatusCode((int)response.StatusCode);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            // Обработка исключения
-            Console.WriteLine($"Ошибка: {ex.Message}");
-            return StatusCode(500); // Internal Server Error
-        }
-    }
-    
     [HttpPost("[action]")]
-        public async Task<IActionResult> UploadFileToDisk()
-        {
-            try
-            {
-                string accessToken = _configuration["Yandex:Token"]!;
+    public async Task<IActionResult> UploadFileToDisk(IFormFile video, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.UploadFileToDisk(video, "/FromYt", cancellationToken);
 
-                // Путь, по которому следует загрузить файл
-                string path = "/Gin.png";
-                Console.WriteLine(Uri.EscapeDataString(path));
-                // URL для запроса на получение ссылки для загрузки файла
-                string uploadUrl = $"https://cloud-api.yandex.net/v1/disk/resources/upload?path={Uri.EscapeDataString(path)}&overwrite=true";
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
 
-                using (HttpClient client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken);
+        return Ok(result);
+    }
 
-                    // Отправка GET запроса для получения ссылки для загрузки файла
-                    Console.WriteLine("1");
-                    HttpResponseMessage response = await client.GetAsync(uploadUrl);
-                    Console.WriteLine("2");
+    [HttpPost("[action]")]
+    public async Task<IActionResult> CreateFolder(string path, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.CreateFolder(path, cancellationToken);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine(response.StatusCode);
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
 
-                        // Чтение содержимого ответа
-                        Console.WriteLine("3");
+        return Ok(result);
+    }
 
-                        string responseBody = await response.Content.ReadAsStringAsync();
-                        Console.WriteLine("4");
-                        Console.WriteLine(responseBody);
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> DeleteFile(string path, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.DeleteFile(path, cancellationToken);
 
-                        var uploadLink = JsonSerializer.Deserialize<UploadLinkResponse>(responseBody);
-                        Console.WriteLine("5");
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
 
-                        byte[] fileBytes = System.IO.File.ReadAllBytes("C:\\Users\\Булат\\Desktop\\Gin.jpg");
-                        Console.WriteLine("6");
+        return Ok(result);
+    }
 
-                        using (HttpClient uploadClient = new HttpClient())
-                        {
-                            // Отправка файла на полученный URL для загрузки
-                            Console.WriteLine("7");
-                            Console.WriteLine(uploadLink.Href  +" 1");
-                            Console.WriteLine(uploadLink.Method + " 2");
-                            Console.WriteLine(uploadLink.Templated + " 3");
-                            
-                            
-                            HttpResponseMessage uploadResponse = await uploadClient.PutAsync(uploadLink.Href, new ByteArrayContent(fileBytes));
-                            Console.WriteLine("8");
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetFileFromPath(string path, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.GetFile(path, cancellationToken);
 
-                            if (uploadResponse.IsSuccessStatusCode)
-                            {
-                                return Ok("File uploaded successfully.");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Ошибка при загрузке файла: {uploadResponse.StatusCode}");
-                                return StatusCode((int)uploadResponse.StatusCode);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Ошибка: {response.StatusCode}");
-                        return StatusCode((int)response.StatusCode);
-                    }
-                }
-            }
-            catch (Exception ex)
-            { 
-                Console.WriteLine($"Ошибка: {ex.Message}");
-                return StatusCode(500); 
-            }
-        }
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> PublishFile(string path, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.PublishFile(path, cancellationToken);
+
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    // [HttpGet("[action]")]
+    // public async Task<IActionResult> GetFile(string url, CancellationToken cancellationToken)
+    // {
+    //     try
+    //     {
+    //         string accessToken = _configuration["Yandex:Token"]!;
+    //
+    //         using (HttpClient client = new HttpClient())
+    //         {
+    //             client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken); // Добавлять всегда
+    //
+    //
+    //             HttpResponseMessage response = await client.GetAsync(url, cancellationToken);
+    //
+    //             if (response.IsSuccessStatusCode)
+    //             {
+    //                 string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+    //                 Console.WriteLine(responseBody);
+    //                 return Ok();
+    //
+    //             }
+    //
+    //             return BadRequest();
+    //
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return BadRequest();
+    //     }
+    // }
+
+      [HttpGet("[action]")]
+      public async Task<string> GetPublishFile(string publicKey, CancellationToken cancellationToken)
+      {
+          try
+          {
+              string accessToken = _configuration["Yandex:Token"]!;
+
+              using (HttpClient client = new HttpClient())
+              {
+                  client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken); // Добавлять всегда
+
+
+                  HttpResponseMessage response = await client.GetAsync(publicKey,cancellationToken);
+
+                  if (response.IsSuccessStatusCode)
+                  {
+                      string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                      Console.WriteLine("________________________________________________________________");
+                      Console.WriteLine(responseBody);
+                      return responseBody;
+
+                  } 
+                  return "Хай";
+
+              }
+          }
+          catch (Exception ex)
+          {
+              return ex.Message;
+          }
+      }
 }

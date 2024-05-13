@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
+using YouTube.Application.Common.Responses.VideoResponse;
 
 namespace YouTube.Application.Interfaces;
 
 public interface IVideoService
 {
-    Task<IEnumerable<string>> GetAllVideo();
-
-    Task AddVideo(IFormFile video);
+    Task<VideoCommentListResponse> GetVideoCommentList(int id, CancellationToken cancellationToken);
 }
