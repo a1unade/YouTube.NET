@@ -9,6 +9,7 @@ import {SubscriptionBell} from "../../assets/Icons.jsx";
 const ChannelPage = () => {
 
   const { customUrl } = useParams(); // Извлечение параметра name из URL
+  console.log(customUrl)
   const [isFollow, setIsFollow] = useState(false);
   const [owners, setOwner] = useState([])
 

@@ -24,10 +24,14 @@ public class UserInfo : BaseEntity
     /// </summary>
     public DateTime BirthDate { get; set; }
     
+    public string? Country { get; set; }
+    
     /// <summary>
     /// Пол пользователя
     /// </summary>
     public string Gender { get; set; }
+    
+    public bool Premium { get; set; }
 
     /// <summary>
     /// Навигационное свойство для связи с User
@@ -43,4 +47,10 @@ public class UserInfo : BaseEntity
     /// Навигационное свойство для связи с аватаркой
     /// </summary>
     public Avatar Avatar { get; set; }
+
+    public Channel Channel { get; set; }
+    
+    public List<Comment>? Comments { get; set; }
+    
+    public List<UserChannelSub> ChannelSubs { get; set; }
 }

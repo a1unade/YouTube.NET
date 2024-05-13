@@ -3,42 +3,34 @@ using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
 [ApiController]
-[Route("api/[controller]")]
 public class ChannelController : ControllerBase
 {
-    private readonly IVideoService _videoService;
+    private readonly IChannelService _channelService;
 
-    public ChannelController(IVideoService videoService)
+    public ChannelController(IChannelService channelService)
     {
-        _videoService = videoService;
+        _channelService = channelService;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllVideos()
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetChannelByName(string name, CancellationToken cancellationToken)
     {
-        var videos = await _videoService.GetAllVideo();
-        return Ok(videos);
+        var result = await _channelService.GetByName(name, cancellationToken);
+
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
+
+        return Ok(result);
     }
-
-    [HttpPost("upload")]
-    public async Task<IActionResult> UploadVideo(IFormFile video)
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllChannelVideo(int id, CancellationToken cancellationToken)
     {
-        // в байтах
-        Console.WriteLine(video.Length);
-        // в мегабайтах 
-        Console.WriteLine(video.Length / (1024 * 1024));
-        if (video == null || video.Length == 0)
-        {
-            return BadRequest("Файл не загружен");
-        }
+        var result = await _channelService.GetChannelVideo(id, cancellationToken);
 
-        if (video.Length / (1024 * 1024) < 20)
-        {
-            return BadRequest("Много весит");
-        }
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
 
-        await _videoService.AddVideo(video);
-
-        return Ok("Видео успешно загружено");
+        return Ok(result);
     }
 }

@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(b => b
-    .WithOrigins(["http://localhost:5173", "http://localhost:5172"]) 
+    .WithOrigins("http://localhost:5173", "http://localhost:5172") 
     .AllowAnyMethod()                     
     .AllowAnyHeader()                      
     .AllowCredentials());  

@@ -1,13 +1,13 @@
-import {Routes, Route} from 'react-router-dom';
-import Main from './pages/main_page';
-import Player from './pages/player';
-import Search from './pages/search';
-import Featured from './pages/channel_page/Featured.jsx'
-import Videos from './pages/channel_page/Videos.jsx'
-import Playlists from './pages/channel_page/Playlists.jsx'
-import Community from './pages/channel_page/Community.jsx'
-import VideoGames from './pages/channel_page/channel_navigation/VideoGames.jsx'
-import ChannelPage from './pages/channel_page/ChannelPage.jsx';
+import { Routes, Route } from "react-router-dom";
+import Main from "./pages/main_page";
+import Player from "./pages/player";
+import Search from "./pages/search";
+import Featured from "./pages/channel_page/Featured.jsx";
+import Videos from "./pages/channel_page/Videos.jsx";
+import Playlists from "./pages/channel_page/Playlists.jsx";
+import Community from "./pages/channel_page/Community.jsx";
+import VideoGames from "./pages/channel_page/channel_navigation/VideoGames.jsx";
+import ChannelPage from "./pages/channel_page/ChannelPage.jsx";
 import Music from "./pages/channel_page/channel_navigation/Music.jsx";
 import Films from "./pages/channel_page/channel_navigation/Films.jsx";
 import FilmsCatalog from "./pages/channel_page/channel_navigation/FilmsCatalog.jsx";
@@ -27,6 +27,11 @@ import MainDetails from "./pages/admin_panel/MainDetails.jsx";
 import AccountSettings from "./pages/settings/AccountSettings.jsx";
 import PaymentsSettings from "./pages/settings/PaymentsSettings.jsx";
 import Auth from "./pages/auth/index.jsx";
+import MyChannelPage from "./pages/channel_page/MyChannelPage/MyChannelPage.jsx";
+import MyCommunity from "./pages/channel_page/MyChannelPage/MyCommunity.jsx";
+import MyPlaylist from "./pages/channel_page/MyChannelPage/MyPlaylist.jsx";
+import MyFeatured from "./pages/channel_page/MyChannelPage/MyFeatured.jsx";
+import MyVideos from "./pages/channel_page/MyChannelPage/MyVideos.jsx";
 
 const Routing = () => {
     return (
@@ -34,6 +39,11 @@ const Routing = () => {
             <Route path='/' element={<Main/>}/>
             <Route path='/watch/:id' element={<Player/>}/>
             <Route path='/search/:request' element={<Search/>}/>
+            <Route path="/MyChannel/:customUrl" element={<MyChannelPage/>}></Route>
+            <Route path="/MyChannel/:customUrl/featured" element={<MyFeatured/>}/>
+            <Route path="/MyChannel/:customUrl/videos" element={<MyVideos/>}/>
+            <Route path="/MyChannel/:customUrl/playlists" element={<MyPlaylist/>}/>
+            <Route path="/MyChannel/:customUrl/community" element={<MyCommunity/>}/>
             <Route path="/channel/:customUrl" element={<ChannelPage/>}></Route>
             <Route path="/channel/:customUrl/featured" element={<Featured/>}/>
             <Route path="/channel/:customUrl/videos" element={<Videos/>}/>
