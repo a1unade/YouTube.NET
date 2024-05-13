@@ -9,13 +9,15 @@ const ChangeAvatar = () => {
     const userId = useParams();
     const navigate = useNavigate();
     const [avatarId, setAvatarId] = useState(1);
+    console.log(userId)
 
     const changeAvatar = async () => {
         try{
             const response = await apiClient.post('Auth/changeAvatar', {
-                userId: userId,
-                avatar: avatarId
+                userId: userId.id,
+                avatarId: avatarId
             });
+            console.log(response.data);
 
             if(response.data.type === 0){
                 window.location.replace(`http://localhost:5173/auth/${userId}`);

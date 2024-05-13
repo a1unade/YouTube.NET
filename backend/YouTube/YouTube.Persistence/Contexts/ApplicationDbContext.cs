@@ -35,7 +35,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=6714;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=6715;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.EnableSensitiveDataLogging();
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,7 +48,10 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserInfoConfiguration());
         modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
-        
-        
+        modelBuilder.ApplyConfiguration(new ChannelConfiguration());
+        modelBuilder.ApplyConfiguration(new CommentConfiguration());
+        modelBuilder.ApplyConfiguration(new StaticFileConfiguration());
+        modelBuilder.ApplyConfiguration(new UserChannelSubConfiguration());
+        modelBuilder.ApplyConfiguration(new VideoConfiguration());
     }
 }
