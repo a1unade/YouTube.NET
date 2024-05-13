@@ -15,5 +15,13 @@ public interface IDbContext
     /// </summary>
     public DbSet<UserInfo> UserInfos { get; set; }
     
+    /// <summary>
+    /// Подписки
+    /// </summary>
     public DbSet<Subscription> Subscriptions{ get; set; }
+    
+    /// <summary>
+    /// Аватарки пользователей
+    /// </summary>
+    public DbSet<Avatar> Avatars { get; set; }
 }

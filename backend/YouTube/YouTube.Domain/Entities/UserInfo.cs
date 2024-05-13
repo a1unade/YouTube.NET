@@ -38,6 +38,16 @@ public class UserInfo : BaseEntity
     /// </summary>
     public User User { get; set; }
     
+    /// <summary>
+    /// ID аватарки
+    /// </summary>
+    public int AvatarId { get; set; }
+    
+    /// <summary>
+    /// Навигационное свойство для связи с аватаркой
+    /// </summary>
+    public Avatar Avatar { get; set; }
+
     public Channel Channel { get; set; }
     
     public List<Comment>? Comments { get; set; }

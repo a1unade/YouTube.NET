@@ -10,5 +10,9 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
     {
         builder.Property(x => x.BirthDate)
             .HasColumnType("date");
+        
+        builder.HasOne(u => u.Avatar)
+            .WithOne()
+            .HasForeignKey<UserInfo>(u => u.AvatarId);
     }
 }

@@ -31,6 +31,8 @@ public interface IAuthService
 
     Task<UserResponse> GetUserByIdAsync(string id);
 
+    Task<AuthResponse> ChangeUserAvatarAsync(string userId, int avatarId);
+
     // /// <summary>
     // /// Смена пароля
     // /// </summary>

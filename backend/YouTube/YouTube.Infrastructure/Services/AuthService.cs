@@ -22,7 +22,8 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
             Name = registerDto.Name,
             Surname = registerDto.Surname,
             BirthDate = registerDto.BirthDate,
-            Gender = registerDto.Gender
+            Gender = registerDto.Gender,
+            AvatarId = 1
         };
 
         User user = new User
@@ -104,6 +105,7 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
+                .Include(u => u.UserInfo.Avatar)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return new UserResponse
@@ -113,7 +115,8 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
                 Name = user.UserInfo.Name,
                 Susrname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
-                BirthDate = user.UserInfo.BirthDate.ToString()
+                BirthDate = user.UserInfo.BirthDate.ToString("d"),
+                Avatar = user.UserInfo.Avatar.Path
             };
         }
         catch (Exception ex)
@@ -150,6 +153,7 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
+                .Include(u => u.UserInfo.Avatar)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == id);
 
             return new UserResponse
@@ -159,53 +163,35 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
                 Name = user.UserInfo.Name,
                 Susrname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
-                BirthDate = user.UserInfo.BirthDate.ToString()
+                BirthDate = user.UserInfo.BirthDate.ToString("d"),
+                Avatar = user.UserInfo.Avatar.Path
             };
         }
         catch (Exception ex)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("GetUserByEmail: " + ex.Message);
+            Console.WriteLine("GetUserById: " + ex.Message);
             Console.ResetColor();
             
             return new UserResponse { ResponseType = UserResponseTypes.Error };
         }
     }
-    
-    // TODO: фича для сброса пароля
-    // public async Task<UserResponse> ChangePasswordAsync(ChangePasswordDto changePasswordDto)
-    // {
-    //     User? user = await userManager.FindByEmailAsync(changePasswordDto.Email);
-    //
-    //     if (user == null)
-    //         return new UserResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.UserNotFound };
-    //     
-    //     if (!user.EmailConfirmed)
-    //         return new UserResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.EmailNotConfirmed };
-    //     
-    //     //IdentityResult result = await userManager.ResetPasswordAsync(user, user.PasswordHash, changePasswordDto.NewPassword);
-    //
-    //     //if (result.Succeeded)
-    //         //return new UserResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.PasswordChanged};
-    //
-    //     return new UserResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.ChangePasswordError };
-    // }
 
-    // TODO: фича для повторной отправки письма с подтверждением почты
-    // public async Task<UserResponse> SendConfirmationAsync(UserEmailDto userDto)
-    // {
-    //     User? user = await userManager.FindByEmailAsync(userDto.Email);
-    //     
-    //     if (user == null)
-    //         return new UserResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.UserNotFound };
-    //
-    //     string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-    //     string confirmationLink =
-    //         $"https://localhost:7102/api/Auth/confirm-email?userId={user.Id}&token={WebUtility.UrlEncode(token)}";
-    //         
-    //     await emailSender.SendEmailAsync(user.Email!, "Подтверждение почты", 
-    //         $"Для подтверждения вашей электронной почты перейдите по <a href=\"{confirmationLink}\">ссылке</a>");
-    //     
-    //     return new UserResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.EmailConfirmMessageSend };
-    // }
+    public async Task<AuthResponse> ChangeUserAvatarAsync(string userId, int avatarId)
+    {
+        User? user = await userManager.Users.AsNoTracking()
+            .Include(u => u.UserInfo)
+            .FirstOrDefaultAsync(u => u.Id == Guid.Parse(userId));
+
+        if (user == null)
+            return new AuthResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.UserNotFound };
+        
+        user.UserInfo.AvatarId = avatarId;
+        
+        var result = await userManager.UpdateAsync(user);
+        
+        if (result.Succeeded)
+            return new AuthResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.ChangeAvatarSuccess};
+        return new AuthResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.ErrorUpdatingUser };
+    }
 }

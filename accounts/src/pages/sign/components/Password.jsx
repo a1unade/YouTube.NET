@@ -34,6 +34,7 @@ const Password = ({ setContainerContent, containerContent, setPassword, email, p
             }
             console.log(response.data);
         } catch (error) {
+            navigate("/error");
             console.error('Ошибка при регистрации:', error);
         }
     }

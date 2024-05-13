@@ -385,3 +385,35 @@ ul {
 .links a:hover {
     color: rgb(32, 33, 36);
 }
+
+.profile-avatar {
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid rgb(32, 33, 36);
+}
+
+.profile-avatar:hover{
+    border: 1px solid rgb(20, 100, 200);
+}
+
+.profile-avatar-active{
+    border: 1px solid rgb(20, 100, 200);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-avatars{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
