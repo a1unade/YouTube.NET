@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YouTube.Application.Interfaces.Repositories;
+using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
 using YouTube.Persistence.Repositories;
 
@@ -25,7 +27,7 @@ public static class ServiceCollectionExtensions
     private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Postgres");
-        
+
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString,
                 builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
@@ -35,6 +37,9 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork))
-            .AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            .AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>))
+            .AddTransient<IChannelRepository, ChannelRepository>()
+            .AddTransient<IVideoRepository, VideoRepository>()
+            .AddTransient<ICommentRepository, CommentRepository>();
     }
 }
