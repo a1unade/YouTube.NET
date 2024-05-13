@@ -33,4 +33,14 @@ public class UserInfo : BaseEntity
     /// Навигационное свойство для связи с User
     /// </summary>
     public User User { get; set; }
+    
+    /// <summary>
+    /// ID аватарки
+    /// </summary>
+    public int AvatarId { get; set; }
+    
+    /// <summary>
+    /// Навигационное свойство для связи с аватаркой
+    /// </summary>
+    public Avatar Avatar { get; set; }
 }

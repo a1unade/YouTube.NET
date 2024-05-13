@@ -30,4 +30,6 @@ public class UserResponse
     /// Электронная почта пользователя
     /// </summary>
     public string? Email { get; set; }
+    
+    public string Avatar { get; set; }
 }

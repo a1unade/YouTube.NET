@@ -13,6 +13,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     public DbSet<User> Users { get; set; }
     public DbSet<UserInfo> UserInfos { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
+    public DbSet<Avatar> Avatars { get; set; }
     public ApplicationDbContext(DbContextOptions<DbContext> options, IConfiguration configuration) 
         : base(options)
     {
@@ -25,15 +26,19 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5412;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=6714;Username=postgres;Password=youtube;Database=postgres;");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<Avatar>().HasData(DatabaseSeeder.Avatars());
+        
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserInfoConfiguration());
         modelBuilder.ApplyConfiguration(new SubscriptionConfiguration());
         
-        base.OnModelCreating(modelBuilder);
+        
     }
 }

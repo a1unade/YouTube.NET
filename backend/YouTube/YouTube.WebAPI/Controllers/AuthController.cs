@@ -54,4 +54,8 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpGet("getUserById")]
     public async Task<UserResponse> GetUserById(string userId) => 
         await authService.GetUserByIdAsync(userId);
+
+    [HttpPost("changeAvatar")]
+    public async Task<AuthResponse> ChangeAvatar(ChangeAvatarDto changeAvatarDto) =>
+        await authService.ChangeUserAvatarAsync(changeAvatarDto.UserId, changeAvatarDto.AvatarId);
 }
