@@ -1,5 +1,7 @@
+using YouTube.Application.Common.Responses;
 using YouTube.Application.Common.Responses.CommentResponse;
 using YouTube.Application.Common.Responses.VideoResponse;
+using YouTube.Application.DTOs.Comment;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
@@ -44,6 +46,16 @@ public class VideoService : IVideoService
         {
             IsSuccessfully = true,
             Comments = result
+        };
+    }
+
+
+    public async Task<BaseResponse> AddComment(AddCommentDto request, CancellationToken cancellationToken)
+    {
+        await _commentRepository.AddComment(request.CommentText, request.VideoId, request.UserId, cancellationToken);
+        return new BaseResponse()
+        {
+            IsSuccessfully = true
         };
     }
 }

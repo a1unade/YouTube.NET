@@ -16,11 +16,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     public DbSet<Subscription> Subscriptions { get; set; }
     
     public DbSet<UserChannelSub> UserChannelSubs { get; set; }
-    
     public DbSet<Channel> Channels { get; set; }
-    
     public DbSet<Comment> Comments { get; set; }
-    
     public DbSet<Video> Videos { get; set; }
     
     public DbSet<StaticFile> StaticFiles { get; set; }
