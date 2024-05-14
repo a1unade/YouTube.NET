@@ -9,7 +9,8 @@ public class ChannelController : ControllerBase
     private readonly IChannelService _channelService;
     private readonly IVideoService _videoService;
 
-    public ChannelController(IChannelService channelService, IVideoService videoService)
+    public ChannelController(IChannelService channelService,
+        IVideoService videoService)
     {
         _channelService = channelService;
         _videoService = videoService;
@@ -27,7 +28,7 @@ public class ChannelController : ControllerBase
     }
     
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetAllChannelVideo(int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllChannelVideo([FromQuery] int id, CancellationToken cancellationToken)
     {
         var result = await _channelService.GetChannelVideo(id, cancellationToken);
 
@@ -57,5 +58,16 @@ public class ChannelController : ControllerBase
             return Ok(t);
 
         return BadRequest(t);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetVideoById(int id, CancellationToken cancellationToken)
+    {
+        var res = await _videoService.GetVideoById(id, cancellationToken);
+
+        if (res.IsSuccessfully)
+            return Ok(res);
+
+        return BadRequest(res);
     }
 }

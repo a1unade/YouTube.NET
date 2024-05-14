@@ -12,11 +12,15 @@ public class VideoService : IVideoService
 {
     private readonly ICommentRepository _commentRepository;
     private readonly IVideoRepository _repository;
+    private readonly IYandexService _yandexService;
 
-    public VideoService(ICommentRepository commentRepository, IVideoRepository repository)
+    public VideoService(ICommentRepository commentRepository,
+        IVideoRepository repository,
+        IYandexService yandexService)
     {
         _commentRepository = commentRepository;
         _repository = repository;
+        _yandexService = yandexService;
     }
 
     public async Task<VideoCommentListResponse> GetVideoCommentList(int id, CancellationToken cancellationToken)
@@ -86,6 +90,45 @@ public class VideoService : IVideoService
         {
             IsSuccessfully = true,
             VideoItems = t
+        };
+    }
+
+    public async Task<VideoResponse> GetVideoById(int id, CancellationToken cancellationToken)
+    {
+        var res = await _repository.GetById(id, cancellationToken);
+
+        if (res == null)
+            return new VideoResponse()
+            {
+                IsSuccessfully = false,
+                Error = new List<string>() { "Not Found" }
+            };
+       
+        var yandex = await _yandexService.GetFile(res.PathInDisk, cancellationToken);
+      
+        if (yandex.IsSuccessfully)
+        {
+            return new VideoResponse()
+            {
+                IsSuccessfully = true,
+                VideoItem = new VideoItem()
+                {
+                    DisLikeCount = res.DisLikeCount,
+                    Description = res.Description,
+                    LikeCount = res.LikeCount,
+                    Name = res.Name,
+                    ViewCount = res.ViewCount,
+                    Id = res.Id,
+                    ReleaseDate = res.ReleaseDate,
+                    PreviewImg = res.StaticFile.Path,
+                    Href = "http://localhost:5041/static/videos" + res.PathInDisk
+                }
+            };
+        }
+
+        return new VideoResponse()
+        {
+            Error = new List<string>() { "Что то пошло не так" }
         };
     }
 }
