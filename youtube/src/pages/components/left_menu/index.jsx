@@ -15,10 +15,10 @@ function LeftMenu({isOpen}) {
                             <a href="/">
                                 <MenuButton title={'Главная'}/>
                             </a>
-                            {userId === "" ? <MenuButton title={'Подписки'}/> : null}
+                            {userId !== "" ? <MenuButton title={'Подписки'}/> : null}
                         </div>
                         {
-                            userId === "" ?
+                            userId !== "" ?
                                 <>
                                     <div className='first-container'>
                                         <div className='best-youtube-section-title-container'>
@@ -56,7 +56,7 @@ function LeftMenu({isOpen}) {
                             <a href="/channel/Sport"><MenuButton title={'Спорт'}/></a>
                         </div>
                         {
-                            userId === "" ?
+                            userId !== "" ?
                                 <div className='first-container'>
                                     <div className='best-youtube-section-title-container'>
                                         <p className='youtube-title-style'>Другие возможности</p>
@@ -92,7 +92,7 @@ function LeftMenu({isOpen}) {
                         <MenuButton title={'Главная'}/>
                     </a>
                     {
-                        userId === "" ?
+                        userId !== "" ?
                             <>
                                 <MenuButton title={'Подписки'}/>
                                 <MenuButton title={'Вы'}/>

@@ -4,6 +4,8 @@ namespace YouTube.Application.Common.Responses;
 
 public class UserResponse
 {
+    public Guid UserId { get; set; }
+    
     public UserResponseTypes ResponseType { get; set; }
     
     /// <summary>
@@ -14,7 +16,7 @@ public class UserResponse
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
-    public string? Susrname { get; set; }
+    public string? Surname { get; set; }
     
     /// <summary>
     /// Пол пользователя
@@ -32,4 +34,8 @@ public class UserResponse
     public string? Email { get; set; }
     
     public string? Avatar { get; set; }
+    
+    public int? ChannelId { get; set; }
+    
+    public bool? Premium { get; set; }
 }

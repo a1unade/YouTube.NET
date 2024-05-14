@@ -73,33 +73,29 @@ const Player = () => {
   } else {
     return (
         <>
-          {premium ?
-              <div className="ad" style={{marginBottom: 40}}>
-                <div>
-                  <img src={ad} alt="ad"/>
-                  <p style={{fontSize: 12, margin: 0, marginTop: 10, textAlign: 'left'}}>* Чтобы отключить
-                    рекламу, купите подписку Premium</p>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+          <div className="ad" style={{marginBottom: 40}}>
+            <div>
+              <img src={ad} alt="ad"/>
+              <p style={{fontSize: 12, margin: 0, marginTop: 10, textAlign: 'left'}}>* Чтобы отключить
+                рекламу, купите подписку Premium</p>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                             <span>Вы играете за V, наёмника в поисках уникального устройства, позволяющего обрести бессмертие.
                                 Вы сможете менять киберимпланты, навыки и стиль игры своего персонажа, исследуя огромный открытый мир, где ваши поступки влияют на ход сюжета и всё, что вас окружает.</span>
-                  <b>
-                    <p>В комплект издания входит:</p>
-                    <i style={{textAlign: "left"}}>
-                      <ul>
-                        <li>Игра Cyberpunk 2077;</li>
-                        <li>Масштабное обновление 2.0, полностью переработавшим различные аспекты
-                          игры;
-                        </li>
-                        <li>Код на загрузку дополнения Phantom Liberty («Призрачная свобода»).</li>
-                      </ul>
-                    </i>
-                  </b>
-                </div>
-              </div>
-              :
-              null
-          }
+              <b>
+                <p>В комплект издания входит:</p>
+                <i style={{textAlign: "left"}}>
+                  <ul>
+                    <li>Игра Cyberpunk 2077;</li>
+                    <li>Масштабное обновление 2.0, полностью переработавшим различные аспекты
+                      игры;
+                    </li>
+                    <li>Код на загрузку дополнения Phantom Liberty («Призрачная свобода»).</li>
+                  </ul>
+                </i>
+              </b>
+            </div>
+          </div>
           <div className="content">
             <div className="player-page">
               <div className="player-container">
@@ -128,7 +124,7 @@ const Player = () => {
                                 navigate(`/channel/${channel.snippet.customUrl}`)
                             }
                         >
-                        <img
+                          <img
                               src={channel.snippet.thumbnails.default.url}
                               alt=""
                           />
