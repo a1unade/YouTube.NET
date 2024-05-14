@@ -16,9 +16,10 @@ public class VideoRepository : IVideoRepository
 
     public async Task<Video?> GetById(int id, CancellationToken cancellationToken)
     {
-        var video = await _context
-                        .Videos.FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
-                    ?? new Video();
+        var video = await _context.Videos
+                        .Include(x => x.StaticFile)
+                        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
+                    ?? null;
 
         return video;
     }
@@ -27,7 +28,7 @@ public class VideoRepository : IVideoRepository
     {
         var video = await _context.Videos
             .FirstOrDefaultAsync(x => x.Name == name, cancellationToken)
-                    ?? new Video();
+                    ?? null;
 
         return video;
     }

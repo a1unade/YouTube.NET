@@ -168,7 +168,6 @@ public class YandexService : IYandexService
 
                 if (response.IsSuccessStatusCode)
                 {
-                    
                     string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
                     var json = JsonSerializer.Deserialize<LinkResponse>(responseBody);
                     Console.WriteLine(responseBody);

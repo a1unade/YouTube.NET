@@ -1,10 +1,10 @@
 import ContentAdd from "./ContentAdd.jsx";
 import VideoInfo from "./VideoInfo.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 const AdminAddVideo = () => {
-
+    const [videos, setVideos] = useState([]);
     const [videoData, setVideoData] = useState({
         selectedVideo: null, // Выбранное видео
         selectedImage: "", // Выбранное изображение
@@ -22,7 +22,19 @@ const AdminAddVideo = () => {
             [fieldName]: file
         }));
     };
+    useEffect(() => {
+        const fetchVideos = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5041/GetAllChannelVideo?id=${1}`);
+                console.log(response.data)
+                setVideos(response.data);
+            } catch (error) {
+                console.error("Ошибка при загрузке видео:", error);
+            }
+        };
 
+        fetchVideos();
+    }, []);
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setVideoData(prevState => ({
@@ -30,15 +42,7 @@ const AdminAddVideo = () => {
             [name]: value
         }));
     };
-    const video = {
-        img: "https://i.ytimg.com/vi/HbWkGxnOEXw/mqdefault.jpg",
-        like: 23,
-        dislike: 22,
-        comment: 3,
-        date: "2020-02-20",
-        view: 3232,
-        name : "Прятки Cs:go"
-    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setUploading(true);
@@ -98,7 +102,7 @@ const AdminAddVideo = () => {
                 </div>
             </div>
             <hr className="separator" style={{marginTop: 10}}/>
-            {!video ? <div className="all-video">
+            {videos.length === 0 ? <div className="all-video">
                 <div className="no-image">
                     <img alt="" className="style-scope ytcp-video-section-content"
                          src="https://www.gstatic.com/youtube/img/creator/no_content_illustration_upload_video_v3.svg"/>
@@ -116,7 +120,9 @@ const AdminAddVideo = () => {
                     </button>
                 </div>
 
-            </div> : <VideoInfo video={video}/>}
+            </div> : videos.map(video => (
+                    <VideoInfo key={video.id} video={video} />
+                ))}
 
             {uploadSuccess ? (
                 <div className="upload-success-message">
