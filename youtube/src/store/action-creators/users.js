@@ -4,14 +4,16 @@ import backendClient from "../../utils/backendClient.js";
 export const createUserById = (userId) => {
     return async (dispatch) => {
         try {
-            const response = await backendClient(`Auth/getUserById/${userId}`);
+            const response = await backendClient(`Auth/getUserById?userId=${userId}`);
 
             if (response.data.responseType === 0) {
                 dispatch({
                     type: "CREATE_USER", payload: {
+                        userId: response.data.userId,
                         name: response.data.name,
                         surname: response.data.surname,
-                        email: response.data.email
+                        email: response.data.email,
+                        premium: response.data.premium
                     }
                 });
             } else {

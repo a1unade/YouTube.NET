@@ -44,7 +44,7 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
             await emailSender.SendEmailAsync(user.Email, "Подтверждение почты", 
                 $"Для подтверждения вашей электронной почты перейдите по <a href=\"{confirmationLink}\">ссылке</a>");
 
-            return new AuthResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.RegisterSuccess };
+            return new AuthResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.RegisterSuccess, UserId = user.Id };
         }
         else
         {
@@ -105,16 +105,22 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
+                .Include(u => u.UserInfo.StaticFile)
+                .Include(u => u.UserInfo.Channel)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return new UserResponse
             {
+                UserId = user!.Id,
                 ResponseType = UserResponseTypes.Success,
                 Email = user!.Email,
                 Name = user.UserInfo.Name,
-                Susrname = user.UserInfo.Surname,
+                Surname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
                 BirthDate = user.UserInfo.BirthDate.ToString("d"),
+                Premium = user.UserInfo.Premium
+                // Avatar = user.UserInfo.StaticFile.Path,
+                // ChannelId = user.UserInfo.Channel.Id
             };
         }
         catch (Exception ex)
@@ -151,16 +157,22 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
+                .Include(u => u.UserInfo.StaticFile)
+                .Include(u => u.UserInfo.Channel)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == id);
 
             return new UserResponse
             {
+                UserId = user!.Id,
                 ResponseType = UserResponseTypes.Success,
                 Email = user!.Email,
                 Name = user.UserInfo.Name,
-                Susrname = user.UserInfo.Surname,
+                Surname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
                 BirthDate = user.UserInfo.BirthDate.ToString("d"),
+                Premium = user.UserInfo.Premium
+                //Avatar = user.UserInfo.StaticFile.Path,
+                //ChannelId = user.UserInfo.Channel.Id
             };
         }
         catch (Exception ex)

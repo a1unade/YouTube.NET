@@ -1,4 +1,4 @@
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, BrowserRouter} from "react-router-dom";
 import Main from "./pages/main_page";
 import Player from "./pages/player";
 import Search from "./pages/search";
@@ -34,63 +34,100 @@ import MyFeatured from "./pages/channel_page/MyChannelPage/MyFeatured.jsx";
 import MyVideos from "./pages/channel_page/MyChannelPage/MyVideos.jsx";
 import Unauthorized from "./pages/401/index.jsx";
 import NotFound from "./pages/404/index.jsx";
-import {useSelector} from "react-redux";
+import {useUserActions} from "./hooks/useUserActions.js";
+import MyPlayer from "./pages/myPlayer/index.jsx";
+import LeftMenu from "./pages/components/left_menu/index.jsx";
+import Header from "./pages/components/header/index.jsx";
+import {useEffect, useState} from "react";
 
 const Routing = () => {
-    const {userId} = useSelector((state) => state.user.userId);
+    const userId = localStorage.getItem('userId');
+    const {createUserById} = useUserActions();
+    const [isOpen, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    const toggleMenu = () => {
+        if (isOpen) {
+            document.body.classList.remove('menu-opened');
+        } else {
+            document.body.classList.add('menu-opened');
+        }
+        setOpen(!isOpen);
+    };
+
+    useEffect(() => {
+        if (document.cookie.length !== 0) {
+            const uId = document.cookie.split("=")[1];
+            createUserById(uId).finally(() => setLoading(false));
+        } else {
+            setLoading(false);
+        }
+    }, [createUserById]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <Routes>
-            <Route path='/' element={<Main/>}/>
-            <Route path='/watch/:id' element={<Player/>}/>
-            <Route path='/search/:request' element={<Search/>}/>
-            <Route path="/MyChannel/:customUrl" element={<MyChannelPage/>}></Route>
-            <Route path="/MyChannel/:customUrl/featured" element={<MyFeatured/>}/>
-            <Route path="/MyChannel/:customUrl/videos" element={<MyVideos/>}/>
-            <Route path="/MyChannel/:customUrl/playlists" element={<MyPlaylist/>}/>
-            <Route path="/MyChannel/:customUrl/community" element={<MyCommunity/>}/>
-            <Route path="/channel/:customUrl" element={<ChannelPage/>}></Route>
-            <Route path="/channel/:customUrl/featured" element={<Featured/>}/>
-            <Route path="/channel/:customUrl/videos" element={<Videos/>}/>
-            <Route path="/channel/:customUrl/playlists" element={<Playlists/>}/>
-            <Route path="/channel/:customUrl/community" element={<Community/>}/>
-            <Route path="/channel/VideoGames" element={<VideoGames/>}/>
-            <Route path="/channel/Music" element={<Music/>}/>
-            <Route path="/channel/Sport" element={<Sport/>}/>
-            <Route path="/feed" element={<Films/>}/>
-            <Route path="/feed/Catalog" element={<FilmsCatalog/>}/>
-            <Route path="/feed/Purchases" element={<FilmsPurchases/>}/>
-            <Route path="/feed/trending/news" element={<TrendNews/>}/>
-            <Route path="/feed/trending/music" element={<TrendMusic/>}/>
-            <Route path="/feed/trending/films" element={<TrendFilm/>}/>
-            <Route path="/feed/trending/videogames" element={<TrendVideoGames/>}/>
-            <Route path="/channel/Music/community" element={<MusicCommunity/>}/>
-            <Route path="/channel/Music/featured" element={<MusicFeatured/>}/>
-            {userId === '' ?
-                <>
-                    <Route path="/channel/edit/:id" element={<ContentAdd/>}/>
-                    <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>}/>
-                    <Route path="/channel/edit/:channelId/playlist" element={<AdminAddPlaylist/>}/>
-                    <Route path="/channel/edit/images" element={<Branding/>}/>
-                    <Route path="/channel/edit/details" element={<MainDetails/>}/>
-                    <Route path="/settings/account" element={<AccountSettings/>}/>
-                    <Route path="/settings/payments" element={<PaymentsSettings/>}/>
-                </>
-                :
-                <>
-                    <Route path="/channel/edit/:id" element={<Unauthorized/>}/>
-                    <Route path="/channel/edit/addvideo" element={<Unauthorized/>}/>
-                    <Route path="/channel/edit/:channelId/playlist" element={<Unauthorized/>}/>
-                    <Route path="/channel/edit/images" element={<Unauthorized/>}/>
-                    <Route path="/channel/edit/details" element={<Unauthorized/>}/>
-                    <Route path="/settings/account" element={<Unauthorized/>}/>
-                    <Route path="/settings/payments" element={<Unauthorized/>}/>
-                </>
-
-            }
-            <Route path="/auth/:id" element={<Auth/>}/>
-            <Route path={'*'} element={<NotFound/>}></Route>
-        </Routes>
+        <BrowserRouter>
+            <div>
+                <LeftMenu isOpen={isOpen}/>
+                <Header toggleMenu={toggleMenu}/>
+            </div>
+            <div id='page' className='routing'>
+                <Routes>
+                    <Route path='/' element={<Main/>}/>
+                    {userId !== "" ?
+                        <>
+                            <Route path="/channel/edit/:id" element={<ContentAdd/>}/>
+                            <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>}/>
+                            <Route path="/channel/edit/:channelId/playlist" element={<AdminAddPlaylist/>}/>
+                            <Route path="/channel/edit/images" element={<Branding/>}/>
+                            <Route path="/channel/edit/details" element={<MainDetails/>}/>
+                            <Route path="/settings/account" element={<AccountSettings/>}/>
+                            <Route path="/settings/payments" element={<PaymentsSettings/>}/>
+                        </>
+                        :
+                        <>
+                            <Route path="/channel/edit/:id" element={<Unauthorized/>}/>
+                            <Route path="/channel/edit/addvideo" element={<Unauthorized/>}/>
+                            <Route path="/channel/edit/:channelId/playlist" element={<Unauthorized/>}/>
+                            <Route path="/channel/edit/images" element={<Unauthorized/>}/>
+                            <Route path="/channel/edit/details" element={<Unauthorized/>}/>
+                            <Route path="/settings/account" element={<Unauthorized/>}/>
+                            <Route path="/settings/payments" element={<Unauthorized/>}/>
+                        </>
+                    }
+                    <Route path='/watch/:id' element={<Player/>}/>
+                    <Route path={'/my-watch/:id'} element={<MyPlayer/>}></Route>
+                    <Route path='/search/:request' element={<Search/>}/>
+                    <Route path="/MyChannel/:customUrl" element={<MyChannelPage/>}></Route>
+                    <Route path="/MyChannel/:customUrl/featured" element={<MyFeatured/>}/>
+                    <Route path="/MyChannel/:customUrl/videos" element={<MyVideos/>}/>
+                    <Route path="/MyChannel/:customUrl/playlists" element={<MyPlaylist/>}/>
+                    <Route path="/MyChannel/:customUrl/community" element={<MyCommunity/>}/>
+                    <Route path="/channel/:customUrl" element={<ChannelPage/>}></Route>
+                    <Route path="/channel/:customUrl/featured" element={<Featured/>}/>
+                    <Route path="/channel/:customUrl/videos" element={<Videos/>}/>
+                    <Route path="/channel/:customUrl/playlists" element={<Playlists/>}/>
+                    <Route path="/channel/:customUrl/community" element={<Community/>}/>
+                    <Route path="/channel/VideoGames" element={<VideoGames/>}/>
+                    <Route path="/channel/Music" element={<Music/>}/>
+                    <Route path="/channel/Sport" element={<Sport/>}/>
+                    <Route path="/feed" element={<Films/>}/>
+                    <Route path="/feed/Catalog" element={<FilmsCatalog/>}/>
+                    <Route path="/feed/Purchases" element={<FilmsPurchases/>}/>
+                    <Route path="/feed/trending/news" element={<TrendNews/>}/>
+                    <Route path="/feed/trending/music" element={<TrendMusic/>}/>
+                    <Route path="/feed/trending/films" element={<TrendFilm/>}/>
+                    <Route path="/feed/trending/videogames" element={<TrendVideoGames/>}/>
+                    <Route path="/channel/Music/community" element={<MusicCommunity/>}/>
+                    <Route path="/channel/Music/featured" element={<MusicFeatured/>}/>
+                    <Route path="/auth/:userId" element={<Auth/>}/>
+                    <Route path={'*'} element={<NotFound/>}></Route>
+                </Routes>
+            </div>
+        </BrowserRouter>
     );
 }
 

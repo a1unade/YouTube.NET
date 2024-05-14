@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 import {Logo, Search, AddVideo} from '../../../assets/Icons.jsx';
 import UserMenu from './components/UserMenu.jsx';
 import {useSelector} from "react-redux";
-import {useSettingsActions} from "../../../hooks/useUserActions.js";
 
 // eslint-disable-next-line react/prop-types
 const Header = ({toggleMenu}) => {
@@ -12,7 +11,7 @@ const Header = ({toggleMenu}) => {
     const [isFocused, setIsFocused] = useState(false);
     const [search, setSearch] = useState('');
     const {userId} = useSelector((state) => state.user.userId);
-    const {avatar} = useSelector((state) => state.user.userId);
+    const {avatar} = useSelector((state) => state.user.avatar);
 
     const handleBlur = () => {
         setIsFocused(false);
@@ -49,7 +48,7 @@ const Header = ({toggleMenu}) => {
                         </button>
                     </div>
                     {
-                        userId === '' ?
+                        userId !== '' ?
                             <div style={{marginRight: 20}}>
                                 <div className='dropdown'>
                                     <div className='button-container menu' style={{marginLeft: 0}}>
