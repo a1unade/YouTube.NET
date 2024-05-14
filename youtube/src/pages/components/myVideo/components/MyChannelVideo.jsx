@@ -1,23 +1,24 @@
 import {useNavigate} from "react-router-dom";
 import {formatDate, formatViews} from "../../../../utils/formatFunctions.js";
 
-const ChannelVideo = ({video}) => {
+// eslint-disable-next-line react/prop-types
+const MyChannelVideo = ({video}) => {
     const navigate = useNavigate();
     return (
         <>
             <div className="main-video">
                 <div className="preview" id={`preview-${video.id}`} onClick={() => navigate(`/watch/${video.id}`)}>
-                    <img src={video.snippet.thumbnails.medium.url} alt=''></img>
+                    <img src={video.previewImg} alt='img'></img>
                 </div>
-                <div className="main-video-info" title={video.snippet.localized.title}>
+                <div className="main-video-info" title={video.name}>
                     <div className="main-video-details">
                         <div className="main-video-name">
-                            <span><b>{video.snippet.localized.title}</b></span>
+                            <span><b>{video.name}</b></span>
                         </div>
                         <div className="info">
                             <ul>
-                                <li>{formatViews(video.statistics.viewCount, 'views')}</li>
-                                <li>{formatDate(video.snippet.publishedAt)}</li>
+                                <li>{formatViews(video.viewCount, 'views')}</li>
+                                <li>{formatDate(video.releaseDate)}</li>
                             </ul>
                         </div>
                     </div>
@@ -27,4 +28,4 @@ const ChannelVideo = ({video}) => {
     );
 }
 
-export default ChannelVideo;
+export default MyChannelVideo;

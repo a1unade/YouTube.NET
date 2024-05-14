@@ -1,23 +1,22 @@
 import {useEffect, useState} from "react";
 import {useLocation} from 'react-router-dom';
-import MainVideo from "./components/MainVideo";
-import SearchVideo from "./components/SearchVideo";
-import apiClient from "../../../utils/apiClient";
+import backendClient from "../../../utils/backendClient.js";
+import MyMainVideo from "./components/MyMainVideo";
+import MySearchVideo from "./components/MySearchVideo";
 
-// eslint-disable-next-line react/prop-types
-const Video = ({id}) => {
+const MyVideo = ({id}) => {
     const [channel, setChannel] = useState(null);
     const [video, setVideo] = useState(null);
     const location = useLocation();
     const currentPage = location.pathname;
 
-    useEffect( () => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
-                const videoResponse = await apiClient.get(`/videos?part=snippet&part=statistics&id=${id}`);
+                const videoResponse = await backendClient.get(`/videos?part=snippet&part=statistics&id=${id}`);
                 setVideo(videoResponse.data.items[0]);
 
-                const channelResponse = await apiClient.get(`/channels?part=snippet&part=brandingSettings&id=${videoResponse.data.items[0].snippet.channelId}`);
+                const channelResponse = await backendClient.get(`/channels?part=snippet&part=brandingSettings&id=${videoResponse.data.items[0].snippet.channelId}`);
                 console.log(channelResponse.data.items[0])
                 setChannel(channelResponse.data.items[0]);
             } catch (error) {
@@ -33,19 +32,19 @@ const Video = ({id}) => {
             case currentPage === '/':
                 return (
                     <>
-                        <MainVideo video={video} channel={channel}/>
+                        <MyMainVideo video={video} channel={channel}/>
                     </>
                 );
             case currentPage.includes('/search/'):
                 return (
                     <>
-                        <SearchVideo video={video} channel={channel}/>
+                        <MySearchVideo video={video} channel={channel}/>
                     </>
                 );
             case currentPage.includes('/watch/'):
                 return (
                     <>
-                        <MainVideo video={video} channel={channel}/>
+                        <MyMainVideo video={video} channel={channel}/>
                     </>
                 );
             default:
@@ -64,4 +63,4 @@ const Video = ({id}) => {
     }
 }
 
-export default Video;
+export default MyVideo;

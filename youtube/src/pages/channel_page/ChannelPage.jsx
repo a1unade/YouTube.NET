@@ -12,10 +12,7 @@ const ChannelPage = () => {
   console.log(customUrl)
   const [isFollow, setIsFollow] = useState(false);
   const [owners, setOwner] = useState([])
-
   const [isImageBig, setIsImageBig] = useState(false);
-
-
   const titles = ['подписчик', 'подписчика', 'подписчиков'];
   const cases = [2, 0, 1, 1, 1, 2];
 

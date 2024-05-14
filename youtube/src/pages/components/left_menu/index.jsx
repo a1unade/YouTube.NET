@@ -1,11 +1,13 @@
 import MenuButton from './components/MenuButton.jsx'
-import '../../../assets/left-menu.css';
+import '../../../assets/styles/left-menu.css';
+import {useSelector} from "react-redux";
 
+// eslint-disable-next-line react/prop-types
 function LeftMenu({isOpen}) {
+    const {userId} = useSelector((state) => state.user.userId);
 
     return (
         <>
-
             {isOpen ?
                 <div className='left-menu'>
                     <div className='sidebar-container'>
@@ -13,51 +15,58 @@ function LeftMenu({isOpen}) {
                             <a href="/">
                                 <MenuButton title={'Главная'}/>
                             </a>
-                            <MenuButton title={'Подписки'}/>
+                            {userId === "" ? <MenuButton title={'Подписки'}/> : null}
                         </div>
-                        <div className='first-container'>
-                            <div className='best-youtube-section-title-container'>
-                                <p className='youtube-title-style'>Вы</p>
-                            </div>
-                            <MenuButton title={'Мой канал'}/>
-                            <MenuButton title={'История'}/>
-                            <MenuButton title={'Ваши видео'}/>
-                            <MenuButton title={'Смотреть позже'}/>
-                        </div>
-                        <div className='first-container'>
-                            <div className='best-youtube-section-title-container'>
-                                <p className='youtube-title-style'>Подписки</p>
-                            </div>
-                            <button className='sidebar-button'>
-                                <div className='svg-container'>
-                                    <img
-                                        src='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
-                                        alt=''/>
-                                </div>
-                                <p className='sidebar-text'>Clever Monkey</p>
-                            </button>
-                        </div>
+                        {
+                            userId === "" ?
+                                <>
+                                    <div className='first-container'>
+                                        <div className='best-youtube-section-title-container'>
+                                            <p className='youtube-title-style'>Вы</p>
+                                        </div>
+                                        <MenuButton title={'Мой канал'}/>
+                                        <MenuButton title={'Ваши видео'}/>
+                                    </div>
+                                    <div className='first-container'>
+                                        <div className='best-youtube-section-title-container'>
+                                            <p className='youtube-title-style'>Подписки</p>
+                                        </div>
+                                        <button className='sidebar-button'>
+                                            <div className='svg-container'>
+                                                <img
+                                                    src='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
+                                                    alt=''/>
+                                            </div>
+                                            <p className='sidebar-text'>Clever Monkey</p>
+                                        </button>
+                                    </div>
+                                </>
+                                :
+                                null
+                        }
                         <div className='first-container'>
                             <div className='best-youtube-section-title-container'>
                                 <p className='youtube-title-style'>Навигатор</p>
                             </div>
-                            <a href="/feed/trending/news"><MenuButton title={'В тренде'} /></a>
-                            <a href="/channel/Music"> <MenuButton title={'Музыка'} /></a>
-                            <a href="/feed"><MenuButton title={'Фильмы'} /></a>
-                            <a href="/channel/VideoGames"><MenuButton title={'Видеоигры'} /></a>
-                            <a href="/channel/Sport"><MenuButton title={'Спорт'} /></a>
+                            <a href="/feed/trending/news"><MenuButton title={'В тренде'}/>
+                            </a>
+                            <a href="/channel/Music"> <MenuButton title={'Музыка'}/></a>
+                            <a href="/feed"><MenuButton title={'Фильмы'}/></a>
+                            <a href="/channel/VideoGames"><MenuButton title={'Видеоигры'}/></a>
+                            <a href="/channel/Sport"><MenuButton title={'Спорт'}/></a>
                         </div>
-                        <div className='first-container'>
-                            <div className='best-youtube-section-title-container'>
-                                <p className='youtube-title-style'>Другие возможности</p>
-                            </div>
-                            <MenuButton title={'Творческая студия'}/>
-                            <MenuButton title={'YouTube Premium'}/>
-                        </div>
-                        <div style={{marginTop: 20}} className='first-container'>
-                            <a href="/settings/account"><MenuButton title={'Настройки'}/></a>
-                                <MenuButton title={'Отправить отзыв'}/>
-                        </div>
+                        {
+                            userId === "" ?
+                                <div className='first-container'>
+                                    <div className='best-youtube-section-title-container'>
+                                        <p className='youtube-title-style'>Другие возможности</p>
+                                    </div>
+                                    <a href="/channel/edit/1"><MenuButton title={'Творческая студия'}/></a>
+                                    <MenuButton title={'YouTube Premium'}/>
+                                </div>
+                                :
+                                null
+                        }
                         <div className='content-section-with-links-and-copyright'>
                             <a href='https://www.youtube.com/about/'>О сервисе</a>
                             <a href='https://www.youtube.com/about/press/'>Прессе</a>
@@ -82,13 +91,19 @@ function LeftMenu({isOpen}) {
                     <a href="/">
                         <MenuButton title={'Главная'}/>
                     </a>
-                    <MenuButton title={'Подписки'}/>
-                    <MenuButton title={'Вы'}/>
+                    {
+                        userId === "" ?
+                            <>
+                                <MenuButton title={'Подписки'}/>
+                                <MenuButton title={'Вы'}/>
+                            </>
+                            :
+                            null
+                    }
                     <script
                         src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
 
                 </div>
-
             }
         </>
     );

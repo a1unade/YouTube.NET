@@ -1,5 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 import {formatDate, formatViews} from "../../../../utils/formatFunctions";
+import ylogo from "../../../../assets/img/ylogo.svg";
 
 const SearchVideo = ({video, channel}) => {
     const navigate = useNavigate();
@@ -28,7 +29,12 @@ const SearchVideo = ({video, channel}) => {
                                 <img src={channel.snippet.thumbnails.high.url} alt=''/>
                             </div>
                         </div>
-                        <span>{video.snippet.channelTitle}</span>
+                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                            <span>{video.snippet.channelTitle}</span>
+                            <div style={{width: 20, height: 20}}>
+                                <img src={ylogo} alt=''/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

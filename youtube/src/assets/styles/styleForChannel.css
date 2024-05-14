@@ -3,7 +3,6 @@
     margin-left: 40px;
 }
 
-
 .channel-header {
     height: 200px;
 
@@ -114,23 +113,17 @@
 .main-description h1 {
     font-family: "Roboto", "Arial", sans-serif;
     font-weight: 700;
-    margin: 0px;
-    margin-bottom: 16px;
+    margin: 0 0 16px;
 }
-
 
 .subscription button img {
     width: 16px;
     height: 16px;
     margin-right: 8px;
-    /* Пример отступа справа */
     margin-left: 5px;
     vertical-align: middle;
-    /* Смещение изображения вниз */
     margin-bottom: 3px;
 }
-
-
 
 .about-channel {
     max-width: 560px;
@@ -169,7 +162,6 @@
     padding: 8px;
 }
 
-
 .about-channel h2 {
     color: black;
     font-size: 19px;
@@ -178,11 +170,8 @@
 
 .about-channel span {
     color: #0f0f0f;
-    /* word-wrap: break-word; Или overflow-wrap: break-word; */
     overflow-wrap: break-word;
     flex-direction: row;
-
-
 }
 
 .about-channel-description {
@@ -190,18 +179,14 @@
     margin-left: 10px;
 }
 
-
-
 .about-full-info {
     flex-direction: column;
 }
 
 .about-full-info svg {
-
     width: 24px;
     height: 24px;
     padding-right: 8px;
-
 }
 
 .about-full-info span {
@@ -217,7 +202,6 @@
     text-decoration: none;
     color: #065fd4;
 }
-
 
 .channel-menu-btn::after {
     content: "";
@@ -246,7 +230,7 @@
 
 .channel-menu-btn {
     padding: 10px 20px;
-    padding-left: 0px;
+    padding-left: 0;
     margin: 0 10px;
     border: none;
     background-color: transparent;
@@ -268,10 +252,8 @@
 
 .main-content {
     max-width: 1200px;
-    margin: 0 auto;
     padding: 20px;
-    margin-left: 60px;
-
+    margin: 0 auto 0 60px;
 }
 
 .main-content span {
@@ -289,7 +271,6 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
 }
 
 .video-button span {
@@ -316,7 +297,6 @@
     padding-bottom: 2px;
     margin-right: 6px;
     vertical-align: middle;
-    /* Устанавливаем вертикальное выравнивание по центру */
     width: 24px;
     height: 24px;
 }
@@ -328,7 +308,6 @@
     background-color: white;
 }
 
-
 .reproduce button:hover {
     border-radius: 18px;
     background-color: #bebebe;
@@ -336,13 +315,11 @@
 
 /* video */
 
-
 .sort-video-buttons {
     color: white;
 }
 
 .sort-video-buttons button {
-
     font-weight: 600;
     color: #0f0f0f;
     border-radius: 6px;
@@ -361,12 +338,11 @@
     display: flex;
     justify-content: space-between;
     text-align: center;
-
 }
 
 .full-playlist span {
     font-weight: 400;
-    margin: 0px;
+    margin: 0;
     font-size: 14px;
 }
 
@@ -380,7 +356,6 @@
 
 .full-playlist svg {
     margin-right: 6px;
-
 }
 
 /*post*/
@@ -389,8 +364,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
 }
+
 .community-post {
     min-width: 700px;
     max-width: 800px;
@@ -426,12 +401,11 @@
     margin-left: 10px;
 }
 
-
 .post-header p{
     font-size: 14px;
-    margin: 0px;
-    margin-right: 20px;
+    margin: 0 20px 0 0;
 }
+
 .post-header label{
     font-size: 12px;
     font-weight: 400;
@@ -468,7 +442,7 @@
 .post-main-description span{
     font-weight: 500;
     font-size: 16px;
-    margin: 0px;
+    margin: 0;
 }
 
 .post-footer {
@@ -484,7 +458,7 @@
 }
 
 .post-footer span{
-    margin: 0px;
+    margin: 0;
     color:#606060;
     font-weight: 400;
     font-size: 12px;
@@ -498,14 +472,12 @@
     padding: 2px;
 }
 
-
 /* Стили для не каналов основных каналов
 */
 
 .for-you{
     margin-bottom: 20px;
 }
-
 
 .videogames{
     padding: 0 0 30px 10px;
@@ -525,8 +497,6 @@
     display: flex;
     width: 100%;
     text-align: center;
-
-
 }
 
 .film {
@@ -536,11 +506,11 @@
     width: 90%;
 }
 
-
 .films-catalog span {
     color: #606060;
     font-weight: 600;
 }
+
 .films-catalog{
     position:fixed;
     left: 50%;
@@ -548,6 +518,7 @@
     transform: translate(-50%, -50%);
     text-align: center;
 }
+
 .films-container {
     position:absolute;
     padding-top: 140px;
@@ -567,7 +538,6 @@
     flex-wrap: wrap;
 }
 
-
 .trend-list{
     height: 100%;
     margin-top: 20px;
@@ -579,8 +549,6 @@
     height: 72px;
     border-radius: 50%;
 }
-
-
 
 .sport-header img{
     width: 80px;
@@ -610,11 +578,6 @@
     align-items: center;
 }
 
-
-
-
-
-
 #isFollow {
     margin-top: 20px;
     color: white;
@@ -625,7 +588,7 @@
     border-radius: 18px;
     border: none;
     font-size: 14px;
-    padding: 0px 10px;
+    padding: 0 10px;
 }
 
 #True{
@@ -692,19 +655,19 @@
     padding: 12px;
 }
 
-
 .sport-main-description{
     margin-top: 10px;
 }
+
 .sport-main-description h2{
     margin: 0;
 }
+
 .sport-main-description span {
     font-weight: 400;
     font-size: 14px;
     color: #606060;
 }
-
 
 .sport-main-content {
     max-width: 1200px;
@@ -712,6 +675,7 @@
     margin-left: 60px;
 
 }
+
 .sport-full-playlist{
     display: flex;
     justify-content: space-between;
@@ -731,7 +695,6 @@
     background-color: transparent;
     margin: 0;
     padding: 10px 14px 10px 14px;
-
 }
 
 .sport-full-playlist button:hover{
@@ -747,12 +710,11 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
 }
+
 .music-button span{
     margin-left: 0;
 }
-
 
 .music-button button{
     display: flex;

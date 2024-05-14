@@ -8,7 +8,7 @@ import LeftMenu from './pages/components/left_menu/index.jsx';
 import {Provider} from "react-redux";
 import store from "./store"
 
-const App = () => {
+export const App = () => {
     const [isOpen, setOpen] = useState(false);
 
     const toggleMenu = () => {

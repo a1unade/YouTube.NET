@@ -52,9 +52,20 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [HttpGet("getUserById")]
-    public async Task<UserResponse> GetUserById(string userId) => 
-        await authService.GetUserByIdAsync(userId);
-
+    public async Task<UserResponse> GetUserById(string userId) 
+    {
+        var response = await authService.GetUserByIdAsync(userId);
+        if (response.ResponseType == UserResponseTypes.Success)
+        {
+            Response.Cookies.Append("auth", userId, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                Path = "/"
+            });
+        }
+        return response;
+    } 
+    
     [HttpPost("changeAvatar")]
     public async Task<AuthResponse> ChangeAvatar(ChangeAvatarDto changeAvatarDto) =>
         await authService.ChangeUserAvatarAsync(changeAvatarDto.UserId, changeAvatarDto.AvatarId);
