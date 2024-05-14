@@ -1,6 +1,7 @@
 import MyChannelPage from "./MyChannelPage.jsx";
 
 const MyFeatured = () => {
+
     return (
         <>
             <MyChannelPage />

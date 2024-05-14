@@ -1,4 +1,3 @@
-using YouTube.Domain.Common.Interfaces;
 
 namespace YouTube.Domain.Entities;
 
@@ -13,4 +12,6 @@ public class Avatar
     /// Путь к статическому файлу
     /// </summary>
     public string Path { get; set; }
+    
+    public UserInfo UserInfo { get; set; }
 }

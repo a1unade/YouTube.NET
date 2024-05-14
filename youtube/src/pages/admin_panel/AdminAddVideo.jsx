@@ -5,12 +5,30 @@ import axios from "axios";
 
 const AdminAddVideo = () => {
 
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [videoData, setVideoData] = useState({
+        selectedVideo: null, // Выбранное видео
+        selectedImage: "", // Выбранное изображение
+        videoName: "", // Название видео
+        videoDescription: "", // Описание видео
+        userId : "685749e0-eadb-4c7b-9af0-ec53a54d223d"
+    });
     const [uploading, setUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const handleFileChange = (event) => {
-        console.log(event.target.files[0])
-        setSelectedFile(event.target.files[0]);
+        const fieldName = event.target.name;
+        const file = event.target.files[0];
+        setVideoData(prevState => ({
+            ...prevState,
+            [fieldName]: file
+        }));
+    };
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setVideoData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
     const video = {
         img: "https://i.ytimg.com/vi/HbWkGxnOEXw/mqdefault.jpg",
@@ -21,35 +39,38 @@ const AdminAddVideo = () => {
         view: 3232,
         name : "Прятки Cs:go"
     }
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         setUploading(true);
 
-
-
-
         try {
+            // Создаем объект FormData для отправки данных на сервер
             const formData = new FormData();
-            formData.append('video',selectedFile);
+            formData.append('Video', videoData.selectedVideo); // Добавляем видео
+            formData.append('ImgUrl', videoData.selectedImage); // Добавляем изображение
+            formData.append('Name', videoData.videoName); // Добавляем название видео
+            formData.append('Description', videoData.videoDescription); // Добавляем описание видео
+            formData.append('UserId', videoData.userId); // Добавляем описание видео
 
-            const response = await axios.post('http://localhost:5041/Yandex/UploadFileToDisk\n', formData, {
+            console.log(formData)
+
+            // Отправляем данные на сервер
+            const response = await axios.post('http://localhost:5041/Yandex/UploadFileToDisk', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            console.log('Файл успешно загружен:', response.data);
-            setUploading(true)
-            setUploadSuccess(true)
+            // В случае успешной загрузки выводим сообщение об успешной загрузке
+            console.log('Файлы успешно загружены:', response.data);
+            setUploading(false);
+            setUploadSuccess(true);
         } catch (error) {
-            setUploading(false)
-            console.error('Ошибка при загрузке файла:', error);
+            // В случае ошибки выводим сообщение об ошибке
+            setUploading(false);
+            console.error('Ошибка при загрузке файлов:', error);
         }
     };
-
-
-
 
     return (
         <>
@@ -105,13 +126,32 @@ const AdminAddVideo = () => {
 
             <div className="add-video-button">
                 <form onSubmit={handleSubmit}>
-                    <input type="file" name="video" accept="video/*" onChange={handleFileChange} />
+                    {/* Поле для выбора видео */}
+                    <input type="file" name="selectedVideo" accept="video/*" onChange={handleFileChange}/>
+
+                    {/* Поле для ввода ссылки на изображение */}
+                    <input type="text" name="selectedImage" placeholder="Ссылка на изображение" value={videoData.selectedImage}
+                           onChange={handleInputChange}/>
+
+                    {/* Поле для ввода названия видео */}
+                    <input type="text" name="videoName" placeholder="Название видео" value={videoData.videoName}
+                           onChange={handleInputChange}/>
+
+                    {/* Поле для ввода описания видео */}
+                    <textarea name="videoDescription" placeholder="Описание видео" value={videoData.videoDescription}
+                              onChange={handleInputChange}></textarea>
+
+                    {/* Кнопка отправки формы */}
                     <button type="submit" disabled={uploading}>
                         {uploading ? 'Загрузка...' : 'ДОБАВИТЬ ВИДЕО'}
                     </button>
                 </form>
             </div>
-            {/*<video src="https://downloader.disk.yandex.ru/disk/c6631babf2ba5612b7b91995e4bcc96584a95b023ee9f4c74b16d7f4a381b3a9/6639844d/fKqInKw3d7bLFOeFnMGnhDH1Z-voPfuALnTn4H9kzgjwczVfmnswgCs8yOJFDNoJUxvr-16KqQ0TCJVok7b3UwuktwEMYuLTXrZrBbdqSkKr8npumZHI4midPdWhecNq?uid=1130000064761911&filename=%D0%B0%D1%83%D1%86%D0%B0%D1%83%D1%86&disposition=attachment&hash=&limit=0&content_type=video%2Fmp4&owner_uid=1130000064761911&fsize=1479412&hid=732514b69dea9ed802bbac80e37b48f7&media_type=video&tknv=v2&etag=065b70582b558a310e3aeec7b1befaa7"/>*/}
+            {uploadSuccess && (
+                <div className="upload-success-message">
+                    Видео успешно загружено!
+                </div>
+            )}
         </>
     );
 };

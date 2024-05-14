@@ -45,4 +45,9 @@ public class VideoRepository : IVideoRepository
 
         return result;
     }
+
+    public async Task<List<Video>> GetRandomVideo(CancellationToken cancellationToken)
+    {
+        return await _context.Videos.Take(20).ToListAsync(cancellationToken);
+    }
 }

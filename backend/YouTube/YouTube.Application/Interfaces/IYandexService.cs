@@ -6,10 +6,16 @@ namespace YouTube.Application.Interfaces;
 
 public interface IYandexService
 {
+    Task<bool> DownloadFile(string fileUrl, string destinationPath, string path, CancellationToken cancellationToken);
     Task<string> GetAllFilesOnDisk(CancellationToken cancellationToken);
 
-    Task<UploadFileResponse> UploadFileToDisk(IFormFile file, string pathInDisk, CancellationToken cancellationToken);
-
+    Task<UploadFileResponse> UploadFileToDisk(
+        IFormFile file,
+        string img,
+        string name,
+        string description,
+        string userId,
+        CancellationToken cancellationToken);
     Task<CreateFolderResponse> CreateFolder(string path, CancellationToken cancellationToken);
 
     Task<BaseResponse> DeleteFile(string path, CancellationToken cancellationToken);

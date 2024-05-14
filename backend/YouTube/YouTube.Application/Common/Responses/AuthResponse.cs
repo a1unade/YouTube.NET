@@ -17,5 +17,5 @@ public class AuthResponse
     /// <summary>
     /// ID пользователя
     /// </summary>
-    public string? UserId { get; set; }
+    public Guid UserId { get; set; }
 }

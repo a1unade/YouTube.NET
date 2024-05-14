@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
@@ -25,13 +26,24 @@ public class YandexController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> UploadFileToDisk(IFormFile video, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadFileToDisk(AddVideoDto request, CancellationToken cancellationToken)
     {
-        var result = await _yandexService.UploadFileToDisk(video, "/FromYt", cancellationToken);
+        var result = await _yandexService.UploadFileToDisk(request.Video, request.ImgUrl, request.Name, request.Description, request.UserId, cancellationToken);
 
         if (!result.IsSuccessfully)
             return BadRequest(result);
 
+        return Ok(result);
+    }
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetFileFromPath(string path, CancellationToken cancellationToken)
+    {
+        var result = await _yandexService.GetFile(path, cancellationToken);
+        
+        if (!result.IsSuccessfully)
+            return BadRequest(result);
+    
         return Ok(result);
     }
 
@@ -57,16 +69,7 @@ public class YandexController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetFileFromPath(string path, CancellationToken cancellationToken)
-    {
-        var result = await _yandexService.GetFile(path, cancellationToken);
-
-        if (!result.IsSuccessfully)
-            return BadRequest(result);
-
-        return Ok(result);
-    }
+    
 
     [HttpGet("[action]")]
     public async Task<IActionResult> PublishFile(string path, CancellationToken cancellationToken)
@@ -78,68 +81,5 @@ public class YandexController : ControllerBase
 
         return Ok(result);
     }
-
-    // [HttpGet("[action]")]
-    // public async Task<IActionResult> GetFile(string url, CancellationToken cancellationToken)
-    // {
-    //     try
-    //     {
-    //         string accessToken = _configuration["Yandex:Token"]!;
-    //
-    //         using (HttpClient client = new HttpClient())
-    //         {
-    //             client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken); // Добавлять всегда
-    //
-    //
-    //             HttpResponseMessage response = await client.GetAsync(url, cancellationToken);
-    //
-    //             if (response.IsSuccessStatusCode)
-    //             {
-    //                 string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-    //                 Console.WriteLine(responseBody);
-    //                 return Ok();
-    //
-    //             }
-    //
-    //             return BadRequest();
-    //
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest();
-    //     }
-    // }
-
-      [HttpGet("[action]")]
-      public async Task<string> GetPublishFile(string publicKey, CancellationToken cancellationToken)
-      {
-          try
-          {
-              string accessToken = _configuration["Yandex:Token"]!;
-
-              using (HttpClient client = new HttpClient())
-              {
-                  client.DefaultRequestHeaders.Add("Authorization", "OAuth " + accessToken); // Добавлять всегда
-
-
-                  HttpResponseMessage response = await client.GetAsync(publicKey,cancellationToken);
-
-                  if (response.IsSuccessStatusCode)
-                  {
-                      string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                      Console.WriteLine("________________________________________________________________");
-                      Console.WriteLine(responseBody);
-                      return responseBody;
-
-                  } 
-                  return "Хай";
-
-              }
-          }
-          catch (Exception ex)
-          {
-              return ex.Message;
-          }
-      }
+    
 }

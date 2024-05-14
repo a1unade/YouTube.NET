@@ -7,10 +7,12 @@ namespace YouTube.WebAPI.Controllers;
 public class ChannelController : ControllerBase
 {
     private readonly IChannelService _channelService;
+    private readonly IVideoService _videoService;
 
-    public ChannelController(IChannelService channelService)
+    public ChannelController(IChannelService channelService, IVideoService videoService)
     {
         _channelService = channelService;
+        _videoService = videoService;
     }
 
     [HttpGet("[action]")]
@@ -44,5 +46,16 @@ public class ChannelController : ControllerBase
             return BadRequest(result);
 
         return Ok(result);
+    }
+
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetRandomVideo(CancellationToken cancellationToken)
+    {
+        var t = await _videoService.GetRandomVideo(cancellationToken);
+
+        if(t.IsSuccessfully)
+            return Ok(t);
+
+        return BadRequest(t);
     }
 }
