@@ -9,4 +9,6 @@ public interface IVideoRepository
     Task<Video?> GetByName(string name, CancellationToken cancellationToken);
 
     Task<List<Video>?> GetVideoChannel(int id, CancellationToken cancellationToken);
+
+    Task<List<Video>> GetRandomVideo(CancellationToken cancellationToken);
 }

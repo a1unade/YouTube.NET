@@ -26,6 +26,11 @@ public class ChannelRepository : IChannelRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<Channel?> GetById(int id, CancellationToken cancellationToken)
+    {
+        return await _context.Channels.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
     public async Task<Channel?> GetByName(string name, CancellationToken cancellationToken)
     {
         return await _context.Channels
@@ -36,5 +41,14 @@ public class ChannelRepository : IChannelRepository
             .Include(x => x.BannerImgFile)
             .FirstOrDefaultAsync(cancellationToken);
         
+    }
+
+    public async Task<Channel> GetByUser(Guid userId, CancellationToken cancellationToken)
+    {
+        var res = await _context.Channels
+            .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken) 
+                  ?? new Channel();
+
+        return res;
     }
 }

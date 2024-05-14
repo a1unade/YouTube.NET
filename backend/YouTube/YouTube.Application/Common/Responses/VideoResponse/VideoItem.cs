@@ -17,4 +17,6 @@ public class VideoItem
     public DateTime ReleaseDate { get; set; }
 
     public string? PreviewImg { get; set; }
+    
+    public string? Href { get; set; }
 }

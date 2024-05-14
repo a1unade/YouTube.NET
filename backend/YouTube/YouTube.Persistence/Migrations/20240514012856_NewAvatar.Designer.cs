@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using YouTube.Persistence.Contexts;
@@ -11,9 +12,11 @@ using YouTube.Persistence.Contexts;
 namespace YouTube.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240514012856_NewAvatar")]
+    partial class NewAvatar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +153,105 @@ namespace YouTube.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("YouTube.Domain.Entities.Avatar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Avatars");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Path = "http://localhost:5041/static/avatars/users-1.svg"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Path = "http://localhost:5041/static/avatars/users-2.svg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Path = "http://localhost:5041/static/avatars/users-3.svg"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Path = "http://localhost:5041/static/avatars/users-4.svg"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Path = "http://localhost:5041/static/avatars/users-5.svg"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Path = "http://localhost:5041/static/avatars/users-6.svg"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Path = "http://localhost:5041/static/avatars/users-7.svg"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Path = "http://localhost:5041/static/avatars/users-8.svg"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Path = "http://localhost:5041/static/avatars/users-9.svg"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Path = "http://localhost:5041/static/avatars/users-10.svg"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Path = "http://localhost:5041/static/avatars/users-11.svg"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Path = "http://localhost:5041/static/avatars/users-12.svg"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Path = "http://localhost:5041/static/avatars/users-13.svg"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Path = "http://localhost:5041/static/avatars/users-14.svg"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Path = "http://localhost:5041/static/avatars/users-15.svg"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Path = "http://localhost:5041/static/avatars/users-16.svg"
+                        });
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
@@ -592,7 +694,7 @@ namespace YouTube.Persistence.Migrations
 
             modelBuilder.Entity("YouTube.Domain.Entities.UserInfo", b =>
                 {
-                    b.HasOne("YouTube.Domain.Entities.StaticFile", "StaticFile")
+                    b.HasOne("YouTube.Domain.Entities.Avatar", "Avatar")
                         .WithOne("UserInfo")
                         .HasForeignKey("YouTube.Domain.Entities.UserInfo", "AvatarId");
 
@@ -602,7 +704,7 @@ namespace YouTube.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("StaticFile");
+                    b.Navigation("Avatar");
 
                     b.Navigation("User");
                 });
@@ -626,6 +728,12 @@ namespace YouTube.Persistence.Migrations
                     b.Navigation("StaticFile");
                 });
 
+            modelBuilder.Entity("YouTube.Domain.Entities.Avatar", b =>
+                {
+                    b.Navigation("UserInfo")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
                 {
                     b.Navigation("UserChannelSubs");
@@ -636,9 +744,6 @@ namespace YouTube.Persistence.Migrations
             modelBuilder.Entity("YouTube.Domain.Entities.StaticFile", b =>
                 {
                     b.Navigation("Channel")
-                        .IsRequired();
-
-                    b.Navigation("UserInfo")
                         .IsRequired();
 
                     b.Navigation("Video")

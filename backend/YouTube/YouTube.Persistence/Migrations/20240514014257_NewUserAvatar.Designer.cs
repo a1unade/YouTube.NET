@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using YouTube.Persistence.Contexts;
@@ -11,9 +12,11 @@ using YouTube.Persistence.Contexts;
 namespace YouTube.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240514014257_NewUserAvatar")]
+    partial class NewUserAvatar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -376,7 +379,7 @@ namespace YouTube.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("AvatarId")
+                    b.Property<int>("AvatarId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("BirthDate")
@@ -594,7 +597,9 @@ namespace YouTube.Persistence.Migrations
                 {
                     b.HasOne("YouTube.Domain.Entities.StaticFile", "StaticFile")
                         .WithOne("UserInfo")
-                        .HasForeignKey("YouTube.Domain.Entities.UserInfo", "AvatarId");
+                        .HasForeignKey("YouTube.Domain.Entities.UserInfo", "AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("YouTube.Domain.Entities.User", "User")
                         .WithOne("UserInfo")

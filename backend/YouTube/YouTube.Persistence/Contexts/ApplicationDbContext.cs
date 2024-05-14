@@ -13,7 +13,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     public DbSet<User> Users { get; set; }
     public DbSet<UserInfo> UserInfos { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
-    public DbSet<Avatar> Avatars { get; set; }
     public DbSet<UserChannelSub> UserChannelSubs { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -32,15 +31,13 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=6715;Username=postgres;Password=youtube;Database=postgres;");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Username=postgres;Password=Bulat2004;Database=DropDataBase;");
         optionsBuilder.EnableSensitiveDataLogging();
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<Avatar>().HasData(DatabaseSeeder.Avatars());
         
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserInfoConfiguration());

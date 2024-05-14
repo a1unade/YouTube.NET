@@ -24,7 +24,6 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
             Surname = registerDto.Surname,
             BirthDate = registerDto.BirthDate,
             Gender = registerDto.Gender,
-            AvatarId = 1
         };
 
         User user = new User
@@ -66,7 +65,7 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
                 await emailSender.SendEmailAsync(user.Email, "Подтверждение почты", 
                     $"Для подтверждения вашей электронной почты перейдите по <a href=\"{confirmationLink}\">ссылке</a>");
 
-                return new AuthResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.RegisterSuccess };
+                return new AuthResponse { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.RegisterSuccess, UserId = user.Id };
             }
         }
 
@@ -106,7 +105,6 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
-                .Include(u => u.UserInfo.Avatar)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return new UserResponse
@@ -117,7 +115,6 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
                 Susrname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
                 BirthDate = user.UserInfo.BirthDate.ToString("d"),
-                Avatar = user.UserInfo.Avatar.Path
             };
         }
         catch (Exception ex)
@@ -140,7 +137,7 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
 
             if (isPasswordCorrect)
                 return new AuthResponse
-                    { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.LoginSuccess, UserId = user.Id.ToString()};
+                    { Type = UserResponseTypes.Success, Message = AuthSuccessMessages.LoginSuccess, UserId = user.Id};
 
             return new AuthResponse { Type = UserResponseTypes.Error, Message = AuthErrorMessages.LoginWrongPassword };
         }
@@ -154,7 +151,6 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
         {
             User? user = await userManager.Users.AsNoTracking()
                 .Include(u => u.UserInfo)
-                .Include(u => u.UserInfo.Avatar)
                 .FirstOrDefaultAsync(u => u.Id.ToString() == id);
 
             return new UserResponse
@@ -165,7 +161,6 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
                 Susrname = user.UserInfo.Surname,
                 Gender = user.UserInfo.Gender,
                 BirthDate = user.UserInfo.BirthDate.ToString("d"),
-                Avatar = user.UserInfo.Avatar.Path
             };
         }
         catch (Exception ex)

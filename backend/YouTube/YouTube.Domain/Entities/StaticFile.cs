@@ -8,4 +8,6 @@ public class StaticFile
     
     public Channel Channel { get; set; }
     public Video Video { get; set; }
+    
+    public UserInfo UserInfo { get; set; }
 }
