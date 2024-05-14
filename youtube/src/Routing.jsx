@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Main from "./pages/main_page";
 import Player from "./pages/player";
 import Search from "./pages/search";
@@ -32,8 +32,13 @@ import MyCommunity from "./pages/channel_page/MyChannelPage/MyCommunity.jsx";
 import MyPlaylist from "./pages/channel_page/MyChannelPage/MyPlaylist.jsx";
 import MyFeatured from "./pages/channel_page/MyChannelPage/MyFeatured.jsx";
 import MyVideos from "./pages/channel_page/MyChannelPage/MyVideos.jsx";
+import Unauthorized from "./pages/401/index.jsx";
+import NotFound from "./pages/404/index.jsx";
+import {useSelector} from "react-redux";
 
 const Routing = () => {
+    const {userId} = useSelector((state) => state.user.userId);
+
     return (
         <Routes>
             <Route path='/' element={<Main/>}/>
@@ -61,14 +66,30 @@ const Routing = () => {
             <Route path="/feed/trending/videogames" element={<TrendVideoGames/>}/>
             <Route path="/channel/Music/community" element={<MusicCommunity/>}/>
             <Route path="/channel/Music/featured" element={<MusicFeatured/>}/>
-            <Route path="/channel/edit/id" element={<ContentAdd/>}/>
-            <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>}/>
-            <Route path="/channel/edit/channelId/playlist" element={<AdminAddPlaylist/>}/>
-            <Route path="/channel/edit/images" element={<Branding/>}/>
-            <Route path="/channel/edit/details" element={<MainDetails/>}/>
-            <Route path={"/settings/account"} element={<AccountSettings/>}/>
-            <Route path={"/settings/payments"} element={<PaymentsSettings/>}/>
-            <Route path={"/auth/:id"} element={<Auth/>}/>
+            {userId === '' ?
+                <>
+                    <Route path="/channel/edit/:id" element={<ContentAdd/>}/>
+                    <Route path="/channel/edit/addvideo" element={<AdminAddVideo/>}/>
+                    <Route path="/channel/edit/:channelId/playlist" element={<AdminAddPlaylist/>}/>
+                    <Route path="/channel/edit/images" element={<Branding/>}/>
+                    <Route path="/channel/edit/details" element={<MainDetails/>}/>
+                    <Route path="/settings/account" element={<AccountSettings/>}/>
+                    <Route path="/settings/payments" element={<PaymentsSettings/>}/>
+                </>
+                :
+                <>
+                    <Route path="/channel/edit/:id" element={<Unauthorized/>}/>
+                    <Route path="/channel/edit/addvideo" element={<Unauthorized/>}/>
+                    <Route path="/channel/edit/:channelId/playlist" element={<Unauthorized/>}/>
+                    <Route path="/channel/edit/images" element={<Unauthorized/>}/>
+                    <Route path="/channel/edit/details" element={<Unauthorized/>}/>
+                    <Route path="/settings/account" element={<Unauthorized/>}/>
+                    <Route path="/settings/payments" element={<Unauthorized/>}/>
+                </>
+
+            }
+            <Route path="/auth/:id" element={<Auth/>}/>
+            <Route path={'*'} element={<NotFound/>}></Route>
         </Routes>
     );
 }

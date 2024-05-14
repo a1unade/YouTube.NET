@@ -64,9 +64,21 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("getUserById")]
-    public async Task<UserResponse> GetUserById(string userId) => 
-        await _authService.GetUserByIdAsync(userId);
 
+    public async Task<UserResponse> GetUserById(string userId) 
+    {
+        var response = await _authService.GetUserByIdAsync(userId);
+        if (response.ResponseType == UserResponseTypes.Success)
+        {
+            Response.Cookies.Append("auth", userId, new CookieOptions
+            {
+                Expires = DateTimeOffset.UtcNow.AddDays(1),
+                Path = "/"
+            });
+        }
+        return response;
+    } 
+    
     [HttpPost("changeAvatar")]
     public async Task<AuthResponse> ChangeAvatar(ChangeAvatarDto changeAvatarDto) =>
         await _authService.ChangeUserAvatarAsync(changeAvatarDto.UserId, changeAvatarDto.AvatarId);

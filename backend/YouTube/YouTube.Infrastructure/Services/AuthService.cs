@@ -175,16 +175,13 @@ public class AuthService(UserManager<User> userManager, IEmailService emailSende
 
     public async Task<AuthResponse> ChangeUserAvatarAsync(string userId, int avatarId)
     {
-        // Найдем информацию о пользователе по его Id
         var userInfo = await dbContext.UserInfos.FirstOrDefaultAsync(u => u.UserId == Guid.Parse(userId));
 
         if (userInfo == null)
             return new AuthResponse { Type = UserResponseTypes.Error, Message = "UserInfo not found" };
 
-        // Обновим AvatarId пользователя
         userInfo.AvatarId = avatarId;
 
-        // Сохраним изменения
         await dbContext.SaveChangesAsync();
 
         return new AuthResponse { Type = UserResponseTypes.Success };

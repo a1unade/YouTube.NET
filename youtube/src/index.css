@@ -1,11 +1,11 @@
-@import url('./assets/header.css');
-@import url('./assets/left-menu.css');
-@import url('./assets/main-page.css');
-@import url('./assets/video.css');
-@import url('./assets/search.css');
-@import url('./assets/player.css');
-@import url('./assets/styleForChannel.css');
-@import url('./assets/admin.css');
+@import url('./assets/styles/header.css');
+@import url('./assets/styles/left-menu.css');
+@import url('./assets/styles/main-page.css');
+@import url('./assets/styles/video.css');
+@import url('./assets/styles/search.css');
+@import url('./assets/styles/player.css');
+@import url('./assets/styles/styleForChannel.css');
+@import url('./assets/styles/admin.css');
 
 :root {
     line-height: 1.5;
@@ -65,4 +65,25 @@ button {
     button {
         background-color: #f9f9f9;
     }
+}
+
+.ad{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px;
+    width: 58lh;
+    gap: 100px;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+}
+
+.ad img{
+    border-radius: 15px;
+}
+
+.menu-opened .ad {
+    width: 53lh;
 }

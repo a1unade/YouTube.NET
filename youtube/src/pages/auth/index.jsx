@@ -6,6 +6,7 @@ const Auth = () => {
     const navigate = useNavigate();
     const {userId} = useParams();
     const {createUserById} = useUserActions();
+
     useEffect( () => {
         createUserById(userId);
         navigate("/");

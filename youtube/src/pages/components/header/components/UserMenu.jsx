@@ -1,6 +1,9 @@
 import {Exit, StudioMenu, Payments, SettingsIcon, HelpIcon, AlertIcon, UserData} from "../../../../assets/Icons";
+import {useNavigate} from "react-router-dom";
 
 const UserMenu = () => {
+    const navigate = useNavigate();
+
     return (
         <>
             <div className='dropdown-content'>
@@ -25,7 +28,7 @@ const UserMenu = () => {
                     </button>
                 </div>
                 <div className='dropdown-section'>
-                    <button className='sidebar-button'>
+                    <button className='sidebar-button' onClick={() => navigate('"/channel/edit/1"')}>
                         <div className='svg-container'>
                             <StudioMenu/>
                         </div>
@@ -67,7 +70,6 @@ const UserMenu = () => {
                         </div>
                         <p className='sidebar-text'>Отправить отзыв</p>
                     </button>
-                    <a href="http://localhost:4173/sign-in">Войти</a>
                 </div>
             </div>
         </>

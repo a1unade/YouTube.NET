@@ -1,6 +1,8 @@
 import {useNavigate} from 'react-router-dom';
 import {formatDate, formatViews} from "../../../../utils/formatFunctions";
+import ylogo from '../../../../assets/img/ylogo.svg';
 
+// eslint-disable-next-line react/prop-types
 const MainVideo = ({video, channel}) => {
     const navigate = useNavigate();
     return (
@@ -20,7 +22,12 @@ const MainVideo = ({video, channel}) => {
                             <span><b>{video.snippet.localized.title}</b></span>
                         </div>
                         <div className="info">
-                            <span>{video.snippet.channelTitle}</span>
+                            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                                <span>{video.snippet.channelTitle}</span>
+                                <div style={{width: 20, height: 20}}>
+                                    <img src={ylogo} alt=''/>
+                                </div>
+                            </div>
                             <ul>
                                 <li>{formatViews(video.statistics.viewCount, 'views')}</li>
                                 <li>{formatDate(video.snippet.publishedAt)}</li>
@@ -30,7 +37,8 @@ const MainVideo = ({video, channel}) => {
                 </div>
             </div>
         </>
-    );
+    )
+        ;
 }
 
 export default MainVideo;

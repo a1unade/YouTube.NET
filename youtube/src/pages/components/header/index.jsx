@@ -1,13 +1,19 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Logo, Search, AddVideo, Notifications} from '../../../assets/Icons.jsx';
+import {Logo, Search, AddVideo} from '../../../assets/Icons.jsx';
 import UserMenu from './components/UserMenu.jsx';
+import {useSelector} from "react-redux";
+import {useSettingsActions} from "../../../hooks/useUserActions.js";
 
+// eslint-disable-next-line react/prop-types
 const Header = ({toggleMenu}) => {
     const navigate = useNavigate()
     const [isDetailsOpen, setDetailsOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [search, setSearch] = useState('');
+    const {userId} = useSelector((state) => state.user.userId);
+    const {avatar} = useSelector((state) => state.user.userId);
+
     const handleBlur = () => {
         setIsFocused(false);
     };
@@ -36,24 +42,30 @@ const Header = ({toggleMenu}) => {
                         <Search className='svg-container'/>
                     </button>
                 </div>
-                <div className='user-buttons' style={{width: 120}}>
+                <div className='user-buttons'>
                     <div className='button-container'>
                         <button>
-                            <AddVideo className='svg-container'/>
+                        <AddVideo className='svg-container'/>
                         </button>
                     </div>
-                    <div style={{marginRight: 20}}>
-                        <div className='dropdown'>
-                            <div className='button-container menu' style={{marginLeft: 0}}>
-                                <button onClick={() => setDetailsOpen(!isDetailsOpen)}>
-                                    <img className='circular-avatar'
-                                         src='https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg'
-                                         alt=''/>
-                                </button>
+                    {
+                        userId === '' ?
+                            <div style={{marginRight: 20}}>
+                                <div className='dropdown'>
+                                    <div className='button-container menu' style={{marginLeft: 0}}>
+                                        <button onClick={() => setDetailsOpen(!isDetailsOpen)}>
+                                            <img className='circular-avatar'
+                                                 src={avatar}
+                                                 alt=''/>
+                                        </button>
+                                    </div>
+                                    {isDetailsOpen && (<UserMenu/>)}
+                                </div>
                             </div>
-                            {isDetailsOpen && (<UserMenu/>)}
-                        </div>
-                    </div>
+                            :
+                            <button className="sign-in-button"
+                                    onClick={() => window.location.replace("http://localhost:5172/signin")}>Войти</button>
+                    }
                 </div>
             </div>
         </>
