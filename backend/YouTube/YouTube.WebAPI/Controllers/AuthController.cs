@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
 
@@ -10,9 +11,9 @@ namespace YouTube.WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ApplicationDbContext _context;
+    private readonly IDbContext _context;
 
-    public AuthController(IMediator mediator,ApplicationDbContext context)
+    public AuthController(IMediator mediator, IDbContext context)
     {
         _mediator = mediator;
         _context = context;
