@@ -1,14 +1,53 @@
+using YouTube.Domain.Common;
+
 namespace YouTube.Domain.Entities;
 
-public class Comment
+/// <summary>
+/// Комментарии
+/// </summary>
+public class Comment : BaseEntity
 {
-    public int Id { get; set; }
-    public string CommentText { get; set; }
-    public DateTime PostDate { get; set; }
+    /// <summary>
+    /// Комментарий
+    /// </summary>
+    public required string CommentText { get; set; }
+
+    /// <summary>
+    /// Дата поста комментария
+    /// </summary>
+    public DateOnly PostDate { get; set; }
+
+    /// <summary>
+    /// Кол-во лайков
+    /// </summary>
     public int LikeCount { get; set; }
-    public int DisLikeCount { get; set; }
-    public int VideoId { get; set; }
-    public Video Video { get; set; }
-    public Guid UserId { get; set; }
-    public UserInfo UserInfo { get; set; }
+
+    /// <summary>
+    /// Кол-во дизлайков
+    /// </summary>
+    public int DislikeCount { get; set; }
+
+    /// <summary>
+    /// ID Видео
+    /// </summary>
+    public Guid VideoId { get; set; }
+
+    /// <summary>
+    /// Видео
+    /// </summary>
+    public Video Video { get; set; } = default!;
+
+    /// <summary>
+    /// Id Канала
+    /// </summary>
+    public Guid ChannelId { get; set; }
+
+    /// <summary>
+    /// Канал оставивший комментарий
+    /// </summary>
+    public Channel Channel { get; set; } = default!;
+    
+    public Guid PostId { get; set; }
+
+    public Post Post { get; set; } = default!;
 }

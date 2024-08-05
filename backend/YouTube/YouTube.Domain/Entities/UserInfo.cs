@@ -5,50 +5,29 @@ namespace YouTube.Domain.Entities;
 public class UserInfo : BaseEntity
 {
     /// <summary>
-    /// ID пользователя
-    /// </summary>
-    public Guid UserId { get; set; }
-        
-    /// <summary>
     /// Имя пользователя
     /// </summary>
-    public string Name { get; set; }
-    
+    public required string Name { get; set; } 
+
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
-    public string? Surname { get; set; }
-    
+    public required string Surname { get; set; }
+
     /// <summary>
     /// Дата рождения пользователя
     /// </summary>
-    public DateTime BirthDate { get; set; }
-    
-    public string? Country { get; set; }
-    
+    public DateOnly BirthDate { get; set; }
+
     /// <summary>
     /// Пол пользователя
     /// </summary>
-    public string Gender { get; set; }
-    
-    public bool Premium { get; set; }
+    public string Gender { get; set; } = default!;
 
     /// <summary>
     /// Навигационное свойство для связи с User
     /// </summary>
-    public User User { get; set; }
+    public User User { get; set; } = default!;
     
-    
-    public Channel Channel { get; set; }
-    
-    public List<Comment>? Comments { get; set; }
-    
-    public List<UserChannelSub> ChannelSubs { get; set; }
-    
-    /// <summary>
-    /// ID аватарки
-    /// </summary>
-    public int? AvatarId { get; set; }
-    
-    public StaticFile StaticFile { get; set; }
+
 }

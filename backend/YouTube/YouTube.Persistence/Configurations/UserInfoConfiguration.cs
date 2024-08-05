@@ -8,11 +8,22 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
 {
     public void Configure(EntityTypeBuilder<UserInfo> builder)
     {
-        builder.Property(x => x.BirthDate)
-            .HasColumnType("date");
+        builder.HasKey(x => x.Id);
 
-        builder.HasOne(x => x.StaticFile)
+        builder.Property(x => x.Name)
+            .IsRequired()
+            .HasMaxLength(64);
+        
+        builder.Property(x => x.Surname)
+            .IsRequired()
+            .HasMaxLength(64);
+        
+        builder.Property(x => x.BirthDate);
+
+        builder.Property(x => x.Gender);
+        
+        builder.HasOne(x => x.User)
             .WithOne(x => x.UserInfo)
-            .HasForeignKey<UserInfo>(x => x.AvatarId);
+            .HasForeignKey<User>(x => x.UserInfoId);
     }
 }

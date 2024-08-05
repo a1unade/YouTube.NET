@@ -9,30 +9,26 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
         builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd();
-
+        
         builder.Property(x => x.CommentText)
             .IsRequired()
-            .HasMaxLength(1000);
+            .HasMaxLength(1000)
+            .HasColumnType("varchar(1000)");
 
+        builder.Property(x => x.PostDate);
+        
         builder.Property(x => x.LikeCount)
             .HasDefaultValue(0);
         
-        builder.Property(x => x.DisLikeCount)
+        builder.Property(x => x.DislikeCount)
             .HasDefaultValue(0);
-
-        builder.Property(x => x.PostDate)
-            .HasColumnType("date");
-
+        
         builder.HasOne(x => x.Video)
             .WithMany(x => x.Comments)
             .HasForeignKey(x => x.VideoId);
 
-        builder.HasOne(x => x.UserInfo)
+        builder.HasOne(x => x.Channel)
             .WithMany(x => x.Comments)
-            .HasForeignKey(x => x.UserId);
-
+            .HasForeignKey(x => x.ChannelId);
     }
 }
