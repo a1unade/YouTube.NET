@@ -1,25 +1,86 @@
+using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
-public class Channel
+public class Channel : BaseEntity
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
+    /// <summary>
+    /// Имя
+    /// </summary>
+    public required string Name { get; set; }
+
+    /// <summary>
+    /// Описание
+    /// </summary>
     public string? Description { get; set; }
-    public DateTime  CreateDate { get; set; }
+
+    /// <summary>
+    /// Дата создания
+    /// </summary>
+    public DateOnly CreateDate { get; set; }
+
+    /// <summary>
+    /// Кол-во подписчиков
+    /// </summary>
     public int SubCount { get; set; }
+
+    /// <summary>
+    /// Id пользователя
+    /// </summary>
     public Guid UserId { get; set; }
-    public UserInfo UserInfo { get; set; }
-    public List<Video> Videos { get; set; }
+
+    /// <summary>
+    /// Пользователь
+    /// </summary>
+    public User User { get; set; } = default!;
+
+    /// <summary>
+    /// Id Аватарки
+    /// </summary>
+    public Guid MainImgId { get; set; }
+
+    /// <summary>
+    /// Файл аватарки
+    /// </summary>
+    public File MainImgFile { get; set; } = default!;
+
+    /// <summary>
+    /// Id банера
+    /// </summary>
+    public Guid BannerImgId { get; set; }
+
+    /// <summary>
+    /// Банер
+    /// </summary>
+    public File BannerImg { get; set; } = default!;
+
+    /// <summary>
+    /// Подписки на каналы
+    /// </summary>
+    public ICollection<ChannelSubscription> UserChannelSubs { get; set; } = default!;
+
+    /// <summary>
+    /// Список видео
+    /// </summary>
+    public ICollection<Video> Videos { get; set; } = default!;
+
+    /// <summary>
+    /// Список комментариев
+    /// </summary>
+    public ICollection<Comment> Comments { get; set; } = default!;
     
-    public int? MainImgId { get; set; }
+    /// <summary>
+    /// Плейлисты
+    /// </summary>
+    public ICollection<Playlist> Playlists { get; set; } = default!;
+
+    /// <summary>
+    /// Подписки
+    /// </summary>
+    public ICollection<ChannelSubscription> Subscriptions { get; set; } = default!;
     
-    public StaticFile? MainImgFile { get; set; }
-    
-    public int? BannerImgId { get; set; }
-    
-    public StaticFile? BannerImgFile { get; set; }
-    
-    public List<UserChannelSub> UserChannelSubs { get; set; }
-    
+    /// <summary>
+    /// Подписчики
+    /// </summary>
+    public ICollection<ChannelSubscription> Subscribers { get; set; } = default!;
 }

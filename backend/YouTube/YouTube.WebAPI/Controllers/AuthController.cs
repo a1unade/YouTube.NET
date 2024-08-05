@@ -1,85 +1,32 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using YouTube.Application.Common.Enums;
-using YouTube.Application.Common.Responses;
-using YouTube.Application.DTOs.Auth;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
+using YouTube.Domain.Entities;
 
 namespace YouTube.WebAPI.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IAuthService _authService;
-    private readonly IChannelRepository _channelRepository;
+    private readonly IMediator _mediator;
+    private readonly IDbContext _context;
 
-    public AuthController(IAuthService authService, IChannelRepository channelRepository)
+    public AuthController(IMediator mediator, IDbContext context)
     {
-        _authService = authService;
-        _channelRepository = channelRepository;
+        _mediator = mediator;
+        _context = context;
     }
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto registerDto, CancellationToken cancellationToken)
+    [HttpPost]
+    public  IActionResult GetTwo()
     {
-        AuthResponse result = await _authService.RegisterAsync(registerDto);
-        
-        if (result.Type == UserResponseTypes.Success)
+        _context.Categories.Add(new Category
         {
-            return Ok(result);
-        }
-        
-        return BadRequest(result.Message);
+            Id = Guid.NewGuid(),
+            Name = "hui"
+        });
+        return
+            Ok(2);
     }
-    
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDto loginDto)
-    {
-        AuthResponse result = await _authService.SignInAsync(loginDto);
-        
-        if (result.Type == UserResponseTypes.Success)
-            return Ok(result);
-        
-        return BadRequest(result.Message);
-    }
-    
-    [HttpGet("confirm-email")]
-    public async Task<AuthResponse> ConfirmEmail(string userId, string token)
-    {
-        AuthResponse result = await _authService.ConfirmEmailAsync(userId, token);
-        
-        if (result.Type == UserResponseTypes.Success)
-            return result;
-        
-        return result;
-    }
-
-    [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteAllUsers()
-    {
-        await _authService.DeleteAllUsersAsync();
-
-        return Ok(new { Message = "Пользователи были удалены"});
-    }
-
-    [HttpGet("getUserById")]
-
-    public async Task<UserResponse> GetUserById(string userId) 
-    {
-        var response = await _authService.GetUserByIdAsync(userId);
-        if (response.ResponseType == UserResponseTypes.Success)
-        {
-            Response.Cookies.Append("auth", userId, new CookieOptions
-            {
-                Expires = DateTimeOffset.UtcNow.AddDays(1),
-                Path = "/"
-            });
-        }
-        return response;
-    } 
-    
-    [HttpPost("changeAvatar")]
-    public async Task<AuthResponse> ChangeAvatar(ChangeAvatarDto changeAvatarDto) =>
-        await _authService.ChangeUserAvatarAsync(changeAvatarDto.UserId, changeAvatarDto.AvatarId);
 }

@@ -26,14 +26,10 @@ public static class ServiceCollectionExtensions
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
-        
+
         services
             .AddTransient<IMediator, Mediator>()
-            .AddTransient<IAuthService, AuthService>()
-            .AddTransient<IEmailService, EmailService>()
-            .AddTransient<IYandexService, YandexService>()
-            .AddTransient<IChannelService, ChannelService>()
-            .AddTransient<IVideoService, VideoService>();
-        services.AddTransient<ISubscriptionService, SubscriptionService>();
+            .AddScoped<IEmailService, EmailService>()
+            .AddScoped<IJwtGenerator, JwtGenerator>();
     }
 }

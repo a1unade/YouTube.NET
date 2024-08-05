@@ -12,8 +12,15 @@ namespace YouTube.Persistence.Configurations
             
             builder.HasOne(u => u.UserInfo)
                 .WithOne(x => x.User)
-                .HasForeignKey<UserInfo>(x => x.UserId)
-                .HasPrincipalKey<User>(x => x.Id);
+                .HasForeignKey<User>(x => x.UserInfoId);
+
+            builder.HasMany(x => x.Channels)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+
+            builder.HasOne(x => x.AvatarUrl)
+                .WithOne()
+                .HasForeignKey<User>(x => x.AvatarId);
         }
     }
 }

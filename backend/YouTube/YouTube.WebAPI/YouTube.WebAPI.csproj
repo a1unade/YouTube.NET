@@ -8,11 +8,13 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>215b9df2-427f-46a5-bc21-2b56f7e70e0e</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3373" />
         <PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
         <PackageReference Include="YandexDisk.Client" Version="1.3.27" />
@@ -31,7 +33,26 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\videos\" />
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-1.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-10.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-11.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-12.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-13.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-14.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-15.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-16.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-2.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-3.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-4.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-5.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-6.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-7.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-8.svg" />
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\users-9.svg" />
     </ItemGroup>
 
 </Project>

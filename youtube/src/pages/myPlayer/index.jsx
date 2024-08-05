@@ -6,6 +6,7 @@ import {useSelector} from "react-redux";
 import ad from "../../assets/img/cyberad.jpeg";
 import backendClient from "../../utils/backendClient.js";
 import ReactPlayer from "react-player";
+import Description from "../player/components/Description.jsx";
 
 // {
 //     "videoItem": {
@@ -35,10 +36,7 @@ const MyPlayer = () => {
     const [isFocused, setIsFocused] = useState(false);
     const {premium} = useSelector(state => state.user.premium);
 
-    const handleViewLocationClick = (event) => {
-        event.preventDefault();
-        setShowMap(true);
-    };
+
 
     const [showMap, setShowMap] = useState(false);
     const apiKey = import.meta.env.VITE_YANDEX_API_KEY; //KeyApi
@@ -56,25 +54,24 @@ const MyPlayer = () => {
         const fetchData = async () => {
             try {
                 const videoResponse = await backendClient.get(
-                    `/videos?part=snippet&part=statistics&id=${id}`
+                    `/GetVideoById?id=${8}`
                 );
-                setVideo(videoResponse.data.items[0]);
+                console.log(videoResponse)
+                console.log(videoResponse.data.videoItem)
+                setVideo(videoResponse.data.videoItem);
 
-                const channelResponse = await backendClient.get(
-                    `/channels?part=snippet&part=brandingSettings&part=statistics&id=${videoResponse.data.items[0].snippet.channelId}`
-                );
-                setChannel(channelResponse.data.items[0]);
 
-                const commentsResponse = await backendClient.get(
-                    `/commentThreads?part=snippet&videoId=${id}&maxResults=20`
-                );
-                setComments(commentsResponse.data.items);
 
-                const videoListResponse = await backendClient.get(
-                    `/videos?part=id&chart=mostPopular&regionCode=RU&maxResults=20`
-                );
-                console.log(videoListResponse.data);
-                setVideos(videoListResponse.data);
+                // const channelResponse = await backendClient.get(
+                //     `/channels?part=snippet&part=brandingSettings&part=statistics&id=${videoResponse.data.items[0].snippet.channelId}`
+                // );
+                // setChannel(channelResponse.data.items[0]);
+                //
+                // const commentsResponse = await backendClient.get(
+                //     `/commentThreads?part=snippet&videoId=${id}&maxResults=20`
+                // );
+                // setComments(commentsResponse.data.items);
+
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
