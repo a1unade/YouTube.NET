@@ -8,11 +8,13 @@ using YouTube.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureLayer();
-builder.Services.AddPersistenceLayer(builder.Configuration);
-builder.Services.AddApplicationLayer();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddInfrastructureLayer();
+builder.Services.AddApplicationLayer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -45,8 +47,8 @@ app.UseFileServer(new FileServerOptions
     EnableDefaultFiles = true  
 }); 
 
-app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

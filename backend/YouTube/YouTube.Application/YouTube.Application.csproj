@@ -11,6 +11,7 @@
       <Folder Include="Feateres\Auth\" />
       <Folder Include="Feateres\Channel\" />
       <Folder Include="Feateres\Video\" />
+      <Folder Include="Interfaces\Repositories\" />
     </ItemGroup>
 
     <ItemGroup>
