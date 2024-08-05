@@ -13,8 +13,6 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
         : base(options)
     {
     }
-
-
     
     public override DbSet<User> Users { get; set; }
     
@@ -39,6 +37,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     public DbSet<Post> Posts  { get; set; }
     
     public DbSet<File> Files { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Extensions.ServiceCollectionExtensions).Assembly);

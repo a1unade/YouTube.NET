@@ -2,9 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
 using YouTube.Persistence.Contexts;
-using YouTube.Persistence.Repositories;
 
 namespace YouTube.Persistence.Extensions;
 
@@ -29,8 +27,7 @@ public static class ServiceCollectionExtensions
     private static void AddRepositories(this IServiceCollection services)
     {
         services
-            .AddScoped<IDbContext, ApplicationDbContext>()
-            .AddScoped<IChannelRepository, ChannelRepository>();
+            .AddScoped<IDbContext, ApplicationDbContext>();
 
     }
 }
