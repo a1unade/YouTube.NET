@@ -68,4 +68,6 @@ public interface IDbContext
 
     
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    
+    DbSet<T> Set<T>() where T : class;
 }
