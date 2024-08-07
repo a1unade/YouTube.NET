@@ -1,8 +1,7 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using YouTube.Application.Interfaces;
+using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
-using YouTube.Persistence.Contexts;
 
 namespace YouTube.WebAPI.Controllers;
 
@@ -10,13 +9,13 @@ namespace YouTube.WebAPI.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly IDbContext _context;
+    private readonly IGenericRepository<Category> _caRepository;
 
-    public AuthController(IMediator mediator, IDbContext context)
+    public AuthController(IDbContext context, IGenericRepository<Category> caRepository)
     {
-        _mediator = mediator;
         _context = context;
+        _caRepository = caRepository;
     }
 
     [HttpPost("[action]")]
@@ -42,5 +41,32 @@ public class AuthController : ControllerBase
         await _context.SaveChangesAsync(cancellationToken);
 
         return Ok();
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> TestGenericRepositoryAddEntity(CancellationToken cancellationToken)
+    {
+        var ca = new Category
+        {
+            Id = Guid.NewGuid(),
+            Name = "HIU"
+        };
+
+        await _caRepository.Add(ca, cancellationToken);
+
+        return Ok();
+    }
+
+    [HttpDelete("[action]")]
+    public async Task<IActionResult> TestGenericRepositoryDelete(CancellationToken cancellationToken)
+    {
+        var entity = await _caRepository.GetById(Guid.Parse("afdd48d4-0193-4f12-98bf-9ca4ff3e3dfd"), cancellationToken);
+        if (entity == null)
+        {
+            return Ok("empty");
+        }
+        await _caRepository.Remove(entity, cancellationToken);
+
+        return Ok("Ok");
     }
 }
