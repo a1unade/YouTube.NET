@@ -37,22 +37,27 @@ public class Channel : BaseEntity
     /// <summary>
     /// Id Аватарки
     /// </summary>
-    public Guid MainImgId { get; set; }
+    public Guid? MainImgId { get; set; }
 
     /// <summary>
     /// Файл аватарки
     /// </summary>
-    public File MainImgFile { get; set; } = default!;
+    public File? MainImgFile { get; set; } 
 
     /// <summary>
     /// Id банера
     /// </summary>
-    public Guid BannerImgId { get; set; }
+    public Guid? BannerImgId { get; set; }
 
     /// <summary>
     /// Банер
     /// </summary>
-    public File BannerImg { get; set; } = default!;
+    public File? BannerImg { get; set; }
+
+    /// <summary>
+    /// Страна
+    /// </summary>
+    public string Country { get; set; } = default!;
 
     /// <summary>
     /// Подписки на каналы

@@ -6,4 +6,6 @@ public interface IEmailService
     /// Отправка письма с кодом подтверждения на почту
     /// </summary>
     Task SendEmailAsync(string email, string subject, string messageBody);
+    
+    string GenerateRandomCode();
 }

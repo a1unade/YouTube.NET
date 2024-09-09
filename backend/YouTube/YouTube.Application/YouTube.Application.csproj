@@ -8,9 +8,8 @@
 
     <ItemGroup>
       <Folder Include="Common\Exceptions\" />
-      <Folder Include="Feateres\Auth\" />
-      <Folder Include="Feateres\Channel\" />
-      <Folder Include="Feateres\Video\" />
+      <Folder Include="Features\Channel\" />
+      <Folder Include="Features\Video\" />
     </ItemGroup>
 
     <ItemGroup>

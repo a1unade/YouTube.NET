@@ -25,7 +25,7 @@ public class EmailService: IEmailService
             Console.WriteLine($"Failed to send mail message: {ex.Message}");
         }
     }
-    
+
     private MimeMessage GenerateMessage(string email, string subject, string messageBody)
     {
         return new MimeMessage
@@ -36,4 +36,6 @@ public class EmailService: IEmailService
             Body = new BodyBuilder { HtmlBody = messageBody }.ToMessageBody()
         };
     }
+    
+    public string GenerateRandomCode() => new Random().Next(100000, 999999).ToString();
 }

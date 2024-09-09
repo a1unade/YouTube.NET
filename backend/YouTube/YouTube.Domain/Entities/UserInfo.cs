@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
@@ -28,6 +29,9 @@ public class UserInfo : BaseEntity
     /// Навигационное свойство для связи с User
     /// </summary>
     public User User { get; set; } = default!;
-    
 
+    /// <summary>
+    /// Страна
+    /// </summary>
+    public string Country { get; set; } = default!;
 }
