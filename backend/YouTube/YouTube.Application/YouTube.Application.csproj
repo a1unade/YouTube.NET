@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+   
+
     <ItemGroup>
       <Folder Include="Common\Exceptions\" />
       <Folder Include="Features\Channel\" />
@@ -22,6 +24,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\YouTube.Domain\YouTube.Domain.csproj" />
-    </ItemGroup>
+    </ItemGroup>  
 
 </Project>

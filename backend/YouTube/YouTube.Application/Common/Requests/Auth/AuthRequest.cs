@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace YouTube.Application.Common.Requests.Auth;
 
 public class AuthRequest
@@ -29,5 +27,4 @@ public class AuthRequest
     public DateTime DateOfBirth { get; set; }
     
     public string Gender { get; set; }
-    
 }

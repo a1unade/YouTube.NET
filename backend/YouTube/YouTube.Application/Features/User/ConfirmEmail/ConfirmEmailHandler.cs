@@ -6,18 +6,16 @@ using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
-using YouTube.Domain.Entities;
 
-namespace YouTube.Application.Features.EmailFeatures.ConfirmEmail;
+namespace YouTube.Application.Features.User.ConfirmEmail;
 
 public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResponse>
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     
-
-    public ConfirmEmailHandler(UserManager<User> userManager,IUserRepository userRepository, IEmailService emailService)
+    public ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IEmailService emailService)
     {
         _userManager = userManager;
         _userRepository = userRepository;
@@ -26,6 +24,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
     public async Task<BaseResponse> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
+        // TODO (VALIDATION)
         var user = await _userRepository.GetUserByEmail(request.Email, cancellationToken);
 
         if (user is null)

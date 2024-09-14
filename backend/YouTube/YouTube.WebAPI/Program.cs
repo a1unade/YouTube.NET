@@ -5,6 +5,7 @@ using YouTube.Data.S3;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.SignalR;
 using YouTube.Persistence.Extensions;
+using YouTube.WebAPI.Configurations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddInfrastructureLayer();
+
 builder.Services.AddApplicationLayer();
 builder.Services.AddS3Storage(builder.Configuration);
 
@@ -30,9 +32,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// TODO  (Logging)
+app.UseCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
 app.UseCors(b => b
     .WithOrigins("http://localhost:5173", "http://localhost:5172") 
     .AllowAnyMethod()                     

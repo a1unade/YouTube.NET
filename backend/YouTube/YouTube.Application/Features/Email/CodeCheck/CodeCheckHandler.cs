@@ -1,23 +1,24 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
+using YouTube.Application.Features.EmailFeatures.CodeCheck;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
-using YouTube.Domain.Entities;
 
-namespace YouTube.Application.Features.EmailFeatures.CodeCheck;
+namespace YouTube.Application.Features.Email.CodeCheck;
 
 public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 {
     private readonly IEmailService _emailService;
-    private readonly UserManager<User> _userManager;
-    private readonly IGenericRepository<User> _userRepository;
+    private readonly UserManager<Domain.Entities.User> _userManager;
+    private readonly IGenericRepository<Domain.Entities.User> _userRepository;
 
 
-    public CodeCheckHandler(IEmailService emailService, UserManager<User> userManager,
-        IGenericRepository<User> userRepository)
+    public CodeCheckHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
+        IGenericRepository<Domain.Entities.User> userRepository)
     {
         _emailService = emailService;
         _userManager = userManager;
@@ -26,7 +27,7 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 
     public async Task<BaseResponse> Handle(CodeCheckCommand request, CancellationToken cancellationToken)
     {
-        if (request.Code is null || request.Id is null || request is null)
+        if (request.Code.IsNullOrEmpty() || request.Id.IsNullOrEmpty() || request is null)
             return new BaseResponse { Message = AnyErrorMessage.RequestIsEmpty };
 
         var user = await _userRepository.GetById(Guid.Parse(request.Id), cancellationToken);
@@ -36,7 +37,7 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 
         var claims = await _userManager.GetClaimsAsync(user);
 
-        if (claims.Count == 0 || claims is null)
+        if (claims.Count == 0 || claims.Count == 0)
             return new BaseResponse { Message = AnyErrorMessage.ClaimsIsEmpty };
 
         var claim = claims.FirstOrDefault(c =>

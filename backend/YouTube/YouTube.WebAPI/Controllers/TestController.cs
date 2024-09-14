@@ -92,14 +92,4 @@ public class TestController : ControllerBase
         return Ok(file.FileName);
 
     }
-
-
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetFileEPT(string bucket, string filename, CancellationToken cancellationToken)
-    {
-        var st = await _service.GetObjectAsync(bucket, filename, cancellationToken);
-
-        return Ok(st);
-    }
-
 }
