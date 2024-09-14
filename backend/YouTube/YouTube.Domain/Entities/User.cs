@@ -4,6 +4,9 @@ namespace YouTube.Domain.Entities;
 
 public class User : IdentityUser<Guid>
 {
+    /// <summary>
+    /// Id Доп информации о пользователе
+    /// </summary>
     public Guid UserInfoId { get; set; }
     
     /// <summary>
@@ -11,25 +14,25 @@ public class User : IdentityUser<Guid>
     /// </summary>
     public UserInfo UserInfo { get; set; } = default!;
     
-    public Premium Subscriptions { get; set; } = default!;
-    
+    public Premium? Subscriptions { get; set; }
+
     /// <summary>
     /// Каналы
     /// </summary>
-    public ICollection<Channel> Channels { get; set; } = default!;
+    public ICollection<Channel>? Channels { get; set; }
 
     /// <summary>
     /// Транзакции
     /// </summary>
-    public ICollection<Transaction> Transactions { get; set; } = default!;
+    public ICollection<Transaction>? Transactions { get; set; } 
     
     /// <summary>
     /// nav-prop Файл
     /// </summary>
-    public Guid AvatarId { get; set; }
+    public Guid? AvatarId { get; set; }
 
     /// <summary>
     /// Аватаркa
     /// </summary>
-    public File AvatarUrl { get; set; } = default!;
+    public File? AvatarUrl { get; set; } 
 }

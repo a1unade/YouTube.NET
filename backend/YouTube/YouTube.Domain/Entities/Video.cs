@@ -35,6 +35,11 @@ public class Video : BaseEntity
     public DateOnly ReleaseDate { get; set; }
     
     /// <summary>
+    /// Страна
+    /// </summary>
+    public string Country { get; set; } = default!;
+    
+    /// <summary>
     /// ID канала
     /// </summary>
     public Guid ChannelId { get; set; }

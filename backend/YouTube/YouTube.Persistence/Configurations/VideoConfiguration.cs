@@ -30,6 +30,10 @@ public class VideoConfiguration : IEntityTypeConfiguration<Video>
 
         builder.Property(x => x.IsHidden)
             .IsRequired();
+        
+        builder.Property(x => x.Country)
+            .IsRequired()
+            .HasMaxLength(50);
 
         builder.Property(x => x.Age)
             .HasDefaultValue(0);
