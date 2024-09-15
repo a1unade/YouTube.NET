@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
 using YouTube.Application.Interfaces;
+using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.WebAPI.Controllers;
 
@@ -10,10 +11,12 @@ namespace YouTube.WebAPI.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IS3Service _service;
+    private readonly IUserRepository _userRepository;
 
-    public TestController(IS3Service service)
+    public TestController(IS3Service service, IUserRepository userRepository)
     {
         _service = service;
+        _userRepository = userRepository;
     }
 
     [HttpGet("[action]")]
@@ -93,13 +96,10 @@ public class TestController : ControllerBase
 
     }
 
-
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetFileEPT(string bucket, string filename, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserById(string id, CancellationToken cancellationToken)
     {
-        var st = await _service.GetObjectAsync(bucket, filename, cancellationToken);
-
-        return Ok(st);
+        var res = await _userRepository.GetById(Guid.Parse(id), cancellationToken: cancellationToken);
+        return Ok(res);
     }
-
 }

@@ -2,7 +2,7 @@ using MediatR;
 using YouTube.Application.Common.Requests.Email;
 using YouTube.Application.Common.Responses;
 
-namespace YouTube.Application.Features.EmailFeatures.ConfirmEmail;
+namespace YouTube.Application.Features.User.ConfirmEmail;
 
 public class ConfirmEmailCommand : EmailConfirmRequest, IRequest<BaseResponse>
 {
