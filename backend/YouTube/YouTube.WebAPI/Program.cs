@@ -13,11 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer();
 
-builder.Services.AddApplicationLayer();
+builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddS3Storage(builder.Configuration);
+builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddSwaggerGen(options =>
 {
