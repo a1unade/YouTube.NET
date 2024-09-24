@@ -76,4 +76,4 @@ jobs:
       - name: Run Tests
         run: |
           cd frontend/youtube-frontend-tests
-          npm test -- --watchAll=false # Отключаем watch режим для CI
+          npm run test
