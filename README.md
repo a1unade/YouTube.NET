@@ -1,4 +1,5 @@
 ![CI Frontend](https://github.com/a1unade/YouTube.NET/actions/workflows/ci.yml/badge.svg)
+[![Codecov](https://codecov.io/gh/a1unade/YouTube.NET/branch/main/graph/badge.svg)](https://codecov.io/gh/a1unade/YouTube.NET)
 
 
 ## Postgres Docker
