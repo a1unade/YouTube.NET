@@ -1,3 +1,6 @@
+![CI Frontend](https://github.com/a1unade/YouTube.NET/actions/workflows/ci.yml/badge.svg)
+
+
 ## Postgres Docker
 
 ```bash

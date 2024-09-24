@@ -1,0 +1,99 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript,typescript
+
+      - name: Analyze code with CodeQL
+        uses: github/codeql-action/analyze@v2
+
+  build:
+    runs-on: ubuntu-latest
+    needs: codeql 
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'  
+
+      - name: Install frontend dependencies
+        run: |
+          cd youtube-frontend
+          npm install 
+
+      - name: Build the frontend
+        run: |
+          cd youtube-frontend
+          npm run build 
+
+  eslint:
+    runs-on: ubuntu-latest
+    needs: build 
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install frontend dependencies
+        run: |
+          cd youtube-frontend
+          npm install
+
+      - name: Run ESLint
+        run: |
+          cd youtube-frontend
+          npm run lint 
+
+  test:
+    runs-on: ubuntu-latest
+    needs: eslint 
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install test dependencies
+        run: |
+          cd youtube-frontend-tests
+          npm install
+
+      - name: Run Tests
+        run: |
+          cd youtube-frontend-tests
+          npm test -- --watchAll=false # Отключаем watch режим для CI
