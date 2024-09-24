@@ -22,9 +22,6 @@ jobs:
         with:
           node-version: '22'  
 
-      - name: Clean npm cache
-        run: npm cache clean --force
-
       - name: Install frontend dependencies
         run: |
           cd frontend/youtube-frontend
@@ -47,9 +44,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '22'
-
-      - name: Clean npm cache
-        run: npm cache clean --force
 
       - name: Install frontend dependencies
         run: |
@@ -74,8 +68,10 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Clean npm cache
-        run: npm cache clean --force
+      - name: Install frontend dependencies
+        run: |
+          cd frontend/youtube-frontend
+          npm install
 
       - name: Install test dependencies
         run: |
