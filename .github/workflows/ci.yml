@@ -24,12 +24,12 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd youtube-frontend
+          cd frontend/youtube-frontend
           npm install 
 
       - name: Build the frontend
         run: |
-          cd youtube-frontend
+          cd frontend/youtube-frontend
           npm run build 
 
   eslint:
@@ -47,12 +47,12 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-          cd youtube-frontend
+          cd frontend/youtube-frontend
           npm install
 
       - name: Run ESLint
         run: |
-          cd youtube-frontend
+          cd frontend/youtube-frontend
           npm run lint 
 
   test:
@@ -70,10 +70,10 @@ jobs:
 
       - name: Install test dependencies
         run: |
-          cd youtube-frontend-tests
+          cd frontend/youtube-frontend-tests
           npm install
 
       - name: Run Tests
         run: |
-          cd youtube-frontend-tests
+          cd frontend/youtube-frontend-tests
           npm test -- --watchAll=false # Отключаем watch режим для CI
