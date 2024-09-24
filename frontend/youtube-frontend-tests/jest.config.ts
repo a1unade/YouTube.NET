@@ -8,9 +8,9 @@ module.exports = {
     testMatch: ['**/__tests__/**/*.(ts|tsx)', '**/?(*.)+(spec|test).(ts|tsx)'],
     collectCoverage: true,
     collectCoverageFrom: [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/index.tsx", 
-    ],
-    coverageReporters: ["text", "lcov"]
+        "../youtube-frontend/src/**/*.{js,jsx,ts,tsx}",
+        "!../youtube-frontend/src/index.tsx",
+      ],
+      coverageReporters: ["text", "lcov"],
   };
   
