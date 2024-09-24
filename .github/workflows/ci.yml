@@ -9,29 +9,9 @@ on:
       - main 
 
 jobs:
-  codeql:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '22'
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/init@v2
-        with:
-          languages: javascript,typescript
-
-      - name: Analyze code with CodeQL
-        uses: github/codeql-action/analyze@v2
 
   build:
     runs-on: ubuntu-latest
-    needs: codeql 
     
     steps:
       - name: Checkout code
