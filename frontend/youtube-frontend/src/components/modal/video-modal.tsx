@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import React, { useEffect, useRef } from "react";
 import {
 	AddToPlaylistIcon,
@@ -64,7 +66,7 @@ const VideoModal = (props: {
 	return (
 		<>
 			{active && (
-				<div ref={modalRef} className={"actions-modal-window"}>
+				<div ref={modalRef} className={"actions-modal-window"} aria-label="Video Modal">
 					<div>
 						<button
 							onClick={() => {

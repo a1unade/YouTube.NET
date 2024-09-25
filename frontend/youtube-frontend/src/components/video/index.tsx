@@ -56,6 +56,7 @@ const Video = (props: {
 			<div className="main-video">
 				<div
 					className="preview"
+					data-testid={`preview-${video.id}`}
 					id={`preview-${video.id}`}
 					onClick={() => navigate(`/watch/${video.id}`)}
 				>
@@ -76,7 +77,7 @@ const Video = (props: {
 						>
 							<img
 								src={channel.snippet.thumbnails.default.url}
-								alt=""
+								alt={`${channel.snippet.customUrl} profile`}
 							/>
 						</div>
 					</div>
@@ -87,6 +88,7 @@ const Video = (props: {
 							</span>
 							<button
 								className={"show-more-button"}
+								aria-label="Show more options"
 								ref={buttonRef}
 								onClick={() => setActive(!active)}
 							>

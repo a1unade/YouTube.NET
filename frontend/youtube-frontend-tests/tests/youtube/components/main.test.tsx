@@ -35,18 +35,14 @@ describe('Main component', () => {
         );
     });
 
-    // it('renders filters component', () => {
-    //     expect(screen.getByTestId('filters')).toBeInTheDocument();
-    // });
-
-    test('renders the correct number of Video components', async () => {
+    test('рендерится правильное количество видео', async () => {
         await waitFor(() => {
             const videoElements = screen.getAllByTestId('video');
-            expect(videoElements).toHaveLength(24); // Проверьте, что здесь правильное количество
+            expect(videoElements).toHaveLength(24);
         });
     });
 
-    it('passes the correct callbacks to Video components', () => {
+    it('видео рендерится с правильными пропсами', () => {
         expect(Video).toHaveBeenCalledWith(
             expect.objectContaining({
                 setSaveVideoActive,

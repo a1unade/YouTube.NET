@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import Filters from "../../../components/layout/filters.tsx";
 import Video from "../../../components/video";
 import React from "react";

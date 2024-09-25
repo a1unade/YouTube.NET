@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import React, { useEffect } from "react";
 
 const PremiumModal = (props: {

@@ -21,9 +21,6 @@ const Comment = (props: { comment: CommentType }) => {
 			>
 				<div
 					className="author-image"
-					onClick={() =>
-						navigate(`/channel/${comment.authorDisplayName}`)
-					}
 				>
 					<img src={comment.authorProfileImageUrl} alt="" />
 				</div>

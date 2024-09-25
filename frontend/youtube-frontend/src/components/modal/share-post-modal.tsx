@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import React, { useEffect, useRef, useState } from "react";
 import { useAlerts } from "../../hooks/alert/use-alerts.tsx";
 

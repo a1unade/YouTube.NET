@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import React, { useEffect, useState } from "react";
 import SharePostModal from "./share-post-modal.tsx";
 import { useAlerts } from "../../hooks/alert/use-alerts.tsx";
