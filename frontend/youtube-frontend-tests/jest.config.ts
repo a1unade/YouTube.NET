@@ -10,6 +10,7 @@ module.exports = {
     collectCoverageFrom: [
         "temp-src/**/*.{ts,tsx}",
         "!temp-src/main.tsx",
+        "!temp-src/assets",
         "!**/*.d.ts",
     ],
     coverageDirectory: "<rootDir>/coverage",
