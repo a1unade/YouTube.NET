@@ -13,15 +13,15 @@ export const formatDate = (date: string): string => {
 	if (yearsDifference > 0) {
 		return `${yearsDifference} ${yearsDifference === 1 ? "год" : "лет"} назад`;
 	} else if (monthsDifference > 0) {
-		return `${monthsDifference} ${monthsDifference === 1 ? "месяц" : "месяцев"} назад`;
+		return `${monthsDifference} ${monthsDifference === 1 ? "месяц" : monthsDifference > 1 && monthsDifference < 5 ? "месяца" : "месяцев"} назад`;
 	} else if (daysDifference > 0) {
-		return `${daysDifference} ${daysDifference === 1 ? "день" : "дней"} назад`;
+		return `${daysDifference} ${daysDifference === 1 ? "день" : daysDifference > 1 && daysDifference < 5 ? "дня" : "дней"} назад`;
 	} else if (hoursDifference > 0) {
-		return `${hoursDifference} ${hoursDifference === 1 ? "час" : "часов"} назад`;
+		return `${hoursDifference} ${hoursDifference === 1 ? "час" : hoursDifference > 1 && hoursDifference < 5 ? "часа" : "часов"} назад`;
 	} else if (minutesDifference > 0) {
-		return `${minutesDifference} ${minutesDifference === 1 ? "минуту" : "минут"} назад`;
+		return `${minutesDifference} ${minutesDifference === 1 ? "минуту" : minutesDifference > 1 && minutesDifference < 5 ? "минуты" : "минут"} назад`;
 	} else {
-		return `${secondsDifference} ${secondsDifference === 1 ? "секунду" : "секунд"} назад`;
+		return `${secondsDifference} ${secondsDifference === 1 ? "секунду" : secondsDifference > 1 && secondsDifference < 5 ? "секунды" : "секунд"} назад`;
 	}
 };
 
@@ -61,8 +61,10 @@ export const formatViews = (count: number, type: string) => {
 		} else {
 			formattedCount = formattedCount.replace(".", ",");
 		}
+		formattedCount = formattedCount.replace(/,$/, ''); 
 		return `${formattedCount} млн. ${titles[2]}`;
 	} else {
 		return "";
 	}
 };
+

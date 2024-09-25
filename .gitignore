@@ -353,3 +353,6 @@ MigrationBackup/
 Users account management/appsettings.Development.json
 Users account management/appsettings.json
 Users account management/Properties/launchSettings.json
+
+#test-coverage
+coverage/

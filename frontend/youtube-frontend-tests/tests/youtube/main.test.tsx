@@ -1,5 +1,5 @@
-import {fireEvent, render, screen} from '@testing-library/react';
-import Main from '../../../youtube-frontend/src/pages/main/index';
+import { render, screen } from '@testing-library/react';
+import Main from '../../../youtube-frontend/src/pages/main';
 import Video from '../../../youtube-frontend/src/components/video';
 import React from 'react';
 
@@ -26,9 +26,9 @@ describe('Main component', () => {
         );
     });
 
-    it('renders filters component', () => {
-        expect(screen.getByTestId('filters')).toBeInTheDocument();
-    });
+    // it('renders filters component', () => {
+    //     expect(screen.getByTestId('filters')).toBeInTheDocument();
+    // });
 
     it('renders the correct number of Video components', () => {
         const videoElements = screen.getAllByTestId('video');

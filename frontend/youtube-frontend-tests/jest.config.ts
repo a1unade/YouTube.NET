@@ -10,7 +10,8 @@ module.exports = {
     collectCoverageFrom: [
         "../youtube-frontend/src/**/*.{ts,tsx}",
         "!../youtube-frontend/src/main.tsx",
-      ],
-      coverageReporters: ["text", "lcov"],
+        "!**/*.d.ts",
+    ],
+    coverageDirectory: "<rootDir>/coverage",
+    coverageReporters: ["text", "lcov"],
   };
-  
