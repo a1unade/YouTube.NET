@@ -1,4 +1,5 @@
-import { formatDate, formatViews } from '../../../youtube-frontend/src/utils/format-functions';
+// @ts-ignore
+import { formatDate, formatViews } from '../../temp-src/utils/format-functions';
 
 describe('formatDate', () => {
     it('should return "1 год назад" for a date 1 year ago', () => {

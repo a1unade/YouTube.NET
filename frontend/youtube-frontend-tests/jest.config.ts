@@ -3,15 +3,16 @@ module.exports = {
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     moduleNameMapper: {
-        '\\.(css|scss)$': 'identity-obj-proxy',
+        '^src/(.*)$': '<rootDir>/temp-src/$1',
     },
     testMatch: ['**/__tests__/**/*.(ts|tsx)', '**/?(*.)+(spec|test).(ts|tsx)'],
     collectCoverage: true,
     collectCoverageFrom: [
-        "../youtube-frontend/src/**/*.{ts,tsx}",
-        "!../youtube-frontend/src/main.tsx",
+        "temp-src/**/*.{ts,tsx}",
+        "!temp-src/main.tsx",
         "!**/*.d.ts",
     ],
     coverageDirectory: "<rootDir>/coverage",
     coverageReporters: ["text", "lcov"],
+    testPathIgnorePatterns: ["/node_modules/", "./temp-src/"],
 };
