@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 // @ts-ignore
-import Comment from '../../../temp-src/pages/player/components/Comment';
+import Comment from '../../../temp-src/pages/player/components/comment.tsx';
 // @ts-ignore
 import { CommentType } from '../../../temp-src/types/comment/comment-type.ts';
 
