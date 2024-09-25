@@ -1,3 +1,4 @@
+// @ts-ignore
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
@@ -10,9 +11,11 @@ module.exports = {
     collectCoverageFrom: [
         "temp-src/**/*.{ts,tsx}",
         "!temp-src/main.tsx",
-        "!temp-src/assets",
-        "!**/*.d.ts",
+        "!temp-src/assets/icons.tsx",
+        "!temp-src/**/*.d.ts",
+        "!**/icons.tsx",
     ],
+
     coverageDirectory: "<rootDir>/coverage",
     coverageReporters: ["text", "lcov"],
     testPathIgnorePatterns: ["/node_modules/", "./temp-src/"],

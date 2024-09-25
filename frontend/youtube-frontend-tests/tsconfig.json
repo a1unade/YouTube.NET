@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "types": ["@testing-library/jest-dom"],
     "jsx": "react-jsx",
     "strict": true,
     "declaration": true,

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import LeftMenu from "./components/layout/left-menu.tsx";

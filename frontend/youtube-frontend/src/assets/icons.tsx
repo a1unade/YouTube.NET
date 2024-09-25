@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export const AddVideo = () => {
 	return (
 		<div className="svg-container">

@@ -1,17 +1,15 @@
-const fs = require('fs-extra'); // Подключаем fs-extra для удобного копирования
+const fs = require('fs-extra');
 
-const srcDir = '../youtube-frontend/src'; // Путь к исходной папке
-const destDir = './temp-src'; // Временная папка для тестов
+const srcDir = '../youtube-frontend/src';
+const destDir = './temp-src';
 
-// Функция для копирования файлов
 async function copyFiles() {
     try {
-        await fs.copy(srcDir, destDir); // Копируем файлы
+        await fs.copy(srcDir, destDir);
         console.log('Files copied successfully!');
     } catch (err) {
         console.error('Error copying files:', err);
     }
 }
 
-// Запускаем функцию копирования
 copyFiles();

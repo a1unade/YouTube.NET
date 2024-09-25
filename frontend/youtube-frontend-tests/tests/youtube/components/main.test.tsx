@@ -1,18 +1,18 @@
 import {render, screen, waitFor} from '@testing-library/react';
 // @ts-ignore
-import Main from '../../temp-src/pages/main';
+import Main from '../../../temp-src/pages/main';
 // @ts-ignore
-import Video from '../../temp-src/components/video';
+import Video from '../../../temp-src/components/video';
 // @ts-ignore
-import { AlertProvider } from '../../temp-src/contexts/alert-provider'
+import { AlertProvider } from '../../../temp-src/contexts/alert-provider'
 import React from 'react';
 import {BrowserRouter} from "react-router-dom";
 
-jest.mock('../../temp-src/components/video', () => {
+jest.mock('../../../temp-src/components/video', () => {
     return jest.fn(() => <div data-testid="video">Video Component</div>);
 });
 
-jest.mock('../../temp-src/components/layout/filters', () => {
+jest.mock('../../../temp-src/components/layout/filters', () => {
     return jest.fn(() => <div data-testid="filters">Filters Component</div>);
 });
 
