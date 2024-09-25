@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { CommentType } from "../../../types/comment/comment-type.ts";
 import { useState } from "react";
 import {
@@ -12,16 +11,14 @@ const Comment = (props: { comment: CommentType }) => {
 	const { comment } = props;
 	const [liked, setLiked] = useState(false);
 	const [disliked, setDisliked] = useState(false);
-	const navigate = useNavigate();
+
 	return (
 		<div className="player-comment">
 			<div
 				className="main-video-info"
 				style={{ marginRight: 20, gap: 20, width: "100%" }}
 			>
-				<div
-					className="author-image"
-				>
+				<div className="author-image">
 					<img src={comment.authorProfileImageUrl} alt="" />
 				</div>
 				<div className="main-video-details" style={{ width: "100%" }}>

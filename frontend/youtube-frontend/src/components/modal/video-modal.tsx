@@ -66,7 +66,11 @@ const VideoModal = (props: {
 	return (
 		<>
 			{active && (
-				<div ref={modalRef} className={"actions-modal-window"} aria-label="Video Modal">
+				<div
+					ref={modalRef}
+					className={"actions-modal-window"}
+					aria-label="Video Modal"
+				>
 					<div>
 						<button
 							onClick={() => {
