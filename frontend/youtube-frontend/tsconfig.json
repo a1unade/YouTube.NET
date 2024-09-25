@@ -1,20 +1,19 @@
 {
 	"compilerOptions": {
-	  "target": "esnext",
-	  "module": "esnext",
-	  "jsx": "react-jsx",
-	  "strict": true,
-	  "declaration": true,
-	  "outDir": "./dist",
-	  "skipLibCheck": true,
-	  "forceConsistentCasingInFileNames": true,
-	  "moduleResolution": "node",
-	  "allowJs": true,
-	  "esModuleInterop": true,
-	  "allowImportingTsExtensions": true,
-	  "noEmit": true
+		"target": "esnext",
+		"module": "esnext",
+		"jsx": "react-jsx",
+		"strict": true,
+		"declaration": true,
+		"outDir": "./dist",
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node",
+		"allowJs": true,
+		"esModuleInterop": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "dist"]
-  }
-  
+}

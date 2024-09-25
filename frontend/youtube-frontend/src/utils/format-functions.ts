@@ -61,10 +61,9 @@ export const formatViews = (count: number, type: string) => {
 		} else {
 			formattedCount = formattedCount.replace(".", ",");
 		}
-		formattedCount = formattedCount.replace(/,$/, ''); 
+		formattedCount = formattedCount.replace(/,$/, "");
 		return `${formattedCount} млн. ${titles[2]}`;
 	} else {
 		return "";
 	}
 };
-
