@@ -1,9 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses.Auth;
 using YouTube.Application.Interfaces;
-using YouTube.Domain.Entities;
 
 namespace YouTube.Application.Features.Auth.Login;
 
@@ -21,18 +22,19 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
     }
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        
-        // TODO (Валидация)
 
+        if (request.Password.IsNullOrEmpty() || request.Email.IsNullOrEmpty())
+            throw new ValidationException("Пароль или почта не валидны");
+        
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
-            return new AuthResponse { Message = AuthErrorMessages.UserNotFound };
+            throw new NotFoundException(AuthErrorMessages.UserNotFound);
 
         var fl = await _userManager.CheckPasswordAsync(user, request.Password);
 
         if (!fl)
-            return new AuthResponse { Message = AuthErrorMessages.LoginWrongPassword };
+            throw new ValidationException(AuthErrorMessages.LoginWrongPassword);
 
         await _signInManager.SignInAsync(user, false);
 

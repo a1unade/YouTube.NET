@@ -17,60 +17,42 @@ public class AuthController : ControllerBase
     {
         _mediator = mediator;
     }
-    
+
 
     [HttpPost("[action]")]
     public async Task<IActionResult> AuthUser(AuthRequest request, CancellationToken cancellationToken)
     {
-        try
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            
-            var result = await _mediator.Send(new AuthCommand(request), cancellationToken);
+        var result = await _mediator.Send(new AuthCommand(request), cancellationToken);
 
-            if (result.IsSuccessfully)
+        if (result.IsSuccessfully)
+        {
+            Response.Cookies.Append("authCookie", result.Token, new CookieOptions
             {
-                Response.Cookies.Append("authCookie", result.Token, new CookieOptions
-                {
-                    Path = "/",
-                    Expires = DateTimeOffset.Now.AddHours(2),
-                    HttpOnly = true
-                });
-                return Ok(result);
-            }
+                Path = "/",
+                Expires = DateTimeOffset.Now.AddHours(2),
+            });
+            return Ok(result);
+        }
 
-            return NotFound(result);
-        }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
+        return NotFound(result);
     }
 
     [HttpPost("[action]")]
     public async Task<IActionResult> LoginUser(LoginRequest request, CancellationToken cancellationToken)
     {
-        try
+        var result = await _mediator.Send(new LoginCommand(request), cancellationToken);
+
+        if (result.IsSuccessfully)
         {
-            var result = await _mediator.Send(new LoginCommand(request), cancellationToken);
-            
-            if (result.IsSuccessfully)
+            Response.Cookies.Append("authCookie", result.Token, new CookieOptions
             {
-                Response.Cookies.Append("authCookie", result.Token, new CookieOptions
-                {
-                    Path = "/",
-                    Expires = DateTimeOffset.Now.AddHours(2),
-                    HttpOnly = true
-                });
-                return Ok(result);
-            }
-            return NotFound(result);
+                Path = "/",
+                Expires = DateTimeOffset.Now.AddHours(2),
+            });
+            return Ok(result);
         }
-        catch (Exception e)
-        {
-            return StatusCode(500, e.Message);
-        }
+
+        return NotFound(result);
     }
 
     [HttpPost("[action]")]
@@ -80,7 +62,7 @@ public class AuthController : ControllerBase
 
         if (result.IsSuccessfully)
             Response.Cookies.Delete("authCookie");
-        
+
         return Ok();
     }
 }

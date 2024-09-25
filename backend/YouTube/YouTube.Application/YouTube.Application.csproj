@@ -9,7 +9,6 @@
    
 
     <ItemGroup>
-      <Folder Include="Common\Exceptions\" />
       <Folder Include="Features\Channel\" />
       <Folder Include="Features\Video\" />
     </ItemGroup>

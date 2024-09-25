@@ -34,7 +34,7 @@ public class S3Service : IS3Service
         return file.FileName;
     }
 
-    public async Task<string> GetDownloadLinkAsync(string bucketName, string fileName,
+    public async Task<string> GetLinkAsync(string bucketName, string fileName,
         CancellationToken cancellationToken)
     {
         var link = await _minioClient.PresignedGetObjectAsync(

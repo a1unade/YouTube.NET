@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
@@ -16,7 +16,6 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
     private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly IGenericRepository<Domain.Entities.User> _userRepository;
 
-
     public CodeCheckHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
         IGenericRepository<Domain.Entities.User> userRepository)
     {
@@ -27,31 +26,33 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 
     public async Task<BaseResponse> Handle(CodeCheckCommand request, CancellationToken cancellationToken)
     {
-        if (request.Code.IsNullOrEmpty() || request.Id.IsNullOrEmpty() || request is null)
-            return new BaseResponse { Message = AnyErrorMessage.RequestIsEmpty };
+        if (string.IsNullOrEmpty(request.Code) || string.IsNullOrEmpty(request.Id))
+            throw new ValidationException();
 
         var user = await _userRepository.GetById(Guid.Parse(request.Id), cancellationToken);
 
         if (user is null)
-            return new BaseResponse { Message = UserErrorMessage.UserNotFound };
+            throw new NotFoundException(UserErrorMessage.UserNotFound);
 
         var claims = await _userManager.GetClaimsAsync(user);
 
-        if (claims.Count == 0 || claims.Count == 0)
-            return new BaseResponse { Message = AnyErrorMessage.ClaimsIsEmpty };
+        if (!claims.Any())
+            throw new BadRequestException(AnyErrorMessage.ClaimsIsEmpty);
 
         var claim = claims.FirstOrDefault(c =>
             c.Type == EmailSuccessMessage.EmailConfirmCodeString && c.Value == request.Code);
 
         if (claim == null)
-            return new BaseResponse { Message = AnyErrorMessage.InvalidConfirmationCode };
+            throw new BadRequestException(AnyErrorMessage.InvalidConfirmationCode);
 
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
         await _userManager.ConfirmEmailAsync(user, code);
 
         await _userManager.RemoveClaimAsync(user, claim);
 
-        await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailThankYouMessage,
+        await _emailService.SendEmailAsync(user.Email!,
+            EmailSuccessMessage.EmailThankYouMessage,
             EmailSuccessMessage.EmailConfirmCodeSuccess);
 
         return new BaseResponse { IsSuccessfully = true };

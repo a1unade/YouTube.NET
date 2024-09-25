@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
@@ -19,28 +21,24 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
     }
     public async Task<BaseResponse> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        //TODO Validation
+        if (request.Password.IsNullOrEmpty() || request.Email.IsNullOrEmpty())
+            throw new ValidationException();
 
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
-            return new BaseResponse { Message = UserErrorMessage.UserNotFound };
+            throw new NotFoundException(UserErrorMessage.UserNotFound);
         
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         
         var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
 
-        if (result.Succeeded)
-            return new BaseResponse { IsSuccessfully = true, Message = UserSuccessMessage.PasswordChanged };
+        if (!result.Succeeded)
+            throw new BadRequestException(result.Errors.Select(x => x.Description).ToString()!);
 
         await _emailService.SendEmailAsync(request.Email, UserSuccessMessage.PasswordChanged,
             EmailSuccessMessage.EmailWarning); 
         
-        return new BaseResponse
-        {
-            Error = result.Errors
-                .Select(x => x.Description)
-                .ToList()
-        };
+        return new BaseResponse { IsSuccessfully = true, Message = UserSuccessMessage.PasswordChanged };
     }
 }

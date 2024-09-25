@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
@@ -15,7 +17,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     
-    public ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IEmailService emailService)
+    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IEmailService emailService)
     {
         _userManager = userManager;
         _userRepository = userRepository;
@@ -24,14 +26,16 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
     public async Task<BaseResponse> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        // TODO (VALIDATION)
+        if (request.Email.IsNullOrEmpty() || request.Id.IsNullOrEmpty())
+            throw new ValidationException();
+        
         var user = await _userRepository.GetUserByEmail(request.Email, cancellationToken);
 
         if (user is null)
-            return new BaseResponse { Message = UserErrorMessage.UserNotFound };
+            throw new NotFoundException(UserErrorMessage.UserNotFound);
 
         if (request.Email != user.Email)
-            return new BaseResponse { Message = UserErrorMessage.UserEmailsDontMatch };
+            throw new BadRequestException(UserErrorMessage.UserEmailsDontMatch);
 
         string code = _emailService.GenerateRandomCode();
 

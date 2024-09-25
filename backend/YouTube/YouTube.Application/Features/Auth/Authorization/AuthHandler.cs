@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses.Auth;
@@ -30,19 +32,22 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
     {
-        // TODO (Validation)
+        if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty() || 
+            request.Gender.IsNullOrEmpty() || request.SurName.IsNullOrEmpty() ||
+            request.Name.IsNullOrEmpty())
+            throw new ValidationException();
 
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is not null)
-            return new AuthResponse { Message = AuthErrorMessages.EmailIsBusy };
+            throw new NotFoundException(AuthErrorMessages.EmailIsBusy);
 
         var userInfo = new UserInfo
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
             Surname = request.SurName,
-            BirthDate = DateOnly.FromDateTime(request.DateOfBirth),
+            BirthDate = request.DateOfBirth,
             Gender = request.Gender,
             Country = "Empty"
         };
@@ -72,12 +77,12 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
 
         IdentityResult result = await _userManager.CreateAsync(user, request.Password);
 
+        // TODO ТУТ надо протестировать 
         if (!result.Succeeded)
-            return new AuthResponse { Error = result.Errors.Select(x => x.Description).ToList() };
+            throw new NotFoundException(result.Errors.Select(x => x.Description).ToString()!);
 
         await _signInManager.SignInAsync(user, false);
-
-
+        
         await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailSuccessRegistrationMessage,
             EmailSuccessMessage.EmailThankYouMessage);
 
