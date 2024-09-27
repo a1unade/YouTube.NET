@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { formatViews } from "../../../utils/format-functions.ts";
-import TextContent from "./text-content.tsx";
+import { useState } from 'react';
+import { formatViews } from '../../../utils/format-functions.ts';
+import TextContent from './text-content.tsx';
 
 const Description = () => {
-	const [descriptionOpened, setDescriptionOpened] = useState(false);
+  const [descriptionOpened, setDescriptionOpened] = useState(false);
 
-	const description = `📢 Добро пожаловать в наше полное руководство по разработке веб-сайтов на HTML, CSS и JavaScript!
+  const description = `📢 Добро пожаловать в наше полное руководство по разработке веб-сайтов на HTML, CSS и JavaScript!
 
 👨‍💻 В этом видео мы погружаемся в мир веб-разработки, где шаг за шагом изучаем основы создания современных и адаптивных сайтов с нуля. Этот урок идеально подходит для начинающих, но также будет полезен для тех, кто хочет систематизировать свои знания и улучшить навыки.
 
@@ -43,41 +43,38 @@ const Description = () => {
 Оптимизация производительности сайта
 Основы SEO для лучшего продвижения в поисковиках`;
 
-	const handleDescription = () => {
-		const button = document.getElementById("description-button");
-		const description = document.getElementById("description");
+  const handleDescription = () => {
+    const button = document.getElementById('description-button');
+    const description = document.getElementById('description');
 
-		if (button && description) {
-			const currentHeight = description.scrollHeight;
+    if (button && description) {
+      const currentHeight = description.scrollHeight;
 
-			if (!descriptionOpened) {
-				button.textContent = "Свернуть";
-				description.style.setProperty(
-					"--expanded-height",
-					`${currentHeight}px`,
-				);
-				description.classList.add("description-opened");
-				setDescriptionOpened(true);
-			} else {
-				button.textContent = "Развернуть";
-				description.classList.remove("description-opened");
-				setDescriptionOpened(false);
-			}
-		}
-	};
+      if (!descriptionOpened) {
+        button.textContent = 'Свернуть';
+        description.style.setProperty('--expanded-height', `${currentHeight}px`);
+        description.classList.add('description-opened');
+        setDescriptionOpened(true);
+      } else {
+        button.textContent = 'Развернуть';
+        description.classList.remove('description-opened');
+        setDescriptionOpened(false);
+      }
+    }
+  };
 
-	return (
-		<div className="video-description">
-			<div className="video-description-text">
-				<p>{formatViews(1645623, "views")}</p>
-				<p>26 дек. 2023 г.</p>
-			</div>
-			<TextContent text={description} />
-			<button onClick={handleDescription} id={"description-button"}>
-				Развернуть
-			</button>
-		</div>
-	);
+  return (
+    <div className="video-description">
+      <div className="video-description-text">
+        <p>{formatViews(1645623, 'views')}</p>
+        <p>26 дек. 2023 г.</p>
+      </div>
+      <TextContent text={description} />
+      <button onClick={handleDescription} id="description-button">
+        Развернуть
+      </button>
+    </div>
+  );
 };
 
 export default Description;

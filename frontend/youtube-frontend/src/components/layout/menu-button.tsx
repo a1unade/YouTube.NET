@@ -1,54 +1,54 @@
 import {
-	AlertIcon,
-	MyChannel,
-	FlagIcon,
-	HelpIcon,
-	HistoryIcon,
-	HomeIcon,
-	LibraryIcon,
-	YoutubeMusic,
-	Popular,
-	PremiumIcon,
-	SettingsIcon,
-	ShortsIcon,
-	ShowMore,
-	SubscriptionsIcon,
-	WatchLater,
-	Music,
-	Films,
-	Games,
-	Sport,
-	Studio,
-	ClosedMenuUser,
-	ButtonLikeIcon,
-	PlaylistIcon,
-	HomeIconFilled,
-	ShortsIconFilled,
-	SubscriptionsIconFilled,
-	HistoryIconFilled,
-	WatchLaterFilled,
-	SettingsIconFilled,
-	FlagIconFilled,
-	PopularFilled,
-	MusicFilled,
-	FilmsFilled,
-	GamesFilled,
-	SportFilled,
-	PlaylistIconFilled,
-	ButtonLikeIconFilled,
-	LibraryIconFilled,
-} from "../../assets/icons.tsx";
-import { IconMapping } from "../../types/icon/icons.ts";
-import { MouseEventHandler } from "react";
+  AlertIcon,
+  MyChannel,
+  FlagIcon,
+  HelpIcon,
+  HistoryIcon,
+  HomeIcon,
+  LibraryIcon,
+  YoutubeMusic,
+  Popular,
+  PremiumIcon,
+  SettingsIcon,
+  ShortsIcon,
+  ShowMore,
+  SubscriptionsIcon,
+  WatchLater,
+  Music,
+  Films,
+  Games,
+  Sport,
+  Studio,
+  ClosedMenuUser,
+  ButtonLikeIcon,
+  PlaylistIcon,
+  HomeIconFilled,
+  ShortsIconFilled,
+  SubscriptionsIconFilled,
+  HistoryIconFilled,
+  WatchLaterFilled,
+  SettingsIconFilled,
+  FlagIconFilled,
+  PopularFilled,
+  MusicFilled,
+  FilmsFilled,
+  GamesFilled,
+  SportFilled,
+  PlaylistIconFilled,
+  ButtonLikeIconFilled,
+  LibraryIconFilled,
+} from '../../assets/icons.tsx';
+import { IconMapping } from '../../types/icon/icons.ts';
+import { MouseEventHandler } from 'react';
 
 const MenuButton = (props: {
-	title: string;
-	selected: string;
-	onClick: MouseEventHandler<HTMLButtonElement> | undefined;
+  title: string;
+  selected: string;
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
 }) => {
-	const { title, selected, onClick } = props;
-	// prettier-ignore
-	const iconMapping: IconMapping = {
+  const { title, selected, onClick } = props;
+  // prettier-ignore
+  const iconMapping: IconMapping = {
 		"Главная": { default: <HomeIcon />, filled: <HomeIconFilled /> },
 		"Shorts": { default: <ShortsIcon />, filled: <ShortsIconFilled /> },
 		"Подписки": {
@@ -98,22 +98,20 @@ const MenuButton = (props: {
 		},
 	};
 
-	return (
-		<>
-			<button
-				id={`button-${title}`}
-				onClick={onClick}
-				className={`sidebar-button ${selected === title ? "menu-button-selected" : ""}`}
-			>
-				<div className="svg-container">
-					{selected == title
-						? iconMapping[title].filled
-						: iconMapping[title].default}
-				</div>
-				<p className="sidebar-text">{title}</p>
-			</button>
-		</>
-	);
+  return (
+    <>
+      <button
+        id={`button-${title}`}
+        onClick={onClick}
+        className={`sidebar-button ${selected === title ? 'menu-button-selected' : ''}`}
+      >
+        <div className="svg-container">
+          {selected == title ? iconMapping[title].filled : iconMapping[title].default}
+        </div>
+        <p className="sidebar-text">{title}</p>
+      </button>
+    </>
+  );
 };
 
 export default MenuButton;

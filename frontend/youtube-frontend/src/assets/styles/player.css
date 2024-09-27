@@ -1,351 +1,353 @@
 /* PLAYER */
 
 .player-section {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	width: 1066px !important;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 1066px !important;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .player-container {
-	width: fit-content;
-	height: fit-content;
-	border-radius: 16px;
-	overflow: hidden;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .player {
-	width: 1066px !important;
-	height: 600px !important;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1066px !important;
+  height: 600px !important;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .closed-menu .player {
-	width: 1240px !important;
-	height: 698px !important;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1240px !important;
+  height: 698px !important;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .video-actions-list {
-	width: 1076px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1076px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .closed-menu .video-actions-list {
-	width: 1240px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1240px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 /* DESCRIPTION */
 
 .video-description {
-	width: 1037px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1037px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .closed-menu .video-description {
-	width: 1210px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 1210px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .video-description {
-	border-radius: 12px;
-	background-color: rgba(0, 0, 0, 0.05);
-	font-size: 14px;
-	padding: 15px;
-	height: fit-content;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-size: 14px;
+  padding: 15px;
+  height: fit-content;
 }
 
 .video-description button {
-	background: transparent;
-	border: none;
-	padding: 0;
-	margin: 12px 0 0;
-	font-weight: 800;
-	font-size: 14px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 12px 0 0;
+  font-weight: 800;
+  font-size: 14px;
 }
 
 .video-description p {
-	font-weight: bold;
-	margin: 0;
+  font-weight: bold;
+  margin: 0;
 }
 
 .video-description-text {
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .description-text-content {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	height: 80px;
-	animation: close 1s ease forwards;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 80px;
+  animation: close 1s ease forwards;
 }
 
-/*noinspection CssUnusedSymbol*/
+/* noinspection CssUnusedSymbol */
 .description-opened {
-	animation: open 1s ease forwards;
+  animation: open 1s ease forwards;
 }
 
 @keyframes close {
-	from {
-		height: var(--expanded-height);
-	}
-	to {
-		height: 80px;
-	}
+  from {
+    height: var(--expanded-height);
+  }
+
+  to {
+    height: 80px;
+  }
 }
 
 @keyframes open {
-	from {
-		height: 80px;
-	}
-	to {
-		height: var(--expanded-height);
-	}
+  from {
+    height: 80px;
+  }
+
+  to {
+    height: var(--expanded-height);
+  }
 }
 
 /* VIDEO ACTIONS */
 
 .player-video-title {
-	width: 100%;
-	font-size: 22px;
-	font-weight: bold;
-	text-align: left;
-	color: #0f0f0f;
-	margin-top: 10px;
-	margin-bottom: 10px;
+  width: 100%;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: left;
+  color: #0f0f0f;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .player-video-title p {
-	margin: 0;
+  margin: 0;
 }
 
 .subscribe-button {
-	display: flex;
-	background-color: #0f0f0f;
-	color: #ffffff;
-	align-items: center;
-	text-align: center;
-	font-size: 14px;
-	border: none;
-	height: 36px;
-	line-height: 36px;
-	border-radius: 18px;
-	font-weight: 800;
-	padding: 12px;
-	transition:
-		width 0.5s ease,
-		opacity 0.3s ease;
+  display: flex;
+  background-color: #0f0f0f;
+  color: #fff;
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  border: none;
+  height: 36px;
+  line-height: 36px;
+  border-radius: 18px;
+  font-weight: 800;
+  padding: 12px;
+  transition:
+    width 0.5s ease,
+    opacity 0.3s ease;
 }
 
 .subscribe-button:hover {
-	background-color: rgba(15, 15, 15, 0.88) !important;
+  background-color: rgba(15, 15, 15, 0.88) !important;
 }
 
 .subscribed {
-	background-color: rgba(0, 0, 0, 0.05);
-	color: #0f0f0f;
-	transition:
-		width 0.5s ease,
-		opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #0f0f0f;
+  transition:
+    width 0.5s ease,
+    opacity 0.3s ease;
 }
 
 .subscribed:hover {
-	background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
 .video-actions-list {
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-	justify-content: flex-end;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .player-channel-info {
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-	gap: 20px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
 }
 
 .like-dislike-actions {
-	background-color: rgba(0, 0, 0, 0.05);
-	border: none;
-	border-radius: 50px;
-	height: 36px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .like-dislike-actions button {
-	border: none;
-	background-color: transparent;
-	padding: 10px;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 10px;
-	font-weight: 800;
-	font-size: 14px;
-	text-wrap: nowrap;
+  border: none;
+  background-color: transparent;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  text-wrap: nowrap;
 }
 
 .like-dislike-actions button:hover {
-	background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .like-dislike-actions button:active {
-	background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .player-page-layout {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .video-recommendations {
-	overflow: hidden;
-	width: 350px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  overflow: hidden;
+  width: 350px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 .closed-menu .video-recommendations {
-	width: 330px;
-	transition:
-		width 0.3s ease,
-		height 0.3s ease;
+  width: 330px;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease;
 }
 
 /* COMMENT SECTION */
 
 .player-leave-comment-section {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 50px;
-	gap: 20px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 50px;
+  gap: 20px;
 }
 
 .player-leave-comment-section textarea {
-	width: 100%;
-	border: none;
-	outline: none;
-	border-bottom: 1px solid #ccc;
-	font-size: 16px;
-	height: 20px;
-	font-family: "Roboto", "Arial", sans-serif;
+  width: 100%;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  height: 20px;
+  font-family: Roboto, Arial, sans-serif;
 }
 
 .player-leave-comment-section textarea:focus {
-	outline: none;
-	border-bottom: 1px solid black;
+  outline: none;
+  border-bottom: 1px solid black;
 }
 
 .player-input-section {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: end;
-	gap: 10px;
-	transition:
-		opacity 0.5s ease,
-		height 0.5s ease;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+  transition:
+    opacity 0.5s ease,
+    height 0.5s ease;
 }
 
 .player-comments-list {
-	width: 100%;
-	text-align: left;
-	display: flex;
-	gap: 10px;
-	flex-direction: column;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
 }
 
 .player-comment-buttons {
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-	align-items: center;
-	justify-content: center;
-	width: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: auto;
 }
 
 .player-comment {
-	display: flex;
-	flex-direction: row;
-	font-size: 14px;
-	gap: 20px;
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  gap: 20px;
 }
 
 .comment-footer {
-	display: flex;
-	align-items: center;
-	flex-direction: row;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 
 .comment-footer svg {
-	margin-left: 4px;
-	margin-right: 4px;
-	padding: 2px;
-	cursor: pointer;
+  margin-left: 4px;
+  margin-right: 4px;
+  padding: 2px;
+  cursor: pointer;
 }
 
 .comment-footer span {
-	color: #606060;
-	font-weight: 400;
-	font-size: 12px;
-	margin: 0 10px 0 0;
+  color: #606060;
+  font-weight: 400;
+  font-size: 12px;
+  margin: 0 10px 0 0;
 }
 
 .comment-footer svg:hover {
-	background-color: rgba(0, 0, 0, 0.1);
-	border-radius: 50px;
-	padding: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  padding: 2px;
 }
 
 .comment-footer button {
-	background-color: transparent;
-	border-radius: 20px;
-	border: none;
-	padding: 5px;
-	font-size: 14px;
+  background-color: transparent;
+  border-radius: 20px;
+  border: none;
+  padding: 5px;
+  font-size: 14px;
 }
 
 .comment-footer button:hover {
-	background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .player-comment-section {
-	width: 1066px;
-	transition:
-		width 0.3s ease,
-		opacity 0.5s ease;
+  width: 1066px;
+  transition:
+    width 0.3s ease,
+    opacity 0.5s ease;
 }
 
 .closed-menu .player-comment-section {
-	width: 1240px;
-	transition:
-		width 0.3s ease,
-		opacity 0.5s ease;
+  width: 1240px;
+  transition:
+    width 0.3s ease,
+    opacity 0.5s ease;
 }

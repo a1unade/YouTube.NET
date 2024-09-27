@@ -1,5 +1,5 @@
 export type PlaylistType = {
-	id: number;
-	name: string;
-	isPrivate: boolean;
+  id: number;
+  name: string;
+  isPrivate: boolean;
 };
