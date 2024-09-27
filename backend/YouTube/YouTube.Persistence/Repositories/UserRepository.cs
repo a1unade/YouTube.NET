@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
         _cache = cache;
     }
 
-    public async Task<User?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<User?> FindById(Guid id, CancellationToken cancellationToken)
     {
         User? user;
         
@@ -47,7 +47,7 @@ public class UserRepository : IUserRepository
         return user ?? null;
     }
 
-    public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
+    public async Task<User?> FindByEmail(string email, CancellationToken cancellationToken)
     {
         return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken) ?? null;
     }

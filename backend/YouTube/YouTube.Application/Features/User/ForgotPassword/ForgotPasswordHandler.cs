@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
@@ -23,12 +25,13 @@ public class ForgotPasswordHandler : IRequestHandler<ForgotPasswordCommand, Base
     }
     public async Task<BaseResponse> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
     {
-        //TODO (Validation)
-
-        var user = await _userRepository.GetUserByEmail(request.Email, cancellationToken);
+        if (request.Email.IsNullOrEmpty())
+            throw new ValidationException();
+        
+        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
 
         if (user is null)
-            return new BaseResponse { Message = UserErrorMessage.UserNotFound };
+            throw new NotFoundException(UserErrorMessage.UserNotFound);
 
         string code = _emailService.GenerateRandomCode();
 

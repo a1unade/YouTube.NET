@@ -1,5 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces.Repositories;
@@ -18,7 +20,10 @@ public class LogoutHandler : IRequestHandler<LogoutCommand, BaseResponse>
     }
     public async Task<BaseResponse> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
-        var user = await _repository.GetById(Guid.Parse(request.UserId), cancellationToken);
+        if (request.UserId.IsNullOrEmpty())
+            throw new ValidationException();
+        
+        var user = await _repository.FindById(Guid.Parse(request.UserId), cancellationToken);
 
         if (user is null)
             return new BaseResponse { Message = UserErrorMessage.UserNotFound };

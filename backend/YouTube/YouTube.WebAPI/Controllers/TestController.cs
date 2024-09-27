@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
-
 namespace YouTube.WebAPI.Controllers;
 
 [ApiController]
@@ -11,18 +9,16 @@ namespace YouTube.WebAPI.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IS3Service _service;
-    private readonly IUserRepository _userRepository;
 
-    public TestController(IS3Service service, IUserRepository userRepository)
+    public TestController(IS3Service service)
     {
         _service = service;
-        _userRepository = userRepository;
     }
 
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetDownloadLink(string bucketId, string objectName, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
-        var link = await _service.GetDownloadLinkAsync(bucketId, objectName, cancellationToken);
+        var link = await _service.GetLinkAsync(bucketId, objectName, cancellationToken);
 
         if (link != String.Empty)
             return Ok(link);
@@ -96,10 +92,11 @@ public class TestController : ControllerBase
 
     }
 
+    
     [HttpGet("[action]")]
-    public async Task<IActionResult> GetUserById(string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
     {
-        var res = await _userRepository.GetById(Guid.Parse(id), cancellationToken: cancellationToken);
-        return Ok(res);
+        var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);
+        return Ok(kink);
     }
 }

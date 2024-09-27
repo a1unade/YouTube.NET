@@ -1,6 +1,8 @@
 using System.Net;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
-using FluentValidation;
+using YouTube.Application.Common.Exceptions;
+using ValidationException = YouTube.Application.Common.Exceptions.ValidationException;
 
 namespace YouTube.WebAPI.Middleware;
 
@@ -32,11 +34,21 @@ public class CustomExceptionMiddleware
 
         switch (exception)
         {
-            case ValidationException validationException :
-                code = HttpStatusCode.BadRequest;
-                result = JsonSerializer.Serialize(validationException.Errors);
+            case BaseException baseException:
+                if (baseException.StatusCode != default)
+                    code = baseException.StatusCode;
+                result = JsonSerializer.Serialize(new { Error = baseException.Message });
                 break;
             
+            case ValidationException validationException:
+                code = HttpStatusCode.BadRequest;
+                result = JsonSerializer.Serialize(new {Error = validationException.Message});
+                break;
+            
+            case NotFoundException notFoundException:
+                code = HttpStatusCode.NotFound;
+                result = JsonSerializer.Serialize(new { Error = notFoundException.Message });
+                break;
         }
 
         context.Response.ContentType = "application/json";
@@ -46,7 +58,7 @@ public class CustomExceptionMiddleware
         {
             result = JsonSerializer.Serialize(new { Error = exception.Message });
         }
-        
+
         return context.Response.WriteAsync(result);
     }
 }
