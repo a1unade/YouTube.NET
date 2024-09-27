@@ -18,21 +18,22 @@ jobs:
       security-events: write  
     strategy:
       matrix:
-        language: ['typescript', 'javascript'] 
+        language: ['typescript'] 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          setup-node-version: '22'
 
       - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+        uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
 
   eslint:
     runs-on: ubuntu-latest
