@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
-using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
-
 namespace YouTube.WebAPI.Controllers;
 
 [ApiController]
@@ -12,12 +9,10 @@ namespace YouTube.WebAPI.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IS3Service _service;
-    private readonly IUserRepository _userRepository;
 
-    public TestController(IS3Service service, IUserRepository userRepository)
+    public TestController(IS3Service service)
     {
         _service = service;
-        _userRepository = userRepository;
     }
 
     [HttpGet("[action]")]
@@ -97,26 +92,11 @@ public class TestController : ControllerBase
 
     }
 
-    [HttpGet("[action]")]
-    public async Task<IActionResult> GetUserById(string id, CancellationToken cancellationToken)
-    {
-        var res = await _userRepository.GetById(Guid.Parse(id), cancellationToken: cancellationToken);
-        return Ok(res);
-    }
-    
     
     [HttpGet("[action]")]
     public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
     {
         var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);
         return Ok(kink);
-    }
-    
-    [HttpGet("[action]")]
-    public Task<IActionResult> TestValidationException(CancellationToken cancellationToken)
-    {
-        
-        throw new ValidationException("MegaHui");
-        
     }
 }

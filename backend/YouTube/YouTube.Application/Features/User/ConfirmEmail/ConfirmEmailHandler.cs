@@ -17,7 +17,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     
-    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IEmailService emailService)
+    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager, IUserRepository userRepository, IEmailService emailService)
     {
         _userManager = userManager;
         _userRepository = userRepository;
@@ -29,13 +29,10 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
         if (request.Email.IsNullOrEmpty() || request.Id.IsNullOrEmpty())
             throw new ValidationException();
         
-        var user = await _userRepository.GetUserByEmail(request.Email, cancellationToken);
+        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
-
-        if (request.Email != user.Email)
-            throw new BadRequestException(UserErrorMessage.UserEmailsDontMatch);
 
         string code = _emailService.GenerateRandomCode();
 

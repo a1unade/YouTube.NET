@@ -10,7 +10,6 @@ public class ContextFactory
     private const string UserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
     
     private static User _user;
-    
 
     public ContextFactory()
     {
@@ -31,7 +30,7 @@ public class ContextFactory
             .SetId(UserId)
             .SetUsername("Ilya")
             .SetBirthday(new DateOnly(2004, 01, 09))
-            .SetEmail("bulatfree18@gmail.com")
+            .SetEmail("bulatfri18@gmail.com")
             .SetUserInfo()
             .Build();
 

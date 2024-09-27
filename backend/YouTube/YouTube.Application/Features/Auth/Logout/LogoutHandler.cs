@@ -23,7 +23,7 @@ public class LogoutHandler : IRequestHandler<LogoutCommand, BaseResponse>
         if (request.UserId.IsNullOrEmpty())
             throw new ValidationException();
         
-        var user = await _repository.GetById(Guid.Parse(request.UserId), cancellationToken);
+        var user = await _repository.FindById(Guid.Parse(request.UserId), cancellationToken);
 
         if (user is null)
             return new BaseResponse { Message = UserErrorMessage.UserNotFound };

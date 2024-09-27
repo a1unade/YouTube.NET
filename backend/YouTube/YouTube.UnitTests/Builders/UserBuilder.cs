@@ -4,8 +4,7 @@ namespace YouTube.UnitTests.Builders;
 
 public class UserBuilder
 {
-    private static readonly User _user = new User();
-    
+    private static readonly User _user = new User();    
     
     private readonly UserInfo _userInfo = new UserInfo
     {
@@ -13,9 +12,10 @@ public class UserBuilder
         Surname = "Vakatov",
         User = _user
     };
-
+    
     private UserBuilder()
     {
+        
     }
 
     /// <summary>
@@ -67,20 +67,10 @@ public class UserBuilder
         _userInfo.BirthDate = new DateOnly(2004, 01, 09);
         _userInfo.Country = "Russia";
         _userInfo.Gender = "Male";
+        _user.PasswordHash = "Ilya1337";
         _user.UserInfo = _userInfo;
         return this;
     }
-
-    // /// <summary>
-    // /// Установить Пароль
-    // /// </summary>
-    // /// <param name="password">Пароль</param>
-    // /// <returns></returns>
-    // public UserBuilder SetPassword(string password)
-    // {
-    //     _user.PasswordHash = _userManager.PasswordHasher.HashPassword(_user, password);
-    //     return this;
-    // }
 
     public User Build() => _user;
 }

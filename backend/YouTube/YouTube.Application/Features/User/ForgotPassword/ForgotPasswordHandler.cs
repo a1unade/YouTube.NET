@@ -28,7 +28,7 @@ public class ForgotPasswordHandler : IRequestHandler<ForgotPasswordCommand, Base
         if (request.Email.IsNullOrEmpty())
             throw new ValidationException();
         
-        var user = await _userRepository.GetUserByEmail(request.Email, cancellationToken);
+        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
