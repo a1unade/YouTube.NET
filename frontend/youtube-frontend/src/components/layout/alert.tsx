@@ -1,35 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const Alert = (props: { message: string; onClose: () => void }) => {
-  const { message, onClose } = props;
-  const [visible, setVisible] = useState(false);
+	const { message, onClose } = props;
+	const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const showTimer = setTimeout(() => {
-      setVisible(true);
-    }, 10);
+	useEffect(() => {
+		const showTimer = setTimeout(() => {
+			setVisible(true);
+		}, 10);
 
-    const hideTimer = setTimeout(() => {
-      setVisible(false);
-    }, 2000);
+		const hideTimer = setTimeout(() => {
+			setVisible(false);
+		}, 2000);
 
-    return () => {
-      clearTimeout(showTimer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
+		return () => {
+			clearTimeout(showTimer);
+			clearTimeout(hideTimer);
+		};
+	}, []);
 
-  useEffect(() => {
-    if (!visible) {
-      const removeTimer = setTimeout(() => {
-        onClose();
-      }, 500);
+	useEffect(() => {
+		if (!visible) {
+			const removeTimer = setTimeout(() => {
+				onClose();
+			}, 500);
 
-      return () => clearTimeout(removeTimer);
-    }
-  }, [visible, onClose]);
+			return () => clearTimeout(removeTimer);
+		}
+	}, [visible, onClose]);
 
-  return <div className={`alert ${visible ? 'alert-show' : 'alert-hide'}`}>{message}</div>;
+	return (
+		<div className={`alert ${visible ? "alert-show" : "alert-hide"}`}>
+			{message}
+		</div>
+	);
 };
 
 export default Alert;

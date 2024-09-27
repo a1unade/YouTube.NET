@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 export type Icon = {
-  default: React.ReactNode;
-  filled: React.ReactNode;
+	default: React.ReactNode;
+	filled: React.ReactNode;
 };
 
 export type IconMapping = {
-  [key: string]: Icon;
+	[key: string]: Icon;
 };
