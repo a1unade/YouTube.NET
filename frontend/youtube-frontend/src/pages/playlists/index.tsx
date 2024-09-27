@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 const Playlists = () => {
-	return <div></div>;
+  return <div />;
 };
 
 export default Playlists;

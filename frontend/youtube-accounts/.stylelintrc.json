@@ -1,0 +1,12 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "alpha-value-notation": null,
+    "color-function-notation": null,
+    "selector-max-id": 1,
+    "unit-allowed-list": ["%", "deg", "rem", "ms", "dvh", "px", "vh", "em", "s"],
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null
+  },
+  "defaultSeverity": "warning"
+}
