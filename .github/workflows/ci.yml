@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: '22'  
 
-      - name: Install frontend dependencies
+      - name: Install youtube-frontend dependencies
         run: |
           cd frontend/youtube-frontend
           npm install 
@@ -32,9 +32,9 @@ jobs:
           cd frontend/youtube-frontend
           npm run build 
 
-      - name: Install frontend dependencies
+      - name: Install youtube-accounts dependencies
         run: |
-          cd frontend/youtube-frontend
+          cd frontend/youtube-accounts
           npm install 
 
       - name: Build the youtube-accounts
