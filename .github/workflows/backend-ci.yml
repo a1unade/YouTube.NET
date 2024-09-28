@@ -26,15 +26,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
       - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+        uses: github/codeql-action/autobuild@v3
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
 
   build:
     runs-on: ubuntu-latest
@@ -50,10 +50,14 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          cd backend/YouTube
+          dotnet restore
 
       - name: Build the project
-        run: dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
+        run: |
+          cd backend/YouTube
+          dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
 
   test:
     runs-on: ubuntu-latest
@@ -69,13 +73,18 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          cd backend/YouTube
+          dotnet restore
 
       - name: Run Tests with Coverage Collection
-        run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ../../.github/coverlet.runsettings
+        run: |
+          cd backend/YouTube
+          dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ../../.github/coverlet.runsettings
 
       - name: Convert coverage to lcov
         run: |
+          cd backend/YouTube
           dotnet tool install --global dotnet-reportgenerator-globaltool
           reportgenerator -reports:"**/TestResults/**/*.xml" -targetdir:coveragereport -reporttypes:lcov
 
