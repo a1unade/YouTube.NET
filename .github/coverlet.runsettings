@@ -6,19 +6,19 @@
         <Configuration>
           <Format>opencover</Format>
           <Include>
-            [YouTube.Infrastructure]Services/*,
-            [YouTube.Persistence]Repositories/*,
-            [YouTube.Application]Features/*
+            ../YouTube.Infrastructure/Services/*.cs,
+            ../YouTube.Persistence/Repositories/*.cs,
+            ../YouTube.Application/Features/*
           </Include>
           <Exclude>
             [*.Tests*],
             [xunit.*],
-            [YouTube.Persistence]Extensions,
-            [YouTube.Persistence]Migrations,
-            [YouTube.Application]Common,
-            [YouTube.Application]Extensions,
-            [YouTube.Application]DTOs
-            [YouTube.Domain]
+            ../YouTube.Persistence/Extensions/*,
+            ../YouTube.Persistence/Migrations/*,
+            ../YouTube.Application/Common/*,
+            ../YouTube.Application/Extensions/*,
+            ../YouTube.Application/DTOs/*
+            ../YouTube.Domain/*
           </Exclude>
         </Configuration>
       </DataCollector>
