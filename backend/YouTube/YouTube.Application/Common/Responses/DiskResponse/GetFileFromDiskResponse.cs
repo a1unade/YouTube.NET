@@ -7,5 +7,6 @@ public class GetFileFromDiskResponse : BaseResponse
     public string? PathInDisk { get; set; }
     
     public string? File { get; set; }
+    
     public LinkResponse? LinkResponse { get; set; }
 }

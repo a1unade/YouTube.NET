@@ -29,7 +29,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
         if (request.Email.IsNullOrEmpty() || request.Id.IsNullOrEmpty())
             throw new ValidationException();
         
-        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
+        var user = await _userRepository.FindByEmail(request.Email!, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
@@ -38,7 +38,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
         await _userManager.AddClaimAsync(user, new Claim(EmailSuccessMessage.EmailConfirmCodeString, code));
             
-        await _emailService.SendEmailAsync(request.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
+        await _emailService.SendEmailAsync(request.Email!, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
         return new BaseResponse { IsSuccessfully = true };
     }

@@ -1,9 +1,9 @@
-namespace YouTube.Application.DTOs;
+namespace YouTube.Application.DTOs.Auth;
 
 public class UserEmailDto
 {
     /// <summary>
     /// Почта пользователя для смены пароля
     /// </summary>
-    public string Email { get; set; }
+    public required string Email { get; set; }
 }

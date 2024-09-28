@@ -15,7 +15,7 @@ public class TestController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("[action]")]
+    [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
         var link = await _service.GetLinkAsync(bucketId, objectName, cancellationToken);
@@ -26,7 +26,7 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
     
-    [HttpPost("[action]")]
+    [HttpPost("UploadFile")]
     public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
     {
         try
@@ -41,7 +41,7 @@ public class TestController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("GetFileForUser")]
     public async Task<IActionResult> GetFileForUser()
     {
         IMinioClient client = new MinioClient()
@@ -61,7 +61,7 @@ public class TestController : ControllerBase
 
     }
     
-    [HttpPost("[action]")]
+    [HttpPost("UploadFileForUser")]
     public async Task<IActionResult> UploadFileForUser(IFormFile file, CancellationToken cancellationToken)
     {
         IMinioClient client = new MinioClient()
@@ -91,9 +91,8 @@ public class TestController : ControllerBase
         return Ok(file.FileName);
 
     }
-
     
-    [HttpGet("[action]")]
+    [HttpGet("GetVideoLink")]
     public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
     {
         var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);

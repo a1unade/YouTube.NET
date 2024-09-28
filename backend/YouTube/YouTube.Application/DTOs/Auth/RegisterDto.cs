@@ -5,17 +5,17 @@ public class RegisterDto
     /// <summary>
     /// Электронная почта
     /// </summary>
-    public string Email { get; set; } = "";
+    public required string Email { get; set; } 
 
     /// <summary>
     /// Пароль
     /// </summary>
-    public string Password { get; set; } = "";
+    public required string Password { get; set; }
 
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public string Name { get; set; } = "";
+    public required string Name { get; set; }
     
     /// <summary>
     /// Фамилия пользователя
@@ -30,5 +30,5 @@ public class RegisterDto
     /// <summary>
     /// Пол пользователя
     /// </summary>
-    public string Gender { get; set; } = "";
+    public required string Gender { get; set; }
 }

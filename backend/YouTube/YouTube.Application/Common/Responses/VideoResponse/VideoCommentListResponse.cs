@@ -4,5 +4,5 @@ namespace YouTube.Application.Common.Responses.VideoResponse;
 
 public class VideoCommentListResponse : BaseResponse
 {
-    public List<CommentItem> Comments { get; set; }
+    public List<CommentItem> Comments { get; set; } = default!;
 }

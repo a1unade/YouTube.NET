@@ -5,5 +5,5 @@ namespace YouTube.Application.Common.Responses.ChannelResponse;
 
 public class ChannelVideosResponse : BaseResponse
 {
-    public List<VideoItem> Videos { get; set; }
+    public List<VideoItem> Videos { get; set; } = default!;
 }

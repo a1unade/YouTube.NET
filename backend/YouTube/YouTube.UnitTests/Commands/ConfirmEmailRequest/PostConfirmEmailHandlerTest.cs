@@ -21,6 +21,6 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
 
         
         Assert.NotNull(response);
-        Assert.Equal(true, response.IsSuccessfully);
+        Assert.True(response.IsSuccessfully);
     }
 }

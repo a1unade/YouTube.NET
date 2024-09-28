@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost("[action]")]
+    [HttpPost("AuthUser")]
     public async Task<IActionResult> AuthUser(AuthRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new AuthCommand(request), cancellationToken);
@@ -37,7 +37,7 @@ public class AuthController : ControllerBase
         return NotFound(result);
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("LoginUser")]
     public async Task<IActionResult> LoginUser(LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new LoginCommand(request), cancellationToken);
@@ -55,7 +55,7 @@ public class AuthController : ControllerBase
         return NotFound(result);
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("Logout")]
     public async Task<IActionResult> Logout(LogoutRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new LogoutCommand(request), cancellationToken);

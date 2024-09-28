@@ -25,6 +25,6 @@ public class PostAuthHandlerTest : TestCommandBase
 
         Assert.NotNull(response);
         Assert.NotNull(response.Token);
-        Assert.Equal(true, response.IsSuccessfully);
+        Assert.True(response.IsSuccessfully);
     }
 }

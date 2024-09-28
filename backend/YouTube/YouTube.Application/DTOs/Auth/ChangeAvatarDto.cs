@@ -5,7 +5,7 @@ public class ChangeAvatarDto
     /// <summary>
     /// ID пользователя
     /// </summary>
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
     
     /// <summary>
     /// Id новой ававтарки
