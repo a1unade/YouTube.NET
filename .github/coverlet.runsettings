@@ -13,11 +13,11 @@
           <Exclude>
             [*.Tests*],
             [xunit.*],
-            [YouTube.Persistence]Repositories/Extensions/*,
-            [YouTube.Persistence]Repositories/Migrations/*,
-            [YouTube.Application]Features/Common/*,
-            [YouTube.Application]Features/Extensions/*,
-            [YouTube.Application]Features/DTOs/*
+            [YouTube.Persistence]Extensions,
+            [YouTube.Persistence]Migrations,
+            [YouTube.Application]Common,
+            [YouTube.Application]Extensions,
+            [YouTube.Application]DTOs
             [YouTube.Domain]
           </Exclude>
         </Configuration>
