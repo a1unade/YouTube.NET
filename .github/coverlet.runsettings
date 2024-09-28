@@ -5,8 +5,21 @@
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
           <Format>opencover</Format>
-          <Include>[YouTube.Infrastructure]Services/*,[YouTube.Persistence]Repositories/*,[YouTube.Application]Features/*</Include>
-          <Exclude>[*.Tests*], [xunit.*]</Exclude>
+          <Include>
+            [YouTube.Infrastructure]Services/*,
+            [YouTube.Persistence]Repositories/*,
+            [YouTube.Application]Features/*
+          </Include>
+          <Exclude>
+            [*.Tests*],
+            [xunit.*],
+            [YouTube.Persistence]Repositories/Extensions/*,
+            [YouTube.Persistence]Repositories/Migrations/*,
+            [YouTube.Application]Features/Common/*,
+            [YouTube.Application]Features/Extensions/*,
+            [YouTube.Application]Features/DTOs/*
+            [YouTube.Domain]
+          </Exclude>
         </Configuration>
       </DataCollector>
     </DataCollectors>
