@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>lcov</Format>
+          <Format>opencover</Format>
           <Include>[YouTube.Infrastructure]Services/*,[YouTube.Persistence]Repositories/*,[YouTube.Application]Features/*</Include>
           <Exclude>[*.Tests*], [xunit.*]</Exclude>
         </Configuration>
