@@ -77,6 +77,11 @@ jobs:
           cd backend/YouTube
           dotnet restore
 
+      - name: Build the project
+        run: |
+          cd backend/YouTube
+          dotnet build --no-restore /p:RunAnalyzersDuringBuild=true /p:TreatWarningsAsErrors=true
+
       - name: Run Tests with Coverage Collection
         run: |
           cd backend/YouTube
