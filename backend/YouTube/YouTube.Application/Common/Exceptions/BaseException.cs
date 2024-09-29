@@ -5,12 +5,7 @@ namespace YouTube.Application.Common.Exceptions;
 public class BaseException : Exception
 {
     public HttpStatusCode StatusCode { get; set; }
-
-    public BaseException()
-    {
-        
-    }
-
+    
     public BaseException(string message)
     {
         

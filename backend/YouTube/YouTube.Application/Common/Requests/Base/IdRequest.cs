@@ -12,5 +12,5 @@ public class IdRequest
         Id = requests.Id;
     }
     
-    public string? Id { get; set; }
+    public Guid Id { get; } 
 }

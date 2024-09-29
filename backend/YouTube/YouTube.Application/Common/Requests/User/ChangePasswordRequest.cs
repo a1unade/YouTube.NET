@@ -13,7 +13,7 @@ public class ChangePasswordRequest
         Email = request.Email;
     }
     
-    public string? Password { get; set; }
+    public string Password { get; set; } = default!;
     
-    public string? Email { get; set; }
+    public string Email { get; set; } = default!;
 }

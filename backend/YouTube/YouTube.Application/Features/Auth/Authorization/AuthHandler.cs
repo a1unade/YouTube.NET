@@ -84,8 +84,8 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         IdentityResult result = await _userManager.CreateAsync(user, request.Password!);
 
         if (!result.Succeeded)
-            throw new BadRequestException(result.Errors.Select(x => x.Description).ToString()!);
-
+            throw new BadRequestException(AnyErrorMessage.ErrorMessage);
+        
         await _signInManager.SignInAsync(user, false);
         
         await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailSuccessRegistrationMessage,

@@ -48,7 +48,10 @@ public class TestCommandBase : IDisposable
             });      
         
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new User());
+            .ReturnsAsync((Guid id, CancellationToken _) =>
+            {
+                return Context.Users.FirstOrDefault(x => x.Id == id);
+            });
 
         
         
