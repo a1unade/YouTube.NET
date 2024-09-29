@@ -15,9 +15,11 @@
             [xunit.*],
             **/YouTube.Persistence/Extensions/**,
             **/YouTube.Persistence/Migrations/**,
+            **/YouTube.Persistence/Contexts/**,
+            **/YouTube.Persistence/Configurations/**,
             **/YouTube.Application/Common/**,
             **/YouTube.Application/Extensions/**,
-            **/YouTube.Application/DTOs/**
+            **/YouTube.Application/DTOs/**,
             **/YouTube.Domain/**
           </ExcludeByFile>
         </Configuration>

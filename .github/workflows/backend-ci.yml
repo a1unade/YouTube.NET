@@ -85,7 +85,7 @@ jobs:
       - name: Run Tests with Coverage Collection
         run: |
           cd backend/YouTube
-          dotnet test --no-build --verbosity detailed --collect:"XPlat Code Coverage" --settings ../../.github/coverlet.runsettings
+          dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ../../.github/coverlet.runsettings
 
       - name: Convert coverage to lcov
         run: |
