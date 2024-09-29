@@ -14,5 +14,5 @@ public class CodeCheckRequest
     
     public string Code { get; set; }
     
-    public string Id { get; set; }
+    public Guid Id { get; set; }
 }

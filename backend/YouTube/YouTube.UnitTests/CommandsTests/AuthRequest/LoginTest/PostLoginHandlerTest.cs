@@ -4,7 +4,7 @@ using YouTube.Application.Common.Requests.Auth;
 using YouTube.Application.Features.Auth.Login;
 using YouTube.Domain.Entities;
 
-namespace YouTube.UnitTests.Commands.AuthRequest;
+namespace YouTube.UnitTests.CommandsTests.AuthRequest.LoginTest;
 
 public class PostLoginHandlerTest : TestCommandBase
 {

@@ -12,5 +12,5 @@ public class LogoutRequest
         UserId = request.UserId;
     }
     
-    public string UserId { get; set; }
+    public Guid UserId { get; set; }
 }

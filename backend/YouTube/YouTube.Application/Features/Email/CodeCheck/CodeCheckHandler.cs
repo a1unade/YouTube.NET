@@ -26,10 +26,10 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 
     public async Task<BaseResponse> Handle(CodeCheckCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Code) || string.IsNullOrEmpty(request.Id))
+        if (string.IsNullOrEmpty(request.Code) || string.IsNullOrEmpty(request.Id.ToString()))
             throw new ValidationException();
 
-        var user = await _userRepository.GetById(Guid.Parse(request.Id), cancellationToken);
+        var user = await _userRepository.GetById(request.Id, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

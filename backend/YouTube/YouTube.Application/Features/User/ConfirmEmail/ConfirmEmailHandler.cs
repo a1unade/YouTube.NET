@@ -26,7 +26,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
     public async Task<BaseResponse> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        if (request.Email.IsNullOrEmpty() || request.Id.IsNullOrEmpty())
+        if (request.Email.IsNullOrEmpty() || request.Id == Guid.Empty)
             throw new ValidationException();
         
         var user = await _userRepository.FindByEmail(request.Email, cancellationToken);

@@ -2,7 +2,7 @@ using Xunit;
 using YouTube.Application.Common.Requests.Email;
 using YouTube.Application.Features.User.ConfirmEmail;
 
-namespace YouTube.UnitTests.Commands.ConfirmEmailRequest;
+namespace YouTube.UnitTests.CommandsTests.ConfirmEmailRequest;
 
 public class PostConfirmEmailHandlerTest : TestCommandBase
 {
@@ -11,7 +11,7 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     {
         var request = new EmailConfirmRequest
         {
-            Id = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc",
+            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
             Email = "bulatfri18@gmail.com"
         };
 

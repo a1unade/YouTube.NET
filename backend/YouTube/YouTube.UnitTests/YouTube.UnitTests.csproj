@@ -27,6 +27,11 @@
     <ItemGroup>
       <ProjectReference Include="..\YouTube.Persistence\YouTube.Persistence.csproj" />
 
+
+    <ItemGroup>
+      <Folder Include="RepositoriesTests\UserRepositoryTests\" />
+    </ItemGroup>
+
     </ItemGroup>
 
 

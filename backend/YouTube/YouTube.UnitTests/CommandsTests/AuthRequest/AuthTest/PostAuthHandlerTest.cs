@@ -1,7 +1,7 @@
 using Xunit;
 using YouTube.Application.Features.Auth.Authorization;
 
-namespace YouTube.UnitTests.Commands.AuthRequest;
+namespace YouTube.UnitTests.CommandsTests.AuthRequest.AuthTest;
 
 public class PostAuthHandlerTest : TestCommandBase
 {
