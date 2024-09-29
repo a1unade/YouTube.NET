@@ -25,7 +25,7 @@ public class PostLoginHandlerTest : TestCommandBase
     
         Assert.NotNull(response);
         Assert.NotNull(response.Token);
-        Assert.Equal(true, response.IsSuccessfully);
+        Assert.True(response.IsSuccessfully);
         UserManager.Verify(x => x.CheckPasswordAsync(It.IsAny<User>(), "Ilya1337"), Times.Once);
     }
 }

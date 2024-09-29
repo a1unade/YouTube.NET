@@ -12,7 +12,7 @@ public class CodeCheckRequest
         Id = request.Id;
     }
     
-    public string Code { get; set; }
+    public string Code { get; set; }  = default!;
     
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 }

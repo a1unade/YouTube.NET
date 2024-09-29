@@ -9,12 +9,7 @@ public class ContextFactory
 
     private const string UserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
     
-    private static User _user;
-
-    public ContextFactory()
-    {
-        
-    }
+    private static User _user = default!;
     
     public static ApplicationDbContext Create()
     {

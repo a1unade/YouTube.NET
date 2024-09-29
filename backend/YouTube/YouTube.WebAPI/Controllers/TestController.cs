@@ -15,7 +15,7 @@ public class TestController : ControllerBase
         _service = service;
     }
 
-    [HttpGet("[action]")]
+    [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
         var link = await _service.GetLinkAsync(bucketId, objectName, cancellationToken);
@@ -26,7 +26,7 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
     
-    [HttpPost("[action]")]
+    [HttpPost("UploadFile")]
     public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
     {
         try
@@ -41,7 +41,7 @@ public class TestController : ControllerBase
         }
     }
 
-    [HttpPost("[action]")]
+    [HttpPost("GetFileForUser")]
     public async Task<IActionResult> GetFileForUser()
     {
         IMinioClient client = new MinioClient()

@@ -19,6 +19,6 @@ public class PostLogoutHandlerTest : TestCommandBase
 
         var result = await handler.Handle(command, default);
         
-        Assert.Equal(true, result.IsSuccessfully);
+        Assert.True(result.IsSuccessfully);
     }
 }

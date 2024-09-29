@@ -11,10 +11,10 @@ public class LoginRequest
         Email = request.Email;
         Password = request.Password;
     }
-    
-    public string Email { get; set; }
-    
-    public string Password { get; set; }
-    
-    
+
+    public string Email { get; set; } = default!;
+
+    public string Password { get; set; } = default!;
+
+
 }

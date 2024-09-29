@@ -7,10 +7,10 @@ public class LogoutRequest
         
     }
 
-    public LogoutRequest(LogoutRequest request)
+    protected LogoutRequest(LogoutRequest request)
     {
         UserId = request.UserId;
     }
-    
-    public Guid UserId { get; set; }
+
+    public Guid UserId { get; set; } 
 }

@@ -20,7 +20,7 @@ public class UserController : ControllerBase
     }
     
 
-    [HttpPost("[action]")]
+    [HttpPost("ForgotPassword")]
     public async Task<IActionResult> ForgotPassword(EmailRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ForgotPasswordCommand(request), cancellationToken);
@@ -31,7 +31,7 @@ public class UserController : ControllerBase
         return NotFound(result);
     }
 
-    [HttpGet("[action]")]
+    [HttpGet("GetAllUser")]
     public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
     {
         var user = await _context.Users.Include(x => x.UserInfo).ToListAsync(cancellationToken);
