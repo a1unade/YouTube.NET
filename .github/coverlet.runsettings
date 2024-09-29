@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>opencover</Format>
+          <IncludeByFile>
+            **/YouTube.Infrastructure/Services/**,
+            **/YouTube.Persistence/Repositories/**,
+            **/YouTube.Application/Features/**
+          </IncludeByFile>
+          <ExcludeByFile>
+            [*.Tests*],
+            [xunit.*],
+            **/YouTube.Persistence/Extensions/**,
+            **/YouTube.Persistence/Migrations/**,
+            **/YouTube.Application/Common/**,
+            **/YouTube.Application/Extensions/**,
+            **/YouTube.Application/DTOs/**
+            **/YouTube.Domain/**
+          </ExcludeByFile>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

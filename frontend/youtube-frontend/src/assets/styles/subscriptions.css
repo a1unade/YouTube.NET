@@ -1,0 +1,86 @@
+.channel-short-element-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 900px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.channel-short-element-author-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  flex-shrink: 0;
+}
+
+.channel-short-element-author-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.channel-details {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.channel-details p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.channel-details p:first-child {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.channel-details ul {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.channel-details ul li {
+  max-width: 200px;
+}
+
+.channel-details ul li:not(:last-child) {
+  margin-right: 5px;
+}
+
+.channel-details ul li:first-child {
+  list-style-type: none;
+}
+
+.channel-details ul li:last-child {
+  margin-left: 12px;
+}
+
+.channel-details p:nth-child(3) {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+}
+
+.subscribe-button:hover {
+  background-color: #e0e0e0;
+}
+
+.subscribe-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.channel-short-elements-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

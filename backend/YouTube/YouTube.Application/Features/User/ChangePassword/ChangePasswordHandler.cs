@@ -24,19 +24,19 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
         if (request.Password.IsNullOrEmpty() || request.Email.IsNullOrEmpty())
             throw new ValidationException();
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email!);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
         
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         
-        var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
+        var result = await _userManager.ResetPasswordAsync(user, token, request.Password!);
 
         if (!result.Succeeded)
             throw new BadRequestException(result.Errors.Select(x => x.Description).ToString()!);
 
-        await _emailService.SendEmailAsync(request.Email, UserSuccessMessage.PasswordChanged,
+        await _emailService.SendEmailAsync(request.Email!, UserSuccessMessage.PasswordChanged,
             EmailSuccessMessage.EmailWarning); 
         
         return new BaseResponse { IsSuccessfully = true, Message = UserSuccessMessage.PasswordChanged };

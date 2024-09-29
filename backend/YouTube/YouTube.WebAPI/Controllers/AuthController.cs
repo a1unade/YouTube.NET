@@ -18,7 +18,6 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
-
     [HttpPost("Auth")]
     public async Task<IActionResult> AuthUser(AuthRequest request, CancellationToken cancellationToken)
     {

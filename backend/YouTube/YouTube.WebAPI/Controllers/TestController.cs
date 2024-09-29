@@ -61,7 +61,7 @@ public class TestController : ControllerBase
 
     }
     
-    [HttpPost("[action]")]
+    [HttpPost("UploadFileForUser")]
     public async Task<IActionResult> UploadFileForUser(IFormFile file, CancellationToken cancellationToken)
     {
         IMinioClient client = new MinioClient()
@@ -91,9 +91,8 @@ public class TestController : ControllerBase
         return Ok(file.FileName);
 
     }
-
     
-    [HttpGet("[action]")]
+    [HttpGet("GetVideoLink")]
     public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
     {
         var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);
