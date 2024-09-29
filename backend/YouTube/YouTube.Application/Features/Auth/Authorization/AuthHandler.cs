@@ -43,7 +43,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             request.Name.IsNullOrEmpty())
             throw new ValidationException();
 
-        var user = await _userRepository.FindByEmail(request.Email!, cancellationToken);
+        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
 
         if (user is not null)
             throw new BadRequestException(AuthErrorMessages.EmailIsBusy);
@@ -51,10 +51,10 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         var userInfo = new UserInfo
         {
             Id = Guid.NewGuid(),
-            Name = request.Name!,
-            Surname = request.SurName!,
-            BirthDate = request.DateOfBirth ?? default(DateOnly),
-            Gender = request.Gender!,
+            Name = request.Name,
+            Surname = request.SurName,
+            BirthDate = request.DateOfBirth,
+            Gender = request.Gender,
             Country = "Empty"
         };
 
@@ -81,14 +81,14 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         };
         await _context.Channels.AddAsync(channel, cancellationToken);
 
-        IdentityResult result = await _userManager.CreateAsync(user, request.Password!);
+        IdentityResult result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
             throw new BadRequestException(AnyErrorMessage.ErrorMessage);
         
         await _signInManager.SignInAsync(user, false);
         
-        await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailSuccessRegistrationMessage,
+        await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailSuccessRegistrationMessage,
             EmailSuccessMessage.EmailThankYouMessage);
 
         return new AuthResponse
