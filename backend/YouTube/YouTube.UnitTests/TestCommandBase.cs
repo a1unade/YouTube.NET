@@ -5,6 +5,7 @@ using Moq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
@@ -22,11 +23,14 @@ public class TestCommandBase : IDisposable
     protected Mock<IUserRepository> UserRepository { get; }
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
+    
+
+    protected Mock<IDistributedCache> Cache { get; }
 
     protected TestCommandBase()
     {
         Context = ContextFactory.Create();
-
+        
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();
         EmailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -38,6 +42,9 @@ public class TestCommandBase : IDisposable
         JwtGenerator = new Mock<IJwtGenerator>();
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
+        
+        // Мок Cache
+        Cache = new Mock<IDistributedCache>();
 
         // Мокирование UserRepository
         UserRepository = new Mock<IUserRepository>();
