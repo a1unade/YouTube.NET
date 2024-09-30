@@ -30,7 +30,7 @@ public class LoginHandlerThrowExceptionTests : TestCommandBase
     }
     
     [Fact]
-    public async Task LoginHandler_ThrowNotFoundException_ForInvalidEmail()
+    public async Task LoginHandler_ThrowUserNotFoundException_ForInvalidEmail()
     {
         var request = new LoginRequest
         {

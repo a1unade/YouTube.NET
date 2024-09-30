@@ -9,10 +9,6 @@ namespace YouTube.Persistence.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(x => x.Id);
-            
-            builder.HasOne(u => u.UserInfo)
-                .WithOne(x => x.User)
-                .HasForeignKey<User>(x => x.UserInfoId);
 
             builder.HasMany(x => x.Channels)
                 .WithOne(x => x.User)

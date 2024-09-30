@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Http;
 using Minio;
-using Minio.DataModel;
 using Minio.DataModel.Args;
 using YouTube.Application.Interfaces;
 

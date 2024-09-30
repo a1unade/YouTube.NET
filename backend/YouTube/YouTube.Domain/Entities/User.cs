@@ -4,16 +4,14 @@ namespace YouTube.Domain.Entities;
 
 public class User : IdentityUser<Guid>
 {
-    /// <summary>
-    /// Id Доп информации о пользователе
-    /// </summary>
-    public Guid UserInfoId { get; set; }
-    
-    /// <summary>
+   /// <summary>
     /// Дополнительная Информация о пользователе
     /// </summary>
     public UserInfo UserInfo { get; set; } = default!;
     
+    /// <summary>
+    /// Подписка
+    /// </summary>
     public Premium? Subscriptions { get; set; }
 
     /// <summary>
