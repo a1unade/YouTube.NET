@@ -47,13 +47,7 @@ app.UseCors(b => b
 
 app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
 
-app.UseFileServer(new FileServerOptions  
-{  
-    FileProvider = new PhysicalFileProvider(  
-        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),  
-    RequestPath = "/static",  
-    EnableDefaultFiles = true  
-}); 
+
 
 app.UseAuthentication();
 app.UseAuthorization();

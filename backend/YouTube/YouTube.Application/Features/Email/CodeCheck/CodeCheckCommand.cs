@@ -2,7 +2,7 @@ using MediatR;
 using YouTube.Application.Common.Requests.Email;
 using YouTube.Application.Common.Responses;
 
-namespace YouTube.Application.Features.EmailFeatures.CodeCheck;
+namespace YouTube.Application.Features.Email.CodeCheck;
 
 public class CodeCheckCommand : CodeCheckRequest, IRequest<BaseResponse>
 {

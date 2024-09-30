@@ -20,7 +20,7 @@ public class AuthHandlerThrowExceptionTests : TestCommandBase
             Email = "fwafawf",
             Name = "fwaf",
             SurName = "",
-            DateOfBirth = new DateOnly(2004, 02, 2),
+            DateOfBirth = DateTime.Today,
             Gender = "Гау"
         };
 
@@ -43,7 +43,7 @@ public class AuthHandlerThrowExceptionTests : TestCommandBase
             Email = "bulatfri18@gmail.com",
             Name = "fwaf",
             SurName = "fawwfwafw",
-            DateOfBirth = new DateOnly(2004, 02, 2),
+            DateOfBirth = DateTime.Today,
             Gender = "Гау"
         };
 
@@ -71,7 +71,7 @@ public class AuthHandlerThrowExceptionTests : TestCommandBase
             Email = "bulatfr22318@gmail.com",
             Name = "fwaffwa",
             SurName = "fawwfwafw",
-            DateOfBirth = new DateOnly(2004, 02, 2),
+            DateOfBirth = DateTime.Today,
             Gender = "Гау"
         };
     
