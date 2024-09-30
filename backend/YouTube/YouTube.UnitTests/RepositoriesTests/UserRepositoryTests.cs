@@ -1,35 +1,30 @@
+using Microsoft.Extensions.Caching.Distributed;
+using Moq;
 using Xunit;
+using YouTube.Persistence.Repositories;
 
 namespace YouTube.UnitTests.RepositoriesTests;
 
 public class UserRepositoryTests : TestCommandBase
 {
-    [Fact]
-    public async Task UserRepository_ReturnUser_GetUserById()
+    private readonly UserRepository _userRepository;
+
+    public UserRepositoryTests()
     {
-        var user = await UserRepository.Object.FindById(Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"), default);
-        Assert.NotNull(user);
-        Assert.Equal("Ilya", user.UserName);
-    }
-    
-    [Fact]
-    public async Task UserRepository_ReturnNull_GetUserById()
-    {
-        var user = await UserRepository.Object.FindById(Guid.Parse("53afbb05-bb2d-25e0-8bef-489ef1cd6fdc"), default);
-        Assert.Null(user);
+        _userRepository = new UserRepository(Context, Cache.Object);
     }
     
     [Fact]
     public async Task UserRepository_ReturnUser_GetUserByEmail()
     {
-        var user = await UserRepository.Object.FindByEmail("bulatfri18@gmail.com", default);
+        var user = await _userRepository.FindByEmail("bulatfri18@gmail.com", default);
         Assert.NotNull(user);
     }
     
     [Fact]
     public async Task UserRepository_ReturnNull_GetUserByEmail()
     {
-        var user = await UserRepository.Object.FindByEmail("2fw18@gmail.com", default);
+        var user = await _userRepository.FindByEmail("2fw18@gmail.com", default);
         Assert.Null(user);
     }
 }

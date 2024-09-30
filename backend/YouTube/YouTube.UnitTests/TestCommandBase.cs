@@ -24,12 +24,14 @@ public class TestCommandBase : IDisposable
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
     
-
+    public User User { get; }
     protected Mock<IDistributedCache> Cache { get; }
 
     protected TestCommandBase()
     {
         Context = ContextFactory.Create();
+
+        User = Context.Users.FirstOrDefault(x => x.Id == Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"))!;
         
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();
@@ -45,7 +47,7 @@ public class TestCommandBase : IDisposable
         
         // Мок Cache
         Cache = new Mock<IDistributedCache>();
-
+       
         // Мокирование UserRepository
         UserRepository = new Mock<IUserRepository>();
         UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))

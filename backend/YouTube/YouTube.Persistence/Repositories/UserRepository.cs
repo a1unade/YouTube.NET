@@ -43,6 +43,6 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> FindByEmail(string email, CancellationToken cancellationToken)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken) ?? null;
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 }
