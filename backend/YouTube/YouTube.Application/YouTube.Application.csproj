@@ -6,18 +6,6 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-   
-
-    <ItemGroup>
-      <Folder Include="Common\Responses\ChannelResponse\" />
-      <Folder Include="Common\Responses\CommentResponse\" />
-      <Folder Include="Common\Responses\VideoResponse\" />
-      <Folder Include="DTOs\Channel\" />
-      <Folder Include="DTOs\Comment\" />
-      <Folder Include="DTOs\Video\" />
-      <Folder Include="Features\Channel\" />
-      <Folder Include="Features\Video\" />
-    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />

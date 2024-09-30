@@ -14,5 +14,5 @@ public class CodeCheckRequest
     
     public string Code { get; set; }  = default!;
     
-    public Guid Id { get; }
+    public Guid Id { get; set; }
 }

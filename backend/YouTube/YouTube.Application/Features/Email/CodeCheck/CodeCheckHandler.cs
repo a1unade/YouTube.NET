@@ -4,7 +4,6 @@ using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
-using YouTube.Application.Features.EmailFeatures.CodeCheck;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
@@ -14,10 +13,10 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 {
     private readonly IEmailService _emailService;
     private readonly UserManager<Domain.Entities.User> _userManager;
-    private readonly IGenericRepository<Domain.Entities.User> _userRepository;
+    private readonly IUserRepository _userRepository;
 
     public CodeCheckHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
-        IGenericRepository<Domain.Entities.User> userRepository)
+        IUserRepository userRepository)
     {
         _emailService = emailService;
         _userManager = userManager;
@@ -26,10 +25,10 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
 
     public async Task<BaseResponse> Handle(CodeCheckCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Code) || string.IsNullOrEmpty(request.Id.ToString()))
+        if (string.IsNullOrEmpty(request.Code) || request.Id == Guid.Empty)
             throw new ValidationException();
 
-        var user = await _userRepository.GetById(request.Id, cancellationToken);
+        var user = await _userRepository.FindById(request.Id, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

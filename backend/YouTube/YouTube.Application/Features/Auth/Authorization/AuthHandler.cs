@@ -53,7 +53,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             Id = Guid.NewGuid(),
             Name = request.Name,
             Surname = request.SurName,
-            BirthDate = request.DateOfBirth,
+            BirthDate = DateOnly.FromDateTime(request.DateOfBirth),
             Gender = request.Gender,
             Country = "Empty"
         };

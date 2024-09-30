@@ -5,6 +5,7 @@ using Moq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
@@ -21,52 +22,63 @@ public class TestCommandBase : IDisposable
     protected Mock<IUserRepository> UserRepository { get; }
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
-    
-    public TestCommandBase()
+
+    protected TestCommandBase()
     {
         Context = ContextFactory.Create();
-        
+
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();
         EmailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
         EmailService.Setup(x => x.GenerateRandomCode())
             .Returns("123456");
-        
+
         // Мок JwtGenerator
         JwtGenerator = new Mock<IJwtGenerator>();
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
-        
-        
+
+
         // Мокирование UserRepository
         UserRepository = new Mock<IUserRepository>();
         UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string email, CancellationToken _) =>
             {
                 return Context.Users.FirstOrDefault(user => user.Email == email);
-            });      
-        
-        UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Guid id, CancellationToken _) =>
-            {
-                return Context.Users.FirstOrDefault(x => x.Id == id);
             });
 
-        
-        
+        UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });
+
+
         // Мокирование UserManager
         UserManager = CreateMockUserManager();
-        
+
         UserManager.Setup(x => x.AddClaimAsync(It.IsAny<User>(), It.IsAny<Claim>()))
             .ReturnsAsync(IdentityResult.Success);
-        
+
+        UserManager.Setup(x => x.GetClaimsAsync(It.IsAny<User>())).ReturnsAsync(() => new List<Claim>
+        {
+            new(EmailSuccessMessage.EmailConfirmCodeString, "123456"),
+            new(EmailSuccessMessage.EmailWarning, "156")
+        });
+
         UserManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
-        
+
         UserManager.Setup(x => x.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>()))
             .ReturnsAsync(true);
-        
+
+        UserManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
+            .ReturnsAsync("123");
+
+        UserManager.Setup(x => x.ConfirmEmailAsync(It.IsAny<User>(), "123"))
+            .ReturnsAsync(IdentityResult.Success);
+
+        UserManager.Setup(x => x.RemoveClaimAsync(It.IsAny<User>(), It.IsAny<Claim>()))
+            .ReturnsAsync(IdentityResult.Success);
+
         // Мок SignInManager
         SignInManager = new Mock<SignInManager<User>>(
             UserManager.Object,
@@ -77,10 +89,9 @@ public class TestCommandBase : IDisposable
             new Mock<IAuthenticationSchemeProvider>().Object,
             new Mock<IUserConfirmation<User>>().Object
         );
-        
+
         SignInManager.Setup(x => x.SignInAsync(It.IsAny<User>(), false, It.IsAny<string>()))
             .Returns(Task.CompletedTask);
-
     }
 
     /// <summary>
@@ -110,7 +121,7 @@ public class TestCommandBase : IDisposable
             serviceProviderMock.Object,
             loggerMock.Object
         );
-        
+
         return mockUserManager;
     }
 

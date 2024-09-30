@@ -1,6 +1,6 @@
 using Xunit;
 using YouTube.Application.Features.Auth.Authorization;
-
+ 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest.AuthTest;
 
 public class PostAuthHandlerTest : TestCommandBase
@@ -14,7 +14,7 @@ public class PostAuthHandlerTest : TestCommandBase
             Email = "PleshEnergy@gmail.com",
             Name = "Alehandro",
             SurName = "Pleshev",
-            DateOfBirth = new DateOnly(2004, 02, 01),
+            DateOfBirth = DateTime.Today,
             Gender = "Гау"
         };
 
