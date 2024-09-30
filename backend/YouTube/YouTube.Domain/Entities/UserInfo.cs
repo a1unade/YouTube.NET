@@ -26,10 +26,15 @@ public class UserInfo : BaseEntity
     public string Gender { get; set; } = default!;
 
     /// <summary>
+    /// Id Пользователя
+    /// </summary>
+    public Guid UserId { get; set; }
+    
+    /// <summary>
     /// Навигационное свойство для связи с User
     /// </summary>
-    [JsonIgnore]
     public User User { get; set; } = default!;
+    
 
     /// <summary>
     /// Страна

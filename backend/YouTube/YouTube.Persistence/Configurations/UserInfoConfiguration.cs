@@ -28,6 +28,6 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
         
         builder.HasOne(x => x.User)
             .WithOne(x => x.UserInfo)
-            .HasForeignKey<User>(x => x.UserInfoId);
+            .HasForeignKey<UserInfo>(x => x.UserId);
     }
 }

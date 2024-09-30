@@ -48,9 +48,15 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         if (user is not null)
             throw new BadRequestException(AuthErrorMessages.EmailIsBusy);
 
+        user = new Domain.Entities.User
+        {
+            UserName = request.Name + request.SurName,
+            Email = request.Email,
+            EmailConfirmed = false,
+        };
+        
         var userInfo = new UserInfo
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Surname = request.SurName,
             BirthDate = DateOnly.FromDateTime(request.DateOfBirth),
@@ -58,27 +64,19 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             Country = "Empty"
         };
 
-        user = new Domain.Entities.User
-        {
-            Id = Guid.NewGuid(),
-            UserName = request.Name + request.SurName,
-            Email = request.Email,
-            EmailConfirmed = false,
-            UserInfoId = userInfo.Id,
-            UserInfo = userInfo
-        };
-
+        user.UserInfo = userInfo;
+        
         var channel = new Channel
         {
             Id = Guid.NewGuid(),
-            Name = user.UserName + user.Id.ToString().Substring(0, 5),
+            Name = user.UserName,
             Description = null,
             CreateDate = DateOnly.FromDateTime(DateTime.Today),
             SubCount = 0,
             Country = userInfo.Country,
-            UserId = user.Id,
             User = user
         };
+        
         await _context.Channels.AddAsync(channel, cancellationToken);
 
         IdentityResult result = await _userManager.CreateAsync(user, request.Password);

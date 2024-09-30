@@ -29,7 +29,7 @@ public class LogoutHandlerThrowExceptionTests : TestCommandBase
     }
     
     [Fact]
-    public async Task LogoutHandler_ThrowNotFoundException_ForInvalidId()
+    public async Task LogoutHandler_ThrowUserNotFoundException_ForInvalidId()
     {
         var request = new LogoutRequest
         {

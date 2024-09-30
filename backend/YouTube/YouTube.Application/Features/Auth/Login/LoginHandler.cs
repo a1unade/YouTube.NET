@@ -29,12 +29,12 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
         if (request.Password.IsNullOrEmpty() || request.Email.IsNullOrEmpty())
             throw new ValidationException("Пароль или почта не валидны");
         
-        var user = await _userRepository.FindByEmail(request.Email!, cancellationToken);
+        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(AuthErrorMessages.UserNotFound);
 
-        var fl = await _userManager.CheckPasswordAsync(user, request.Password!);
+        var fl = await _userManager.CheckPasswordAsync(user, request.Password);
 
         if (!fl)
             throw new BadRequestException(AuthErrorMessages.LoginWrongPassword);

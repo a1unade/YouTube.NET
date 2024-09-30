@@ -39,7 +39,6 @@ public class TestCommandBase : IDisposable
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
 
-
         // Мокирование UserRepository
         UserRepository = new Mock<IUserRepository>();
         UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -50,8 +49,7 @@ public class TestCommandBase : IDisposable
 
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });
-
-
+        
         // Мокирование UserManager
         UserManager = CreateMockUserManager();
 
@@ -72,6 +70,12 @@ public class TestCommandBase : IDisposable
 
         UserManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
             .ReturnsAsync("123");
+        
+        UserManager.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>()))
+            .ReturnsAsync("1234");
+
+        UserManager.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Success);
 
         UserManager.Setup(x => x.ConfirmEmailAsync(It.IsAny<User>(), "123"))
             .ReturnsAsync(IdentityResult.Success);

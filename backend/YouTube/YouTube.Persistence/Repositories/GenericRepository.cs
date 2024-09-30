@@ -26,7 +26,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         return await _set.AsNoTracking().ToListAsync(cancellationToken);
     }
-
+    //TODO Переделать на IQueryable
     public IEnumerable<T> Get(Func<T, bool> predicate, CancellationToken cancellationToken)
     {
         return _set.AsNoTracking().Where(predicate).ToList();
