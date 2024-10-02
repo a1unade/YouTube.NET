@@ -10,6 +10,7 @@ public class UserBuilder
     {
         Name = "Ilya",
         Surname = "Vakatov",
+        UserId = _user.Id,
         User = _user
     };
     

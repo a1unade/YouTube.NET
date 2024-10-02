@@ -4,11 +4,6 @@ namespace YouTube.Domain.Entities;
 
 public class User : IdentityUser<Guid>
 {
-   /// <summary>
-    /// Дополнительная Информация о пользователе
-    /// </summary>
-    public UserInfo UserInfo { get; set; } = default!;
-    
     /// <summary>
     /// Подписка
     /// </summary>
@@ -33,4 +28,9 @@ public class User : IdentityUser<Guid>
     /// Аватаркa
     /// </summary>
     public File? AvatarUrl { get; set; } 
+    
+    /// <summary>
+    /// Дополнительная Информация о пользователе
+    /// </summary>
+    public UserInfo UserInfo { get; set; } = default!;
 }

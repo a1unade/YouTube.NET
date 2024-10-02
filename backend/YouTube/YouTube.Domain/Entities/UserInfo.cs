@@ -24,7 +24,12 @@ public class UserInfo : BaseEntity
     /// Пол пользователя
     /// </summary>
     public string Gender { get; set; } = default!;
-
+    
+    /// <summary>
+    /// Страна
+    /// </summary>
+    public string Country { get; set; } = default!;
+    
     /// <summary>
     /// Id Пользователя
     /// </summary>
@@ -33,11 +38,6 @@ public class UserInfo : BaseEntity
     /// <summary>
     /// Навигационное свойство для связи с User
     /// </summary>
+    [JsonIgnore]
     public User User { get; set; } = default!;
-    
-
-    /// <summary>
-    /// Страна
-    /// </summary>
-    public string Country { get; set; } = default!;
 }
