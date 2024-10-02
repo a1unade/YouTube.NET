@@ -5,11 +5,10 @@ import errors from '../../../utils/error-messages.ts';
 const Common = (props: {
   setContainerContent: React.Dispatch<React.SetStateAction<number>>;
   containerContent: number;
-  setBirth: React.Dispatch<React.SetStateAction<Date | undefined>>;
   gender: string;
   setGender: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const { setContainerContent, setBirth, gender, setGender, containerContent } = props;
+  const { setContainerContent, gender, setGender, containerContent } = props;
   const [day, setDay] = useState(''); // день рождения
   const [month, setMonth] = useState(''); // месяц рождения
   const [year, setYear] = useState(''); // год рождения
@@ -40,8 +39,6 @@ const Common = (props: {
     }
 
     if (gender.length > 0 && dateMessage.length === 0) {
-      setBirth(new Date(parseInt(year), parseInt(month), parseInt(day)));
-
       setContainerContent(containerContent + 1);
     }
   };
@@ -66,7 +63,7 @@ const Common = (props: {
           </div>
           <div className="input-container" style={{ margin: 0 }}>
             <select value={month} id="month" onChange={(e) => setMonth(e.target.value)} required>
-              <option value="" disabled selected hidden>
+              <option value="" disabled hidden>
                 Месяц
               </option>
               <option value="1">Январь</option>
@@ -115,7 +112,7 @@ const Common = (props: {
       </div>
       <div className="input-container" style={{ marginTop: 10 }}>
         <select id="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
-          <option value="" disabled selected hidden>
+          <option value="" disabled hidden>
             Пол
           </option>
           <option value="ж">Жен.</option>

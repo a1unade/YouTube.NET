@@ -3,17 +3,22 @@ import errors from './error-messages.ts';
 export const validateEmail = (email: string, phoneCheck: boolean) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[0-9]{1,3}[- ]?\(?[0-9]{3}\)?[- ]?[0-9]{3}[- ]?[0-9]{2}[- ]?[0-9]{2}$/;
+
   if (email.length === 0) {
     return errors.emptyEmail;
   } else if (!emailRegex.test(email)) {
-    if (
-      phoneCheck &&
-      !phoneRegex.test(email) &&
-      !email.includes('@') &&
-      (!isNaN(parseInt(email.charAt(0))) || email.charAt(0) === '+')
-    ) {
-      return errors.invalidPhoneNumber;
+    if (email.includes('@')) {
+      return errors.invalidEmail;
     }
+
+    if (phoneCheck) {
+      const isPotentialPhone = !isNaN(parseInt(email.charAt(0))) || email.charAt(0) === '+';
+
+      if (isPotentialPhone && !phoneRegex.test(email)) {
+        return errors.invalidPhoneNumber;
+      }
+    }
+
     return errors.invalidEmail;
   }
 
@@ -43,12 +48,16 @@ export const validateBirthDate = (year: string, month: string, day: string) => {
     return errors.emptyDate;
   }
 
-  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  const parsedYear = parseInt(year, 10);
+  const parsedMonth = parseInt(month, 10) - 1;
+  const parsedDay = parseInt(day, 10);
+
+  const date = new Date(parsedYear, parsedMonth, parsedDay);
   const isValidDate =
     !isNaN(date.getTime()) &&
-    date.getFullYear().toString() == year &&
-    (date.getMonth() + 1).toString() == month &&
-    date.getDate().toString() == day;
+    date.getFullYear() === parsedYear &&
+    date.getMonth() === parsedMonth &&
+    date.getDate() === parsedDay;
 
   if (!isValidDate) {
     return errors.invalidDate;

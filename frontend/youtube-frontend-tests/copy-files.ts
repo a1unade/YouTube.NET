@@ -1,12 +1,17 @@
 const fs = require('fs-extra');
 
-const srcDir = '../youtube-frontend/src';
-const destDir = './temp-src';
+const srcDirFrontend = '../youtube-frontend/src';
+const srcDirAccount = '../youtube-accounts/src';
+const destDirFrontend = './temp-src';
+const destDirAccount = './acc-src';
 
 async function copyFiles() {
     try {
-        await fs.copy(srcDir, destDir);
-        console.log('Files copied successfully!');
+        await fs.copy(srcDirFrontend, destDirFrontend);
+        console.log('Frontend files copied successfully!');
+
+        await fs.copy(srcDirAccount, destDirAccount);
+        console.log('Account files copied successfully!');
     } catch (err) {
         console.error('Error copying files:', err);
     }

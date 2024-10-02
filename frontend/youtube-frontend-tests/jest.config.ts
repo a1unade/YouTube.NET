@@ -13,10 +13,13 @@ module.exports = {
         "!temp-src/main.tsx",
         "!temp-src/assets/icons.tsx",
         "!temp-src/**/*.d.ts",
+        "acc-src/**/*.{ts,tsx}",
+        "!acc-src/main.tsx",
+        "!acc-src/**/*.d.ts",
         "!**/icons.tsx",
     ],
 
     coverageDirectory: "<rootDir>/coverage",
     coverageReporters: ["text", "lcov"],
-    testPathIgnorePatterns: ["/node_modules/", "./temp-src/"],
+    testPathIgnorePatterns: ["/node_modules/", "./temp-src/", "./acc-src"],
 };

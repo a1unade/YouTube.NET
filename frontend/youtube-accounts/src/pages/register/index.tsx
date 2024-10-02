@@ -12,10 +12,8 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [birth, setBirth] = useState<Date | undefined>();
   const [gender, setGender] = useState('');
-  // const [password, setPassword] = useState('');
-  console.log(birth);
+
   const renderContainerContent = () => {
     switch (containerContent) {
       case 0:
@@ -36,7 +34,6 @@ const Register = () => {
             containerContent={containerContent}
             gender={gender}
             setGender={setGender}
-            setBirth={setBirth}
           />
         );
       case 2:
