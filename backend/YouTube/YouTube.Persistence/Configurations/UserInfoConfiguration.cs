@@ -28,6 +28,7 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
         
         builder.HasOne(x => x.User)
             .WithOne(x => x.UserInfo)
-            .HasForeignKey<UserInfo>(x => x.UserId);
+            .HasForeignKey<UserInfo>(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

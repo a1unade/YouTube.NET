@@ -21,21 +21,25 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> FindById(Guid id, CancellationToken cancellationToken)
     {
-        var userString = await _cache.GetStringAsync(id.ToString(), cancellationToken);
+        var userString = await _cache.GetAsync(id.ToString(), cancellationToken);
 
         if (userString is not null)
+        {
+            Console.WriteLine("Из кеша");
             return JsonSerializer.Deserialize<User>(userString);
+        }
         
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var user = await _context.Users.Include(x => x.UserInfo).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (user is not null)
         {
-            userString = JsonSerializer.Serialize(user);
-            await _cache.SetStringAsync(user.Id.ToString(), userString, new DistributedCacheEntryOptions
+            var userBytes = JsonSerializer.SerializeToUtf8Bytes(user);
+            await _cache.SetAsync(user.Id.ToString(), userBytes, new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
             }, cancellationToken);
         }
+        Console.WriteLine("Из Бд");
 
         return user;
     }

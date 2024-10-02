@@ -18,13 +18,12 @@ namespace YouTube.UnitTests;
 public class TestCommandBase : IDisposable
 {
     protected readonly ApplicationDbContext Context;
+    public User User { get; }
     protected Mock<IEmailService> EmailService { get; }
     protected Mock<IJwtGenerator> JwtGenerator { get; }
     protected Mock<IUserRepository> UserRepository { get; }
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
-    
-    public User User { get; }
     protected Mock<IDistributedCache> Cache { get; }
 
     protected TestCommandBase()
@@ -32,7 +31,7 @@ public class TestCommandBase : IDisposable
         Context = ContextFactory.Create();
 
         User = Context.Users.FirstOrDefault(x => x.Id == Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"))!;
-        
+
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();
         EmailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -44,10 +43,17 @@ public class TestCommandBase : IDisposable
         JwtGenerator = new Mock<IJwtGenerator>();
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
-        
+
         // Мок Cache
         Cache = new Mock<IDistributedCache>();
-       
+
+        Cache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((byte[]?)null);
+
+        Cache.Setup(x => x.SetAsync(It.IsAny<string>(), It.IsAny<byte[]>(), It.IsAny<DistributedCacheEntryOptions>(),
+                It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
         // Мокирование UserRepository
         UserRepository = new Mock<IUserRepository>();
         UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -58,7 +64,7 @@ public class TestCommandBase : IDisposable
 
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });
-        
+
         // Мокирование UserManager
         UserManager = CreateMockUserManager();
 
@@ -79,7 +85,7 @@ public class TestCommandBase : IDisposable
 
         UserManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
             .ReturnsAsync("123");
-        
+
         UserManager.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>()))
             .ReturnsAsync("1234");
 
