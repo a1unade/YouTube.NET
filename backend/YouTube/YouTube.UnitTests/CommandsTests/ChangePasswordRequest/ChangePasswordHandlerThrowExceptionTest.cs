@@ -17,7 +17,7 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
         var request = new Request
         {
             Password = "",
-            Email = "bulatfri18@gmail.com"
+            Id = User.Id
         };
 
         var command = new ChangePasswordCommand(request);
@@ -30,12 +30,12 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
     }
     
     [Fact]
-    public async Task ChangePasswordHandler_ThrowUserNotFoundException_ForInvalidEmail()
+    public async Task ChangePasswordHandler_ThrowUserNotFoundException_ForInvalidId()
     {
         var request = new Request
         {
             Password = "fwfawfawf",
-            Email = "tfri18@gmail.com"
+            Id = Guid.NewGuid()
         };
 
         var command = new ChangePasswordCommand(request);
@@ -50,7 +50,7 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
     }
     
     [Fact]
-    public async Task ChangePasswordHandler_ThrowBadRequestException_ForInvalidEmail()
+    public async Task ChangePasswordHandler_ThrowBadRequestException_ForInvalidId()
     {
         UserManager.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Failed());        
@@ -58,7 +58,7 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
         var request = new Request
         {
             Password = "fwfawfawf",
-            Email = User.Email!
+            Id = User.Id
         };
 
         var command = new ChangePasswordCommand(request);

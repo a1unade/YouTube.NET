@@ -1,5 +1,5 @@
 using Xunit;
-using YouTube.Application.Features.Email.CodeCheck;
+using YouTube.Application.Features.Email.CodeCheckForConfirmEmail;
 using Request = YouTube.Application.Common.Requests.Email.CodeCheckRequest;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckRequest;
@@ -15,8 +15,8 @@ public class PostCodeCheckHandlerTest : TestCommandBase
             Code = "123456"
         };
 
-        var command = new CodeCheckCommand(request);
-        var handler = new CodeCheckHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var command = new CodeCheckForConfirmEmailCommand(request);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
 
         var result = await handler.Handle(command, default);
         

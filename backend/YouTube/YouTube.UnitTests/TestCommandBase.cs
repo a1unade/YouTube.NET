@@ -74,7 +74,8 @@ public class TestCommandBase : IDisposable
         UserManager.Setup(x => x.GetClaimsAsync(It.IsAny<User>())).ReturnsAsync(() => new List<Claim>
         {
             new(EmailSuccessMessage.EmailConfirmCodeString, "123456"),
-            new(EmailSuccessMessage.EmailWarning, "156")
+            new(EmailSuccessMessage.EmailWarning, "156"),
+            new (EmailSuccessMessage.EmailChangePasswordCode, "123456")
         });
 
         UserManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))

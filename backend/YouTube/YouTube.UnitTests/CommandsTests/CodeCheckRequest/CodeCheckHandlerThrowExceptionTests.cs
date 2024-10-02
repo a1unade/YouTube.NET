@@ -3,9 +3,8 @@ using Moq;
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Features.Email.CodeCheck;
+using YouTube.Application.Features.Email.CodeCheckForConfirmEmail;
 using YouTube.Domain.Entities;
-using Handler = YouTube.Application.Features.Email.CodeCheck.CodeCheckHandler;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckRequest;
 
@@ -20,8 +19,8 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
             Code = ""
         };
 
-        var command = new CodeCheckCommand(request);
-        var handler = new Handler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var command = new CodeCheckForConfirmEmailCommand(request);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () => { await handler.Handle(command, default); });
     }
@@ -35,8 +34,8 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
             Code = "123456"
         };
 
-        var command = new CodeCheckCommand(request);
-        var handler = new Handler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var command = new CodeCheckForConfirmEmailCommand(request);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -56,8 +55,8 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
             Code = "123456"
         };
 
-        var command = new CodeCheckCommand(request);
-        var handler = new Handler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var command = new CodeCheckForConfirmEmailCommand(request);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {
@@ -77,8 +76,8 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
             Code = "999999"
         };
 
-        var command = new CodeCheckCommand(request);
-        var handler = new Handler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var command = new CodeCheckForConfirmEmailCommand(request);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {

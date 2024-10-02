@@ -1,5 +1,5 @@
 using Xunit;
-using YouTube.Application.Common.Requests.Email;
+using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Features.User.ConfirmEmail;
 
 namespace YouTube.UnitTests.CommandsTests.ConfirmEmailRequest;
@@ -9,10 +9,9 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     [Fact]
     public async Task ConfirmEmailHandler_Success()
     {
-        var request = new EmailConfirmRequest
+        var request = new IdRequest
         {
-            Id = User.Id,
-            Email = User.Email!
+            Id = User.Id
         };
 
         var command = new ConfirmEmailCommand(request);

@@ -10,10 +10,10 @@ public class ChangePasswordRequest
     public ChangePasswordRequest(ChangePasswordRequest request)
     {
         Password = request.Password;
-        Email = request.Email;
+        Id = request.Id;
     }
     
     public string Password { get; set; } = default!;
     
-    public string Email { get; set; } = default!;
+    public Guid Id { get; set; }
 }

@@ -9,21 +9,21 @@ using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
-namespace YouTube.Application.Features.User.ForgotPassword;
+namespace YouTube.Application.Features.Email.ForgotPasswordSendEmail;
 
-public class ForgotPasswordHandler : IRequestHandler<ForgotPasswordCommand, BaseResponse>
+public class ForgotPasswordSendEmailHandler : IRequestHandler<ForgotPasswordSendEmailCommand, BaseResponse>
 {
     private readonly IEmailService _emailService;
     private readonly IUserRepository _userRepository;
     private readonly UserManager<Domain.Entities.User> _userManager;
 
-    public ForgotPasswordHandler(IEmailService emailService, IUserRepository userRepository, UserManager<Domain.Entities.User> userManager)
+    public ForgotPasswordSendEmailHandler(IEmailService emailService, IUserRepository userRepository, UserManager<Domain.Entities.User> userManager)
     {
         _emailService = emailService;
         _userRepository = userRepository;
         _userManager = userManager;
     }
-    public async Task<BaseResponse> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse> Handle(ForgotPasswordSendEmailCommand request, CancellationToken cancellationToken)
     {
         if (request.Email.IsNullOrEmpty())
             throw new ValidationException();
@@ -40,7 +40,5 @@ public class ForgotPasswordHandler : IRequestHandler<ForgotPasswordCommand, Base
         await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailChangePasswordCode, code);
 
         return new BaseResponse { IsSuccessfully = true, Message = EmailSuccessMessage.CheckYourEmail};
-        
-        //TODO как сделать так чтобы с фронта приходил запрос на проверку кода а потом уже менять пароль у чела
     }
 }
