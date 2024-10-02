@@ -1,7 +1,7 @@
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Common.Requests.Email;
+using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Features.User.ConfirmEmail;
 
 namespace YouTube.UnitTests.CommandsTests.ConfirmEmailRequest;
@@ -11,10 +11,9 @@ public class ConfirmEmailThrowExceptionTests : TestCommandBase
     [Fact]
     public async Task ConfirmEmailHandler_ThrowsValidationException_ForInvalidIdRequest()
     {
-        var request = new EmailConfirmRequest
+        var request = new IdRequest
         {
-            Id = Guid.Empty,
-            Email = "bulatfree18@gmail.com"
+            Id = Guid.Empty
         };
 
         var command = new ConfirmEmailCommand(request);
@@ -25,32 +24,13 @@ public class ConfirmEmailThrowExceptionTests : TestCommandBase
             await handler.Handle(command, default);
         });
     }
-    
-    [Fact]
-    public async Task ConfirmEmailHandler_ThrowsValidationException_ForInvalidEmailRequest()
-    {
-        var request = new EmailConfirmRequest
-        {
-            Id = User.Id,
-            Email = ""
-        };
 
-        var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
-        
-        await Assert.ThrowsAsync<ValidationException>(async () =>
-        {
-            await handler.Handle(command, default);
-        });
-    }
-    
     [Fact]
-    public async Task ConfirmEmailHandler_ThrowsNotFoundException_ForInvalidEmailRequest()
+    public async Task ConfirmEmailHandler_ThrowsNotFoundException_ForInvalidIdRequest()
     {
-        var request = new EmailConfirmRequest
+        var request = new IdRequest
         {
-            Id = User.Id,
-            Email = "NeNastoyasha9Pochta.com"
+            Id = Guid.NewGuid()
         };
 
         var command = new ConfirmEmailCommand(request);

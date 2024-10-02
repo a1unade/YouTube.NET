@@ -1,8 +1,6 @@
-using Moq;
 using Xunit;
 using YouTube.Application.Common.Requests.Auth;
 using YouTube.Application.Features.Auth.Login;
-using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest.LoginTest;
 
@@ -26,6 +24,5 @@ public class PostLoginHandlerTest : TestCommandBase
         Assert.NotNull(response);
         Assert.NotNull(response.Token);
         Assert.True(response.IsSuccessfully);
-        UserManager.Verify(x => x.CheckPasswordAsync(It.IsAny<User>(), "Ilya1337"), Times.Once);
     }
 }

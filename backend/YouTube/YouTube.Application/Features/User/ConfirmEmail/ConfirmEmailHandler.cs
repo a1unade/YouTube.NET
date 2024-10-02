@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
@@ -26,10 +25,10 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
     public async Task<BaseResponse> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        if (request.Email.IsNullOrEmpty() || request.Id == Guid.Empty)
+        if (request.Id == Guid.Empty)
             throw new ValidationException();
         
-        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
+        var user = await _userRepository.FindById(request.Id, cancellationToken);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
@@ -38,7 +37,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 
         await _userManager.AddClaimAsync(user, new Claim(EmailSuccessMessage.EmailConfirmCodeString, code));
             
-        await _emailService.SendEmailAsync(request.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
+        await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
         return new BaseResponse { IsSuccessfully = true };
     }

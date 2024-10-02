@@ -7,15 +7,15 @@ using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
-namespace YouTube.Application.Features.Email.CodeCheck;
+namespace YouTube.Application.Features.Email.CodeCheckForConfirmEmail;
 
-public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
+public class CodeCheckForConfirmEmailHandler : IRequestHandler<CodeCheckForConfirmEmailCommand, BaseResponse>
 {
     private readonly IEmailService _emailService;
     private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly IUserRepository _userRepository;
 
-    public CodeCheckHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
+    public CodeCheckForConfirmEmailHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
         IUserRepository userRepository)
     {
         _emailService = emailService;
@@ -23,7 +23,7 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
         _userRepository = userRepository;
     }
 
-    public async Task<BaseResponse> Handle(CodeCheckCommand request, CancellationToken cancellationToken)
+    public async Task<BaseResponse> Handle(CodeCheckForConfirmEmailCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Code) || request.Id == Guid.Empty)
             throw new ValidationException();
@@ -54,6 +54,6 @@ public class CodeCheckHandler : IRequestHandler<CodeCheckCommand, BaseResponse>
             EmailSuccessMessage.EmailThankYouMessage,
             EmailSuccessMessage.EmailConfirmCodeSuccess);
 
-        return new BaseResponse { IsSuccessfully = true };
+        return new BaseResponse { IsSuccessfully = true, Message = EmailSuccessMessage.EmailConfirmCodeSuccess};
     }
 }

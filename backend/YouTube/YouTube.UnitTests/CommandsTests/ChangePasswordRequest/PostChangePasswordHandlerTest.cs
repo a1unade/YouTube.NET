@@ -12,7 +12,7 @@ public class PostChangePasswordHandlerTest : TestCommandBase
         var request = new Request
         {
             Password = "fwafaf",
-            Email = "bulatfri18@gmail.com"
+            Id = User.Id
         };
 
         var command = new ChangePasswordCommand(request);

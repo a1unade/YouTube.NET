@@ -12,5 +12,5 @@ public class EmailRequest
         Email = request.Email;
     }
     
-    public string Email { get; } = default!;
+    public string Email { get; set; } = default!;
 }

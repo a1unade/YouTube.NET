@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Requests.User;
-using YouTube.Application.Features.User.ForgotPassword;
+using YouTube.Application.Features.Email.ForgotPasswordSendEmail;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
@@ -27,7 +27,7 @@ public class UserController : ControllerBase
     [HttpPost("ForgotPassword")]
     public async Task<IActionResult> ForgotPassword(EmailRequest request, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(new ForgotPasswordCommand(request), cancellationToken);
+        var result = await _mediator.Send(new ForgotPasswordSendEmailCommand(request), cancellationToken);
 
         if (result.IsSuccessfully)
             return Ok(result);
