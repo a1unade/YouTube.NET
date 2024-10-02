@@ -3,7 +3,7 @@ using YouTube.Application.Features.Email.CodeCheckForConfirmEmail;
 using Request = YouTube.Application.Common.Requests.Email.CodeCheckRequest;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckRequest;
-
+[Collection("Sequential Tests")]
 public class PostCodeCheckHandlerTest : TestCommandBase
 {
     [Fact]

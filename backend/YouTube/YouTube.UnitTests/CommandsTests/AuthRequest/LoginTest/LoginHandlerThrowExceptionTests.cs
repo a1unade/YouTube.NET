@@ -7,7 +7,7 @@ using YouTube.Application.Features.Auth.Login;
 using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest.LoginTest;
-
+[Collection("Sequential Tests")]
 public class LoginHandlerThrowExceptionTests : TestCommandBase
 {
     [Fact]

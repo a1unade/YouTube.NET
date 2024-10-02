@@ -8,7 +8,7 @@ using YouTube.Application.Features.Email.CodeCheckForChangePassword;
 using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckForChangePassword;
-
+[Collection("Sequential Tests")]
 public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
 {
     [Fact]

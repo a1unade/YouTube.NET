@@ -3,7 +3,7 @@ using YouTube.Application.Features.User.ChangePassword;
 using Request = YouTube.Application.Common.Requests.User.ChangePasswordRequest;
 namespace YouTube.UnitTests.CommandsTests.ChangePasswordRequest;
 
-
+[Collection("Sequential Tests")]
 public class PostChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]

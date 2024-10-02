@@ -7,7 +7,7 @@ using YouTube.Application.Features.Email.CodeCheckForConfirmEmail;
 using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckRequest;
-
+[Collection("Sequential Tests")]
 public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
 {
     [Fact]
