@@ -31,7 +31,7 @@ public class ConfirmEmailThrowExceptionTests : TestCommandBase
     {
         var request = new EmailConfirmRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Email = ""
         };
 
@@ -49,7 +49,7 @@ public class ConfirmEmailThrowExceptionTests : TestCommandBase
     {
         var request = new EmailConfirmRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Email = "NeNastoyasha9Pochta.com"
         };
 

@@ -16,7 +16,7 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
     {
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Code = ""
         };
 
@@ -52,7 +52,7 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
         UserManager.Setup(x => x.GetClaimsAsync(It.IsAny<User>())).ReturnsAsync(() => new List<Claim>());
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Code = "123456"
         };
 
@@ -73,7 +73,7 @@ public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
     {
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Code = "999999"
         };
 

@@ -58,7 +58,7 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
         var request = new Request
         {
             Password = "fwfawfawf",
-            Email = "bulatfri18@gmail.com"
+            Email = User.Email!
         };
 
         var command = new ChangePasswordCommand(request);

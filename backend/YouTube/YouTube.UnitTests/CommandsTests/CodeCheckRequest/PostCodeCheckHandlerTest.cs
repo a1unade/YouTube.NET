@@ -11,7 +11,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
     {
         var request = new Request
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
+            Id = User.Id,
             Code = "123456"
         };
 
