@@ -11,8 +11,8 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     {
         var request = new EmailConfirmRequest
         {
-            Id = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"),
-            Email = "bulatfri18@gmail.com"
+            Id = User.Id,
+            Email = User.Email!
         };
 
         var command = new ConfirmEmailCommand(request);

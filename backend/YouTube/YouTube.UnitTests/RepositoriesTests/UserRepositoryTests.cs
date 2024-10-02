@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Moq;
 using Xunit;
 using YouTube.Persistence.Repositories;
 
@@ -31,6 +33,16 @@ public class UserRepositoryTests : TestCommandBase
     {
         var user = await _userRepository.FindById(Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"), default);
         Assert.NotNull(user);
+    }
+    
+    [Fact]
+    public async Task UserRepository_ReturnUserFromCache_GetUserById()
+    {
+        Cache.Setup(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(JsonSerializer.SerializeToUtf8Bytes(User));
+        var user = await _userRepository.FindById(Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"), default);
+        Assert.NotNull(user);
+        Cache.Verify(x => x.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
     
     [Fact]

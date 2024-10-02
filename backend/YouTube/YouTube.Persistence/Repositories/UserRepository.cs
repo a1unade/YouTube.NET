@@ -24,10 +24,7 @@ public class UserRepository : IUserRepository
         var userString = await _cache.GetAsync(id.ToString(), cancellationToken);
 
         if (userString is not null)
-        {
-            Console.WriteLine("Из кеша");
             return JsonSerializer.Deserialize<User>(userString);
-        }
         
         var user = await _context.Users.Include(x => x.UserInfo).FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
@@ -39,8 +36,7 @@ public class UserRepository : IUserRepository
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
             }, cancellationToken);
         }
-        Console.WriteLine("Из Бд");
-
+        
         return user;
     }
 

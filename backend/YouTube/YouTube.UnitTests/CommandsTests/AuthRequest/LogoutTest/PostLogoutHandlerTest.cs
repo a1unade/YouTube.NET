@@ -11,7 +11,7 @@ public class PostLogoutHandlerTest : TestCommandBase
     {
         var request = new LogoutRequest
         {
-            UserId = Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc")
+            UserId = User.Id
         };
 
         var command = new LogoutCommand(request);

@@ -18,7 +18,7 @@ namespace YouTube.UnitTests;
 public class TestCommandBase : IDisposable
 {
     protected readonly ApplicationDbContext Context;
-    public User User { get; }
+    protected User User { get; }
     protected Mock<IEmailService> EmailService { get; }
     protected Mock<IJwtGenerator> JwtGenerator { get; }
     protected Mock<IUserRepository> UserRepository { get; }
@@ -31,7 +31,7 @@ public class TestCommandBase : IDisposable
         Context = ContextFactory.Create();
 
         User = Context.Users.FirstOrDefault(x => x.Id == Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"))!;
-
+        
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();
         EmailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))

@@ -13,7 +13,7 @@ public class PostLoginHandlerTest : TestCommandBase
     {
         var request = new LoginRequest
         {
-            Email = "bulatfri18@gmail.com",
+            Email = User.Email!,
             Password = "Ilya1337"
         };
     

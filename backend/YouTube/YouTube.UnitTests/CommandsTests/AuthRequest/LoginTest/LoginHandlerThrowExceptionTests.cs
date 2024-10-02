@@ -58,7 +58,7 @@ public class LoginHandlerThrowExceptionTests : TestCommandBase
 
         var request = new LoginRequest
         {
-            Email = "bulatfri18@gmail.com",
+            Email = User.Email!,
             Password = "Password" 
         };
 
