@@ -4,7 +4,7 @@ using Xunit;
 using YouTube.Persistence.Repositories;
 
 namespace YouTube.UnitTests.RepositoriesTests;
-
+[Collection("Sequential Tests")]
 public class UserRepositoryTests : TestCommandBase
 {
     private readonly UserRepository _userRepository;

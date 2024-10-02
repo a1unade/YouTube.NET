@@ -5,7 +5,7 @@ using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Features.User.ConfirmEmail;
 
 namespace YouTube.UnitTests.CommandsTests.ConfirmEmailRequest;
-
+[Collection("Sequential Tests")]
 public class ConfirmEmailThrowExceptionTests : TestCommandBase
 {
     [Fact]

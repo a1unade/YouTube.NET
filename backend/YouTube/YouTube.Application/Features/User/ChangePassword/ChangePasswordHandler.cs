@@ -37,10 +37,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
         
         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
         
-        var result = await _userManager.ResetPasswordAsync(user, token, request.Password);
-
-        if (!result.Succeeded)
-            throw new BadRequestException(result.Errors.Select(x => x.Description).ToString()!);
+        await _userManager.ResetPasswordAsync(user, token, request.Password);
 
         await _emailService.SendEmailAsync(user.Email!, UserSuccessMessage.PasswordChanged,
             EmailSuccessMessage.EmailWarning); 

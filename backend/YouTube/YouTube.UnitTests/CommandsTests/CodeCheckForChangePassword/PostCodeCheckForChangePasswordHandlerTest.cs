@@ -3,7 +3,7 @@ using YouTube.Application.Common.Requests.Email;
 using YouTube.Application.Features.Email.CodeCheckForChangePassword;
 
 namespace YouTube.UnitTests.CommandsTests.CodeCheckForChangePassword;
-
+[Collection("Sequential Tests")]
 public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]

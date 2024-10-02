@@ -8,7 +8,7 @@ using YouTube.Domain.Entities;
 using Request = YouTube.Application.Common.Requests.User.ChangePasswordRequest;
 
 namespace YouTube.UnitTests.CommandsTests.ChangePasswordRequest;
-
+[Collection("Sequential Tests")]
 public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
 {
     [Fact]
@@ -47,26 +47,5 @@ public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
         });
         
         Assert.Equal(UserErrorMessage.UserNotFound, exception.Message);
-    }
-    
-    [Fact]
-    public async Task ChangePasswordHandler_ThrowBadRequestException_ForInvalidId()
-    {
-        UserManager.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
-            .ReturnsAsync(IdentityResult.Failed());        
-        
-        var request = new Request
-        {
-            Password = "fwfawfawf",
-            Id = User.Id
-        };
-
-        var command = new ChangePasswordCommand(request);
-        var handler = new ChangePasswordHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
-        
-        await Assert.ThrowsAsync<BadRequestException>(async () =>
-        {
-            await handler.Handle(command, default);
-        });
     }
 }

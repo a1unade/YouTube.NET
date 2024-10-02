@@ -3,7 +3,7 @@ using YouTube.Application.Common.Requests.User;
 using YouTube.Application.Features.Email.ForgotPasswordSendEmail;
 
 namespace YouTube.UnitTests.CommandsTests.ForgotPasswordSendEmailRequest;
-
+[Collection("Sequential Tests")]
 public class PostForgotPasswordHandlerTest : TestCommandBase
 {
     [Fact]

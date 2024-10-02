@@ -3,7 +3,7 @@ using YouTube.Application.Common.Requests.Auth;
 using YouTube.Application.Features.Auth.Login;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest.LoginTest;
-
+[Collection("Sequential Tests")]
 public class PostLoginHandlerTest : TestCommandBase
 {
     [Fact]
