@@ -5,7 +5,7 @@
   "scripts": {
     "copy": "node copy-files.ts",
     "cleanup": "node cleanup.ts",
-    "test": "npm run copy && jest --collectCoverageFrom=\"./temp-src/**/*.{ts,tsx}\" --coverage && npm run cleanup",
+    "test": "npm run copy && jest --coverage && npm run cleanup",
     "coverage": "istanbul cover --report html --report text ./node_modules/.bin/jest -- --coverage"
   },
   "keywords": [],

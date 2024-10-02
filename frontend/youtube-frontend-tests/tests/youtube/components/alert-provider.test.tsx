@@ -1,3 +1,4 @@
+// @ts-ignore
 import React from 'react';
 // @ts-ignore
 import { AlertProvider } from '../../../temp-src/contexts/alert-provider';

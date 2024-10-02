@@ -16,18 +16,21 @@ describe('Alert Component', () => {
 
     it('алерт рендерится правильно', () => {
         render(<Alert message="Test Alert Message" onClose={mockOnClose} />);
+        // @ts-ignore
         expect(screen.getByText("Test Alert Message")).toBeInTheDocument();
     });
 
     it('алерт появляется с небольшой задержкой', async () => {
         render(<Alert message="Test Alert Message" onClose={mockOnClose} />);
 
+        // @ts-ignore
         expect(screen.getByText("Test Alert Message")).toHaveClass('alert-hide');
 
         act(() => {
             jest.advanceTimersByTime(10);
         });
 
+        // @ts-ignore
         expect(screen.getByText("Test Alert Message")).toHaveClass('alert-show');
     });
 
@@ -39,6 +42,7 @@ describe('Alert Component', () => {
         });
 
         await waitFor(() => {
+            // @ts-ignore
             expect(screen.getByText("Test Alert Message")).toHaveClass('alert-hide');
         });
     });
