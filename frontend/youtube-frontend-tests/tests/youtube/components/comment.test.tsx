@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 // @ts-ignore
@@ -29,49 +28,62 @@ describe("Comment Component", () => {
         );
     });
 
-    test("комментарий рендерится правильно", () => {
+    it("комментарий рендерится правильно", () => {
+        // @ts-ignore
         expect(screen.getByText("John Doe")).toBeInTheDocument();
+        // @ts-ignore
         expect(screen.getByText("This is a comment")).toBeInTheDocument();
+        // @ts-ignore
         expect(screen.getByAltText("")).toHaveAttribute("src", mockComment.authorProfileImageUrl);
     });
 
-    test("при нажатии на кнопку лайк обновляется состояние", () => {
+    it("при нажатии на кнопку лайк обновляется состояние", () => {
         const likeButton = screen.getByText("Like");
 
+        // @ts-ignore
         expect(likeButton).toBeInTheDocument();
 
         fireEvent.click(likeButton);
+        // @ts-ignore
         expect(screen.getByText("Like Filled")).toBeInTheDocument();
 
         fireEvent.click(screen.getByText("Like Filled"));
+        // @ts-ignore
         expect(screen.getByText("Like")).toBeInTheDocument();
     });
 
-    test("при нажатии на кнопку дизлайк обновляется состояние", () => {
+    it("при нажатии на кнопку дизлайк обновляется состояние", () => {
         const dislikeButton = screen.getByText("Dislike");
 
+        // @ts-ignore
         expect(dislikeButton).toBeInTheDocument();
 
         fireEvent.click(dislikeButton);
+        // @ts-ignore
         expect(screen.getByText("Dislike Filled")).toBeInTheDocument();
 
         fireEvent.click(screen.getByText("Dislike Filled"));
+        // @ts-ignore
         expect(screen.getByText("Dislike")).toBeInTheDocument();
     });
 
-    test("при нажатии на кнопку лайка сбрасывается дизлайк", () => {
+    it("при нажатии на кнопку лайка сбрасывается дизлайк", () => {
         fireEvent.click(screen.getByText("Dislike"));
         fireEvent.click(screen.getByText("Like"));
 
+        // @ts-ignore
         expect(screen.getByText("Like Filled")).toBeInTheDocument();
+        // @ts-ignore
         expect(screen.getByText("Dislike")).toBeInTheDocument();
     });
 
-    test("при нажатии на кнопку дизлайка сбрасывается лайк", () => {
+    it("при нажатии на кнопку дизлайка сбрасывается лайк", () => {
         fireEvent.click(screen.getByText("Like"));
         fireEvent.click(screen.getByText("Dislike"));
 
+        // @ts-ignore
         expect(screen.getByText("Dislike Filled")).toBeInTheDocument();
+        // @ts-ignore
         expect(screen.getByText("Like")).toBeInTheDocument();
     });
 });

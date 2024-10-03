@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 // @ts-ignore
 import CommentSection from "../../../temp-src/pages/player/components/comment-section.tsx";
@@ -19,11 +18,13 @@ describe("CommentSection Component", () => {
     });
 
     it("заголовок правильно рендерится", () => {
+        // @ts-ignore
         expect(screen.getByText(/Комментарии: 675/i)).toBeInTheDocument();
     });
 
     it("рендерится форма для ввода комментария", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
+        // @ts-ignore
         expect(textarea).toBeInTheDocument();
     });
 
@@ -31,7 +32,9 @@ describe("CommentSection Component", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
         fireEvent.focus(textarea);
 
+        // @ts-ignore
         expect(screen.getByText("Отмена")).toBeInTheDocument();
+        // @ts-ignore
         expect(screen.getByText("Оставить комментарий")).toBeInTheDocument();
     });
 
@@ -40,7 +43,9 @@ describe("CommentSection Component", () => {
         fireEvent.focus(textarea);
         fireEvent.blur(textarea);
 
+        // @ts-ignore
         expect(screen.queryByText("Отмена")).not.toBeInTheDocument();
+        // @ts-ignore
         expect(screen.queryByText("Оставить комментарий")).not.toBeInTheDocument();
     });
 
@@ -51,7 +56,9 @@ describe("CommentSection Component", () => {
         const cancelButton = screen.getByText("Отмена");
         fireEvent.click(cancelButton);
 
+        // @ts-ignore
         expect(screen.queryByText("Отмена")).not.toBeInTheDocument();
+        // @ts-ignore
         expect(screen.queryByText("Оставить комментарий")).not.toBeInTheDocument();
     });
 
@@ -95,7 +102,9 @@ describe("CommentSection Component", () => {
         ];
 
         comments.forEach(comment => {
+            // @ts-ignore
             expect(screen.getByText(comment.authorDisplayName)).toBeInTheDocument();
+            // @ts-ignore
             expect(screen.getByText(comment.textDisplay)).toBeInTheDocument();
         });
     });
