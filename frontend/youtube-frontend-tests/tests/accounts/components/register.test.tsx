@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import Register from '../../../acc-src/pages/register/index.tsx';
 import { useState as useStateMock } from 'react';
 
-// Мокаем все дочерние компоненты
 jest.mock('../../../acc-src/pages/register/components/Name.tsx', () => () => <div>Name Component</div>);
 jest.mock('../../../acc-src/pages/register/components/Common.tsx', () => () => <div>Common Component</div>);
 jest.mock('../../../acc-src/pages/register/components/Email.tsx', () => () => <div>Email Component</div>);
