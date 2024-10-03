@@ -83,26 +83,6 @@ describe('VideoActions component', () => {
         expect(screen.getByText('Подписаться')).toBeInTheDocument();
     });
 
-    // it('opens and closes Actions Modal', () => {
-    //     render(
-    //         <VideoActions
-    //             setShareActive={setShareActive}
-    //             setSaveActive={setSaveActive}
-    //             setReportVideoActive={setReportVideoActive}
-    //         />
-    //     );
-    //
-    //     const moreActionsButton = screen.getByRole('button', { name: /more/i });
-    //
-    //     fireEvent.click(moreActionsButton);
-    //     // @ts-ignore
-    //     expect(screen.getByText('Actions Modal')).toBeInTheDocument();
-    //
-    //     fireEvent.click(moreActionsButton);
-    //     // @ts-ignore
-    //     expect(screen.queryByText('Actions Modal')).not.toBeInTheDocument();
-    // });
-
     it('opens Premium Modal on download without premium', () => {
         render(
             <VideoActions

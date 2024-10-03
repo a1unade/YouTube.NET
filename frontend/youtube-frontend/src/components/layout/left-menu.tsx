@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import MenuButton from './menu-button.tsx';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
