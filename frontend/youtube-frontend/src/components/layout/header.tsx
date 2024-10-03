@@ -26,7 +26,7 @@ const Header = (props: { onClick: MouseEventHandler<HTMLButtonElement> | undefin
               </svg>
             </button>
           </div>
-          <div onClick={() => navigate('/')}>
+          <div id="toggle-left-menu-button" onClick={() => navigate('/')}>
             <Logo />
           </div>
         </div>
@@ -44,14 +44,14 @@ const Header = (props: { onClick: MouseEventHandler<HTMLButtonElement> | undefin
         </div>
         <div className="user-buttons" style={{ width: 110 }}>
           <div className="button-container">
-            <button>
+            <button id="add-video-button">
               <AddVideo />
             </button>
           </div>
           <div style={{ marginRight: 20 }}>
             <div className="dropdown">
               <div className="button-container menu" style={{ marginLeft: 0 }}>
-                <button ref={buttonRef} onClick={() => setActive(!active)}>
+                <button id="user-menu-button" ref={buttonRef} onClick={() => setActive(!active)}>
                   <img
                     className="circular-avatar"
                     src="https://avatars.githubusercontent.com/u/113981832?v=4"

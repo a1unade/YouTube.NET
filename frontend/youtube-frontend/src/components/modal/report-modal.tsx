@@ -43,6 +43,7 @@ const ReportModal = (props: {
                 <input
                   type="radio"
                   name="report-reason"
+                  id="report-reason-sex"
                   checked={selectedReason === 'Содержавние сексуального характера'}
                   readOnly
                 />
@@ -55,6 +56,7 @@ const ReportModal = (props: {
                 <input
                   type="radio"
                   name="report-reason"
+                  id="report-reason-cruel-content"
                   checked={selectedReason === 'Жестокое или отталкивающее содержание'}
                   readOnly
                 />
@@ -67,6 +69,7 @@ const ReportModal = (props: {
                 <input
                   type="radio"
                   name="report-reason"
+                  id="report-reason-discrimination"
                   checked={selectedReason === 'Дискриминационные высказывания и оскорбления'}
                   readOnly
                 />
@@ -79,6 +82,7 @@ const ReportModal = (props: {
                 <input
                   type="radio"
                   name="report-reason"
+                  id="report-reason-harmful-actions"
                   checked={selectedReason === 'Вредные или опасные действия'}
                   readOnly
                 />
@@ -88,6 +92,7 @@ const ReportModal = (props: {
                 <input
                   type="radio"
                   name="report-reason"
+                  id="report-reason-spam"
                   checked={selectedReason === 'Спам'}
                   readOnly
                 />

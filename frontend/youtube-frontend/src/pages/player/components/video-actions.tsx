@@ -95,13 +95,9 @@ const VideoActions = (props: {
               borderRight: '1px solid rgba(0, 0, 0, 0.1)',
               paddingLeft: 10,
             }}
-            data-testid="like-button"
+            id="like-button"
           >
-            {liked ? (
-              <ButtonLikeIconFilled data-testid="like-icon-filled" />
-            ) : (
-              <ButtonLikeIcon data-testid="like-icon" />
-            )}
+            {liked ? <ButtonLikeIconFilled /> : <ButtonLikeIcon />}
             <span>{formatViews(13646124, 'likes')}</span>
           </button>
 
@@ -111,13 +107,9 @@ const VideoActions = (props: {
               setDisliked(!disliked);
             }}
             style={{ paddingRight: 10 }}
-            data-testid="dislike-button"
+            id="dislike-button"
           >
-            {disliked ? (
-              <ButtonDislikeIconFilled data-testid="dislike-icon-filled" />
-            ) : (
-              <ButtonDislikeIcon data-testid="dislike-icon" />
-            )}
+            {disliked ? <ButtonDislikeIconFilled /> : <ButtonDislikeIcon />}
           </button>
         </div>
         <div className="like-dislike-actions">
