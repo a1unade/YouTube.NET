@@ -4,14 +4,14 @@ namespace YouTube.UnitTests.Builders;
 
 public class UserBuilder
 {
-    private static readonly User _user = new User();    
+    private static readonly User User = new User();    
     
     private readonly UserInfo _userInfo = new UserInfo
     {
         Name = "Ilya",
         Surname = "Vakatov",
-        UserId = _user.Id,
-        User = _user
+        UserId = User.Id,
+        User = User
     };
     
     private UserBuilder()
@@ -22,7 +22,7 @@ public class UserBuilder
     /// <summary>
     /// Создать builder
     /// </summary>
-    /// <returns></returns>
+    /// <returns>UserBuilder</returns>
     public static UserBuilder CreateBuilder()
         => new();
     
@@ -30,9 +30,11 @@ public class UserBuilder
     /// Установить имя
     /// </summary>
     /// <param name="username">Имя</param>
+    /// <returns>UserBuilder</returns>
+
     public UserBuilder SetUsername(string username)
     {
-        _user.UserName = username;
+        User.UserName = username;
         return this;
     }
     
@@ -40,9 +42,11 @@ public class UserBuilder
     /// Установить email
     /// </summary>
     /// <param name="email">Имя</param>
+    /// <returns>UserBuilder</returns>
+
     public UserBuilder SetEmail(string email)
     {
-        _user.Email = email;
+        User.Email = email;
         return this;
     }
     
@@ -50,28 +54,43 @@ public class UserBuilder
     /// Установить дату рождения
     /// </summary>
     /// <param name="birthday">Дата рождения</param>
+    /// <returns>UserBuilder</returns>
+
     public UserBuilder SetBirthday(DateOnly birthday)
     {
         _userInfo.BirthDate = birthday;
         return this;
     }
 
+    /// <summary>
+    /// Установить Id
+    /// </summary>
+    /// <param name="id">Id</param>
+    /// <returns>UserBuilder</returns>
     public UserBuilder SetId(string id)
     {
-        _user.Id = Guid.Parse(id);
+        User.Id = Guid.Parse(id);
         return this;
     }
 
+    /// <summary>
+    /// Задать доп информацию
+    /// </summary>
+    /// <returns>UserBuilder</returns>
     public UserBuilder SetUserInfo()
     {
         _userInfo.Id = Guid.NewGuid();
         _userInfo.BirthDate = new DateOnly(2004, 01, 09);
         _userInfo.Country = "Russia";
         _userInfo.Gender = "Male";
-        _user.PasswordHash = "Ilya1337";
-        _user.UserInfo = _userInfo;
+        User.PasswordHash = "Ilya1337";
+        User.UserInfo = _userInfo;
         return this;
     }
-
-    public User Build() => _user;
+    
+    /// <summary>
+    /// Билд юзера
+    /// </summary>
+    /// <returns>Юзер</returns>
+    public User Build() => User;
 }

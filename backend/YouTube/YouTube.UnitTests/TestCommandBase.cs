@@ -17,6 +17,8 @@ namespace YouTube.UnitTests;
 
 public class TestCommandBase : IDisposable
 {
+    private const string UserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
+
     protected readonly ApplicationDbContext Context;
     protected User User { get; }
     protected Mock<IEmailService> EmailService { get; }
@@ -28,9 +30,15 @@ public class TestCommandBase : IDisposable
 
     protected TestCommandBase()
     {
-        Context = ContextFactory.Create();
-
-        User = Context.Users.FirstOrDefault(x => x.Id == Guid.Parse("53afbb05-bb2d-45e0-8bef-489ef1cd6fdc"))!;
+        User = UserBuilder.CreateBuilder()
+            .SetId(UserId)
+            .SetUsername("Ilya")
+            .SetBirthday(new DateOnly(2004, 01, 09))
+            .SetEmail("bulatfri18@gmail.com")
+            .SetUserInfo()
+            .Build();
+        
+        Context = ContextFactory.Create(User);
         
         // Мокирование EmailService
         EmailService = new Mock<IEmailService>();

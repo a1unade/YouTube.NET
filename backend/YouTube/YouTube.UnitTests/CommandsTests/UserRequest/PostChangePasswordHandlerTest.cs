@@ -1,16 +1,32 @@
-using Microsoft.AspNetCore.Identity;
-using Moq;
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Features.User.ChangePassword;
-using YouTube.Domain.Entities;
-using Request = YouTube.Application.Common.Requests.User.ChangePasswordRequest;
 
-namespace YouTube.UnitTests.CommandsTests.ChangePasswordRequest;
-[Collection("Sequential Tests")]
-public class ChangePasswordHandlerThrowExceptionTest : TestCommandBase
+namespace YouTube.UnitTests.CommandsTests.UserRequest;
+using Request = Application.Common.Requests.User.ChangePasswordRequest;
+
+[Collection("HandlerTest")]
+public class PostChangePasswordHandlerTest : TestCommandBase
 {
+    [Fact]
+    public async Task ChangePasswordHandler_Success()
+    {
+        var request = new Request
+        {
+            Password = "fwafaf",
+            Id = User.Id
+        };
+
+        var command = new ChangePasswordCommand(request);
+        var handler = new ChangePasswordHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
+
+        var response = await handler.Handle(command, default);
+        
+        Assert.NotNull(response);
+        Assert.True(response.IsSuccessfully);
+    }
+    
     [Fact]
     public async Task ChangePasswordHandler_ThrowValidationException_ForInvalidRequest()
     {

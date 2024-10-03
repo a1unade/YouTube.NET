@@ -6,10 +6,30 @@ using YouTube.Application.Common.Requests.Auth;
 using YouTube.Application.Features.Auth.Login;
 using YouTube.Domain.Entities;
 
-namespace YouTube.UnitTests.CommandsTests.AuthRequest.LoginTest;
-[Collection("Sequential Tests")]
-public class LoginHandlerThrowExceptionTests : TestCommandBase
+namespace YouTube.UnitTests.CommandsTests.AuthRequest;
+[Collection("HandlerTest")]
+public class PostLoginHandlerTest : TestCommandBase
 {
+    [Fact]
+    public async Task LoginHandler_Success()
+    {
+        var request = new LoginRequest
+        {
+            Email = User.Email!,
+            Password = "Ilya1337"
+        };
+    
+        var command = new LoginCommand(request);
+        var handler = new LoginHandler(UserManager.Object, UserRepository.Object, JwtGenerator.Object,
+            SignInManager.Object);
+    
+        var response = await handler.Handle(command, default);
+    
+        Assert.NotNull(response);
+        Assert.NotNull(response.Token);
+        Assert.True(response.IsSuccessfully);
+    }
+    
     [Fact]
     public async Task LoginHandler_ThrowValidationException_ForInvalidRequest()
     {
