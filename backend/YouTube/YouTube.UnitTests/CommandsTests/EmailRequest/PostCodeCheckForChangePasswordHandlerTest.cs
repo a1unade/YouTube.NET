@@ -7,10 +7,29 @@ using YouTube.Application.Common.Requests.Email;
 using YouTube.Application.Features.Email.CodeCheckForChangePassword;
 using YouTube.Domain.Entities;
 
-namespace YouTube.UnitTests.CommandsTests.CodeCheckForChangePassword;
-[Collection("Sequential Tests")]
-public class CodeCheckHandlerThrowExceptionTests : TestCommandBase
+namespace YouTube.UnitTests.CommandsTests.EmailRequest;
+[Collection("HandlerTest")]
+public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
 {
+    [Fact]
+    public async Task CodeCheckForChangePasswordHandler_Success()
+    {
+        var request = new CodeCheckForChangePasswordRequest
+        {
+            Code = "123456",
+            Email = User.Email!
+        };
+
+        var command = new CodeCheckForChangePasswordCommand(request);
+        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+
+        var response = await handler.Handle(command, default);
+        
+        Assert.NotNull(response);
+        Assert.True(response.IsSuccessfully);
+        Assert.Equal(User.Id, response.Id);
+    }
+    
     [Fact]
     public async Task CodeCheckForChangePasswordHandler_ThrowValidationException_ForInvalidRequest()
     {

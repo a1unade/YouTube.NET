@@ -1,17 +1,35 @@
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Common.Requests.User;
 using YouTube.Application.Features.Email.ForgotPasswordSendEmail;
+using Request = YouTube.Application.Common.Requests.User.EmailRequest;
 
-namespace YouTube.UnitTests.CommandsTests.ForgotPasswordSendEmailRequest;
-[Collection("Sequential Tests")]
-public class ForgotPasswordHandlerThrowExceptionTests : TestCommandBase
+namespace YouTube.UnitTests.CommandsTests.EmailRequest;
+[Collection("HandlerTest")]
+public class PostForgotPasswordHandlerTest : TestCommandBase
 {
+    [Fact]
+    public async Task ForgotPasswordHandler_Success()
+    {
+        var request = new Request
+        {
+            Email = User.Email!
+        };
+
+        var command = new ForgotPasswordSendEmailCommand(request);
+        var handler =
+            new ForgotPasswordSendEmailHandler(EmailService.Object, UserRepository.Object, UserManager.Object);
+
+        var response = await handler.Handle(command, default);
+        
+        Assert.NotNull(response);
+        Assert.True(response.IsSuccessfully);
+    }
+    
     [Fact]
     public async Task ForgotPasswordHandler_ThrowValidationException_ForInvalidRequest()
     {
-        var request = new EmailRequest
+        var request = new Request
         {
             Email = ""
         };
@@ -29,7 +47,7 @@ public class ForgotPasswordHandlerThrowExceptionTests : TestCommandBase
     [Fact]
     public async Task ForgotPasswordHandler_ThrowNotFoundException_ForInvalidEmail()
     {
-        var request = new EmailRequest
+        var request = new Request
         {
             Email = "fawfnjwjnfjanwf"
         };

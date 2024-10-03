@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
 
 namespace YouTube.UnitTests.Builders;
 
 public abstract class ContextFactory
 {
-
-    private const string UserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
-    
-    public static ApplicationDbContext Create()
+    public static ApplicationDbContext Create(User user)
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -17,18 +15,11 @@ public abstract class ContextFactory
         var context = new ApplicationDbContext(options);
 
         context.Database.EnsureCreated();
-
-        var user = UserBuilder.CreateBuilder()
-            .SetId(UserId)
-            .SetUsername("Ilya")
-            .SetBirthday(new DateOnly(2004, 01, 09))
-            .SetEmail("bulatfri18@gmail.com")
-            .SetUserInfo()
-            .Build();
-
+        
         context.Users.AddRange(user);
 
         context.SaveChangesAsync();
+        
         return context;
     }
 
