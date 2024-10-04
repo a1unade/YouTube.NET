@@ -25,10 +25,5 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
         builder.Property(x => x.Country)
             .IsRequired()
             .HasMaxLength(50);
-        
-        builder.HasOne(x => x.User)
-            .WithOne(x => x.UserInfo)
-            .HasForeignKey<UserInfo>(x => x.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

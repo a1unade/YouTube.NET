@@ -1,4 +1,6 @@
 
+using System.Linq.Expressions;
+
 namespace YouTube.Application.Interfaces.Repositories;
 
 /// <summary>
@@ -18,17 +20,15 @@ public interface IGenericRepository<T> where T : class
     /// <summary>
     /// Получить все записи о сущности
     /// </summary>
-    /// <param name="cancellationToken">CancellationToken</param>
     /// <returns></returns>
-    Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken);
+    IQueryable<T> GetAll();
 
     /// <summary>
     /// Получить сущность
     /// </summary>
     /// <param name="predicate">Условие получения</param>
-    /// <param name="cancellationToken">CancellationToken</param>
     /// <returns></returns>
-    IEnumerable<T> Get(Func<T, bool> predicate, CancellationToken cancellationToken);
+    IQueryable<T> Get(Expression<Func<T, bool>> predicate);
 
     /// <summary>
     /// Получить сущность по Id

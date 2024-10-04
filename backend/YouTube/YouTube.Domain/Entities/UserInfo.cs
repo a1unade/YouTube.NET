@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
@@ -34,10 +33,4 @@ public class UserInfo : BaseEntity
     /// Id Пользователя
     /// </summary>
     public Guid UserId { get; set; }
-    
-    /// <summary>
-    /// Навигационное свойство для связи с User
-    /// </summary>
-    [JsonIgnore]
-    public User User { get; set; } = default!;
 }
