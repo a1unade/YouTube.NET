@@ -60,8 +60,7 @@ public class GenericRepositoryTests : TestCommandBase
             EmailConfirmed = false,
             PasswordHash = "GAt123fmwf"
         };
-        await Context.Users.AddAsync(user);
-        await Context.SaveChangesAsync();
+        await GenericRepository.Object.Add(user,default);
         
         await GenericRepository.Object.Remove(user, default);
 
@@ -78,8 +77,8 @@ public class GenericRepositoryTests : TestCommandBase
             EmailConfirmed = false,
             PasswordHash = "GAt123fmwf"
         };
-        await Context.Users.AddAsync(user);
-        await Context.SaveChangesAsync();
+        
+        await GenericRepository.Object.Add(user,default);
         
         await GenericRepository.Object.RemoveById(user.Id, default);
 
