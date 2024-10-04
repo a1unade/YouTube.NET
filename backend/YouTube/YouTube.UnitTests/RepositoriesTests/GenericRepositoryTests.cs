@@ -12,7 +12,7 @@ public class GenericRepositoryTests : TestCommandBase
     {
         var users = await GenericRepository.Object.GetAll().ToListAsync();
 
-        Assert.Equal(users.Count, 1);
+        Assert.Single(users);
     }
 
     [Fact]
