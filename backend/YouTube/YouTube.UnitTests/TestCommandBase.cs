@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
+using MockQueryable;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
@@ -24,6 +26,8 @@ public class TestCommandBase : IDisposable
     protected Mock<IEmailService> EmailService { get; }
     protected Mock<IJwtGenerator> JwtGenerator { get; }
     protected Mock<IUserRepository> UserRepository { get; }
+    
+    protected Mock<IGenericRepository<User>> GenericRepository { get; }
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
     protected Mock<IDistributedCache> Cache { get; }
@@ -69,6 +73,26 @@ public class TestCommandBase : IDisposable
             {
                 return Context.Users.FirstOrDefault(user => user.Email == email);
             });
+
+        GenericRepository = new Mock<IGenericRepository<User>>();
+
+        GenericRepository.Setup(x => x.Add(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        
+        GenericRepository.Setup(x => x.Remove(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        
+        GenericRepository.Setup(x => x.RemoveById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        
+        GenericRepository.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(User);
+        
+        GenericRepository.Setup(x => x.GetAll())
+            .Returns(new List<User> {User}.AsQueryable().BuildMock());  
+        
+        GenericRepository.Setup(repo => repo.Get(It.IsAny<Expression<Func<User, bool>>>()))
+            .Returns((Expression<Func<User, bool>> predicate) => Context.Users.Where(predicate.Compile()).AsQueryable());
 
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });

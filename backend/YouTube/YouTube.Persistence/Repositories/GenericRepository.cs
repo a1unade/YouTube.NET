@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
@@ -22,19 +23,19 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken)
+    public IQueryable<T> GetAll()
     {
-        return await _set.AsNoTracking().ToListAsync(cancellationToken);
+        return _set.AsNoTracking();
     }
-    //TODO Переделать на IQueryable
-    public IEnumerable<T> Get(Func<T, bool> predicate, CancellationToken cancellationToken)
+
+    public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
     {
-        return _set.AsNoTracking().Where(predicate).ToList();
+        return _set.AsNoTracking().Where(predicate);
     }
 
     public async Task<T?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return await _set.FindAsync(id, cancellationToken) ?? null;
+        return await _set.FindAsync(id, cancellationToken);
     }
 
     public async Task Remove(T item, CancellationToken cancellationToken)
@@ -46,10 +47,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task RemoveById(Guid id, CancellationToken cancellationToken)
     {
         var entity = _set.FindAsync(id, cancellationToken).Result;
+        
         if (entity != null)
-        {
             _set.Remove(entity);
-        }
         await _context.SaveChangesAsync(cancellationToken);
     }
 }

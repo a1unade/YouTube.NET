@@ -11,7 +11,6 @@ public class UserBuilder
         Name = "Ilya",
         Surname = "Vakatov",
         UserId = User.Id,
-        User = User
     };
     
     private UserBuilder()
