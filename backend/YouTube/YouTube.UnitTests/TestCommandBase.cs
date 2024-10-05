@@ -75,18 +75,18 @@ public class TestCommandBase : IDisposable
             });
 
         GenericRepository = new Mock<IGenericRepository<User>>();
-
-        GenericRepository.Setup(x => x.Add(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        
-        GenericRepository.Setup(x => x.Remove(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
         
         GenericRepository.Setup(x => x.RemoveById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         
         GenericRepository.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(User);
+        
+        GenericRepository.Setup(x => x.Add(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+        
+        GenericRepository.Setup(x => x.Remove(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
         
         GenericRepository.Setup(x => x.GetAll())
             .Returns(new List<User> {User}.AsQueryable().BuildMock());  

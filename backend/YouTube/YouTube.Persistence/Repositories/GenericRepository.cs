@@ -46,10 +46,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public async Task RemoveById(Guid id, CancellationToken cancellationToken)
     {
-        var entity = _set.FindAsync(id, cancellationToken).Result;
+        var entity = await _set.FindAsync(id, cancellationToken);
         
         if (entity != null)
             _set.Remove(entity);
+        
         await _context.SaveChangesAsync(cancellationToken);
     }
 }
