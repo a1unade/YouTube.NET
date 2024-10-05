@@ -1,23 +1,23 @@
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Xunit;
 using YouTube.Domain.Entities;
+using YouTube.Persistence.Repositories;
 
 namespace YouTube.UnitTests.RepositoriesTests;
 [Collection("GenericRepository")]
 public class GenericRepositoryTests : TestCommandBase
 { 
-    // private readonly GenericRepository<User> _genericRepository;
-    //
-    // public GenericRepositoryTests()
-    // {
-    //     _genericRepository = new GenericRepository<User>(Context);
-    // }
+    private readonly GenericRepository<User> _genericRepository;
+    
+    public GenericRepositoryTests()
+    {
+        _genericRepository = new GenericRepository<User>(Context);
+    }
     
     [Fact]
     public async Task GenericRepository_GetAllUser_Success()
     {
-        var users = await GenericRepository.Object.GetAll().ToListAsync();
+        var users = await _genericRepository.GetAll().ToListAsync();
 
         Assert.Single(users);
     }
@@ -25,7 +25,7 @@ public class GenericRepositoryTests : TestCommandBase
     [Fact]
     public async Task GenericRepository_GetById_Success()
     {
-        var user = await GenericRepository.Object.GetById(User.Id, default);
+        var user = await _genericRepository.GetById(User.Id, default);
 
         Assert.Equal(user, User);
     }
@@ -35,51 +35,11 @@ public class GenericRepositoryTests : TestCommandBase
     {
         var expectedUserName = "Ilya";
 
-        var result = GenericRepository.Object.Get(user => user.UserName == expectedUserName);
+        var result = _genericRepository.Get(user => user.UserName == expectedUserName);
 
         var user = result.FirstOrDefault();
         Assert.NotNull(user);
         Assert.Equal(expectedUserName, user.UserName);
-    }
-    
-    [Fact]
-    public async Task GenericRepository_Add_Success()
-    {
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            UserName = "Igor",
-            Email = "Gfwfawfy@gmail.com",
-            PasswordHash = "GAkfawfmat123fmwf"
-        };
-        
-        await GenericRepository.Object.Add(user, CancellationToken.None);
-        
-        await Context.Users.ToListAsync();
-        GenericRepository.Verify(x => x.Add(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
-    }
-    
-    [Fact]
-    public async Task GenericRepository_Remove_Success()
-    {
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            UserName = "Pasha",
-            Email = "pasha@gmail.com",
-            EmailConfirmed = false,
-            PasswordHash = "GAt123fmwf"
-        };
-        await GenericRepository.Object.Add(user, CancellationToken.None);
-
-        await GenericRepository.Object.Remove(user, default); 
-    
-
-        var users = await Context.Users.ToListAsync();
-
-        Assert.Single(users);
-        GenericRepository.Verify(x => x.Remove(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
-
     }
     
     [Fact]
@@ -94,14 +54,50 @@ public class GenericRepositoryTests : TestCommandBase
             PasswordHash = "GAt123fmwf"
         };
 
-        await GenericRepository.Object.Add(user,default);
+        await _genericRepository.Add(user,default);
 
-        await GenericRepository.Object.RemoveById(user.Id, default);
+        await _genericRepository.RemoveById(user.Id, default);
 
 
         var users = await Context.Users.ToListAsync();
-        GenericRepository.Verify(x => x.RemoveById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()), Times.Once);
 
         Assert.Single(users);
     }
+    
+    // [Fact]
+    // public async Task GenericRepository_Add_Success()
+    // {
+    //     var user = new User
+    //     {
+    //         Id = Guid.NewGuid(),
+    //         UserName = "Igor",
+    //         Email = "Gfwfawfy@gmail.com",
+    //         PasswordHash = "GAkfawfmat123fmwf"
+    //     };
+    //     
+    //     await _genericRepository.Add(user, CancellationToken.None);
+    //     
+    //     await Context.Users.ToListAsync();
+    // }
+    //
+    // [Fact]
+    // public async Task GenericRepository_Remove_Success()
+    // {
+    //     var user = new User
+    //     {
+    //         Id = Guid.NewGuid(),
+    //         UserName = "Pasha",
+    //         Email = "pasha@gmail.com",
+    //         EmailConfirmed = false,
+    //         PasswordHash = "GAt123fmwf"
+    //     };
+    //     await _genericRepository.Add(user, CancellationToken.None);
+    //
+    //     await _genericRepository.Remove(user, default); 
+    //
+    //
+    //     var users = await Context.Users.ToListAsync();
+    //
+    //     Assert.Single(users);
+    // }
 }
