@@ -85,9 +85,6 @@ public class TestCommandBase : IDisposable
         GenericRepository.Setup(x => x.Add(It.IsAny<User>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
         
-        GenericRepository.Setup(x => x.Remove(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
-        
         GenericRepository.Setup(x => x.GetAll())
             .Returns(new List<User> {User}.AsQueryable().BuildMock());  
         

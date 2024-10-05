@@ -63,41 +63,4 @@ public class GenericRepositoryTests : TestCommandBase
 
         Assert.Single(users);
     }
-    
-    // [Fact]
-    // public async Task GenericRepository_Add_Success()
-    // {
-    //     var user = new User
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         UserName = "Igor",
-    //         Email = "Gfwfawfy@gmail.com",
-    //         PasswordHash = "GAkfawfmat123fmwf"
-    //     };
-    //     
-    //     await _genericRepository.Add(user, CancellationToken.None);
-    //     
-    //     await Context.Users.ToListAsync();
-    // }
-    //
-    // [Fact]
-    // public async Task GenericRepository_Remove_Success()
-    // {
-    //     var user = new User
-    //     {
-    //         Id = Guid.NewGuid(),
-    //         UserName = "Pasha",
-    //         Email = "pasha@gmail.com",
-    //         EmailConfirmed = false,
-    //         PasswordHash = "GAt123fmwf"
-    //     };
-    //     await _genericRepository.Add(user, CancellationToken.None);
-    //
-    //     await _genericRepository.Remove(user, default); 
-    //
-    //
-    //     var users = await Context.Users.ToListAsync();
-    //
-    //     Assert.Single(users);
-    // }
 }
