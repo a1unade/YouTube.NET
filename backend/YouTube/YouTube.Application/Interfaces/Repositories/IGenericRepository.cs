@@ -37,14 +37,6 @@ public interface IGenericRepository<T> where T : class
     /// <param name="cancellationToken">CancellationToken</param>
     /// <returns></returns>
     Task<T?> GetById(Guid id, CancellationToken cancellationToken);
-    
-    /// <summary>
-    /// Удалить запись
-    /// </summary>
-    /// <param name="item">Сущность</param>
-    /// <param name="cancellationToken">CancellationToken</param>
-    /// <returns></returns>
-    Task Remove(T item, CancellationToken cancellationToken);
 
     /// <summary>
     /// Удалить сущность по Id
