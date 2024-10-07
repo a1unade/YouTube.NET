@@ -7,6 +7,7 @@ using YouTube.Application.Features.Video.UploadVideo;
 
 namespace YouTube.UnitTests.CommandsTests.VideoRequest;
 [Collection("UploadVideoHandlerTest")]
+[CollectionDefinition("UploadVideoHandlerTest", DisableParallelization = true)]
 public class PostUploadVideoHandlerTest : TestCommandBase
 {
     [Fact]

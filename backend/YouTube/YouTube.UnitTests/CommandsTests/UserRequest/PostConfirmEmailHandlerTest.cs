@@ -6,6 +6,7 @@ using YouTube.Application.Features.User.ConfirmEmail;
 
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
 [Collection("ConfirmEmailHandlerTest")]
+[CollectionDefinition("ConfirmEmailHandlerTest", DisableParallelization = true)]
 public class PostConfirmEmailHandlerTest : TestCommandBase
 {
     [Fact]

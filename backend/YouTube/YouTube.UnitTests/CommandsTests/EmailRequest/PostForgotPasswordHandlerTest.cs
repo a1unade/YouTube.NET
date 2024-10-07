@@ -6,6 +6,8 @@ using Request = YouTube.Application.Common.Requests.User.EmailRequest;
 
 namespace YouTube.UnitTests.CommandsTests.EmailRequest;
 [Collection("ForgotPasswordHandlerTest")]
+[CollectionDefinition("ForgotPasswordHandlerTest", DisableParallelization = true)]
+
 public class PostForgotPasswordHandlerTest : TestCommandBase
 {
     [Fact]

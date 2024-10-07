@@ -13,7 +13,7 @@ public class FileContent
         Stream content,
         string fileName,
         string contentType,
-        string? bucket)
+        string bucket)
     {
         Content = content;
         FileName = fileName;
@@ -31,18 +31,18 @@ public class FileContent
     /// <summary>
     /// Бинарные данные файла
     /// </summary>
-    public Stream Content { get; set; }
+    public Stream Content { get; set; } = default!;
 
     /// <summary>
     /// Название файла
     /// </summary>
-    public string FileName { get; set; }
+    public string FileName { get; set; } = default!;
 
     /// <summary>
     /// Тип контента
     /// </summary>
-    public string ContentType { get; set; }
-    
+    public string ContentType { get; set; } = default!;
+
     /// <summary>
     /// Размер в байтах
     /// </summary>
@@ -51,5 +51,5 @@ public class FileContent
     /// <summary>
     /// Название бакета
     /// </summary>
-    public string Bucket { get; set; }
+    public string Bucket { get; set; } = default!;
 }

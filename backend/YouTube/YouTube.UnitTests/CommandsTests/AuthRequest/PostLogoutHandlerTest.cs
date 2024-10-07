@@ -6,6 +6,7 @@ using YouTube.Application.Features.Auth.Logout;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest;
 [Collection("LogoutHandlerTest")]
+[CollectionDefinition("LogoutHandlerTest", DisableParallelization = true)]
 public class PostLogoutHandlerTest : TestCommandBase
 {
     [Fact]

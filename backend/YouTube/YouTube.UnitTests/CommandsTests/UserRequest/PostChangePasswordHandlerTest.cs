@@ -2,11 +2,12 @@ using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Features.User.ChangePassword;
+using Request = YouTube.Application.Common.Requests.User.ChangePasswordRequest;
 
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
-using Request = Application.Common.Requests.User.ChangePasswordRequest;
 
 [Collection("ChangePasswordHandlerTest")]
+[CollectionDefinition("ChangePasswordHandlerTest", DisableParallelization = true)]
 public class PostChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]
