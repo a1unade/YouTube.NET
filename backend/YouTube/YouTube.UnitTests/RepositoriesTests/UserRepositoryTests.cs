@@ -5,6 +5,7 @@ using YouTube.Persistence.Repositories;
 
 namespace YouTube.UnitTests.RepositoriesTests;
 [Collection("UserRepositoryTest")]
+[CollectionDefinition("UserRepositoryTest", DisableParallelization = true)]
 public class UserRepositoryTests : TestCommandBase
 {
     private readonly UserRepository _userRepository;

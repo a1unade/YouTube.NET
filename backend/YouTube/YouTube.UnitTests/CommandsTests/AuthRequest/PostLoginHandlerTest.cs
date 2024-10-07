@@ -8,6 +8,7 @@ using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest;
 [Collection("LoginHandlerTest")]
+[CollectionDefinition("LoginHandlerTest", DisableParallelization = true)]
 public class PostLoginHandlerTest : TestCommandBase
 {
     [Fact]

@@ -9,6 +9,7 @@ using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.EmailRequest;
 [Collection("CodeCheckForChangePasswordHandlerTest")]
+[CollectionDefinition("CodeCheckForChangePasswordHandlerTest", DisableParallelization = true)]
 public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]

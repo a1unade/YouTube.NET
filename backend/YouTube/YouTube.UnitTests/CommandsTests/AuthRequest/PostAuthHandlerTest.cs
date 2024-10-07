@@ -9,6 +9,7 @@ using Request = YouTube.Application.Common.Requests.Auth.AuthRequest;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest;
 [Collection("AuthHandlerTest")]
+[CollectionDefinition("AuthHandlerTest", DisableParallelization = true)]
 public class PostAuthHandlerTest : TestCommandBase
 {
     [Fact]
