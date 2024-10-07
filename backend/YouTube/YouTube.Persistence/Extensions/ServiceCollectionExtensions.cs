@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(connectionString,
                 builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-            
+        
         services.AddIdentity<User, IdentityRole<Guid>>(opt =>
             {
                 opt.Password.RequireDigit = false;
@@ -43,7 +43,19 @@ public static class ServiceCollectionExtensions
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        // var serviceProvider = services.BuildServiceProvider();
+        //
+        // using (var scope = serviceProvider.CreateScope())
+        // {
+        //     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        //     var dbSeeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>(); 
+        //
+        //     dbContext.Database.Migrate();
+        //     dbSeeder.SeedAsync(dbContext).GetAwaiter().GetResult(); 
+        // }
     }
+
 
     private static void AddRepositories(this IServiceCollection services)
     {

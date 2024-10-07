@@ -1,7 +1,5 @@
 using System.Reflection;
-using Microsoft.Extensions.FileProviders;
 using YouTube.Application.Extensions;
-using YouTube.Data.S3;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.SignalR;
 using YouTube.Persistence.Extensions;
@@ -14,10 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationLayer();
-builder.Services.AddInfrastructureLayer();
+builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
-builder.Services.AddS3Storage(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddSwaggerGen(options =>

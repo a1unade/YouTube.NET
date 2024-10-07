@@ -1,5 +1,4 @@
 using System.Net;
-using System.Runtime.InteropServices.JavaScript;
 using System.Text.Json;
 using YouTube.Application.Common.Exceptions;
 using ValidationException = YouTube.Application.Common.Exceptions.ValidationException;

@@ -1,4 +1,4 @@
-namespace YouTube.Data.S3;
+namespace YouTube.Infrastructure.Options;
 
 public class MinioOptions
 {
