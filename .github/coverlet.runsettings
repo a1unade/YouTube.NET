@@ -17,7 +17,7 @@
             **/YouTube.Persistence/Migrations/**,
             **/YouTube.Persistence/Contexts/**,
             **/YouTube.Persistence/Configurations/**,
-            **/YouTube.Persistence/Seeder**,
+            **/YouTube.Persistence/Seeder/**,
             **/YouTube.Application/Common/**,
             **/YouTube.Application/Extensions/**,
             **/YouTube.Application/DTOs/**,
