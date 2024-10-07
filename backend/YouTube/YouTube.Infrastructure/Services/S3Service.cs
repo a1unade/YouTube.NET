@@ -3,7 +3,7 @@ using Minio.DataModel.Args;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 
-namespace YouTube.Data.S3;
+namespace YouTube.Infrastructure.Services;
 
 public class S3Service : IS3Service
 {

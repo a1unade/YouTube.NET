@@ -9,10 +9,12 @@ namespace YouTube.WebAPI.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IS3Service _service;
+    private readonly IEmailService _emailService;
 
-    public TestController(IS3Service service)
+    public TestController(IS3Service service, IEmailService emailService)
     {
         _service = service;
+        _emailService = emailService;
     }
 
     [HttpGet("GetLink")]
@@ -83,5 +85,13 @@ public class TestController : ControllerBase
     {
         var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);
         return Ok(kink);
+    }
+    
+    [HttpGet("EmailTest")]
+    public async Task<IActionResult> EmailTest()
+    {
+        await _emailService.SendEmailAsync("bulatfri18@gmail.com", "Хуй", "ХУЙ");
+
+        return Ok();
     }
 }

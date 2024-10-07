@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: YouTube.WebAPI/Dockerfile 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_S3_SERVICE_URL=minio:9000
+      - REDIS_CONNECTION_STRING=redis:6379
+    depends_on:
+      - db
+      - redis
+      - minio
+    ports:
+      - "8080:8080"
+    networks:
+      - youtube_network
+    
+  db:
+    image: postgres:16
+    container_name: Youtube.PostgresSQL
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Bulat2004
+      POSTGRES_DB: RuTube
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - youtube_network
+
+  redis:
+    container_name: Youtube.Redis
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    networks:
+      - youtube_network
+
+  minio:
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - youtube_network
+
+volumes:
+  db_data:
+  minio_data:
+
+networks:
+  youtube_network:
+    driver: bridge

@@ -29,7 +29,6 @@ public class DbSeeder : IDbSeeder
         if (newCategories.Any())
         {
             context.Categories.AddRange(newCategories.Select(category => new Category { Name = category.ToString() }));
-            await context.SaveChangesAsync(cancellationToken);
         }
     }
 
@@ -37,5 +36,6 @@ public class DbSeeder : IDbSeeder
     public async Task SeedAsync(IDbContext context, CancellationToken cancellationToken = default)
     {
         await SeedCategoriesAsync(context, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
