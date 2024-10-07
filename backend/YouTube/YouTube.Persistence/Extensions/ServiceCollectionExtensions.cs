@@ -7,6 +7,7 @@ using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
 using YouTube.Persistence.Repositories;
+using YouTube.Persistence.Seeder;
 
 namespace YouTube.Persistence.Extensions;
 
@@ -48,6 +49,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddScoped<IDbContext, ApplicationDbContext>()
+            .AddScoped<IDbSeeder, DbSeeder>()
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
             .AddScoped<IUserRepository, UserRepository>();
     }

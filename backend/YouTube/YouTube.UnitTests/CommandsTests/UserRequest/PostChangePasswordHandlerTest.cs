@@ -6,7 +6,7 @@ using YouTube.Application.Features.User.ChangePassword;
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
 using Request = Application.Common.Requests.User.ChangePasswordRequest;
 
-[Collection("HandlerTest")]
+[Collection("ChangePasswordHandlerTest")]
 public class PostChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]

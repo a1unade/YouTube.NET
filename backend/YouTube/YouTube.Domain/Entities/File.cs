@@ -7,7 +7,7 @@ public class File : BaseEntity
     /// <summary>
     /// Размер
     /// </summary>
-    public int Size { get; set; }
+    public long Size { get; set; }
 
     /// <summary>
     /// Тип файла
@@ -15,7 +15,7 @@ public class File : BaseEntity
     public string? ContentType { get; set; }
 
     /// <summary>
-    /// Путь
+    /// Путь в S3
     /// </summary>
     public string Path { get; set; } = default!;
     

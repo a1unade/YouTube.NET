@@ -4,7 +4,7 @@ using YouTube.Domain.Entities;
 using YouTube.Persistence.Repositories;
 
 namespace YouTube.UnitTests.RepositoriesTests;
-[Collection("GenericRepository")]
+[Collection("GenericRepositoryTest")]
 public class GenericRepositoryTests : TestCommandBase
 { 
     private readonly GenericRepository<User> _genericRepository;

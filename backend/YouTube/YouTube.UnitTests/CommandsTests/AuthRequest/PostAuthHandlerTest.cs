@@ -8,7 +8,7 @@ using YouTube.Domain.Entities;
 using Request = YouTube.Application.Common.Requests.Auth.AuthRequest;
 
 namespace YouTube.UnitTests.CommandsTests.AuthRequest;
-[Collection("HandlerTest")]
+[Collection("AuthHandlerTest")]
 public class PostAuthHandlerTest : TestCommandBase
 {
     [Fact]

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using MockQueryable;
 using YouTube.Application.Common.Messages.Success;
+using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
@@ -31,6 +32,8 @@ public class TestCommandBase : IDisposable
     protected Mock<UserManager<User>> UserManager { get; }
     protected Mock<SignInManager<User>> SignInManager { get; }
     protected Mock<IDistributedCache> Cache { get; }
+    
+    protected Mock<IS3Service> S3Service { get; set; }
 
     protected TestCommandBase()
     {
@@ -40,6 +43,7 @@ public class TestCommandBase : IDisposable
             .SetBirthday(new DateOnly(2004, 01, 09))
             .SetEmail("bulatfri18@gmail.com")
             .SetUserInfo()
+            .SetChannel()
             .Build();
         
         Context = ContextFactory.Create(User);
@@ -56,6 +60,11 @@ public class TestCommandBase : IDisposable
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
 
+        S3Service = new Mock<IS3Service>();
+
+        S3Service.Setup(x => x.UploadAsync(It.IsAny<FileContent>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("fwlflwflw/flawflawf");
+
         // Мок Cache
         Cache = new Mock<IDistributedCache>();
 
@@ -66,14 +75,7 @@ public class TestCommandBase : IDisposable
                 It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        // Мокирование UserRepository
-        UserRepository = new Mock<IUserRepository>();
-        UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((string email, CancellationToken _) =>
-            {
-                return Context.Users.FirstOrDefault(user => user.Email == email);
-            });
-
+       
         GenericRepository = new Mock<IGenericRepository<User>>();
         
         GenericRepository.Setup(x => x.RemoveById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -90,6 +92,15 @@ public class TestCommandBase : IDisposable
         
         GenericRepository.Setup(repo => repo.Get(It.IsAny<Expression<Func<User, bool>>>()))
             .Returns((Expression<Func<User, bool>> predicate) => Context.Users.Where(predicate.Compile()).AsQueryable());
+        
+        // Мокирование UserRepository
+        UserRepository = new Mock<IUserRepository>();
+        UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((string email, CancellationToken _) =>
+            {
+                return Context.Users.FirstOrDefault(user => user.Email == email);
+            });
+
 
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });

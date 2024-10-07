@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using YouTube.Persistence.Contexts;
@@ -11,9 +12,11 @@ using YouTube.Persistence.Contexts;
 namespace YouTube.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241006011419_Video fix")]
+    partial class Videofix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -550,13 +553,14 @@ namespace YouTube.Persistence.Migrations
                         .HasColumnType("smallint")
                         .HasDefaultValue((short)0);
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ChannelId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -817,7 +821,9 @@ namespace YouTube.Persistence.Migrations
                 {
                     b.HasOne("YouTube.Domain.Entities.Category", "Category")
                         .WithOne()
-                        .HasForeignKey("YouTube.Domain.Entities.Video", "CategoryId");
+                        .HasForeignKey("YouTube.Domain.Entities.Video", "CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("YouTube.Domain.Entities.Channel", "Channel")
                         .WithMany("Videos")
