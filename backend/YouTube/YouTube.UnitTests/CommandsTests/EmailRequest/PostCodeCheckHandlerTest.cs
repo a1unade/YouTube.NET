@@ -8,7 +8,7 @@ using YouTube.Domain.Entities;
 using Request = YouTube.Application.Common.Requests.Email.CodeCheckRequest;
 
 namespace YouTube.UnitTests.CommandsTests.EmailRequest;
-[Collection("HandlerTest")]
+[Collection("CodeCheckHandlerTest")]
 public class PostCodeCheckHandlerTest : TestCommandBase
 {
     [Fact]

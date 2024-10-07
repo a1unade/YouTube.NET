@@ -12,6 +12,14 @@ public class UserBuilder
         Surname = "Vakatov",
         UserId = User.Id,
     };
+
+    private readonly Channel _channel = new Channel
+    {
+        Name = "fafawfjaifijawf",
+        CreateDate = DateOnly.FromDateTime(DateTime.Today),
+        SubCount = 0,
+        Country = "Russia"
+    };
     
     private UserBuilder()
     {
@@ -84,6 +92,14 @@ public class UserBuilder
         _userInfo.Gender = "Male";
         User.PasswordHash = "Ilya1337";
         User.UserInfo = _userInfo;
+        return this;
+    }
+
+    public UserBuilder SetChannel()
+    {
+        User.Channels = new List<Channel>();
+        User.Channels.Add(_channel);
+        
         return this;
     }
     

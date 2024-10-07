@@ -26,20 +26,6 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
     
-    [HttpPost("UploadFile")]
-    public async Task<IActionResult> UploadFile(IFormFile file, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var str = await _service.UploadAsync(file, "avatar", cancellationToken);
-            return Ok(str);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, "Pizda");
-        }
-    }
 
     [HttpPost("GetFileForUser")]
     public async Task<IActionResult> GetFileForUser()

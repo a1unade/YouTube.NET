@@ -8,7 +8,7 @@ using YouTube.Application.Features.Email.CodeCheckForChangePassword;
 using YouTube.Domain.Entities;
 
 namespace YouTube.UnitTests.CommandsTests.EmailRequest;
-[Collection("HandlerTest")]
+[Collection("CodeCheckForChangePasswordHandlerTest")]
 public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
 {
     [Fact]

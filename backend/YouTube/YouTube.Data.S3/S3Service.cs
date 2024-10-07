@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
+using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.Data.S3;
@@ -14,23 +14,19 @@ public class S3Service : IS3Service
         _minioClient = minioClient;
     }
 
-    public async Task<string> UploadAsync(IFormFile file, string bucketName, CancellationToken cancellationToken)
+    public async Task<string> UploadAsync(FileContent content, CancellationToken cancellationToken)
     {
-        await BucketExistAsync(bucketName, cancellationToken);
+        await BucketExistAsync(content.Bucket, cancellationToken);
+        var uploadFile = new PutObjectArgs()
+            .WithBucket(content.Bucket)
+            .WithObject(content.FileName)
+            .WithStreamData(content.Content)
+            .WithObjectSize(content.Lenght)
+            .WithContentType(content.ContentType);
 
-        await using (var stream = file.OpenReadStream())
-        {
-            var uploadFile = new PutObjectArgs()
-                .WithBucket(bucketName)
-                .WithObject(file.FileName)
-                .WithStreamData(stream)
-                .WithObjectSize(file.Length)
-                .WithContentType(file.ContentType);
+        await _minioClient.PutObjectAsync(uploadFile, cancellationToken);
 
-            await _minioClient.PutObjectAsync(uploadFile, cancellationToken);
-        }
-
-        return file.FileName;
+        return content.Bucket + "/" + content.FileName;
     }
 
     public async Task<string> GetLinkAsync(string bucketName, string fileName,

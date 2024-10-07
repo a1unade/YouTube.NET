@@ -1,7 +1,9 @@
 using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
-
+/// <summary>
+/// Видео
+/// </summary>
 public class Video : BaseEntity
 {
     /// <summary>
@@ -37,7 +39,7 @@ public class Video : BaseEntity
     /// <summary>
     /// Страна
     /// </summary>
-    public string Country { get; set; } = default!;
+    public string? Country { get; set; }
     
     /// <summary>
     /// ID канала
@@ -62,7 +64,7 @@ public class Video : BaseEntity
     /// <summary>
     /// Комментарии к видео
     /// </summary>
-    public ICollection<Comment> Comments { get; set; } = default!;
+    public ICollection<Comment>? Comments { get; set; }
     
     /// <summary>
     /// Ид превью
@@ -87,15 +89,15 @@ public class Video : BaseEntity
     /// <summary>
     /// Ид категории
     /// </summary>
-    public Guid CategoryId { get; set; }
+    public Guid? CategoryId { get; set; }
     
     /// <summary>
     /// Категории
     /// </summary>
-    public Category Category { get; set; } = default!;
+    public Category? Category { get; set; }
 
     /// <summary>
     /// Плейлисты
     /// </summary>
-    public ICollection<Playlist> Playlists { get; set; } = default!;
+    public ICollection<Playlist>? Playlists { get; set; }
 }
