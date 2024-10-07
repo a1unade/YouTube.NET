@@ -1,13 +1,18 @@
 using MimeKit;
 using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.Infrastructure.Services;
 
 public class EmailService: IEmailService
 {
-    private const string Host = "smtp.yandex.com";
-    private const int Port = 465;
+    private readonly IConfigurationSection _configurationSection;
+
+    public EmailService(IConfiguration configuration)
+    {
+        _configurationSection = configuration.GetSection("EmailSettings");
+    }
     
     public async Task SendEmailAsync(string email, string subject, string messageBody)
     {
@@ -15,8 +20,8 @@ public class EmailService: IEmailService
         {
             using var smtpClient = new SmtpClient();
 
-            await smtpClient.ConnectAsync(Host, Port, true);
-            await smtpClient.AuthenticateAsync("jinx.httpserver@yandex.ru", "kfgxrkizhidqhnyd");
+            await smtpClient.ConnectAsync(_configurationSection["Host"], int.Parse(_configurationSection["Port"]!), true);
+            await smtpClient.AuthenticateAsync(_configurationSection["EmailAddress"], _configurationSection["Password"]);
             await smtpClient.SendAsync(GenerateMessage(email, subject, messageBody));
             await smtpClient.DisconnectAsync(true);
         }
@@ -30,7 +35,7 @@ public class EmailService: IEmailService
     {
         return new MimeMessage
         {
-            From = {new MailboxAddress("YouTube", "jinx.httpserver@yandex.ru")},
+            From = {new MailboxAddress("YouTube", _configurationSection["EmailAddress"])},
             To = {new MailboxAddress("", email)},
             Subject = subject,
             Body = new BodyBuilder { HtmlBody = messageBody }.ToMessageBody()
