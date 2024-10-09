@@ -15,6 +15,7 @@
             [xunit.*],
             **/YouTube.Persistence/Extensions/**,
             **/YouTube.Persistence/Migrations/**,
+            **/YouTube.Persistence/MigrationTools/**,
             **/YouTube.Persistence/Contexts/**,
             **/YouTube.Persistence/Configurations/**,
             **/YouTube.Persistence/Seeder/**,
