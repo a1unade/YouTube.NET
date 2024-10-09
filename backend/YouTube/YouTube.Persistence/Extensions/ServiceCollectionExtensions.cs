@@ -6,6 +6,7 @@ using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
 using YouTube.Persistence.Contexts;
+using YouTube.Persistence.MigrationTools;
 using YouTube.Persistence.Repositories;
 using YouTube.Persistence.Seeder;
 
@@ -16,7 +17,7 @@ public static class ServiceCollectionExtensions
     public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext(configuration);
-        services.AddRepositories();
+        services.AddContextAndRepositories();
         services.AddHttpContextAccessor();
     }
     
@@ -43,25 +44,15 @@ public static class ServiceCollectionExtensions
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
-
-        // var serviceProvider = services.BuildServiceProvider();
-        //
-        // using (var scope = serviceProvider.CreateScope())
-        // {
-        //     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        //     var dbSeeder = scope.ServiceProvider.GetRequiredService<IDbSeeder>(); 
-        //
-        //     dbContext.Database.Migrate();
-        //     dbSeeder.SeedAsync(dbContext).GetAwaiter().GetResult(); 
-        // }
     }
 
 
-    private static void AddRepositories(this IServiceCollection services)
+    private static void AddContextAndRepositories(this IServiceCollection services)
     {
         services
             .AddScoped<IDbContext, ApplicationDbContext>()
             .AddScoped<IDbSeeder, DbSeeder>()
+            .AddTransient<Migrator>()
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
             .AddScoped<IUserRepository, UserRepository>();
     }

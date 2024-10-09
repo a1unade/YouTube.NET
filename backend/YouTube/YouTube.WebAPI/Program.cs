@@ -3,6 +3,7 @@ using YouTube.Application.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.SignalR;
 using YouTube.Persistence.Extensions;
+using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
 
 
@@ -25,6 +26,10 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+using var scoped = app.Services.CreateScope();
+var migrator = scoped.ServiceProvider.GetRequiredService<Migrator>();
+await migrator.MigrateAsync();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -44,10 +49,8 @@ app.UseCors(b => b
 
 app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
 
-
-
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
 
+app.MapControllers();
 app.Run();
