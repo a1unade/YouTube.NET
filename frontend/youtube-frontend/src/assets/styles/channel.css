@@ -1,113 +1,119 @@
 .channel-thumbnail {
-    width: 98%;
-    height: 200px;
-    border-radius: 15px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: width 0.35s ease;
+  width: 98%;
+  height: 200px;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.35s ease;
 }
 
 .channel-thumbnail img {
-    width: 100%;
-    height: auto;
-    max-height: 200px;
-    object-fit: cover;
-    transition: width 0.35s ease, height 0.35s ease;
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  transition:
+    width 0.35s ease,
+    height 0.35s ease;
 }
 
 .channel-section .channel-short-element-info {
-    cursor: default;
+  cursor: default;
 }
 
 .channel-section .channel-details {
-    position: relative;
-    bottom: 25px;
+  position: relative;
+  bottom: 25px;
 }
 
 .channel-section .channel-short-element-layout {
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-    cursor: default;
-    height: 160px;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  cursor: default;
+  height: 160px;
 }
 
 .channel-section .channel-details p {
-    font-size: 30px;
-    font-weight: bold;
-    margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .channel-section .channel-short-element-layout .subscribe-button {
-    position: relative;
-    place-self: center;
-    left: -232px;
-    bottom: 35px;
+  position: relative;
+  place-self: center;
+  left: -232px;
+  bottom: 35px;
 }
 
 .channel-section .channel-short-element-layout .subscribe-button.subscribed {
-    left: -225px;
+  left: -225px;
 }
 
 .channel-section .channel-short-element-author-img {
-    height: 140px;
-    width: 140px;
+  height: 140px;
+  width: 140px;
 }
 
 .channel-section .channel-details span {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 .channel-section .channel-details ul {
-    font-size: 14px;
-    margin-bottom: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .closed-menu .channel-navigation-button-container {
-    margin-left: 0;
-    padding-left: 0;
-    transition: width 0.3s ease;
+  margin-left: 0;
+  padding-left: 0;
+  transition: width 0.3s ease;
 }
 
 .channel-navigation-button-container {
-    width: 100%;
-    margin-left: -33px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding-left: 33px;
-    position: relative;
+  width: 100%;
+  margin-left: -33px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding-left: 33px;
+  position: relative;
 }
 
 .channel-navigation-button-container button {
-    border: none;
-    background: transparent;
-    padding: 0 0 10px;
-    position: relative;
-    overflow: hidden;
+  border: none;
+  background: transparent;
+  padding: 0 0 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 .channel-navigation-button-container button::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: transparent;
-    transition: width 0.3s, background 0.3s;
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: transparent;
+  transition:
+    width 0.3s,
+    background 0.3s;
 }
 
 .channel-navigation-button-container button.selected::after {
-    width: 100%;
-    background: rgba(15, 15, 15, 0.88);
-    transition: width 0.3s, background 0.3s;
+  width: 100%;
+  background: rgba(15, 15, 15, 0.88);
+  transition:
+    width 0.3s,
+    background 0.3s;
 }
 
 .channel-navigation-button-container button:hover::after {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
 }
