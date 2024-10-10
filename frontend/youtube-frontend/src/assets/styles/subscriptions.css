@@ -8,6 +8,13 @@
   cursor: pointer;
 }
 
+.channel-short-element-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
 .channel-short-element-author-img {
   display: flex;
   align-items: center;
@@ -46,22 +53,22 @@
   display: flex;
   padding: 0;
   margin: 0;
+  gap: 8px;
 }
 
 .channel-details ul li {
   max-width: 200px;
+  padding-right: 5px;
 }
 
 .channel-details ul li:not(:last-child) {
-  margin-right: 5px;
+  padding-right: 5px;
+  margin-right: 8px;
 }
 
 .channel-details ul li:first-child {
   list-style-type: none;
-}
-
-.channel-details ul li:last-child {
-  margin-left: 12px;
+  margin-right: 8px;
 }
 
 .channel-details p:nth-child(3) {
