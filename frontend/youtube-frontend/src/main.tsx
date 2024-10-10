@@ -16,6 +16,7 @@ import { useAlerts } from './hooks/alert/use-alerts.tsx';
 import { AlertProvider } from './contexts/alert-provider.tsx';
 import Subscriptions from './pages/subscriptions';
 import Playlists from './pages/playlists';
+import ChannelFeatured from './pages/channel';
 
 export const App = () => {
   const [saveVideoActive, setSaveVideoActive] = useState(false);
@@ -76,10 +77,13 @@ export const App = () => {
                 />
               }
             />
-            {/* prettier-ignore */}
-            <Route path="/feed/subscriptions" element={<Subscriptions />}/>
-            {/* prettier-ignore */}
-            <Route path="/feed/playlists" element={<Playlists/>}/>
+            <Route path="/channel/:id" element={<ChannelFeatured />} />
+            <Route path="/channel/:id/featured" element={<ChannelFeatured />} />
+            <Route path="/channel/:id/videos" element={<ChannelFeatured />} />
+            <Route path="/channel/:id/playlists" element={<ChannelFeatured />} />
+            <Route path="/channel/:id/community" element={<ChannelFeatured />} />
+            <Route path="/feed/subscriptions" element={<Subscriptions />} />
+            <Route path="/feed/playlists" element={<Playlists />} />
           </Routes>
         </div>
       </div>

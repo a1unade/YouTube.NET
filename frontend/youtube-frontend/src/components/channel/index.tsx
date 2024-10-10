@@ -20,16 +20,19 @@ const ChannelElement = (props: { channel: ChannelShortType }) => {
 
   return (
     <div className="channel-short-element-layout">
-      <div className="channel-short-element-author-img">
-        <img src={channel.image} alt={channel.name} />
-      </div>
-      <div className="channel-details">
-        <p>{channel.name}</p>
-        <ul>
-          <li>@username</li>
-          <li>{formatViews(channel.subscribersCount, 'followers')}</li>
-        </ul>
-        <p>{channel.description}</p>
+      <div className="channel-short-element-info">
+        <div className="channel-short-element-author-img">
+          <img src={channel.image} alt={channel.name} />
+        </div>
+        <div className="channel-details">
+          <p>{channel.name}</p>
+          <ul>
+            <li>@username</li>
+            <li>{formatViews(channel.subscribersCount, 'followers')}</li>
+            <li>{channel.videoCount} видео</li>
+          </ul>
+          <span>{channel.description}</span>
+        </div>
       </div>
       <button
         className={`subscribe-button ${subscribed ? 'subscribed' : ''}`}

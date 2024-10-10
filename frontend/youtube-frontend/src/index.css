@@ -3,6 +3,7 @@
 @import url('./assets/styles/video.css');
 @import url('./assets/styles/player.css');
 @import url('./assets/styles/subscriptions.css');
+@import url('./assets/styles/channel.css');
 
 :root {
   line-height: 1.5;
