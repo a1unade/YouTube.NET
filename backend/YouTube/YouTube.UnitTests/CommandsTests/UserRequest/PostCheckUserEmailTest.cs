@@ -1,6 +1,8 @@
+using Moq;
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Features.UserRequests.CheckUserEmail;
+using YouTube.Domain.Entities;
 using Request = YouTube.Application.Common.Requests.User.EmailRequest;
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
 [Collection("CheckUserEmailTest")]
@@ -28,6 +30,8 @@ public class PostCheckUserEmailTest : TestCommandBase
     [Fact]
     public async Task CheckUserEmailHandler_ReturnTrueForNewUser()
     {
+        UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
         
         var request = new Request
         {
@@ -37,7 +41,10 @@ public class PostCheckUserEmailTest : TestCommandBase
         var command = new CheckUserEmailCommand(request);
         var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
 
-        await Assert.ThrowsAsync<BadRequestException>(async () => { await handler.Handle(command, default); });
+        var response = await handler.Handle(command, default);
+        
+        Assert.True(response.NewUser);
+        Assert.True(response.IsSuccessfully);
     }
     
     [Fact]
@@ -54,5 +61,20 @@ public class PostCheckUserEmailTest : TestCommandBase
         var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
 
         await Assert.ThrowsAsync<BadRequestException>(async () => { await handler.Handle(command, default); });
+    }
+    
+    [Fact]
+    public async Task CheckUserEmailHandler_ThrowValidationException_ForInvalidRequest()
+    {
+        
+        var request = new Request
+        {
+            Email = null!
+        };
+
+        var command = new CheckUserEmailCommand(request);
+        var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
+
+        await Assert.ThrowsAsync<ValidationException>(async () => { await handler.Handle(command, default); });
     }
 }
