@@ -8,7 +8,7 @@ using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
-namespace YouTube.Application.Features.User.ChangePassword;
+namespace YouTube.Application.Features.UserRequests.ChangePassword;
 /// <summary>
 /// Обработчик смены пароля (когда пользователь зарегистрирован)
 /// </summary>

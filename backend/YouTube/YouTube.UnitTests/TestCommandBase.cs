@@ -24,6 +24,9 @@ public class TestCommandBase : IDisposable
 
     protected readonly ApplicationDbContext Context;
     protected User User { get; }
+    protected Channel UserChannel { get; }
+    
+    protected Video UserVideo { get; }
     protected Mock<IEmailService> EmailService { get; }
     protected Mock<IJwtGenerator> JwtGenerator { get; }
     protected Mock<IUserRepository> UserRepository { get; }
@@ -44,7 +47,11 @@ public class TestCommandBase : IDisposable
             .SetEmail("bulatfri18@gmail.com")
             .SetUserInfo()
             .SetChannel()
+            .SetVideoAndFiles()
             .Build();
+
+        UserChannel = User.Channels!.ToList()[0];
+        UserVideo = UserChannel.Videos.ToList()[0];
         
         Context = ContextFactory.Create(User);
         
@@ -64,6 +71,9 @@ public class TestCommandBase : IDisposable
 
         S3Service.Setup(x => x.UploadAsync(It.IsAny<FileContent>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("fwlflwflw/flawflawf");
+
+        S3Service.Setup(x => x.GetFileUrlAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync("fawfwafa");
 
         // Мок Cache
         Cache = new Mock<IDistributedCache>();

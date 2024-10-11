@@ -1,7 +1,7 @@
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Features.User.ChangePassword;
+using YouTube.Application.Features.UserRequests.ChangePassword;
 using Request = YouTube.Application.Common.Requests.User.ChangePasswordRequest;
 
 namespace YouTube.UnitTests.CommandsTests.UserRequest;

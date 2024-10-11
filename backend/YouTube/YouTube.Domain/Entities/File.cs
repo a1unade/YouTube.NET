@@ -18,9 +18,14 @@ public class File : BaseEntity
     /// Путь в S3
     /// </summary>
     public string Path { get; set; } = default!;
-    
+
     /// <summary>
     /// Название файла
     /// </summary>
-    public string? FileName { get; set; }
+    public string FileName { get; set; } = default!;
+
+    /// <summary>
+    /// Название бакета
+    /// </summary>
+    public string? BucketName { get; set; }
 }

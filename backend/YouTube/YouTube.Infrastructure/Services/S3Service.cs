@@ -24,22 +24,30 @@ public class S3Service : IS3Service
             .WithObjectSize(content.Lenght)
             .WithContentType(content.ContentType);
 
-        await _minioClient.PutObjectAsync(uploadFile, cancellationToken);
+        await _minioClient.PutObjectAsync(uploadFile, cancellationToken)
+            .ConfigureAwait(false);
 
         return content.Bucket + "/" + content.FileName;
     }
 
-    public async Task<string> GetLinkAsync(string bucketName, string fileName,
+    public async Task<string> GetFileUrlAsync(string bucketName, string fileName,
         CancellationToken cancellationToken)
     {
-        var link = await _minioClient.PresignedGetObjectAsync(
-                new PresignedGetObjectArgs()
+        try
+        {
+            var link = await _minioClient.PresignedGetObjectAsync(new PresignedGetObjectArgs()
                     .WithBucket(bucketName)
                     .WithObject(fileName)
-                    .WithExpiry(300))
-            .ConfigureAwait(false) ?? String.Empty;
+                    .WithExpiry(60 * 60 * 24))
+                .ConfigureAwait(false);
 
-        return link;
+            return link ?? string.Empty;
+        }
+        catch(Exception)
+        {
+            return string.Empty;
+        }
+        
     }
 
     public async Task<string> GetObjectAsync(string bucketName, string fileName, CancellationToken cancellationToken)

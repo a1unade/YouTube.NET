@@ -1,4 +1,5 @@
 using YouTube.Domain.Entities;
+using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.UnitTests.Builders;
 
@@ -13,12 +14,21 @@ public class UserBuilder
         UserId = User.Id,
     };
 
-    private readonly Channel _channel = new Channel
+    private static readonly Channel Channel = new Channel
     {
         Name = "fafawfjaifijawf",
         CreateDate = DateOnly.FromDateTime(DateTime.Today),
         SubCount = 0,
         Country = "Russia"
+    };
+    
+    private static readonly Video Video = new Video
+    {
+        Name = "Bogoeg",
+        Country = "Russia",
+        ReleaseDate = default,
+        ChannelId = Channel.Id,
+        Channel = Channel
     };
     
     private UserBuilder()
@@ -95,10 +105,37 @@ public class UserBuilder
         return this;
     }
 
+    /// <summary>
+    /// Задать канал полюзователю
+    /// </summary>
+    /// <returns></returns>
     public UserBuilder SetChannel()
     {
         User.Channels = new List<Channel>();
-        User.Channels.Add(_channel);
+        User.Channels.Add(Channel);
+        return this;
+    }
+
+    /// <summary>
+    /// Задать видео каналу пользователя
+    /// </summary>
+    /// <returns></returns>
+    public UserBuilder SetVideoAndFiles()
+    {
+        Video.VideoUrl = new File
+        {
+            Path = "FWAaf",
+            FileName = "FWAwwwww",
+            BucketName = "FAWFAf"
+        };
+        Video.PreviewImg = new File
+        {
+            Path = "fawfafw",
+            FileName = "ffawfaff",
+            BucketName = "fwfafwafawf"
+        };
+        Channel.Videos = new List<Video>();
+        Channel.Videos.Add(Video);
         
         return this;
     }
