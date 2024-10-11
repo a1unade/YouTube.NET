@@ -1,4 +1,4 @@
-namespace YouTube.Application.Common.Responses.UserResponse;
+namespace YouTube.Application.Common.Responses.User;
 
 public class UserIdResponse : BaseResponse
 {

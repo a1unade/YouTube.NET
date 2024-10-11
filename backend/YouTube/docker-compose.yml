@@ -25,8 +25,7 @@ services:
     container_name: Youtube.PostgresSQL
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Bulat2004
-      POSTGRES_DB: RuTube
+      POSTGRES_PASSWORD: youtube
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:

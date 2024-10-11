@@ -8,17 +8,19 @@ using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
-namespace YouTube.Application.Features.User.ConfirmEmail;
+namespace YouTube.Application.Features.UserRequests.ConfirmEmail;
 
 public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResponse>
 {
     private readonly UserManager<Domain.Entities.User> _userManager;
+    private readonly IJwtGenerator _jwtGenerator;
     private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     
-    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager, IUserRepository userRepository, IEmailService emailService)
+    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IJwtGenerator jwtGenerator, IUserRepository userRepository, IEmailService emailService)
     {
         _userManager = userManager;
+        _jwtGenerator = jwtGenerator;
         _userRepository = userRepository;
         _emailService = emailService;
     }
@@ -39,6 +41,6 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
             
         await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
-        return new BaseResponse { IsSuccessfully = true };
+        return new BaseResponse { IsSuccessfully = true, Message = _jwtGenerator.GenerateToken(user)};
     }
 }

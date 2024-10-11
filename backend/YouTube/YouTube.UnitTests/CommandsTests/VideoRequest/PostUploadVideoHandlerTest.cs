@@ -29,7 +29,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
                     Headers = new HeaderDictionary { { "Content-Type", "image/jpeg" } }
                 }
             },
-            ChannelId = User.Channels!.ToList()[0].Id,
+            ChannelId = UserChannel.Id,
             Name = "Fwafawfawfa",
             Description = "fawfawfmakfmawf",
             Category = "fawfaff",

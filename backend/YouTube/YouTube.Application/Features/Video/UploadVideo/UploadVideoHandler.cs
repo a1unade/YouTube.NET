@@ -22,8 +22,8 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
 
     public async Task<BaseResponse> Handle(UploadVideoCommand request, CancellationToken cancellationToken)
     {
-        if (request.ChannelId == Guid.Empty || request is null ||
-            string.IsNullOrEmpty(request.Description) || string.IsNullOrEmpty(request.Name))
+        if (request.ChannelId == Guid.Empty || request is null || string.IsNullOrEmpty(request.Name)
+            || request.Files.Count != 2)
             throw new ValidationException();
 
         var channel = await _context.Channels.FindAsync(request.ChannelId, cancellationToken);
@@ -45,12 +45,10 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
             if (file.Length <= 0)
                 throw new ArgumentException("Некорректное количество байт");
             
-            var fileId = Guid.NewGuid();
-            
             var path = await _s3Service.UploadAsync(new FileContent
             {
                 Content = file.OpenReadStream(),
-                FileName = fileId.ToString(),
+                FileName = file.FileName,
                 ContentType = file.ContentType,
                 Lenght = file.Length,
                 Bucket = channel.Id.ToString()
@@ -58,16 +56,14 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
 
             var fileToDb = new File
             {
-                Id = fileId,
                 Size = file.Length,
                 ContentType = file.ContentType,
                 Path = path,
-                FileName = file.FileName
+                FileName = file.FileName,
+                BucketName = channel.Id.ToString()
             };
             
-
             await _context.Files.AddAsync(fileToDb, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
 
             if (file.ContentType.StartsWith("video/"))
                 videoFile = fileToDb;

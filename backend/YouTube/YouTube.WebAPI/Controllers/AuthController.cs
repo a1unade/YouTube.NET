@@ -17,7 +17,12 @@ public class AuthController : ControllerBase
     {
         _mediator = mediator;
     }
-
+    
+    /// <summary>
+    /// Авторизация
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">cancellationToken</param>
     [HttpPost("Auth")]
     public async Task<IActionResult> AuthUser(AuthRequest request, CancellationToken cancellationToken)
     {
@@ -36,6 +41,11 @@ public class AuthController : ControllerBase
         return NotFound(result);
     }
 
+    /// <summary>
+    /// Логин
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">cancellationToken</param>
     [HttpPost("Login")]
     public async Task<IActionResult> LoginUser(LoginRequest request, CancellationToken cancellationToken)
     {
@@ -53,7 +63,12 @@ public class AuthController : ControllerBase
 
         return NotFound(result);
     }
-
+    
+    /// <summary>
+    /// Выход из аккаунта
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">cancellationToken</param>
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout(LogoutRequest request, CancellationToken cancellationToken)
     {

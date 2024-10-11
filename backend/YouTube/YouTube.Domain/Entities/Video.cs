@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
@@ -59,6 +60,7 @@ public class Video : BaseEntity
     /// <summary>
     /// Канал
     /// </summary>
+    [JsonIgnore]
     public Channel Channel { get; set; } = default!;
 
     /// <summary>

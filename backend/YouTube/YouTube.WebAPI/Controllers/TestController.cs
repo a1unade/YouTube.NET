@@ -1,7 +1,12 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
+using Microsoft.EntityFrameworkCore;
+using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.DTOs.Video;
+using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
+using File = YouTube.Domain.Entities.File;
+
 namespace YouTube.WebAPI.Controllers;
 
 [ApiController]
@@ -9,18 +14,22 @@ namespace YouTube.WebAPI.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IS3Service _service;
+    private readonly IMediator _mediator;
+    private readonly IDbContext _context;
     private readonly IEmailService _emailService;
 
-    public TestController(IS3Service service, IEmailService emailService)
+    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService)
     {
         _service = service;
+        _mediator = mediator;
+        _context = context;
         _emailService = emailService;
     }
 
     [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
-        var link = await _service.GetLinkAsync(bucketId, objectName, cancellationToken);
+        var link = await _service.GetFileUrlAsync(bucketId, objectName, cancellationToken);
 
         if (link != String.Empty)
             return Ok(link);
@@ -28,57 +37,6 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
     
-
-    [HttpPost("GetFileForUser")]
-    public async Task<IActionResult> GetFileForUser()
-    {
-        IMinioClient client = new MinioClient()
-            .WithEndpoint("play.min.io")
-            .WithCredentials("ns7G0GX9I5IFWDptZk6b", "OZ4pPiUM5Er7kMzmeDamCeNz2r7UARgqmvSRj1YC")
-            .WithSSL(false)
-            .Build();
-
-       var link = await client.PresignedGetObjectAsync(
-               new PresignedGetObjectArgs()
-                   .WithBucket("fortest")
-                   .WithObject("IMG_4520.MP4")   
-                   .WithExpiry(300))
-           .ConfigureAwait(false) ?? String.Empty;
-
-       return Ok(link);
-
-    }
-    
-    [HttpPost("UploadFileForUser")]
-    public async Task<IActionResult> UploadFileForUser(IFormFile file, CancellationToken cancellationToken)
-    {
-        IMinioClient client = new MinioClient()
-            .WithEndpoint("play.min.io:9001")
-            .WithCredentials("qdJ9ilmIEJXcDrYCyj9h", "vx2VUCmkxRmEdC11N3sI7veDDptg3dIn3yDbEuy6")
-            .WithSSL()
-            .Build();
-        
-        var found = await client.BucketExistsAsync(new BucketExistsArgs().WithBucket("fortest"), cancellationToken);
-        if (!found)
-        {
-            await client.MakeBucketAsync(new MakeBucketArgs().WithBucket("fortest"), cancellationToken);
-        }
-        
-        await using (var stream = file.OpenReadStream())
-        {
-            var uploadFile = new PutObjectArgs()
-                .WithBucket("fortest")
-                .WithObject(file.FileName)
-                .WithStreamData(stream)
-                .WithObjectSize(file.Length)
-                .WithContentType(file.ContentType);
-            
-            await client.PutObjectAsync(uploadFile, cancellationToken);
-        }
-
-        return Ok(file.FileName);
-
-    }
     
     [HttpGet("GetVideoLink")]
     public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
@@ -92,6 +50,85 @@ public class TestController : ControllerBase
     {
         await _emailService.SendEmailAsync("bulatfri18@gmail.com", "Хуй", "ХУЙ");
 
+        return Ok();
+    }
+
+    [HttpGet("GetVideoById")]
+    public async Task<IActionResult> GetVideo(IdRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetVideoQuery(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);    
+    }
+
+    /// <summary>
+    /// Получить канал по Id 
+    /// </summary>
+    /// <param name="files"></param>
+    /// <param name="cancellationToken">cancellationToken</param>
+    /// <returns>Канал</returns>
+    [HttpPost("UploadFilesForChannel")]
+    public async Task<IActionResult> UploadFilesForChannel(List<IFormFile> files, CancellationToken cancellationToken)
+    {
+        var channel =
+            await _context.Channels.FirstOrDefaultAsync(x => x.Id == Guid.Parse("bba9b7e4-33e6-447e-b33a-cc5c60d77365"),
+                cancellationToken);
+        foreach (var file in files)
+        {
+            var fileToDb = new File
+            {
+                Size = file.Length,
+                ContentType = file.ContentType,
+                Path = "fafwf",
+                FileName = file.FileName,
+                BucketName = channel!.Id.ToString()
+            };
+
+            await _context.Files.AddAsync(fileToDb, cancellationToken);
+            if (fileToDb.FileName == "GIN.jpg")
+                channel.BannerImg = fileToDb;
+
+            else
+                channel.MainImgFile = fileToDb;
+            
+            await _context.SaveChangesAsync(cancellationToken);
+
+            await _service.UploadAsync(new FileContent
+            {
+                Content = file.OpenReadStream(),
+                FileName = file.FileName,
+                ContentType = file.ContentType,
+                Lenght = file.Length,
+                Bucket = channel.Id.ToString()
+            }, cancellationToken);
+
+        }
+
+        return Ok();
+    }
+
+    [HttpDelete("DeleteMe")]
+    public async Task<IActionResult> DeleteUSer(CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(
+            x => x.Id == Guid.Parse("18b88d2e-0b9e-41bd-8f44-2bd2c3fd04c2"), cancellationToken); 
+        _context.Users.Remove(user!);
+
+        await _context.SaveChangesAsync(cancellationToken);
+        
+        return Ok();
+    }
+    
+    [HttpDelete("DeleteAll")]
+    public async Task<IActionResult> DeleteAllUser(CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.ToListAsync(cancellationToken); 
+        _context.Users.RemoveRange(user);
+
+        await _context.SaveChangesAsync(cancellationToken);
+        
         return Ok();
     }
 }

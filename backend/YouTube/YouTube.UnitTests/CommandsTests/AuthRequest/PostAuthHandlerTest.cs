@@ -84,7 +84,7 @@ public class PostAuthHandlerTest : TestCommandBase
     }
     
     [Fact]
-    public async Task AuthHandler_ThrowBadRequestException_ForCreateAsyncIsCrash()
+    public async Task AuthHandler_ThrowIdentityException_ForCreateAsyncIsCrash()
     {
         UserManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Failed());
@@ -103,7 +103,7 @@ public class PostAuthHandlerTest : TestCommandBase
         var handler = new AuthHandler(UserManager.Object, SignInManager.Object, UserRepository.Object,
             JwtGenerator.Object, EmailService.Object, Context);
     
-        await Assert.ThrowsAsync<BadRequestException>(async () =>
+        await Assert.ThrowsAsync<IdentityException>(async () =>
         {
             await handler.Handle(command, default);
         });

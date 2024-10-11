@@ -14,6 +14,7 @@ public class AuthRequest
         SurName = request.SurName;
         DateOfBirth = request.DateOfBirth;
         Gender = request.Gender;
+        Country = request.Country;
     }
 
     public string Password { get; set; } = default!;
@@ -27,4 +28,6 @@ public class AuthRequest
     public DateTime DateOfBirth { get; set; }
     
     public string Gender { get; set; } = default!;
+
+    public string Country { get; set; } = default!;
 }
