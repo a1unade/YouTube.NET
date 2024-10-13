@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  youtube-frontend:
+    build:
+      context: ./youtube-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5172:80"
+
+  youtube-accounts:
+    build:
+      context: ./youtube-accounts
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80" 
