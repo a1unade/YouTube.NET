@@ -11,20 +11,19 @@ namespace YouTube.Application.Features.Email.CodeCheckForChangePassword;
 
 public class CodeCheckForChangePasswordHandler : IRequestHandler<CodeCheckForChangePasswordCommand, UserIdResponse>
 {
-    private readonly IUserRepository _userRepository;
     private readonly UserManager<Domain.Entities.User> _userManager;
 
-    public CodeCheckForChangePasswordHandler(IUserRepository userRepository, UserManager<Domain.Entities.User> userManager)
+    public CodeCheckForChangePasswordHandler(UserManager<Domain.Entities.User> userManager)
     {
-        _userRepository = userRepository;
         _userManager = userManager;
     }
+    
     public async Task<UserIdResponse> Handle(CodeCheckForChangePasswordCommand request, CancellationToken cancellationToken)
     {
         if (request.Email.IsNullOrEmpty() || request.Code.IsNullOrEmpty())
             throw new ValidationException();
 
-        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

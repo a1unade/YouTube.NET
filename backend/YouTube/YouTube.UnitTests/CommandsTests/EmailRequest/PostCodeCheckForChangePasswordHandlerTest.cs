@@ -22,7 +22,7 @@ public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForChangePasswordCommand(request);
-        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+        var handler = new CodeCheckForChangePasswordHandler(UserManager.Object);
 
         var response = await handler.Handle(command, default);
         
@@ -41,7 +41,7 @@ public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForChangePasswordCommand(request);
-        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+        var handler = new CodeCheckForChangePasswordHandler(UserManager.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -59,7 +59,7 @@ public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForChangePasswordCommand(request);
-        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+        var handler = new CodeCheckForChangePasswordHandler(UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -81,7 +81,7 @@ public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForChangePasswordCommand(request);
-        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+        var handler = new CodeCheckForChangePasswordHandler(UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {
@@ -102,7 +102,7 @@ public class PostCodeCheckForChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForChangePasswordCommand(request);
-        var handler = new CodeCheckForChangePasswordHandler(UserRepository.Object, UserManager.Object);
+        var handler = new CodeCheckForChangePasswordHandler(UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {

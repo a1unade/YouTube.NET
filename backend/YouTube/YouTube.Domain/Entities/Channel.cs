@@ -59,7 +59,7 @@ public class Channel : BaseEntity
     /// <summary>
     /// Страна
     /// </summary>
-    public string Country { get; set; } = default!;
+    public string? Country { get; set; } 
 
     /// <summary>
     /// Подписки на каналы

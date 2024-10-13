@@ -24,7 +24,6 @@ public class ChannelConfiguration : IEntityTypeConfiguration<Channel>
             .HasDefaultValue(0);
         
         builder.Property(x => x.Country)
-            .IsRequired()
             .HasMaxLength(50);
 
         builder.Property(x => x.BannerImgId);

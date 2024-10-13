@@ -23,7 +23,6 @@ public class UserInfoConfiguration : IEntityTypeConfiguration<UserInfo>
         builder.Property(x => x.Gender);
 
         builder.Property(x => x.Country)
-            .IsRequired()
             .HasMaxLength(50);
     }
 }

@@ -140,6 +140,18 @@ public class TestCommandBase : IDisposable
         UserManager.Setup(x => x.GeneratePasswordResetTokenAsync(It.IsAny<User>()))
             .ReturnsAsync("1234");
 
+        UserManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>()))
+            .ReturnsAsync((string email) =>
+            {
+                return Context.Users.FirstOrDefault(x => x.Email == email);
+            });
+
+        UserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+            .ReturnsAsync((string id) =>
+            {
+                return Context.Users.FirstOrDefault(x => x.Id == Guid.Parse(id));
+            });
+
         UserManager.Setup(x => x.ResetPasswordAsync(It.IsAny<User>(), It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(IdentityResult.Success);
 

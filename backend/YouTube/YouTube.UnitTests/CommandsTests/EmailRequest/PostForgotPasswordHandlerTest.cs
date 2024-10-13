@@ -20,7 +20,7 @@ public class PostForgotPasswordHandlerTest : TestCommandBase
 
         var command = new ForgotPasswordSendEmailCommand(request);
         var handler =
-            new ForgotPasswordSendEmailHandler(EmailService.Object, UserRepository.Object, UserManager.Object);
+            new ForgotPasswordSendEmailHandler(EmailService.Object, UserManager.Object);
 
         var response = await handler.Handle(command, default);
         
@@ -38,7 +38,7 @@ public class PostForgotPasswordHandlerTest : TestCommandBase
         
         var command = new ForgotPasswordSendEmailCommand(request);
         var handler =
-            new ForgotPasswordSendEmailHandler(EmailService.Object, UserRepository.Object, UserManager.Object);
+            new ForgotPasswordSendEmailHandler(EmailService.Object, UserManager.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -56,7 +56,7 @@ public class PostForgotPasswordHandlerTest : TestCommandBase
         
         var command = new ForgotPasswordSendEmailCommand(request);
         var handler =
-            new ForgotPasswordSendEmailHandler(EmailService.Object, UserRepository.Object, UserManager.Object);
+            new ForgotPasswordSendEmailHandler(EmailService.Object, UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

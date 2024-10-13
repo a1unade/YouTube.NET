@@ -78,6 +78,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             User = user
         };
         
+        await _context.Channels.AddAsync(channel, cancellationToken);
 
         IdentityResult result = await _userManager.CreateAsync(user, request.Password);
 
@@ -87,11 +88,11 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             throw new IdentityException(errors, HttpStatusCode.BadRequest);
         }
         
-        await _context.Channels.AddAsync(channel, cancellationToken);
         await _signInManager.SignInAsync(user, false);
 
         var code = _emailService.GenerateRandomCode();
         await _userManager.AddClaimAsync(user, new Claim(EmailSuccessMessage.EmailConfirmCodeString, code));
+        
         await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
         return new AuthResponse

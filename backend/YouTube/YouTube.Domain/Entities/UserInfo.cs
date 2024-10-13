@@ -27,7 +27,7 @@ public class UserInfo : BaseEntity
     /// <summary>
     /// Страна
     /// </summary>
-    public string Country { get; set; } = default!;
+    public string? Country { get; set; }
     
     /// <summary>
     /// Id Пользователя

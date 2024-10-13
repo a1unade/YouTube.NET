@@ -14,13 +14,11 @@ namespace YouTube.Application.Features.Email.ForgotPasswordSendEmail;
 public class ForgotPasswordSendEmailHandler : IRequestHandler<ForgotPasswordSendEmailCommand, BaseResponse>
 {
     private readonly IEmailService _emailService;
-    private readonly IUserRepository _userRepository;
     private readonly UserManager<Domain.Entities.User> _userManager;
 
-    public ForgotPasswordSendEmailHandler(IEmailService emailService, IUserRepository userRepository, UserManager<Domain.Entities.User> userManager)
+    public ForgotPasswordSendEmailHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager)
     {
         _emailService = emailService;
-        _userRepository = userRepository;
         _userManager = userManager;
     }
     public async Task<BaseResponse> Handle(ForgotPasswordSendEmailCommand request, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ public class ForgotPasswordSendEmailHandler : IRequestHandler<ForgotPasswordSend
         if (request.Email.IsNullOrEmpty())
             throw new ValidationException();
         
-        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);
