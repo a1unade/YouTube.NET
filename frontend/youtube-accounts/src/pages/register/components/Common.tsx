@@ -7,8 +7,9 @@ const Common = (props: {
   containerContent: number;
   gender: string;
   setGender: React.Dispatch<React.SetStateAction<string>>;
+  setDate: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  const { setContainerContent, gender, setGender, containerContent } = props;
+  const { setContainerContent, gender, setGender, setDate, containerContent } = props;
   const [day, setDay] = useState(''); // день рождения
   const [month, setMonth] = useState(''); // месяц рождения
   const [year, setYear] = useState(''); // год рождения
@@ -39,6 +40,7 @@ const Common = (props: {
     }
 
     if (gender.length > 0 && dateMessage.length === 0) {
+      setDate(`${year}-${month}-${day}`);
       setContainerContent(containerContent + 1);
     }
   };

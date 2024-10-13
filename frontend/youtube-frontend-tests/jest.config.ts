@@ -12,6 +12,7 @@ module.exports = {
         "temp-src/**/*.{ts,tsx}",
         "!temp-src/main.tsx",
         "!temp-src/assets/icons.tsx",
+        "!temp-src/types/",
         "!temp-src/**/*.d.ts",
         "acc-src/**/*.{ts,tsx}",
         "!acc-src/main.tsx",

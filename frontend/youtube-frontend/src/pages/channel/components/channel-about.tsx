@@ -28,7 +28,7 @@ const ChannelAbout = (props: { description: string }) => {
         <h3>Ссылки</h3>
         <div className="channel-link-list">
           {links.map((link) => (
-            <ChannelLink link={link} />
+            <ChannelLink key={link} link={link} />
           ))}
         </div>
       </div>

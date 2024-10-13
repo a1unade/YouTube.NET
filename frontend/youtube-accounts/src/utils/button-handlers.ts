@@ -1,11 +1,6 @@
 import { validateEmail } from './validator.ts';
-import React from 'react';
 
-export const handleNextButtonClick = (
-  email: string,
-  setContainerContent: React.Dispatch<React.SetStateAction<number>>,
-  containerContent: number,
-) => {
+export const handleNextButtonClick = (email: string) => {
   const message = validateEmail(email, false);
   if (message.length > 0) {
     document.getElementById('email')!.classList.add('error', 'shake');
@@ -14,8 +9,6 @@ export const handleNextButtonClick = (
     setTimeout(() => {
       document.getElementById('email')!.classList.remove('shake');
     }, 500);
-  } else {
-    setContainerContent(containerContent + 1);
   }
 };
 

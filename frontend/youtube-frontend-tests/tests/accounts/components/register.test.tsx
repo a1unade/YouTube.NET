@@ -1,93 +1,217 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 // @ts-ignore
-import Register from '../../../acc-src/pages/register/index.tsx';
-import { useState as useStateMock } from 'react';
+import Register from '../../../acc-src/pages/register/index';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
+// @ts-ignore
+import apiClient from '../../../acc-src/utils/api-client.ts';
+import React from "react";
 
-jest.mock('../../../acc-src/pages/register/components/Name.tsx', () => () => <div>Name Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Common.tsx', () => () => <div>Common Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Email.tsx', () => () => <div>Email Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Password.tsx', () => () => <div>Password Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Confirmation.tsx', () => () => <div>Confirmation Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Check.tsx', () => () => <div>Check Component</div>);
-jest.mock('../../../acc-src/pages/register/components/Terms.tsx', () => () => <div>Terms Component</div>);
+interface ContainerProps {
+    setContainerContent: React.Dispatch<React.SetStateAction<number>>;
+}
 
-jest.mock('react', () => ({
-    ...jest.requireActual('react'),
-    useState: jest.fn(),
+interface ConfirmProps {
+    processAuth: () => void;
+    setContainerContent: React.Dispatch<React.SetStateAction<number>>;
+}
+
+jest.mock('../../../acc-src/pages/register/components/Name.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Name Component
+        <button id={"next-button-1"} onClick={() => setContainerContent(1)}>Next</button>
+    </div>
+));
+jest.mock('../../../acc-src/pages/register/components/Common.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Common Component
+        <button id={"next-button-2"} onClick={() => setContainerContent(2)}>Next</button>
+    </div>
+));
+jest.mock('../../../acc-src/pages/register/components/Email.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Email Component
+        <button id={"next-button-3"} onClick={() => setContainerContent(3)}>Next</button>
+    </div>
+));
+jest.mock('../../../acc-src/pages/register/components/Password.tsx', () => ({
+                                                                                processAuth,
+                                                                                setContainerContent
+                                                                            }: ConfirmProps) => (
+    <>
+        <div>Password Component</div>
+        <button id={"submit-button"} onClick={() => {
+            processAuth();
+            setContainerContent(4);
+        }}>Submit</button>
+    </>
+));
+jest.mock('../../../acc-src/pages/register/components/Confirmation.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Confirmation Component
+        <button id={"next-button-4"} onClick={() => setContainerContent(5)}>Next</button>
+    </div>
+));
+jest.mock('../../../acc-src/pages/register/components/Check.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Check Component
+        <button id={"next-button-5"} onClick={() => setContainerContent(6)}>Next</button>
+    </div>
+));
+jest.mock('../../../acc-src/pages/register/components/Terms.tsx', () => ({ setContainerContent }: ContainerProps) => (
+    <div>
+        Terms Component
+        <button id={"next-button-6"} onClick={() => setContainerContent(7)}>Next</button>
+    </div>
+));
+
+jest.mock('../../../acc-src/utils/api-client.ts');
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn(),
 }));
 
+const mockedApiClient = apiClient as jest.Mocked<typeof apiClient>;
+
 describe('Register component', () => {
-    let setContainerContent: jest.Mock;
+    let navigate: jest.Mock;
 
     beforeEach(() => {
-        setContainerContent = jest.fn();
-
-        (useStateMock as jest.Mock)
-            .mockImplementation((initialValue) => {
-                if (typeof initialValue === 'number') {
-                    return [0, setContainerContent];
-                }
-                return [initialValue, jest.fn()];
-            });
-
-        render(<Register />);
-    });
-
-    afterEach(() => {
+        navigate = jest.fn();
+        (useNavigate as jest.Mock).mockReturnValue(navigate);
         jest.clearAllMocks();
+
+        render(
+            <BrowserRouter>
+                <Register />
+            </BrowserRouter>
+        );
     });
 
-    it('renders Name component when containerContent is 0', () => {
-        // @ts-ignore
+    it('renders Name component initially', () => {
         expect(screen.getByText('Name Component')).toBeInTheDocument();
     });
 
-    it('renders Common component when containerContent is 1', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [1, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Common Component')).toBeInTheDocument();
+    it('navigates to Common component on Name Next click', async () => {
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+
+        await waitFor(() => expect(screen.getByText('Common Component')).toBeInTheDocument());
     });
 
-    it('renders Email component when containerContent is 2', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [2, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Email Component')).toBeInTheDocument();
+    it('navigates to Email component on Common Next click', async () => {
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+
+        await waitFor(() => expect(screen.getByText('Email Component')).toBeInTheDocument());
     });
 
-    it('renders Password component when containerContent is 3', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [3, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Password Component')).toBeInTheDocument();
+    it('calls processAuth on Password Submit click', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 200, data: { userId: '123' } });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+
+        expect(mockedApiClient.post).toHaveBeenCalled();
     });
 
-    it('renders Confirmation component when containerContent is 4', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [4, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Confirmation Component')).toBeInTheDocument();
+    it('navigates to error on API error', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 400 });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+
+        expect(mockedApiClient.post).toHaveBeenCalled();
+        expect(navigate).toHaveBeenCalledWith('/error');
     });
 
-    it('renders Check component when containerContent is 5', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [5, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Check Component')).toBeInTheDocument();
+    it('renders Confirmation component', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 200, data: { userId: '123' } });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+
+        await waitFor(() => expect(screen.getByText('Confirmation Component')).toBeInTheDocument());
     });
 
-    it('renders Terms component when containerContent is 6', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [6, setContainerContent]);
-        render(<Register />);
-        // @ts-ignore
-        expect(screen.getByText('Terms Component')).toBeInTheDocument();
+    it('renders Check component', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 200, data: { userId: '123' } });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-4")!);
+        });
+
+        await waitFor(() => expect(screen.getByText('Check Component')).toBeInTheDocument());
     });
 
-    it('returns null for an unknown containerContent value', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [999, setContainerContent]);
-        const { container } = render(<Register />);
-        // @ts-ignore
-        expect(container).toBeEmptyDOMElement();
+    it('renders Terms component', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 200, data: { userId: '123' } });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-4")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-5")!);
+        });
+
+        await waitFor(() => expect(screen.getByText('Terms Component')).toBeInTheDocument());
     });
 });

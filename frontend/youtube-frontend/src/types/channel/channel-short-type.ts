@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export type ChannelShortType = {
   id: number;
   name: string;

@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ChannelElement from '../../../temp-src/components/channel/index.tsx';
 // @ts-ignore
 import { useAlerts } from '../../../temp-src/hooks/alert/use-alerts.tsx';
+import {BrowserRouter} from "react-router-dom";
 
 jest.mock('../../../temp-src/hooks/alert/use-alerts.tsx', () => ({
     useAlerts: jest.fn(),
@@ -25,7 +26,9 @@ describe('ChannelElement', () => {
             addAlert: addAlertMock,
         });
 
-        render(<ChannelElement channel={mockChannel} />);
+        render(<BrowserRouter>
+            <ChannelElement channel={mockChannel} />
+        </BrowserRouter>);
     });
 
     afterEach(() => {

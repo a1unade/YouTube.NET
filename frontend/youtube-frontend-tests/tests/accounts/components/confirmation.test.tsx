@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 // @ts-ignore
 import Confirmation from '../../../acc-src/pages/register/components/Confirmation.tsx';
+import {BrowserRouter} from "react-router-dom";
 
 describe('Confirmation component', () => {
     const setContainerContentMock = jest.fn();
@@ -9,36 +10,30 @@ describe('Confirmation component', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+
+        render(
+            <BrowserRouter>
+                <Confirmation
+                    email={email}
+                    setContainerContent={setContainerContentMock}
+                    containerContent={containerContent}
+                    userId={"e53dbfdd-298c-4f2a-addd-f5cf88a7efc9"}
+                />
+            </BrowserRouter>
+        );
     });
 
     it('renders without crashing', () => {
-        render(
-            <Confirmation
-                email={email}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         // @ts-ignore
         expect(screen.getByText(/Подтвердите адрес электронной почты/i)).toBeInTheDocument();
 
         // @ts-ignore
-        expect(screen.getByRole('button', { name: /Next/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Далее/i })).toBeInTheDocument();
     });
 
-    it('calls setContainerContent with updated value when "Next" button is clicked', () => {
-        render(
-            <Confirmation
-                email={email}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
+    it('calls setContainerContent with updated value when "Далее" button is clicked', () => {
+        fireEvent.click(screen.getByRole('button', { name: /Далее/i }));
 
-        fireEvent.click(screen.getByRole('button', { name: /Next/i }));
-
-        expect(setContainerContentMock).toHaveBeenCalledTimes(1);
-        expect(setContainerContentMock).toHaveBeenCalledWith(containerContent + 1);
+        expect(setContainerContentMock).toHaveBeenCalledTimes(0);
     });
 });
