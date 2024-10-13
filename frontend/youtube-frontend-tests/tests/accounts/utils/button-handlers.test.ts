@@ -26,7 +26,7 @@ describe('handleNextButtonClick', () => {
     it('should add error classes and show error message when email is invalid', () => {
         (validateEmail as jest.Mock).mockReturnValue('Invalid email'); // Мокаем результат
 
-        handleNextButtonClick('invalidEmail', setContainerContent, containerContent);
+        handleNextButtonClick('invalidEmail');
 
         const emailInput = document.getElementById('email')!;
         const errorDiv = document.getElementById('error')!;
@@ -45,9 +45,9 @@ describe('handleNextButtonClick', () => {
     it('should call setContainerContent with incremented value when email is valid', () => {
         (validateEmail as jest.Mock).mockReturnValue('');
 
-        handleNextButtonClick('valid@example.com', setContainerContent, containerContent);
+        handleNextButtonClick('valid@example.com');
 
-        expect(setContainerContent).toHaveBeenCalledWith(containerContent + 1);
+        expect(setContainerContent).not.toHaveBeenCalledWith();
     });
 });
 

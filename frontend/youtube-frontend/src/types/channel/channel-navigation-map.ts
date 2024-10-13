@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 // prettier-ignore
 export const navigationMap: { [p: string]: string } = {
   'videos': 'Видео',

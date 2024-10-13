@@ -6,9 +6,11 @@ import { makePasswordVisible } from '../../../utils/button-handlers.ts';
 const Password = (props: {
   setContainerContent: React.Dispatch<React.SetStateAction<number>>;
   containerContent: number;
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  processAuth: () => void;
 }) => {
-  const { setContainerContent, containerContent } = props;
-  const [password, setPassword] = useState('');
+  const { setContainerContent, containerContent, setPassword, password, processAuth } = props;
   const [confirm, setConfirm] = useState('');
 
   const handleNextButtonClick = async () => {
@@ -33,7 +35,7 @@ const Password = (props: {
     }
 
     if (message.length === 0 && password === confirm) {
-      setContainerContent(containerContent + 1);
+      processAuth();
     }
   };
 

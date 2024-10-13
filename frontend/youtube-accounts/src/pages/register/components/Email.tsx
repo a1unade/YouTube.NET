@@ -1,5 +1,8 @@
 import React from 'react';
 import { handleNextButtonClick } from '../../../utils/button-handlers.ts';
+import apiClient from '../../../utils/api-client.ts';
+import { EmailResponse } from '../../../interfaces/email-response.ts';
+import { useNavigate } from 'react-router-dom';
 
 const Email = (props: {
   email: string;
@@ -7,7 +10,24 @@ const Email = (props: {
   setContainerContent: React.Dispatch<React.SetStateAction<number>>;
   containerContent: number;
 }) => {
+  const navigate = useNavigate();
   const { email, setEmail, setContainerContent, containerContent } = props;
+
+  const checkUserEmail = () => {
+    apiClient
+      .post<EmailResponse>('User/CheckUserEmail', {
+        email: email,
+      })
+      .then((response) => {
+        const { newUser, confirmation, error } = response.data;
+
+        if (newUser) setContainerContent(containerContent + 1);
+
+        if (confirmation) setContainerContent(4);
+
+        if (error) navigate('/error');
+      });
+  };
 
   return (
     <>
@@ -51,7 +71,10 @@ const Email = (props: {
         </button>
         <button
           className="right-button"
-          onClick={() => handleNextButtonClick(email, setContainerContent, containerContent)}
+          onClick={() => {
+            handleNextButtonClick(email);
+            checkUserEmail();
+          }}
         >
           Далее
         </button>

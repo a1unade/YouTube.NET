@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Email from '../../../acc-src/pages/register/components/Email';
 // @ts-ignore
 import { handleNextButtonClick } from '../../../acc-src/utils/button-handlers.ts';
+import {BrowserRouter} from "react-router-dom";
 
 jest.mock('../../../acc-src/utils/button-handlers.ts');
 
@@ -13,19 +14,21 @@ describe('Email component', () => {
     const email = '';
 
     beforeEach(() => {
-        jest.clearAllMocks(); // Очищаем мок функции перед каждым тестом
+        jest.clearAllMocks();
+
+        render(
+            <BrowserRouter>
+                <Email
+                    email={email}
+                    setEmail={setEmailMock}
+                    setContainerContent={setContainerContentMock}
+                    containerContent={containerContent}
+                />
+            </BrowserRouter>
+        );
     });
 
     it('renders without crashing', () => {
-        render(
-            <Email
-                email={email}
-                setEmail={setEmailMock}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         // @ts-ignore
         expect(screen.getByText(/Использовать существующий адрес электронной почты/i)).toBeInTheDocument();
         // @ts-ignore
@@ -41,62 +44,22 @@ describe('Email component', () => {
     });
 
     it('calls setEmail when typing in the input field', () => {
-        render(
-            <Email
-                email={email}
-                setEmail={setEmailMock}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         const input = screen.getByPlaceholderText(/Адрес электронной почты/i);
         fireEvent.change(input, { target: { value: 'test@example.com' } });
-
         expect(setEmailMock).toHaveBeenCalledWith('test@example.com');
     });
 
     it('calls setContainerContent with decremented value when "Назад" button is clicked', () => {
-        render(
-            <Email
-                email={email}
-                setEmail={setEmailMock}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         fireEvent.click(screen.getByRole('button', { name: /Назад/i }));
-
         expect(setContainerContentMock).toHaveBeenCalledWith(containerContent - 1);
     });
 
     it('calls handleNextButtonClick when "Далее" button is clicked', () => {
-        render(
-            <Email
-                email={email}
-                setEmail={setEmailMock}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         fireEvent.click(screen.getByRole('button', { name: /Далее/i }));
-
-        expect(handleNextButtonClick).toHaveBeenCalledWith(email, setContainerContentMock, containerContent);
+        expect(handleNextButtonClick).toHaveBeenCalledWith(email);
     });
 
     it('shows an error message when email is not valid', () => {
-
-        render(
-            <Email
-                email={email}
-                setEmail={setEmailMock}
-                setContainerContent={setContainerContentMock}
-                containerContent={containerContent}
-            />
-        );
-
         const input = screen.getByPlaceholderText(/Адрес электронной почты/i);
         fireEvent.change(input, { target: { value: 'invalid-email' } });
     });

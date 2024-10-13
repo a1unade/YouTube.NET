@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import VideoActions from '../../../temp-src/pages/player/components/video-actions.tsx';
 // @ts-ignore
 import { useAlerts } from '../../../temp-src/hooks/alert/use-alerts.tsx';
+import {BrowserRouter} from "react-router-dom";
 
 jest.mock('../../../temp-src/hooks/alert/use-alerts.tsx', () => ({
     useAlerts: jest.fn(),
@@ -33,6 +34,16 @@ describe('VideoActions component', () => {
         addAlert = jest.fn();
 
         (useAlerts as jest.Mock).mockReturnValue({ addAlert });
+
+        render(
+            <BrowserRouter>
+                <VideoActions
+                    setShareActive={setShareActive}
+                    setSaveActive={setSaveActive}
+                    setReportVideoActive={setReportVideoActive}
+                />
+            </BrowserRouter>
+        );
     });
 
     afterEach(() => {
@@ -40,14 +51,6 @@ describe('VideoActions component', () => {
     });
 
     it('renders channel info and buttons', () => {
-        render(
-            <VideoActions
-                setShareActive={setShareActive}
-                setSaveActive={setSaveActive}
-                setReportVideoActive={setReportVideoActive}
-            />
-        );
-
         // @ts-ignore
         expect(screen.getByText('Название канала')).toBeInTheDocument();
         // @ts-ignore
@@ -62,14 +65,6 @@ describe('VideoActions component', () => {
     });
 
     it('toggles subscription and shows alerts', () => {
-        render(
-            <VideoActions
-                setShareActive={setShareActive}
-                setSaveActive={setSaveActive}
-                setReportVideoActive={setReportVideoActive}
-            />
-        );
-
         const subscribeButton = screen.getByText('Подписаться');
 
         fireEvent.click(subscribeButton);
@@ -84,14 +79,6 @@ describe('VideoActions component', () => {
     });
 
     it('opens Premium Modal on download without premium', () => {
-        render(
-            <VideoActions
-                setShareActive={setShareActive}
-                setSaveActive={setSaveActive}
-                setReportVideoActive={setReportVideoActive}
-            />
-        );
-
         const downloadButton = screen.getByText('Скачать').parentElement as HTMLElement;
 
         fireEvent.click(downloadButton);

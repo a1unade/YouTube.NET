@@ -48,7 +48,10 @@ const Email = (props: {
           </button>
           <button
             className="right-button"
-            onClick={() => handleNextButtonClick(email, setContainerContent, containerContent)}
+            onClick={() => {
+              handleNextButtonClick(email);
+              setContainerContent(containerContent + 1);
+            }}
           >
             Далее
           </button>

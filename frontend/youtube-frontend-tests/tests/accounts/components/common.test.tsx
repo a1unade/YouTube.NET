@@ -14,6 +14,7 @@ jest.mock('../../../acc-src/utils/error-messages.ts', () => ({
 describe('Common component', () => {
     const setContainerContentMock = jest.fn();
     const setGenderMock = jest.fn();
+    const setDateMock = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -31,6 +32,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender=""
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -53,6 +55,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender=""
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -79,6 +82,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender=""
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -102,6 +106,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender="м"
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -121,6 +126,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender="м"
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -143,6 +149,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender=""
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -158,6 +165,7 @@ describe('Common component', () => {
                 containerContent={2}
                 gender="м"
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -175,6 +183,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender="м"
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 
@@ -204,6 +213,7 @@ describe('Common component', () => {
                 containerContent={1}
                 gender=""
                 setGender={setGenderMock}
+                setDate={setDateMock}
             />
         );
 

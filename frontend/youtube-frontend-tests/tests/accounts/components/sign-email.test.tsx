@@ -75,9 +75,7 @@ describe('Email Component', () => {
         fireEvent.click(nextButton);
 
         expect(handleNextButtonClick).toHaveBeenCalledWith(
-            'test@example.com',
-            mockSetContainerContent,
-            0
+            'test@example.com'
         );
     });
 });
