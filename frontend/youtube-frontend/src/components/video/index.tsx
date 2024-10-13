@@ -44,7 +44,7 @@ const Video = (props: {
       customUrl: 'example-channel',
       thumbnails: {
         default: {
-          url: 'https://yt3.ggpht.com/tDMXnQ33Oz-56RsgOMMmCcF5YieuKTWLa2R8cwkofUq_kTtnF3-curv8Jw0xpwCXnjIqtXvXXg=s88-c-k-c0x00ffffff-no-rj',
+          url: 'https://yt3.googleusercontent.com/mx5F0oIYca4pqKVSjL3ZdzsfYDONENYB46N5QJzUinDwr6oOVdF8GPpzeIojesWAmT3fU1nc=s160-c-k-c0x00ffffff-no-rj',
         },
       },
     },

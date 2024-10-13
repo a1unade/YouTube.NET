@@ -305,3 +305,7 @@
   display: flex;
   flex-direction: column;
 }
+
+.channel-video .main-video-image-div {
+  display: none;
+}

@@ -1,31 +1,14 @@
-/* istanbul ignore file */
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { navigationMap } from '../../../types/channel/channel-navigation-map.ts';
 
-// prettier-ignore
-const navigationMap: { [p: string]: string } = {
-  'featured': 'Главная',
-  'videos': 'Видео',
-  'playlists': 'Плейлисты',
-  'community': 'Сообщество'
-};
-
-const ChannelNavigation = () => {
+const ChannelNavigation = (props: {
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const { selected, setSelected } = props;
   const { id } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState<string>('Главная');
-
-  useEffect(() => {
-    const pathSegments = location.pathname.split('/');
-    const lastSegment = pathSegments[pathSegments.length - 1];
-
-    if (navigationMap[lastSegment]) {
-      setSelected(navigationMap[lastSegment]);
-    } else {
-      setSelected('Главная');
-    }
-  }, [location.pathname]);
 
   const handleSelect = (title: string) => {
     const currentButton = document.getElementById(`channel-button-${selected}`)!;
@@ -41,13 +24,6 @@ const ChannelNavigation = () => {
 
   return (
     <div className="channel-navigation-button-container">
-      <button
-        id="channel-button-Главная"
-        className={selected === 'Главная' ? 'selected' : ''}
-        onClick={() => handleSelect('Главная')}
-      >
-        Главная
-      </button>
       <button
         id="channel-button-Видео"
         className={selected === 'Видео' ? 'selected' : ''}
@@ -68,6 +44,13 @@ const ChannelNavigation = () => {
         onClick={() => handleSelect('Сообщество')}
       >
         Сообщество
+      </button>
+      <button
+        id="channel-button-О канале"
+        className={selected === 'О канале' ? 'selected' : ''}
+        onClick={() => handleSelect('О канале')}
+      >
+        О канале
       </button>
     </div>
   );
