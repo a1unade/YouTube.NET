@@ -2,9 +2,11 @@ import { ChannelShortType } from '../../types/channel/channel-short-type.ts';
 import { useState } from 'react';
 import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
 import { formatViews } from '../../utils/format-functions.ts';
+import { useNavigate } from 'react-router-dom';
 
 const ChannelElement = (props: { channel: ChannelShortType }) => {
   const { channel } = props;
+  const navigate = useNavigate();
   const [subscribed, setSubscribed] = useState(true);
   const { addAlert } = useAlerts();
 
@@ -20,7 +22,10 @@ const ChannelElement = (props: { channel: ChannelShortType }) => {
 
   return (
     <div className="channel-short-element-layout">
-      <div className="channel-short-element-info">
+      <div
+        className="channel-short-element-info"
+        onClick={() => navigate(`/channel/${channel.id}`)}
+      >
         <div className="channel-short-element-author-img">
           <img src={channel.image} alt={channel.name} />
         </div>

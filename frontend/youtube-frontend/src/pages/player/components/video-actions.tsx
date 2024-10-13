@@ -11,6 +11,7 @@ import React, { useRef, useState } from 'react';
 import ActionsModal from '../../../components/modal/actions-modal.tsx';
 import PremiumModal from '../../../components/modal/premium-modal.tsx';
 import { useAlerts } from '../../../hooks/alert/use-alerts.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const VideoActions = (props: {
   setShareActive: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,16 +24,18 @@ const VideoActions = (props: {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const premium = false;
+  const navigate = useNavigate();
   const { addAlert } = useAlerts();
   const [actionsModal, setActionsModal] = useState(false);
   const [premiumModal, setPremiumModal] = useState(false);
 
   const channel = {
+    id: '1',
     snippet: {
       customUrl: 'example-channel',
       thumbnails: {
         default: {
-          url: 'https://yt3.ggpht.com/tDMXnQ33Oz-56RsgOMMmCcF5YieuKTWLa2R8cwkofUq_kTtnF3-curv8Jw0xpwCXnjIqtXvXXg=s88-c-k-c0x00ffffff-no-rj',
+          url: 'https://yt3.googleusercontent.com/mx5F0oIYca4pqKVSjL3ZdzsfYDONENYB46N5QJzUinDwr6oOVdF8GPpzeIojesWAmT3fU1nc=s160-c-k-c0x00ffffff-no-rj',
         },
       },
     },
@@ -62,7 +65,7 @@ const VideoActions = (props: {
   return (
     <div className="video-actions-list">
       <div className="player-channel-info">
-        <div className="main-video-info">
+        <div className="main-video-info" onClick={() => navigate(`/channel/${channel.id}`)}>
           <div style={{ marginRight: 10 }}>
             <div className="author-image">
               <img src={channel.snippet.thumbnails.default.url} alt="" />

@@ -77,22 +77,67 @@ export const App = () => {
                 />
               }
             />
-            <Route path="/channel/:id" element={<ChannelFeatured />} />
-            <Route path="/channel/:id/featured" element={<ChannelFeatured />} />
-            <Route path="/channel/:id/videos" element={<ChannelFeatured />} />
-            <Route path="/channel/:id/playlists" element={<ChannelFeatured />} />
-            <Route path="/channel/:id/community" element={<ChannelFeatured />} />
+            <Route
+              path="/channel/:id"
+              element={
+                <ChannelFeatured
+                  setReportVideoActive={setReportVideoActive}
+                  setShareActive={setShareActive}
+                  setSaveVideoActive={setSaveVideoActive}
+                />
+              }
+            />
+            <Route
+              path="/channel/:id/videos"
+              element={
+                <ChannelFeatured
+                  setReportVideoActive={setReportVideoActive}
+                  setShareActive={setShareActive}
+                  setSaveVideoActive={setSaveVideoActive}
+                />
+              }
+            />
+            <Route
+              path="/channel/:id/playlists"
+              element={
+                <ChannelFeatured
+                  setReportVideoActive={setReportVideoActive}
+                  setShareActive={setShareActive}
+                  setSaveVideoActive={setSaveVideoActive}
+                />
+              }
+            />
+            <Route
+              path="/channel/:id/community"
+              element={
+                <ChannelFeatured
+                  setReportVideoActive={setReportVideoActive}
+                  setShareActive={setShareActive}
+                  setSaveVideoActive={setSaveVideoActive}
+                />
+              }
+            />
+            <Route
+              path="/channel/:id/about"
+              element={
+                <ChannelFeatured
+                  setReportVideoActive={setReportVideoActive}
+                  setShareActive={setShareActive}
+                  setSaveVideoActive={setSaveVideoActive}
+                />
+              }
+            />
             <Route path="/feed/subscriptions" element={<Subscriptions />} />
             <Route path="/feed/playlists" element={<Playlists />} />
           </Routes>
         </div>
       </div>
       {/* prettier-ignore */}
-      <SaveVideoModal active={saveVideoActive} setActive={setSaveVideoActive}/>
+      <SaveVideoModal active={saveVideoActive} setActive={setSaveVideoActive} />
       {/* prettier-ignore */}
-      <ShareModal shareActive={shareActive} setShareActive={setShareActive}/>
+      <ShareModal shareActive={shareActive} setShareActive={setShareActive} />
       {/* prettier-ignore */}
-      <ReportModal active={reportVideoActive} setActive={setReportVideoActive}/>
+      <ReportModal active={reportVideoActive} setActive={setReportVideoActive} />
     </div>
   );
 };
