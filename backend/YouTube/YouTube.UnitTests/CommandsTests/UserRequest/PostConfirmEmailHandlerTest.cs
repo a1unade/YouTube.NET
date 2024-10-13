@@ -18,7 +18,7 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
         var response = await handler.Handle(command,default);
 
         
@@ -35,7 +35,7 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
         
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -52,7 +52,7 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
         
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

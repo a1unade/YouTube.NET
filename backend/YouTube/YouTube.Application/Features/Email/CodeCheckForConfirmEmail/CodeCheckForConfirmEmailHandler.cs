@@ -13,14 +13,12 @@ public class CodeCheckForConfirmEmailHandler : IRequestHandler<CodeCheckForConfi
 {
     private readonly IEmailService _emailService;
     private readonly UserManager<Domain.Entities.User> _userManager;
-    private readonly IUserRepository _userRepository;
 
-    public CodeCheckForConfirmEmailHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager,
-        IUserRepository userRepository)
+    public CodeCheckForConfirmEmailHandler(IEmailService emailService, UserManager<Domain.Entities.User> userManager
+        )
     {
         _emailService = emailService;
         _userManager = userManager;
-        _userRepository = userRepository;
     }
 
     public async Task<BaseResponse> Handle(CodeCheckForConfirmEmailCommand request, CancellationToken cancellationToken)
@@ -28,7 +26,7 @@ public class CodeCheckForConfirmEmailHandler : IRequestHandler<CodeCheckForConfi
         if (string.IsNullOrEmpty(request.Code) || request.Id == Guid.Empty)
             throw new ValidationException();
 
-        var user = await _userRepository.FindById(request.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.Id.ToString());
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

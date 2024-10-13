@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     {
         _mediator = mediator;
     }
-//TODO Хуйня не работает
+    
     /// <summary>
     /// Запрос на отправку кода для восстановления пароля
     /// </summary>
@@ -54,7 +54,6 @@ public class UserController : ControllerBase
 
         return BadRequest(result);
     }
-    //TODO Хуйня не работает
 
     /// <summary>
     /// Запрос на отправку сообщения с кодом подтверждения

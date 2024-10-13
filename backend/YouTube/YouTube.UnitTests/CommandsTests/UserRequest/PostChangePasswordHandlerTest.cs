@@ -20,7 +20,7 @@ public class PostChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new ChangePasswordCommand(request);
-        var handler = new ChangePasswordHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ChangePasswordHandler(UserManager.Object, EmailService.Object);
 
         var response = await handler.Handle(command, default);
         
@@ -38,7 +38,7 @@ public class PostChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new ChangePasswordCommand(request);
-        var handler = new ChangePasswordHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ChangePasswordHandler(UserManager.Object, EmailService.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -56,7 +56,7 @@ public class PostChangePasswordHandlerTest : TestCommandBase
         };
 
         var command = new ChangePasswordCommand(request);
-        var handler = new ChangePasswordHandler(UserManager.Object, UserRepository.Object, EmailService.Object);
+        var handler = new ChangePasswordHandler(UserManager.Object, EmailService.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

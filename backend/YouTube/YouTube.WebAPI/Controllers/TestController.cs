@@ -109,17 +109,7 @@ public class TestController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("DeleteMe")]
-    public async Task<IActionResult> DeleteUSer(CancellationToken cancellationToken)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("18b88d2e-0b9e-41bd-8f44-2bd2c3fd04c2"), cancellationToken); 
-        _context.Users.Remove(user!);
-
-        await _context.SaveChangesAsync(cancellationToken);
-        
-        return Ok();
-    }
+  
     
     [HttpDelete("DeleteAll")]
     public async Task<IActionResult> DeleteAllUser(CancellationToken cancellationToken)

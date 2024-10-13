@@ -15,13 +15,11 @@ namespace YouTube.Application.Features.UserRequests.ChangePassword;
 public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, BaseResponse>
 {
     private readonly UserManager<Domain.Entities.User> _userManager;
-    private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
 
-    public ChangePasswordHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IEmailService emailService)
+    public ChangePasswordHandler(UserManager<Domain.Entities.User> userManager, IEmailService emailService)
     {
         _userManager = userManager;
-        _userRepository = userRepository;
         _emailService = emailService;
     }
     
@@ -30,7 +28,7 @@ public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Base
         if (request.Password.IsNullOrEmpty() || request.Id == Guid.Empty)
             throw new ValidationException();
 
-        var user = await _userRepository.FindById(request.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.Id.ToString());
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

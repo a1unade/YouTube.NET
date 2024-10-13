@@ -14,14 +14,12 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
 {
     private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly IJwtGenerator _jwtGenerator;
-    private readonly IUserRepository _userRepository;
     private readonly IEmailService _emailService;
     
-    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IJwtGenerator jwtGenerator, IUserRepository userRepository, IEmailService emailService)
+    public  ConfirmEmailHandler(UserManager<Domain.Entities.User> userManager,IJwtGenerator jwtGenerator, IEmailService emailService)
     {
         _userManager = userManager;
         _jwtGenerator = jwtGenerator;
-        _userRepository = userRepository;
         _emailService = emailService;
     }
 
@@ -30,7 +28,7 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
         if (request.Id == Guid.Empty)
             throw new ValidationException();
         
-        var user = await _userRepository.FindById(request.Id, cancellationToken);
+        var user = await _userManager.FindByIdAsync(request.Id.ToString());
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

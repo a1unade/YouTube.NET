@@ -22,7 +22,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForConfirmEmailCommand(request);
-        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object);
 
         var result = await handler.Handle(command, default);
         
@@ -40,7 +40,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForConfirmEmailCommand(request);
-        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () => { await handler.Handle(command, default); });
     }
@@ -55,7 +55,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForConfirmEmailCommand(request);
-        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -76,7 +76,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForConfirmEmailCommand(request);
-        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {
@@ -97,7 +97,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         };
 
         var command = new CodeCheckForConfirmEmailCommand(request);
-        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object, UserRepository.Object);
+        var handler = new CodeCheckForConfirmEmailHandler(EmailService.Object, UserManager.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {
