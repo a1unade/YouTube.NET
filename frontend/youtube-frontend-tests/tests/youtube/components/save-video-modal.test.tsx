@@ -56,7 +56,6 @@ describe('SaveVideoModal', () => {
         expect(document.body.style.overflow).toBe('');
     });
 
-
     it('calls setActive with false when close-modal button is clicked', () => {
         const closeButton = document.getElementsByClassName("close-modal-button")[0] as HTMLDivElement;
 
@@ -64,4 +63,16 @@ describe('SaveVideoModal', () => {
 
         expect(setActive).toHaveBeenCalledWith(false);
     });
+
+    it('sets body overflow to "" when active is false', () => {
+        render(<SaveVideoModal active={true} setActive={setActive} />);
+
+        expect(document.body.style.overflow).toBe('hidden');
+
+        setActive(false);
+        render(<SaveVideoModal active={false} setActive={setActive} />);
+
+        expect(document.body.style.overflow).toBe('');
+    });
+
 });

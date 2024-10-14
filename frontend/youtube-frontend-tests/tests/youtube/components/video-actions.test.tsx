@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import VideoActions from '../../../temp-src/pages/player/components/video-actions.tsx';
 // @ts-ignore
 import { useAlerts } from '../../../temp-src/hooks/alert/use-alerts.tsx';
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter, useNavigate} from "react-router-dom";
 
 jest.mock('../../../temp-src/hooks/alert/use-alerts.tsx', () => ({
     useAlerts: jest.fn(),
@@ -32,14 +32,17 @@ describe('VideoActions component', () => {
     let setSaveActive: jest.Mock;
     let setReportVideoActive: jest.Mock;
     let addAlert: jest.Mock;
+    let mockNavigate: jest.Mock;
 
     beforeEach(() => {
         setShareActive = jest.fn();
         setSaveActive = jest.fn();
         setReportVideoActive = jest.fn();
         addAlert = jest.fn();
+        mockNavigate = jest.fn();
 
         (useAlerts as jest.Mock).mockReturnValue({ addAlert });
+        (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
         render(
             <BrowserRouter>
@@ -144,6 +147,14 @@ describe('VideoActions component', () => {
         fireEvent.click(shareButton);
 
         expect(setShareActive).toHaveBeenCalledWith(true);
+    });
+
+    it('navigates to the channel when channel info is clicked', () => {
+        const channelInfo = document.getElementsByClassName("main-video-info")[0] as HTMLDivElement;
+
+        fireEvent.click(channelInfo);
+
+        expect(mockNavigate).toHaveBeenCalledWith('/channel/1');
     });
 
 });
