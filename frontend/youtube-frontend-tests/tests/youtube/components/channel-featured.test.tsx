@@ -69,6 +69,7 @@ describe('ChannelFeatured', () => {
         );
 
         const button = document.getElementById("channel-playlists") as HTMLButtonElement;
+
         button.click();
 
         expect(button).toBeInTheDocument();
@@ -86,6 +87,7 @@ describe('ChannelFeatured', () => {
         );
 
         const button = document.getElementById("channel-about") as HTMLButtonElement;
+
         button.click();
 
         expect(button).toBeInTheDocument();
@@ -122,5 +124,4 @@ describe('ChannelFeatured', () => {
 
         expect(document.getElementById("channel-video")).toBeInTheDocument();
     });
-
 });

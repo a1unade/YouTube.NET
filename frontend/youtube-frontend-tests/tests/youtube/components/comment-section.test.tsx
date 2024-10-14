@@ -18,52 +18,50 @@ describe("CommentSection Component", () => {
     });
 
     it("заголовок правильно рендерится", () => {
-        // @ts-ignore
         expect(screen.getByText(/Комментарии: 675/i)).toBeInTheDocument();
     });
 
     it("рендерится форма для ввода комментария", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
-        // @ts-ignore
+
         expect(textarea).toBeInTheDocument();
     });
 
     it("кнопки появляются при нажати на форму с комментарием", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
+
         fireEvent.focus(textarea);
 
-        // @ts-ignore
         expect(screen.getByText("Отмена")).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText("Оставить комментарий")).toBeInTheDocument();
     });
 
     it("кнопки пропадают при выходе из формы", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
+
         fireEvent.focus(textarea);
         fireEvent.blur(textarea);
 
-        // @ts-ignore
         expect(screen.queryByText("Отмена")).not.toBeInTheDocument();
-        // @ts-ignore
         expect(screen.queryByText("Оставить комментарий")).not.toBeInTheDocument();
     });
 
     it("кнопки пропадают при нажатии на кнопку отмена", () => {
         const textarea = screen.getByPlaceholderText("Введите комментарий");
+
         fireEvent.focus(textarea);
 
         const cancelButton = screen.getByText("Отмена");
+
         fireEvent.click(cancelButton);
 
-        // @ts-ignore
         expect(screen.queryByText("Отмена")).not.toBeInTheDocument();
-        // @ts-ignore
         expect(screen.queryByText("Оставить комментарий")).not.toBeInTheDocument();
     });
 
     it("рендер всех комментариев проходит правильно", () => {
         const comments = screen.getAllByTestId("comment");
+
         expect(comments.length).toBe(5);
     });
 
@@ -102,9 +100,7 @@ describe("CommentSection Component", () => {
         ];
 
         comments.forEach(comment => {
-            // @ts-ignore
             expect(screen.getByText(comment.authorDisplayName)).toBeInTheDocument();
-            // @ts-ignore
             expect(screen.getByText(comment.textDisplay)).toBeInTheDocument();
         });
     });

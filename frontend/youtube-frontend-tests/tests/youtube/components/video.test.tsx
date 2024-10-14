@@ -55,13 +55,17 @@ describe('Компонент Видео', () => {
 
     it('переходит на правильную страницу видео при клике', () => {
         const preview = screen.getByTestId('preview-7GO1OZB0UMY');
+
         fireEvent.click(preview);
+
         expect(mockNavigate).toHaveBeenCalledWith('/watch/7GO1OZB0UMY');
     });
 
     it('переходит на правильную страницу канала при клике на изображение канала', () => {
         const authorImage = screen.getByAltText('example-channel profile');
+
         fireEvent.click(authorImage);
+
         expect(mockNavigate).toHaveBeenCalledWith('/channel/example-channel');
     });
 

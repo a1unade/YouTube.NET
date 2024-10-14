@@ -18,6 +18,7 @@ describe('Playlists', () => {
 
     it('renders six PlaylistItem components', () => {
         const items = screen.getAllByText(/Playlist Item/i);
+
         expect(items.length).toBe(6);
         expect(screen.getAllByText(/Playlist Item/i)).toHaveLength(6);
     });

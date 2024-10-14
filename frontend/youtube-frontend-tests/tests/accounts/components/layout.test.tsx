@@ -8,9 +8,8 @@ describe('Layout Component', () => {
         render(<Layout element={testElement} />);
 
         const renderedElement = screen.getByTestId('test-element');
-        // @ts-ignore
+
         expect(renderedElement).toBeInTheDocument();
-        // @ts-ignore
         expect(renderedElement).toHaveTextContent('Test Element');
     });
 
@@ -21,9 +20,7 @@ describe('Layout Component', () => {
         const contentDiv = screen.getByText(/content/i);
         const footer = screen.getByText('Русский');
 
-        // @ts-ignore
         expect(contentDiv).toBeInTheDocument();
-        // @ts-ignore
         expect(footer).toBeInTheDocument();
     });
 
@@ -32,7 +29,7 @@ describe('Layout Component', () => {
         render(<Layout element={testElement} />);
 
         const footer = screen.getByText('Русский');
-        // @ts-ignore
+
         expect(footer).toBeInTheDocument();
     });
 });

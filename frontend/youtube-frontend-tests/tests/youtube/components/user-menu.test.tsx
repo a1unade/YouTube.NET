@@ -9,13 +9,14 @@ describe('UserMenu component', () => {
     it('should add event listener when active is true and remove when active is false', () => {
         const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
         const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-
         const { rerender } = render(
             <UserMenu active={true} setActive={setActive} buttonRef={buttonRef} />
         );
+
         expect(addEventListenerSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
 
         rerender(<UserMenu active={false} setActive={setActive} buttonRef={buttonRef} />);
+
         expect(removeEventListenerSpy).toHaveBeenCalledWith('mousedown', expect.any(Function));
 
         addEventListenerSpy.mockRestore();
@@ -36,8 +37,8 @@ describe('UserMenu component', () => {
         const { container } = render(
             <UserMenu active={true} setActive={setActive} buttonRef={buttonRef} />
         );
-
         const modal = container.querySelector('.actions-modal-window');
+
         fireEvent.mouseDown(modal!);
 
         expect(setActive).toHaveBeenCalled();

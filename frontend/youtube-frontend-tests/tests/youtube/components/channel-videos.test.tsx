@@ -69,6 +69,7 @@ describe('ChannelVideos', () => {
         );
 
         const videosList = container.querySelector('.videos-list');
+
         expect(videosList).toBeInTheDocument();
         expect(videosList!.children.length).toBe(24);
         expect(videosList!.children[0].className).toBe('channel-video');

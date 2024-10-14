@@ -19,6 +19,7 @@ describe("Description Component", () => {
 
     it("рендерится кнопка с текстом 'Развернуть'", () => {
         const button = screen.getByRole("button", { name: /развернуть/i });
+
         expect(button).toBeInTheDocument();
     });
 
@@ -28,7 +29,9 @@ describe("Description Component", () => {
         fireEvent.click(button);
 
         expect(button.textContent).toBe("Свернуть");
+
         const description = screen.getByText(/добро пожаловать в наше полное руководство/i);
+
         expect(description).toHaveClass("description-opened");
     });
 
@@ -36,12 +39,15 @@ describe("Description Component", () => {
         const button = screen.getByRole("button", { name: /развернуть/i });
 
         fireEvent.click(button);
+
         expect(button.textContent).toBe("Свернуть");
 
         const description = screen.getByText(/добро пожаловать в наше полное руководство/i);
+
         expect(description).toHaveClass("description-opened");
 
         fireEvent.click(button);
+
         expect(button.textContent).toBe("Развернуть");
         expect(description).not.toHaveClass("description-opened");
     });

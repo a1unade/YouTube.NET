@@ -38,17 +38,12 @@ describe('Password Component', () => {
 
     it('renders the component correctly', () => {
         render(<Password {...defaultProps} />);
-        // @ts-ignore
+
         expect(screen.getByText(/Создайте надежный пароль/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByPlaceholderText(/Пароль/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByPlaceholderText(/Подтвердить/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Показать пароль/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Назад/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Далее/i)).toBeInTheDocument();
     });
 
@@ -63,13 +58,11 @@ describe('Password Component', () => {
         fireEvent.click(screen.getByText(/Далее/i));
 
         expect(validatePassword).toHaveBeenCalledWith('weak');
-        // @ts-ignore
         expect(document.getElementById('password')!).toHaveClass('error');
-        // @ts-ignore
         expect(screen.getByText('Password is too weak')).toBeInTheDocument();
 
         jest.advanceTimersByTime(500);
-        // @ts-ignore
+
         expect(document.getElementById('password')!).toHaveClass('error');
     });
 
@@ -83,13 +76,11 @@ describe('Password Component', () => {
         fireEvent.click(screen.getByText(/Далее/i));
 
         expect(validatePassword).toHaveBeenCalledWith('strongPass');
-        // @ts-ignore
         expect(document.getElementById('password')!).toHaveClass('error');
-        // @ts-ignore
         expect(document.getElementById('confirm')!).toHaveClass('error');
 
         jest.advanceTimersByTime(500);
-        // @ts-ignore
+
         expect(document.getElementById('confirm')!).toHaveClass('error');
     });
 
@@ -108,7 +99,9 @@ describe('Password Component', () => {
 
     it('calls makePasswordVisible when button is clicked', () => {
         render(<Password {...defaultProps} />);
+
         fireEvent.click(screen.getByText(/Показать пароль/i));
+
         expect(makePasswordVisible).toHaveBeenCalled();
     });
 
@@ -122,7 +115,6 @@ describe('Password Component', () => {
 
         jest.advanceTimersByTime(500);
 
-        // @ts-ignore
         expect(document.getElementById('password')!).not.toHaveClass('shake');
     });
 
@@ -137,7 +129,6 @@ describe('Password Component', () => {
 
         jest.advanceTimersByTime(500);
 
-        // @ts-ignore
         expect(document.getElementById('confirm')!).not.toHaveClass('shake');
     });
 

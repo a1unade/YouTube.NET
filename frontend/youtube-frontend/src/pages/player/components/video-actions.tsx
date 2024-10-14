@@ -140,7 +140,7 @@ const VideoActions = (props: {
             className="like-dislike-actions"
           >
             <div>
-              <button onClick={toggleModal} ref={buttonRef}>
+              <button id="toggle-modal-button" onClick={toggleModal} ref={buttonRef}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="24"

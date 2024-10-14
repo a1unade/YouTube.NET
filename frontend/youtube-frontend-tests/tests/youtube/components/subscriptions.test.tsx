@@ -10,7 +10,8 @@ jest.mock('../../../temp-src/components/channel/index.tsx', () => {
 
 describe('Subscriptions Component', () => {
     beforeEach(() => {
-        jest.clearAllMocks(); // Clear all mocks before each test
+        jest.clearAllMocks();
+
         render(<Subscriptions />);
     });
 
@@ -20,6 +21,7 @@ describe('Subscriptions Component', () => {
 
     it('рендерится правильно количество каналов', () => {
         const channelElements = screen.getAllByText(/Channel Element/i);
+
         expect(channelElements).toHaveLength(5);
     });
 

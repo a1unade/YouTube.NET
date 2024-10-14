@@ -55,4 +55,13 @@ describe('SaveVideoModal', () => {
 
         expect(document.body.style.overflow).toBe('');
     });
+
+
+    it('calls setActive with false when close-modal button is clicked', () => {
+        const closeButton = document.getElementsByClassName("close-modal-button")[0] as HTMLDivElement;
+
+        fireEvent.click(closeButton);
+
+        expect(setActive).toHaveBeenCalledWith(false);
+    });
 });

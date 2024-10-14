@@ -24,7 +24,7 @@ describe('handleNextButtonClick', () => {
     });
 
     it('should add error classes and show error message when email is invalid', () => {
-        (validateEmail as jest.Mock).mockReturnValue('Invalid email'); // Мокаем результат
+        (validateEmail as jest.Mock).mockReturnValue('Invalid email');
 
         handleNextButtonClick('invalidEmail');
 

@@ -39,13 +39,9 @@ describe('Name Component', () => {
     });
 
     it('renders the component', () => {
-        // @ts-ignore
         expect(screen.getByText(/Создать аккаунт Google/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByPlaceholderText(/Имя/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByPlaceholderText(/Фамилия/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/вход/i)).toBeInTheDocument();
     });
 
@@ -59,15 +55,9 @@ describe('Name Component', () => {
 
         expect(validateName).toHaveBeenCalledWith('');
         expect(validateSurname).toHaveBeenCalledWith('');
-
-        // @ts-ignore
         expect(screen.getByText('Invalid name')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Invalid surname')).toBeInTheDocument();
-
-        // @ts-ignore
         expect(document.getElementById('name')!).toHaveClass('error');
-        // @ts-ignore
         expect(document.getElementById('name-error')!).toHaveClass('error-message');
     });
 
@@ -81,7 +71,6 @@ describe('Name Component', () => {
 
         expect(validateName).toHaveBeenCalledWith('');
         expect(validateSurname).toHaveBeenCalledWith('');
-
         expect(mockSetContainerContent).toHaveBeenCalledWith(1);
     });
 
@@ -92,14 +81,11 @@ describe('Name Component', () => {
         fireEvent.change(document.getElementById('name')!, { target: { value: '' } });
         fireEvent.click(screen.getByText(/Далее/i));
 
-        // @ts-ignore
         expect(screen.getByText('Name cannot be empty')).toBeInTheDocument();
-        // @ts-ignore
         expect(document.getElementById('name')!).toHaveClass('error shake');
 
         jest.advanceTimersByTime(500);
 
-        // @ts-ignore
         expect(document.getElementById('name')!).not.toHaveClass('shake');
     });
 });
