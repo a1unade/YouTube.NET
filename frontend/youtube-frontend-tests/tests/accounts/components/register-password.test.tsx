@@ -142,4 +142,13 @@ describe('Password Component', () => {
 
         expect(mockSetContainerContent).toHaveBeenCalledWith(0);
     });
+
+    it('calls setPassword on password input change', () => {
+        render(<Password {...defaultProps} />);
+        const passwordInput = screen.getByPlaceholderText(/Пароль/i);
+
+        fireEvent.change(passwordInput, { target: { value: 'newPassword123' } });
+
+        expect(mockSetPassword).toHaveBeenCalledWith('newPassword123');
+    });
 });

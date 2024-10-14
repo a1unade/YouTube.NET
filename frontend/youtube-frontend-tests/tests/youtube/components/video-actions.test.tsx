@@ -138,4 +138,12 @@ describe('VideoActions component', () => {
         expect(screen.queryByText('Actions Modal')).not.toBeInTheDocument();
     });
 
+    it('sets shareActive when share button is clicked', () => {
+        const shareButton = screen.getByText('Поделиться');
+
+        fireEvent.click(shareButton);
+
+        expect(setShareActive).toHaveBeenCalledWith(true);
+    });
+
 });
