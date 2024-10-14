@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 // @ts-ignore
 import ChannelPlaylists from '../../../temp-src/pages/channel/components/channel-playlists.tsx';
-// @ts-ignore
 
 jest.mock('../../../temp-src/components/playlist', () => {
     return jest.fn(() => <div>Mocked PlaylistItem</div>);
@@ -20,8 +19,8 @@ describe('ChannelPlaylists', () => {
 
     test('renders correct structure', () => {
         const { container } = render(<ChannelPlaylists />);
-
         const videosList = container.querySelector('.videos-list');
+
         expect(videosList).toBeInTheDocument();
         expect(videosList!.children.length).toBe(2);
         expect(videosList!.children[0].className).toBe('channel-video');

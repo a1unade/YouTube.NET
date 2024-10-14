@@ -15,20 +15,15 @@ describe('SharePostModal', () => {
     const { addAlert } = useAlerts();
 
     beforeEach(() => {
-        // Очищаем моки перед каждым тестом
         jest.clearAllMocks();
     });
 
     it('должен рендериться корректно при активном состоянии', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
 
-        // @ts-ignore
         expect(screen.getByRole('dialog')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByPlaceholderText('Введите текст...')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Отмена')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Опубликовать')).toBeInTheDocument();
     });
 
@@ -38,14 +33,15 @@ describe('SharePostModal', () => {
         expect(document.body.style.overflow).toBe('hidden');
 
         rerender(<SharePostModal active={false} setActive={setActive} />);
+
         expect(document.body.style.overflow).toBe('');
     });
 
     it('должен устанавливать фокус на textarea при первом рендере', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
+
         const textarea = screen.getByPlaceholderText('Введите текст...') as HTMLTextAreaElement;
 
-        // @ts-ignore
         expect(textarea).toHaveFocus();
     });
 
@@ -53,6 +49,7 @@ describe('SharePostModal', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
 
         const cancelButton = screen.getByText('Отмена');
+
         fireEvent.click(cancelButton);
 
         expect(setActive).toHaveBeenCalledWith(false);
@@ -62,6 +59,7 @@ describe('SharePostModal', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
 
         const closeButton = document.getElementsByClassName('close-modal-button')[0] as HTMLButtonElement;
+
         fireEvent.click(closeButton);
 
         expect(setActive).toHaveBeenCalledWith(false);
@@ -75,7 +73,6 @@ describe('SharePostModal', () => {
 
         fireEvent.change(textarea, { target: { value: 'Тестовая запись' } });
 
-        // @ts-ignore
         expect(publishButton).not.toBeDisabled();
 
         fireEvent.click(publishButton);
@@ -90,14 +87,13 @@ describe('SharePostModal', () => {
 
         const publishButton = screen.getByText('Опубликовать') as HTMLButtonElement;
 
-        // @ts-ignore
         expect(publishButton).toBeDisabled();
     });
 
     it('должен закрываться при клике на затемнение экрана (overlay)', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
-
         const overlay = screen.getByRole('dialog');
+
         fireEvent.click(overlay);
 
         expect(setActive).toHaveBeenCalledWith(false);
@@ -105,8 +101,8 @@ describe('SharePostModal', () => {
 
     it('должен предотвращать закрытие при клике на модальное окно (modal-content)', () => {
         render(<SharePostModal active={true} setActive={setActive} />);
-
         const modalContent = screen.getByText('Новая запись').closest('.modal-content');
+
         fireEvent.click(modalContent!);
 
         expect(setActive).not.toHaveBeenCalled();

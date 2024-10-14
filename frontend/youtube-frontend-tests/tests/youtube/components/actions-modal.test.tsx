@@ -25,9 +25,7 @@ describe('ActionsModal', () => {
             />
         );
 
-        // @ts-ignore
         expect(screen.getByText('Сохранить')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Пожаловаться')).toBeInTheDocument();
     });
 
@@ -42,9 +40,7 @@ describe('ActionsModal', () => {
             />
         );
 
-        // @ts-ignore
         expect(screen.queryByText('Сохранить')).not.toBeInTheDocument();
-        // @ts-ignore
         expect(screen.queryByText('Пожаловаться')).not.toBeInTheDocument();
     });
 
@@ -76,6 +72,7 @@ describe('ActionsModal', () => {
         );
 
         const modal = container.querySelector('.actions-modal-window');
+
         fireEvent.mouseDown(modal!);
 
         expect(setActive).not.toHaveBeenCalled();
@@ -93,6 +90,7 @@ describe('ActionsModal', () => {
         );
 
         const saveButton = screen.getByText('Сохранить');
+
         fireEvent.click(saveButton);
 
         expect(setSaveActive).toHaveBeenCalledWith(true);
@@ -110,11 +108,10 @@ describe('ActionsModal', () => {
             />
         );
 
-        // Имитируем клик на кнопку "Пожаловаться"
         const reportButton = screen.getByText('Пожаловаться');
+
         fireEvent.click(reportButton);
 
-        // Проверяем, что открыто окно жалобы и текущее окно закрыто
         expect(setReportVideoActive).toHaveBeenCalledWith(true);
         expect(setActive).toHaveBeenCalledWith(false);
     });

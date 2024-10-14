@@ -14,15 +14,13 @@ describe('ReportModal', () => {
 
     afterEach(() => {
         jest.clearAllMocks();
-        document.body.style.overflow = ''; // Сбрасываем overflow после каждого теста
+        document.body.style.overflow = '';
     });
 
     it('рендеринг с активным модальным окном', () => {
         render(<ReportModal active={true} setActive={setActiveMock} />);
 
-        // @ts-ignore
         expect(screen.getByText(/Причина жалобы/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Содержавние сексуального характера/i)).toBeInTheDocument();
     });
 
@@ -30,26 +28,30 @@ describe('ReportModal', () => {
         render(<ReportModal active={false} setActive={setActiveMock} />);
 
         const modalOverlay = screen.queryByRole('dialog');
+
         expect(modalOverlay).not.toBeNull();
     });
 
     it('блокировка прокрутки при активном модальном окне', () => {
         render(<ReportModal active={true} setActive={setActiveMock} />);
+
         expect(document.body.style.overflow).toBe('hidden');
     });
 
     it('разблокировка прокрутки при закрытии модального окна', () => {
         const { rerender } = render(<ReportModal active={true} setActive={setActiveMock} />);
+
         expect(document.body.style.overflow).toBe('hidden');
 
         rerender(<ReportModal active={false} setActive={setActiveMock} />);
+
         expect(document.body.style.overflow).toBe('');
     });
 
     it('закрытие модального окна при клике на кнопку "Отмена"', () => {
         render(<ReportModal active={true} setActive={setActiveMock} />);
-
         const cancelButton = screen.getByText(/Отмена/i);
+
         fireEvent.click(cancelButton);
 
         expect(setActiveMock).toHaveBeenCalledWith(false);
@@ -62,6 +64,7 @@ describe('ReportModal', () => {
         fireEvent.click(screen.getByText(/Жестокое или отталкивающее содержание/i));
 
         const reportButton = screen.getByText(/Пожаловаться/i);
+
         fireEvent.click(reportButton);
 
         expect(setActiveMock).toHaveBeenCalledWith(false);
@@ -72,12 +75,11 @@ describe('ReportModal', () => {
         render(<ReportModal active={true} setActive={setActiveMock} />);
 
         const reportButton = screen.getByText(/Пожаловаться/i) as HTMLButtonElement;
-        // @ts-ignore
+
         expect(reportButton).toBeDisabled();
 
         fireEvent.click(screen.getByText(/Спам/i));
 
-        // @ts-ignore
         expect(reportButton).not.toBeDisabled();
     });
 

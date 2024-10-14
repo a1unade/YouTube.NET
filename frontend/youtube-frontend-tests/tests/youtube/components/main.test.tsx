@@ -38,6 +38,7 @@ describe('Main component', () => {
     test('рендерится правильное количество видео', async () => {
         await waitFor(() => {
             const videoElements = screen.getAllByTestId('video');
+
             expect(videoElements).toHaveLength(24);
         });
     });

@@ -44,6 +44,7 @@ describe('ChannelNavigation', () => {
 
     it('handles class change on button click', () => {
         render(<ChannelNavigation selected="Видео" setSelected={setSelected} />);
+
         const videoButton = screen.getByText('Видео');
         const playlistsButton = screen.getByText('Плейлисты');
 
@@ -62,5 +63,61 @@ describe('ChannelNavigation', () => {
 
         expect(setSelected).toHaveBeenCalledWith('О канале');
         expect(navigate).toHaveBeenCalledWith(`/channel/${idMock}/${Object.keys(navigationMap).find(key => navigationMap[key] === 'О канале')}`);
+    });
+
+    // Добавим тесты для остальных кнопок
+    it('handles click on "Видео" button', () => {
+        render(<ChannelNavigation selected="Плейлисты" setSelected={setSelected} />);
+
+        fireEvent.click(screen.getByText('Видео'));
+
+        expect(setSelected).toHaveBeenCalledWith('Видео');
+        expect(navigate).toHaveBeenCalledWith(`/channel/${idMock}/${Object.keys(navigationMap).find(key => navigationMap[key] === 'Видео')}`);
+        expect(screen.getByText('Видео')).not.toHaveClass('selected');
+        expect(screen.getByText('Плейлисты')).not.toHaveClass('selected');
+    });
+
+    it('handles click on "Плейлисты" button', () => {
+        render(<ChannelNavigation selected="Видео" setSelected={setSelected} />);
+
+        fireEvent.click(screen.getByText('Плейлисты'));
+
+        expect(setSelected).toHaveBeenCalledWith('Плейлисты');
+        expect(navigate).toHaveBeenCalledWith(`/channel/${idMock}/${Object.keys(navigationMap).find(key => navigationMap[key] === 'Плейлисты')}`);
+        expect(screen.getByText('Плейлисты')).not.toHaveClass('selected');
+        expect(screen.getByText('Видео')).not.toHaveClass('selected');
+    });
+
+    it('handles click on "Сообщество" button', () => {
+        render(<ChannelNavigation selected="Плейлисты" setSelected={setSelected} />);
+
+        fireEvent.click(screen.getByText('Сообщество'));
+
+        expect(setSelected).toHaveBeenCalledWith('Сообщество');
+        expect(navigate).toHaveBeenCalledWith(`/channel/${idMock}/${Object.keys(navigationMap).find(key => navigationMap[key] === 'Сообщество')}`);
+        expect(screen.getByText('Сообщество')).not.toHaveClass('selected');
+        expect(screen.getByText('Плейлисты')).not.toHaveClass('selected');
+    });
+
+    it('handles click on "О канале" button', () => {
+        render(<ChannelNavigation selected="Плейлисты" setSelected={setSelected} />);
+
+        fireEvent.click(screen.getByText('О канале'));
+
+        expect(setSelected).toHaveBeenCalledWith('О канале');
+        expect(navigate).toHaveBeenCalledWith(`/channel/${idMock}/${Object.keys(navigationMap).find(key => navigationMap[key] === 'О канале')}`);
+        expect(screen.getByText('О канале')).not.toHaveClass('selected');
+        expect(screen.getByText('Плейлисты')).not.toHaveClass('selected');
+    });
+
+    it('renders "О канале" button with selected class when selected state is "О канале"', () => {
+        render(<ChannelNavigation selected="О канале" setSelected={setSelected} />);
+
+        const aboutButton = screen.getByText('О канале');
+
+        expect(aboutButton).toHaveClass('selected');
+        expect(screen.getByText('Видео')).not.toHaveClass('selected');
+        expect(screen.getByText('Плейлисты')).not.toHaveClass('selected');
+        expect(screen.getByText('Сообщество')).not.toHaveClass('selected');
     });
 });

@@ -20,6 +20,7 @@ describe('PlaylistItem', () => {
 
         const videoCountText = screen.getByText(/видео/).textContent;
         const videoCountValue = parseInt(videoCountText?.split(' ')[0] || '0', 10);
+
         expect(videoCountValue).toBeGreaterThanOrEqual(3);
         expect(videoCountValue).toBeLessThanOrEqual(7);
     });

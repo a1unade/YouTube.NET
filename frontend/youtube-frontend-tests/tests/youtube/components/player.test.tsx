@@ -65,8 +65,8 @@ describe("Player Component", () => {
 
     it("контекстное меню не работает для плеера", () => {
         const player = screen.getByTestId("react-player");
-
         const preventDefault = jest.fn();
+
         fireEvent.contextMenu(player, { preventDefault });
 
         expect(preventDefault).not.toHaveBeenCalled();

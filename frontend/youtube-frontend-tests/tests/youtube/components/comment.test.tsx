@@ -29,26 +29,22 @@ describe("Comment Component", () => {
     });
 
     it("комментарий рендерится правильно", () => {
-        // @ts-ignore
         expect(screen.getByText("John Doe")).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText("This is a comment")).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByAltText("")).toHaveAttribute("src", mockComment.authorProfileImageUrl);
     });
 
     it("при нажатии на кнопку лайк обновляется состояние", () => {
         const likeButton = screen.getByText("Like");
 
-        // @ts-ignore
         expect(likeButton).toBeInTheDocument();
 
         fireEvent.click(likeButton);
-        // @ts-ignore
+
         expect(screen.getByText("Like Filled")).toBeInTheDocument();
 
         fireEvent.click(screen.getByText("Like Filled"));
-        // @ts-ignore
+
         expect(screen.getByText("Like")).toBeInTheDocument();
     });
 

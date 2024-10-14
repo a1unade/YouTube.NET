@@ -99,6 +99,7 @@ const ShareModal = (props: {
               </span>
               <div className="share-buttons">
                 <button
+                  id="share-vk-button"
                   onClick={() => {
                     window.open(`https://vk.com/share.php?url=${link}`, '_blank');
                     setShareActive(false);
@@ -122,6 +123,7 @@ const ShareModal = (props: {
                   </svg>
                 </button>
                 <button
+                  id="share-telegram-button"
                   onClick={() => {
                     window.open(`https://t.me/share/url?url=${link}`, '_blank');
                     setShareActive(false);
@@ -140,6 +142,7 @@ const ShareModal = (props: {
                   </div>
                 </button>
                 <button
+                  id="share-whatsapp-button"
                   onClick={() => {
                     window.open(
                       `https://api.whatsapp.com/send/?text=${link}&type=custom_url&app_absent=0`,

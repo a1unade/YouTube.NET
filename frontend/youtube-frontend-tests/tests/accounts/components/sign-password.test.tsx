@@ -21,31 +21,24 @@ describe('Password Component', () => {
         password: '',
     };
 
+    beforeEach(() => {
+        render(<Password {...defaultProps} />);
+    });
+
     afterEach(() => {
         jest.clearAllMocks();
     });
 
     it('renders the component with all elements', () => {
-        render(<Password {...defaultProps} />);
-
-        // @ts-ignore
         expect(screen.getByText(/Добро пожаловать!/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/test@example.com/i)).toBeInTheDocument();
-
-        /// @ts-ignore
         expect(screen.getByPlaceholderText(/Введите пароль/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Показать пароль/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Сменить аккаунт/i)).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText(/Далее/i)).toBeInTheDocument();
     });
 
     it('handles password input change', () => {
-        render(<Password {...defaultProps} />);
-
         const passwordInput = screen.getByPlaceholderText(/Введите пароль/i);
 
         fireEvent.change(passwordInput, { target: { value: 'newPassword' } });
@@ -54,8 +47,6 @@ describe('Password Component', () => {
     });
 
     it('calls makePasswordVisible when "Показать пароль" is clicked', () => {
-        render(<Password {...defaultProps} />);
-
         const showPasswordButton = screen.getByText(/Показать пароль/i);
 
         fireEvent.click(showPasswordButton);
@@ -64,8 +55,6 @@ describe('Password Component', () => {
     });
 
     it('goes back to the previous container content when "Сменить аккаунт" is clicked', () => {
-        render(<Password {...defaultProps} />);
-
         const changeAccountButton = screen.getByText(/Сменить аккаунт/i);
 
         fireEvent.click(changeAccountButton);
@@ -74,8 +63,6 @@ describe('Password Component', () => {
     });
 
     it('calls alert when "Далее" is clicked', () => {
-        render(<Password {...defaultProps} />);
-
         const nextButton = screen.getByText(/Далее/i);
 
         fireEvent.click(nextButton);

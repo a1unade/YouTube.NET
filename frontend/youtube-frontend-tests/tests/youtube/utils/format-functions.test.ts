@@ -4,109 +4,145 @@ import { formatDate, formatViews } from '../../../temp-src/utils/format-function
 describe('formatDate', () => {
     it('должен вернуть "1 год назад" для даты 1 год назад', () => {
         const date = new Date();
+
         date.setFullYear(date.getFullYear() - 1);
+
         expect(formatDate(date.toISOString())).toBe('1 год назад');
     });
 
     it('должен вернуть "2 месяца назад" для даты 2 месяца назад', () => {
         const date = new Date();
+
         date.setMonth(date.getMonth() - 2);
+
         expect(formatDate(date.toISOString())).toBe('2 месяца назад');
     });
 
     it('должен вернуть "1 месяц назад" для даты 1 месяц назад', () => {
         const date = new Date();
+
         date.setMonth(date.getMonth() - 1);
+
         expect(formatDate(date.toISOString())).toBe('1 месяц назад');
     });
 
     it('должен вернуть "5 месяцев назад" для даты 5 месяцев назад', () => {
         const date = new Date();
+
         date.setMonth(date.getMonth() - 5);
+
         expect(formatDate(date.toISOString())).toBe('5 месяцев назад');
     });
 
     it('должен вернуть "5 лет назад" для даты 5 лет назад', () => {
         const date = new Date();
+
         date.setFullYear(date.getFullYear() - 5);
+
         expect(formatDate(date.toISOString())).toBe('5 лет назад');
     });
 
     it('должен вернуть "1 день назад" для даты 1 день назад', () => {
         const date = new Date();
+
         date.setDate(date.getDate() - 1);
+
         expect(formatDate(date.toISOString())).toBe('1 день назад');
     });
 
     it('должен вернуть "3 дня назад" для даты 3 дня назад', () => {
         const date = new Date();
+
         date.setDate(date.getDate() - 3);
+
         expect(formatDate(date.toISOString())).toBe('3 дня назад');
     });
 
     it('должен вернуть "5 дней назад" для даты 5 дней назад', () => {
         const date = new Date();
+
         date.setDate(date.getDate() - 5);
+
         expect(formatDate(date.toISOString())).toBe('5 дней назад');
     });
 
     it('должен вернуть "3 часа назад" для даты 3 часа назад', () => {
         const date = new Date();
+
         date.setHours(date.getHours() - 3);
+
         expect(formatDate(date.toISOString())).toBe('3 часа назад');
     });
 
     it('должен вернуть "1 час назад" для даты 1 час назад', () => {
         const date = new Date();
+
         date.setHours(date.getHours() - 1);
+
         expect(formatDate(date.toISOString())).toBe('1 час назад');
     });
 
     it('должен вернуть "5 часов назад" для даты 5 часов назад', () => {
         const date = new Date();
+
         date.setHours(date.getHours() - 5);
+
         expect(formatDate(date.toISOString())).toBe('5 часов назад');
     });
 
     it('должен вернуть "4 минуты назад" для даты 4 минуты назад', () => {
         const date = new Date();
+
         date.setMinutes(date.getMinutes() - 4);
+
         expect(formatDate(date.toISOString())).toBe('4 минуты назад');
     });
 
     it('должен вернуть "51 минуту назад" для даты 51 минуту назад', () => {
         const date = new Date();
+
         date.setMinutes(date.getMinutes() - 51);
+
         expect(formatDate(date.toISOString())).toBe('51 минуту назад');
     });
 
     it('должен вернуть "20 минут назад" для даты 20 минут назад', () => {
         const date = new Date();
+
         date.setMinutes(date.getMinutes() - 20);
+
         expect(formatDate(date.toISOString())).toBe('20 минут назад');
     });
 
     it('должен вернуть "5 секунд назад" для даты 5 секунд назад', () => {
         const date = new Date();
+
         date.setSeconds(date.getSeconds() - 5);
+
         expect(formatDate(date.toISOString())).toBe('5 секунд назад');
     });
 
     it('должен вернуть "4 секунды назад" для даты 4 секунды назад', () => {
         const date = new Date();
+
         date.setSeconds(date.getSeconds() - 4);
+
         expect(formatDate(date.toISOString())).toBe('4 секунды назад');
     });
 
     it('должен вернуть "51 секунду назад" для даты 51 секунду назад', () => {
         const date = new Date();
+
         date.setSeconds(date.getSeconds() - 51);
+
         expect(formatDate(date.toISOString())).toBe('51 секунду назад');
     });
 
     it('должен вернуть "20 секунд назад" для даты 20 секунд назад', () => {
         const date = new Date();
+
         date.setSeconds(date.getSeconds() - 20);
+
         expect(formatDate(date.toISOString())).toBe('20 секунд назад');
     });
 });

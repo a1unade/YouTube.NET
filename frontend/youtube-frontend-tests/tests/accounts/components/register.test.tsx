@@ -21,18 +21,21 @@ jest.mock('../../../acc-src/pages/register/components/Name.tsx', () => ({ setCon
         <button id={"next-button-1"} onClick={() => setContainerContent(1)}>Next</button>
     </div>
 ));
+
 jest.mock('../../../acc-src/pages/register/components/Common.tsx', () => ({ setContainerContent }: ContainerProps) => (
     <div>
         Common Component
         <button id={"next-button-2"} onClick={() => setContainerContent(2)}>Next</button>
     </div>
 ));
+
 jest.mock('../../../acc-src/pages/register/components/Email.tsx', () => ({ setContainerContent }: ContainerProps) => (
     <div>
         Email Component
         <button id={"next-button-3"} onClick={() => setContainerContent(3)}>Next</button>
     </div>
 ));
+
 jest.mock('../../../acc-src/pages/register/components/Password.tsx', () => ({
                                                                                 processAuth,
                                                                                 setContainerContent
@@ -65,6 +68,7 @@ jest.mock('../../../acc-src/pages/register/components/Terms.tsx', () => ({ setCo
 ));
 
 jest.mock('../../../acc-src/utils/api-client.ts');
+
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: jest.fn(),
@@ -213,5 +217,39 @@ describe('Register component', () => {
         });
 
         await waitFor(() => expect(screen.getByText('Terms Component')).toBeInTheDocument());
+    });
+
+    it('renders nothing when containerContent is out of bounds', async () => {
+        mockedApiClient.post.mockResolvedValueOnce({ status: 200, data: { userId: '123' } });
+
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-1")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-2")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-3")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("submit-button")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-4")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-5")!);
+        });
+        await act(async () => {
+            fireEvent.click(document.getElementById("next-button-6")!);
+        });
+
+        expect(screen.queryByText('Name Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Common Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Email Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Password Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Confirmation Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Check Component')).not.toBeInTheDocument();
+        expect(screen.queryByText('Terms Component')).not.toBeInTheDocument();
     });
 });

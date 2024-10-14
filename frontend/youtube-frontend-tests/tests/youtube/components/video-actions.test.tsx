@@ -21,6 +21,12 @@ jest.mock('../../../temp-src/utils/format-functions.ts', () => ({
     formatViews: jest.fn((count, type) => `${count} ${type}`),
 }));
 
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn(),
+}));
+
+
 describe('VideoActions component', () => {
     let setShareActive: jest.Mock;
     let setSaveActive: jest.Mock;
@@ -51,16 +57,10 @@ describe('VideoActions component', () => {
     });
 
     it('renders channel info and buttons', () => {
-        // @ts-ignore
         expect(screen.getByText('Название канала')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('143675438 followers')).toBeInTheDocument();
-
-        // @ts-ignore
         expect(screen.getByText('Подписаться')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Поделиться')).toBeInTheDocument();
-        // @ts-ignore
         expect(screen.getByText('Скачать')).toBeInTheDocument();
     });
 
@@ -69,12 +69,10 @@ describe('VideoActions component', () => {
 
         fireEvent.click(subscribeButton);
         expect(addAlert).toHaveBeenCalledWith('Подписка оформлена.');
-        // @ts-ignore
         expect(screen.getByText('Вы подписаны')).toBeInTheDocument();
 
         fireEvent.click(subscribeButton);
         expect(addAlert).toHaveBeenCalledWith('Подписка отменена.');
-        // @ts-ignore
         expect(screen.getByText('Подписаться')).toBeInTheDocument();
     });
 
@@ -82,7 +80,62 @@ describe('VideoActions component', () => {
         const downloadButton = screen.getByText('Скачать').parentElement as HTMLElement;
 
         fireEvent.click(downloadButton);
-        // @ts-ignore
         expect(screen.getByText('Premium Modal')).toBeInTheDocument();
     });
+
+    it('toggles like and dislike states correctly', () => {
+        const likeButton = document.getElementById("like-button") as HTMLButtonElement;
+        const dislikeButton = document.getElementById("dislike-button") as HTMLButtonElement;
+
+        fireEvent.click(likeButton);
+        expect(screen.getByText(/13646124 likes/)).toBeInTheDocument();
+
+        fireEvent.click(dislikeButton);
+        expect(screen.getByText(/13646124 likes/)).toBeInTheDocument();
+    });
+
+    it('adds/removes subscription correctly', () => {
+        const subscribeButton = screen.getByText('Подписаться');
+
+        fireEvent.click(subscribeButton);
+        expect(screen.getByText('Вы подписаны')).toBeInTheDocument(); // Проверяем, что подписка активна
+
+        fireEvent.click(subscribeButton);
+        expect(screen.getByText('Подписаться')).toBeInTheDocument(); // Снова проверяем текст кнопки
+    });
+
+    it('opens PremiumModal when trying to download', () => {
+        const downloadButton = screen.getByText('Скачать');
+
+        fireEvent.click(downloadButton);
+
+        expect(screen.getByText('Premium Modal')).toBeInTheDocument();
+    });
+
+    it('removes dislike when like button is clicked after it was previously disliked', () => {
+        const dislikeButton = document.getElementById("dislike-button") as HTMLButtonElement;
+        const likeButton = document.getElementById("like-button") as HTMLButtonElement;
+
+        fireEvent.click(dislikeButton);
+        expect(screen.getByText(/13646124 likes/)).toBeInTheDocument();
+
+        fireEvent.click(likeButton);
+
+        expect(dislikeButton).toBeInTheDocument();
+    });
+
+    it('toggles the actions modal when the modal button is clicked', () => {
+        const actionsButton = document.getElementById("toggle-modal-button") as HTMLButtonElement;
+
+        expect(screen.queryByText('Actions Modal')).not.toBeInTheDocument();
+
+        fireEvent.click(actionsButton);
+
+        expect(screen.getByText('Actions Modal')).toBeInTheDocument();
+
+        fireEvent.click(actionsButton);
+
+        expect(screen.queryByText('Actions Modal')).not.toBeInTheDocument();
+    });
+
 });

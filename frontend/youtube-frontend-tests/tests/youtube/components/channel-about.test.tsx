@@ -7,6 +7,7 @@ import { formatViews } from '../../../temp-src/utils/format-functions';
 interface Links {
     link: string;
 }
+
 jest.mock('../../../temp-src/utils/format-functions', () => ({
     formatViews: jest.fn((count, type) => `${count} ${type}`),
 }));
