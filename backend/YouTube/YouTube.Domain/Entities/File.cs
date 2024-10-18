@@ -27,5 +27,5 @@ public class File : BaseEntity
     /// <summary>
     /// Название бакета
     /// </summary>
-    public string? BucketName { get; set; }
+    public string BucketName { get; set; } = default!;
 }

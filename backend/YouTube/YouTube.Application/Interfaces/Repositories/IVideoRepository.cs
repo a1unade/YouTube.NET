@@ -1,8 +1,19 @@
 using YouTube.Domain.Entities;
 
 namespace YouTube.Application.Interfaces.Repositories;
-
+/// <summary>
+/// Репозиторий для работы с видео
+/// </summary>
 public interface IVideoRepository
 {
-    Task<List<Video>> GetVideoPagination(int page, int count, CancellationToken cancellationToken);
+    /// <summary>
+    /// Получить список видео
+    /// </summary>
+    /// <param name="page">Страница</param>
+    /// <param name="size">Размер страницы</param>
+    /// <param name="category">Категория</param>
+    /// <param name="sort">Сортировка</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Список видео</returns>
+    Task<List<Video>> GetVideoPagination(int page, int size, string? category, string? sort, CancellationToken cancellationToken);
 }

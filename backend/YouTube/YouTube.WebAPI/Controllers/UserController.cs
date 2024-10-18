@@ -72,7 +72,7 @@ public class UserController : ControllerBase
     }
     
     /// <summary>
-    /// Проверка кода для подтверждения почты
+    /// Проверка кода для подтверждения почты (При авторизации)
     /// </summary>
     /// <param name="request">Код и Id пользователя</param>
     /// <param name="cancellationToken">cancellationToken</param>

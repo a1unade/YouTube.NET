@@ -54,6 +54,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDbSeeder, DbSeeder>()
             .AddTransient<Migrator>()
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
-            .AddScoped<IUserRepository, UserRepository>();
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IVideoRepository, VideoRepository>();
     }
 }
