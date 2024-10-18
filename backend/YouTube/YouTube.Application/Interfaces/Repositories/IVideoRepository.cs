@@ -4,5 +4,5 @@ namespace YouTube.Application.Interfaces.Repositories;
 
 public interface IVideoRepository
 {
-    Task<List<Video>> GetVideoPagination(int page, int count, CancellationToken cancellationToken);
+    Task<List<Video>> GetVideoPagination(int page, int size, CancellationToken cancellationToken);
 }
