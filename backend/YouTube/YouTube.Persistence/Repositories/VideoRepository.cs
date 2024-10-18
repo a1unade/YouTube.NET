@@ -14,12 +14,34 @@ public class VideoRepository : IVideoRepository
         _context = context;
     }
     
-    public async Task<List<Video>> GetVideoPagination(int page, int size, CancellationToken cancellationToken)
+    public async Task<List<Video>> GetVideoPagination(int page, int size, string? category, string? sort, CancellationToken cancellationToken)
     {
-        return await _context.Videos
+        
+        var query = _context.Videos
+            .AsNoTracking()
             .Include(x => x.PreviewImg)
             .Include(x => x.Channel)
-            .ThenInclude(x => x.MainImgFile )
+            .ThenInclude(x => x.MainImgFile)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(category))
+        {
+            var categoryVideo = await _context.Categories.FirstOrDefaultAsync(x => x.Name == category, cancellationToken);
+            query = query.Where(x => Equals(x.Category!.Name, categoryVideo));
+        }
+        
+        if (!string.IsNullOrEmpty(sort))
+        {
+            query = sort switch
+            {
+                "view" => query.OrderByDescending(x => x.ViewCount),
+                "like" => query.OrderByDescending(x => x.LikeCount),
+                "dislike" => query.OrderByDescending(x => x.DisLikeCount),
+                _ => query
+            };
+        }
+        
+        return await query
             .Skip((page - 1) * size)
             .Take(size)
             .ToListAsync(cancellationToken);
