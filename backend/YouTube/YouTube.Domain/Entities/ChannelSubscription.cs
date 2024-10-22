@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Подписки на каналы
+/// </summary>
 public class ChannelSubscription 
 {
     /// <summary>

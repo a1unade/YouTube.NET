@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Плейлист
+/// </summary>
 public class Playlist : BaseEntity
 {
     /// <summary>

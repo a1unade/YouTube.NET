@@ -47,7 +47,13 @@ public class Comment : BaseEntity
     /// </summary>
     public Channel Channel { get; set; } = default!;
     
+    /// <summary>
+    /// Пост ид
+    /// </summary>
     public Guid PostId { get; set; }
 
+    /// <summary>
+    /// Пост
+    /// </summary>
     public Post Post { get; set; } = default!;
 }

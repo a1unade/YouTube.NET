@@ -36,6 +36,10 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     
     public DbSet<Post> Posts  { get; set; }
     
+    public DbSet<ChatHistory> ChatHistories { get; set; }
+    
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    
     public DbSet<File> Files { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

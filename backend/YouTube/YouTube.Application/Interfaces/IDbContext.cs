@@ -65,7 +65,16 @@ public interface IDbContext
     /// Транзакции
     /// </summary>
     public DbSet<Transaction> Transactions { get; set; }
+    
+    /// <summary>
+    /// История чата
+    /// </summary>
+    public DbSet<ChatHistory> ChatHistories { get; set; }
 
+    /// <summary>
+    /// Сообщения чата
+    /// </summary>
+    public DbSet<ChatMessage> ChatMessages { get; set; }
     
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     

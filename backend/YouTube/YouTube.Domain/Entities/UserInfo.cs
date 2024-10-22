@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Информация о пользователе
+/// </summary>
 public class UserInfo : BaseEntity
 {
     /// <summary>

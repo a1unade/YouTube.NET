@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Пост
+/// </summary>
 public class Post : BaseEntity
 {
     /// <summary>
@@ -39,5 +42,8 @@ public class Post : BaseEntity
     /// </summary>
     public int CommentCount { get; set; }
 
+    /// <summary>
+    /// Комментарии
+    /// </summary>
     public ICollection<Comment> Comments { get; set; } = default!;
 }
