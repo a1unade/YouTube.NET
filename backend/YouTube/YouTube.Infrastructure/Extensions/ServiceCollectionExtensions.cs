@@ -21,7 +21,8 @@ public static class ServiceCollectionExtensions
         services
             .AddTransient<IMediator, Mediator>()
             .AddScoped<IEmailService, EmailService>()
-            .AddScoped<IJwtGenerator, JwtGenerator>();
+            .AddScoped<IJwtGenerator, JwtGenerator>()
+            .AddScoped<IChatService, ChatService>();
     }
 
     private static void AddStorage(this IServiceCollection services, IConfiguration configuration)

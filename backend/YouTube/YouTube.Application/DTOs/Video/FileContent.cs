@@ -31,8 +31,8 @@ public class FileContent
     /// <summary>
     /// Бинарные данные файла
     /// </summary>
-    public Stream Content { get; set; } = default!;
-
+    public Stream? Content { get; set; } 
+    
     /// <summary>
     /// Название файла
     /// </summary>
@@ -52,4 +52,9 @@ public class FileContent
     /// Название бакета
     /// </summary>
     public string Bucket { get; set; } = default!;
+
+    /// <summary>
+    /// Массив Байтов
+    /// </summary>
+    public byte[]? Bytes { get; set; } = default!;
 }

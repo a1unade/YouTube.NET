@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Пользователь
+/// </summary>
 public class User : IdentityUser<Guid>
 {
     /// <summary>
@@ -33,4 +36,9 @@ public class User : IdentityUser<Guid>
     /// Дополнительная Информация о пользователе
     /// </summary>
     public UserInfo UserInfo { get; set; } = default!;
+
+    /// <summary>
+    /// История чатов
+    /// </summary>
+    public ChatHistory ChatHistory { get; set; } = default!;
 }

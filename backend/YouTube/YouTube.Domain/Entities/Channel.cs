@@ -3,6 +3,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Канал
+/// </summary>
 public class Channel : BaseEntity
 {
     /// <summary>

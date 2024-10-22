@@ -21,23 +21,32 @@ namespace YouTube.UnitTests;
 public class TestCommandBase : IDisposable
 {
     private const string UserId = "53afbb05-bb2d-45e0-8bef-489ef1cd6fdc";
-
+    
     protected readonly ApplicationDbContext Context;
+    
     protected User User { get; }
+    
     protected Channel UserChannel { get; }
     
     protected Video UserVideo { get; }
-    protected Mock<IEmailService> EmailService { get; }
-    protected Mock<IJwtGenerator> JwtGenerator { get; }
-    protected Mock<IUserRepository> UserRepository { get; }
     
+    protected Mock<IEmailService> EmailService { get; }
+    
+    protected Mock<IJwtGenerator> JwtGenerator { get; }
+    
+    protected Mock<IUserRepository> UserRepository { get; }
+
+    protected Mock<IVideoRepository> VideoRepository { get; }
     protected Mock<IGenericRepository<User>> GenericRepository { get; }
+    
     protected Mock<UserManager<User>> UserManager { get; }
+    
     protected Mock<SignInManager<User>> SignInManager { get; }
+    
     protected Mock<IDistributedCache> Cache { get; }
     
-    protected Mock<IS3Service> S3Service { get; set; }
-
+    protected Mock<IS3Service> S3Service { get; }
+    
     protected TestCommandBase()
     {
         User = UserBuilder.CreateBuilder()
@@ -67,6 +76,7 @@ public class TestCommandBase : IDisposable
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .Returns("123");
 
+        // Mok S3
         S3Service = new Mock<IS3Service>();
 
         S3Service.Setup(x => x.UploadAsync(It.IsAny<FileContent>(), It.IsAny<CancellationToken>()))
@@ -85,7 +95,7 @@ public class TestCommandBase : IDisposable
                 It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-       
+       // Repositories
         GenericRepository = new Mock<IGenericRepository<User>>();
         
         GenericRepository.Setup(x => x.RemoveById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
@@ -111,13 +121,24 @@ public class TestCommandBase : IDisposable
                 return Context.Users.FirstOrDefault(user => user.Email == email);
             });
 
+        VideoRepository = new Mock<IVideoRepository>();
+
+        VideoRepository.Setup(x =>
+            x.GetVideoPagination(
+                It.IsAny<int>(), 
+                It.IsAny<int>(), 
+                It.IsAny<string>(),
+                It.IsAny<string>(), 
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Video> { UserVideo, UserVideo });
+
 
         UserRepository.Setup(x => x.FindById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Guid id, CancellationToken _) => { return Context.Users.FirstOrDefault(x => x.Id == id); });
 
         // Мокирование UserManager
         UserManager = CreateMockUserManager();
-
+        
         UserManager.Setup(x => x.AddClaimAsync(It.IsAny<User>(), It.IsAny<Claim>()))
             .ReturnsAsync(IdentityResult.Success);
 

@@ -1,7 +1,10 @@
 using System.Reflection;
+using MassTransit;
 using YouTube.Application.Extensions;
+using YouTube.Infrastructure.Consumers;
 using YouTube.Infrastructure.Extensions;
-using YouTube.Infrastructure.SignalR;
+using YouTube.Infrastructure.Hubs;
+using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
@@ -24,6 +27,19 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<ChatConsumer>();
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("ChatQueue", e =>
+        {
+            e.ConfigureConsumer<ChatConsumer>(context);
+        });
+    });
+});
+
 var app = builder.Build();
 
 using var scoped = app.Services.CreateScope();
@@ -37,7 +53,6 @@ if (app.Environment.IsDevelopment())
 }
 // TODO  (Logging)
 app.UseCustomExceptionMiddleware();
-
 app.UseHttpsRedirection();
 app.UseRouting();
 
@@ -47,7 +62,7 @@ app.UseCors(b => b
     .AllowAnyHeader()                      
     .AllowCredentials());  
 
-app.MapHub<EmailConfirmationHub>("/emailConfirmationHub");
+app.MapHub<SupportChatHub>("/supportChatHub");
 
 app.UseAuthentication();
 app.UseAuthorization();

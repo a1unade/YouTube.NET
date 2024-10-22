@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Файл
+/// </summary>
 public class File : BaseEntity
 {
     /// <summary>

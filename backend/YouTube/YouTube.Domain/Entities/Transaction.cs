@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Транзакция
+/// </summary>
 public class Transaction : BaseEntity
 {
     /// <summary>

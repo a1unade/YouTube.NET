@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     /// Авторизация
     /// </summary>
     /// <param name="request">Запрос</param>
-    /// <param name="cancellationToken">cancellationToken</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("Auth")]
     public async Task<IActionResult> AuthUser(AuthRequest request, CancellationToken cancellationToken)
     {
@@ -45,7 +45,7 @@ public class AuthController : ControllerBase
     /// Логин
     /// </summary>
     /// <param name="request">Запрос</param>
-    /// <param name="cancellationToken">cancellationToken</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("Login")]
     public async Task<IActionResult> LoginUser(LoginRequest request, CancellationToken cancellationToken)
     {
@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
     /// Выход из аккаунта
     /// </summary>
     /// <param name="request">Запрос</param>
-    /// <param name="cancellationToken">cancellationToken</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("Logout")]
     public async Task<IActionResult> Logout(LogoutRequest request, CancellationToken cancellationToken)
     {

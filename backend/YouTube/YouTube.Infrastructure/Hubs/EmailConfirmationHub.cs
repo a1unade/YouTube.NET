@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 
-namespace YouTube.Infrastructure.SignalR;
+namespace YouTube.Infrastructure.Hubs;
 
 public class EmailConfirmationHub: Hub
 {

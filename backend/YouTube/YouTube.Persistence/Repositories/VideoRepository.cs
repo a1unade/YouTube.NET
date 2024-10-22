@@ -1,10 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
 
 namespace YouTube.Persistence.Repositories;
-
+[ExcludeFromCodeCoverage]
 public class VideoRepository : IVideoRepository
 {
     private readonly IDbContext _context;

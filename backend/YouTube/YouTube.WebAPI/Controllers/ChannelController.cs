@@ -19,7 +19,7 @@ public class ChannelController : ControllerBase
     /// Получить канал по Id 
     /// </summary>
     /// <param name="request">Id канала</param>
-    /// <param name="cancellationToken">cancellationToken</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Канал</returns>
     [HttpGet("GetChannel")]
     public async Task<IActionResult> GetChannelById([FromQuery] IdRequest request, CancellationToken cancellationToken)

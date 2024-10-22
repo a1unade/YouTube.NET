@@ -2,6 +2,9 @@ using YouTube.Domain.Common;
 
 namespace YouTube.Domain.Entities;
 
+/// <summary>
+/// Премиум подписка
+/// </summary>
 public class Premium : BaseEntity
 {
     /// <summary>
