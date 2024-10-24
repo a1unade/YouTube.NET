@@ -17,7 +17,40 @@ public class SupportChatHub : Hub
     }
 
     public async Task JoinChat(Guid userId) => await Groups.AddToGroupAsync(Context.ConnectionId, userId.ToString());
+    public async Task SendAll(Guid userId, string? message, IFormFile? file)
+    {
+        if (message.IsNullOrEmpty() && file is null)
+            throw new ArgumentException();
+        
+        var messageInfo = new MessageInfo { UserId = userId };
+        if (file is not null)
+        {
+            byte[] fileBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                fileBytes = memoryStream.ToArray();
+            }
 
+            messageInfo.FileContent = new FileContent
+            {
+                FileName = file.FileName,
+                ContentType = file.ContentType,
+                Lenght = file.Length,
+                Bucket = userId.ToString(),
+                Bytes = fileBytes
+            };
+        }
+
+        if (!string.IsNullOrWhiteSpace(message))
+            messageInfo.Message = message;
+        
+        
+        await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", messageInfo);
+        
+        await _publishEndpoint.Publish(messageInfo);
+    }
+    
     public async Task SendMessage(Guid userId, string message)
     {
         await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", userId, message);
@@ -52,40 +85,6 @@ public class SupportChatHub : Hub
                 Bucket = userId.ToString()
             }
         });
-    }
-
-    public async Task SendAll(Guid userId, string? message, IFormFile? file)
-    {
-        if (message.IsNullOrEmpty() && file is null)
-            throw new ArgumentException();
-        
-        var messageInfo = new MessageInfo { UserId = userId };
-        if (file is not null)
-        {
-            byte[] fileBytes;
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                fileBytes = memoryStream.ToArray();
-            }
-
-            messageInfo.FileContent = new FileContent
-            {
-                FileName = file.FileName,
-                ContentType = file.ContentType,
-                Lenght = file.Length,
-                Bucket = userId.ToString(),
-                Bytes = fileBytes
-            };
-        }
-
-        if (!string.IsNullOrWhiteSpace(message))
-            messageInfo.Message = message;
-        
-        
-        await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", messageInfo);
-        
-        await _publishEndpoint.Publish(messageInfo);
     }
 
     public async Task LeaveChat(Guid userId) => await Groups.RemoveFromGroupAsync(Context.ConnectionId, userId.ToString());

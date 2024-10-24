@@ -55,6 +55,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<Migrator>()
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IVideoRepository, VideoRepository>();
+            .AddScoped<IVideoRepository, VideoRepository>()
+            .AddScoped<IChatRepository, ChatRepository>();
     }
 }

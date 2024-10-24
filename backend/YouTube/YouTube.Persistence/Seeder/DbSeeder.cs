@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Enums;
 using YouTube.Application.Interfaces;
@@ -7,6 +8,13 @@ namespace YouTube.Persistence.Seeder;
 
 public class DbSeeder : IDbSeeder
 {
+    private readonly UserManager<User> _userManager;
+
+    public DbSeeder(UserManager<User> userManager)
+    {
+        _userManager = userManager;
+    }
+
     private static List<CategoryType> _baseCategories = new()
     {
         CategoryType.Humor,
@@ -19,7 +27,7 @@ public class DbSeeder : IDbSeeder
     };
 
     private static List<Channel> _baseChannels = new()
-    { 
+    {
         new Channel
         {
             Name = "Музыка",
@@ -47,9 +55,24 @@ public class DbSeeder : IDbSeeder
         }
     };
 
+    private static User _user = new()
+    {
+        UserName = "Admin",
+        Email = "bulatfree18@gmail.com" ,
+        UserInfo =  new UserInfo
+        {
+            Name = "ADMIN",
+            Surname = "ADMIN",
+            BirthDate = default,
+            Gender = "male"
+        }
+    };
+
     public async Task SeedAsync(IDbContext context, CancellationToken cancellationToken = default)
     {
+        await SeedAdminUserAsync(context, cancellationToken);
         await SeedCategoriesAsync(context, cancellationToken);
+        await SeedBaseChannelsAsync(context, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
 
@@ -67,6 +90,22 @@ public class DbSeeder : IDbSeeder
                 newCategories.Select(category => new Category { Name = category.ToString() }), cancellationToken);
     }
 
+    private async Task SeedAdminUserAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var existingUser = await context.Users.FirstOrDefaultAsync(x => x.Email == _user.Email || x.UserName == _user.UserName, cancellationToken);
+
+        if (existingUser == null)
+        {
+            var result = await _userManager.CreateAsync(_user, "StrongAdminPassword123!");
+            
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join("; ", result.Errors.Select(e => e.Description)));
+            }
+        }
+    }
+
+
     private static async Task SeedBaseChannelsAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var existingChannels = await context.Channels.ToListAsync(cancellationToken);
@@ -81,7 +120,8 @@ public class DbSeeder : IDbSeeder
                 {
                     Name = channel.Name,
                     Description = channel.Description,
-                    CreateDate = channel.CreateDate
+                    CreateDate = channel.CreateDate,
+                    User = _user
                 }), cancellationToken);
     }
 }
