@@ -4,7 +4,6 @@ using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Video;
 using YouTube.Application.Features.Video.GetVideoPagination;
 using YouTube.Domain.Entities;
-using File = System.IO.File;
 
 namespace YouTube.UnitTests.CommandsTests.VideoRequest;
 

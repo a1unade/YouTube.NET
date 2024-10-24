@@ -1,7 +1,10 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.DTOs.Chat;
 using YouTube.Application.DTOs.Video;
+using YouTube.Application.Features.Chats.GetChatHistory;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
@@ -11,10 +14,12 @@ namespace YouTube.WebAPI.Controllers;
 public class ChatController : ControllerBase
 {
     private readonly IChatService _chatService;
+    private readonly IMediator _mediator;
 
-    public ChatController(IChatService chatService)
+    public ChatController(IChatService chatService, IMediator mediator)
     {
         _chatService = chatService;
+        _mediator = mediator;
     }
 
     [HttpPost("Test")]
@@ -56,5 +61,15 @@ public class ChatController : ControllerBase
         }
 
         return Ok("Заебись");
+    }
+    
+    [HttpGet("ChatHistory")]
+    public async Task<IActionResult> GetChatHistory([FromQuery] IdRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetChatHistoryQuery(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
     }
 }
