@@ -4,5 +4,5 @@ namespace YouTube.Application.Common.Responses.Chats;
 
 public class ChatHistoryResponse : BaseResponse
 {
-    public List<ChatMessageDto> ChatMessages { get; set; } = default!;
+    public List<ChatMessageDto>? ChatMessages { get; set; }
 }

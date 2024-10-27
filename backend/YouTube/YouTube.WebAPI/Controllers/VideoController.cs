@@ -41,7 +41,7 @@ public class VideoController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
     [HttpGet("GetVideoById")]
-    public async Task<IActionResult> GetVideoById([FromQuery ] IdRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetVideoById([FromQuery] IdRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetVideoQuery(request), cancellationToken);
 
@@ -58,7 +58,7 @@ public class VideoController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
     [HttpGet("PaginationVideo")]
-    public async Task<IActionResult> PaginationVideo(VideoPaginationRequest request,
+    public async Task<IActionResult> PaginationVideo([FromQuery] VideoPaginationRequest request,
         CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetVideoPaginationQuery(request), cancellationToken);

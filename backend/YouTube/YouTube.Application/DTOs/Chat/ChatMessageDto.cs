@@ -7,4 +7,6 @@ public class ChatMessageDto
     public string? Message { get; set; }
     
     public DateTime Time { get; set; }
+    
+    public bool IsRead { get; set; }
 }

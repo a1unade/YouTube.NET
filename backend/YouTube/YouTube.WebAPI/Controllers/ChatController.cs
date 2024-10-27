@@ -2,9 +2,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.Common.Requests.Chats;
 using YouTube.Application.DTOs.Chat;
 using YouTube.Application.DTOs.Video;
-using YouTube.Application.Features.Chats.GetChatHistory;
+using YouTube.Application.Features.Chats.GetChatInfoCollectionForCard;
+using YouTube.Application.Features.Chats.GetChatMessagesPaginationByDay;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
@@ -63,10 +65,32 @@ public class ChatController : ControllerBase
         return Ok("Заебись");
     }
     
-    [HttpGet("ChatHistory")]
-    public async Task<IActionResult> GetChatHistory([FromQuery] IdRequest request, CancellationToken cancellationToken)
+    /// <summary>
+    /// Запрос на получение чата для карточки
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о чате</returns>
+    [HttpGet("GetHistoryCollectionForCard")]
+    public async Task<IActionResult> GetChatInfoCollectionMessage([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetChatHistoryQuery(request), cancellationToken);
+        var response = await _mediator.Send(new GetChatInfoCollectionQuery(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
+    }
+    
+    /// <summary>
+    /// Запрос на получение сообщений по дням
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Список сообщений по дням</returns>
+    [HttpGet("ChatMessagesByDay")]
+    public async Task<IActionResult> GetChatMessagesPaginationByDay([FromQuery] PaginationDaysRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetChatMessagesPaginationQuery(request), cancellationToken);
         if (response.IsSuccessfully)
             return Ok(response);
         

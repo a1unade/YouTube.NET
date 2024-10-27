@@ -5,6 +5,7 @@ using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
+using YouTube.Domain.Entities;
 using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.WebAPI.Controllers;
@@ -121,4 +122,52 @@ public class TestController : ControllerBase
         
         return Ok();
     }
+    [HttpPost("AddMessage")]
+    public async Task<IActionResult> AddMessage(CancellationToken cancellationToken)
+    {
+        // Получаем пользователя
+        var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
+            x => x.Id == Guid.Parse("d2f2139c-ae5e-40b6-98d1-291d14cc8862"), cancellationToken);
+
+        user.ChatHistory = new ChatHistory();
+
+        // Добавляем несколько сообщений в чат
+        var messages = new List<ChatMessage>
+        {
+            new ChatMessage
+            {
+                Message = "Привет?",
+                Timestamp = DateTime.UtcNow, // Установка времени в UTC
+                IsRead = false,
+                UserId = user.Id,
+                User = user,
+                ChatHistory = user.ChatHistory
+            },
+            new ChatMessage
+            {
+                Message = "спасибо!",
+                Timestamp = DateTime.UtcNow.AddMinutes(1), // Смещение времени для примера в UTC
+                IsRead = false,
+                UserId = user.Id,
+                User = user,
+                ChatHistory = user.ChatHistory
+            },
+            new ChatMessage
+            {
+                Message = "на выходных?",
+                Timestamp = DateTime.UtcNow.AddMinutes(2), // Смещение времени для примера в UTC
+                IsRead = false,
+                UserId = user.Id,
+                User = user,
+                ChatHistory = user.ChatHistory
+            }
+        };
+
+        _context.ChatMessages.AddRange(messages);
+        await _context.SaveChangesAsync(cancellationToken);
+    
+        return Ok();
+    }
+
+
 }

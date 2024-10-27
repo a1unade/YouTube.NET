@@ -58,7 +58,7 @@ public class DbSeeder : IDbSeeder
     private static User _user = new()
     {
         UserName = "Admin",
-        Email = "bulatfree18@gmail.com" ,
+        Email = "bulatfree18@gmail.com",
         UserInfo =  new UserInfo
         {
             Name = "ADMIN",
@@ -70,15 +70,17 @@ public class DbSeeder : IDbSeeder
 
     public async Task SeedAsync(IDbContext context, CancellationToken cancellationToken = default)
     {
-        await SeedAdminUserAsync(context, cancellationToken);
+        await SeedAdminAsync(context, cancellationToken);
         await SeedCategoriesAsync(context, cancellationToken);
         await SeedBaseChannelsAsync(context, cancellationToken);
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
+
     private static async Task SeedCategoriesAsync(IDbContext context, CancellationToken cancellationToken)
     {
-        var existingCategories = await context.Categories.ToListAsync(cancellationToken);
+        var existingCategories = await context.Categories.AsNoTracking().ToListAsync(cancellationToken);
 
         var newCategories = _baseCategories
             .Where(baseCategory =>
@@ -89,31 +91,16 @@ public class DbSeeder : IDbSeeder
             await context.Categories.AddRangeAsync(
                 newCategories.Select(category => new Category { Name = category.ToString() }), cancellationToken);
     }
-
-    private async Task SeedAdminUserAsync(IDbContext context, CancellationToken cancellationToken)
-    {
-        var existingUser = await context.Users.FirstOrDefaultAsync(x => x.Email == _user.Email || x.UserName == _user.UserName, cancellationToken);
-
-        if (existingUser == null)
-        {
-            var result = await _userManager.CreateAsync(_user, "StrongAdminPassword123!");
-            
-            if (!result.Succeeded)
-            {
-                throw new Exception(string.Join("; ", result.Errors.Select(e => e.Description)));
-            }
-        }
-    }
-
-
+    
     private static async Task SeedBaseChannelsAsync(IDbContext context, CancellationToken cancellationToken)
     {
-        var existingChannels = await context.Channels.ToListAsync(cancellationToken);
+        var existingChannels = await context.Channels.AsNoTracking().ToListAsync(cancellationToken);
 
         var newChannels = _baseChannels
-            .Where(baseChannels =>
-                existingChannels.All(existingChannel => existingChannel.Name != baseChannels.ToString()))
+            .Where(baseChannel =>
+                existingChannels.All(existingChannel => existingChannel.Name != baseChannel.Name))
             .ToList();
+        
         if (newChannels.Any())
             await context.Channels.AddRangeAsync(
                 newChannels.Select(channel => new Channel
@@ -121,7 +108,25 @@ public class DbSeeder : IDbSeeder
                     Name = channel.Name,
                     Description = channel.Description,
                     CreateDate = channel.CreateDate,
-                    User = _user
+                    User = _user,
                 }), cancellationToken);
+    }
+
+    private async Task SeedAdminAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(_user.Email!);
+        if (existingUser == null)
+        {
+            var result = await _userManager.CreateAsync(_user, "YourPassword123!"); 
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine(error.Description);
+                }
+            }
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
