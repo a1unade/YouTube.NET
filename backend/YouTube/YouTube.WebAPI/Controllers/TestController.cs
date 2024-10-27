@@ -129,7 +129,7 @@ public class TestController : ControllerBase
         var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
             x => x.Id == Guid.Parse("d2f2139c-ae5e-40b6-98d1-291d14cc8862"), cancellationToken);
 
-        user.ChatHistory = new ChatHistory();
+        user!.ChatHistory = new ChatHistory();
 
         // Добавляем несколько сообщений в чат
         var messages = new List<ChatMessage>

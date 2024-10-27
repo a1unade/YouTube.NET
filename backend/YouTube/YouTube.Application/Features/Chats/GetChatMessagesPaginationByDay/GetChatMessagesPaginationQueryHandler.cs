@@ -39,10 +39,10 @@ public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMess
                 Message = messages.Message,
                 Time = messages.Timestamp,
                 IsRead = messages.IsRead,
+                ContentType = messages.File?.ContentType,
                 FileUrl = messages.File is null
                     ? null
-                    : await _s3Service.GetFileUrlAsync(messages.File.BucketName, messages.File.FileName,
-                        cancellationToken)
+                    : await _s3Service.GetFileUrlAsync(messages.File.BucketName, messages.File.FileName, cancellationToken),
             });
         }
 

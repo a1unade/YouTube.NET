@@ -23,7 +23,41 @@ public class ChatController : ControllerBase
         _chatService = chatService;
         _mediator = mediator;
     }
-
+    
+    /// <summary>
+    /// Запрос на получение чата для карточки
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о чате</returns>
+    [HttpGet("GetHistoryCollectionForCard")]
+    public async Task<IActionResult> GetChatInfoCollectionMessage([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetChatInfoCollectionQuery(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
+    }
+    
+    /// <summary>
+    /// Запрос на получение сообщений по дням
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Список сообщений по дням</returns>
+    [HttpGet("ChatMessagesByDay")]
+    public async Task<IActionResult> GetChatMessagesPaginationByDay([FromQuery] PaginationDaysRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetChatMessagesPaginationQuery(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
+    }
+    
+    
+    
     [HttpPost("Test")]
     public async Task<IActionResult> TestBus(Guid userId, string? messageInfo, IFormFile? file)
     {
@@ -63,37 +97,5 @@ public class ChatController : ControllerBase
         }
 
         return Ok("Заебись");
-    }
-    
-    /// <summary>
-    /// Запрос на получение чата для карточки
-    /// </summary>
-    /// <param name="request">Запрос</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о чате</returns>
-    [HttpGet("GetHistoryCollectionForCard")]
-    public async Task<IActionResult> GetChatInfoCollectionMessage([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new GetChatInfoCollectionQuery(request), cancellationToken);
-        if (response.IsSuccessfully)
-            return Ok(response);
-        
-        return BadRequest(response);
-    }
-    
-    /// <summary>
-    /// Запрос на получение сообщений по дням
-    /// </summary>
-    /// <param name="request">Запрос</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Список сообщений по дням</returns>
-    [HttpGet("ChatMessagesByDay")]
-    public async Task<IActionResult> GetChatMessagesPaginationByDay([FromQuery] PaginationDaysRequest request, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new GetChatMessagesPaginationQuery(request), cancellationToken);
-        if (response.IsSuccessfully)
-            return Ok(response);
-        
-        return BadRequest(response);
     }
 }
