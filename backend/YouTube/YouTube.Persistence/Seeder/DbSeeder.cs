@@ -9,10 +9,12 @@ namespace YouTube.Persistence.Seeder;
 public class DbSeeder : IDbSeeder
 {
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<Role> _roleManager;
 
-    public DbSeeder(UserManager<User> userManager)
+    public DbSeeder(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     private static List<CategoryType> _baseCategories = new()
@@ -24,6 +26,12 @@ public class DbSeeder : IDbSeeder
         CategoryType.Games,
         CategoryType.Music,
         CategoryType.MoviesAndAnimations
+    };
+
+    private static List<Role> _roles = new()
+    {
+        new Role("Admin"),
+        new Role("User")
     };
 
     private static List<Channel> _baseChannels = new()
@@ -70,6 +78,7 @@ public class DbSeeder : IDbSeeder
 
     public async Task SeedAsync(IDbContext context, CancellationToken cancellationToken = default)
     {
+        await SeedRolesAsync(_roleManager, context, cancellationToken);
         await SeedAdminAsync(context, cancellationToken);
         await SeedCategoriesAsync(context, cancellationToken);
         await SeedBaseChannelsAsync(context, cancellationToken);
@@ -111,19 +120,45 @@ public class DbSeeder : IDbSeeder
                     User = _user,
                 }), cancellationToken);
     }
+    
+    private static async Task SeedRolesAsync(RoleManager<Role> roleManager, IDbContext context, CancellationToken cancellationToken)
+    {
+        foreach (var roleName in _roles)
+        {
+            if (!await roleManager.RoleExistsAsync(roleName.Name!))
+            {
+                await roleManager.CreateAsync(new Role { Name = roleName.Name });
+            }
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
 
     private async Task SeedAdminAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var existingUser = await _userManager.FindByEmailAsync(_user.Email!);
         if (existingUser == null)
         {
-            var result = await _userManager.CreateAsync(_user, "YourPassword123!"); 
-            if (!result.Succeeded)
+            var result = await _userManager.CreateAsync(_user, "Password123!");
+
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(_user, "Admin");
+            }
+            else
             {
                 foreach (var error in result.Errors)
                 {
                     Console.WriteLine(error.Description);
                 }
+            }
+        }
+        else
+        {
+            var isInRole = await _userManager.IsInRoleAsync(existingUser, "Admin");
+            if (!isInRole)
+            {
+                await _userManager.AddToRoleAsync(existingUser, "Admin");
             }
         }
 

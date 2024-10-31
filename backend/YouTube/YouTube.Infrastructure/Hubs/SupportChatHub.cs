@@ -1,91 +1,63 @@
 using MassTransit;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.IdentityModel.Tokens;
+using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.DTOs.Chat;
-using YouTube.Application.DTOs.Video;
+using YouTube.Application.Interfaces;
 
 namespace YouTube.Infrastructure.Hubs;
 
+/// <summary>
+/// Хаб для чата тех поддержки
+/// </summary>
 public class SupportChatHub : Hub
 {
-    private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IChatService _chatService;
+    private readonly IBus _bus;
 
-    public SupportChatHub(IPublishEndpoint publishEndpoint)
+    public SupportChatHub(IChatService chatService, IBus bus)
     {
-        _publishEndpoint = publishEndpoint;
+        _chatService = chatService;
+        _bus = bus;
     }
 
-    public async Task JoinChat(Guid userId) => await Groups.AddToGroupAsync(Context.ConnectionId, userId.ToString());
-    public async Task SendAll(Guid userId, string? message, IFormFile? file)
+    /// <summary>
+    /// Зайти в чат
+    /// </summary>
+    /// <param name="connection">Id Пользователя и чата</param>
+    public async Task<Guid?> JoinChat(ChatConnection connection)
     {
-        if (message.IsNullOrEmpty() && file is null)
-            throw new ArgumentException();
+        if(connection.ChatId is null)
+            connection.ChatId = await _chatService.CreateChatAsync(connection.UserId);
         
-        var messageInfo = new MessageInfo { UserId = userId };
-        if (file is not null)
-        {
-            byte[] fileBytes;
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                fileBytes = memoryStream.ToArray();
-            }
-
-            messageInfo.FileContent = new FileContent
-            {
-                FileName = file.FileName,
-                ContentType = file.ContentType,
-                Lenght = file.Length,
-                Bucket = userId.ToString(),
-                Bytes = fileBytes
-            };
-        }
-
-        if (!string.IsNullOrWhiteSpace(message))
-            messageInfo.Message = message;
-        
-        
-        await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", messageInfo);
-        
-        await _publishEndpoint.Publish(messageInfo);
+        await Groups.AddToGroupAsync(Context.ConnectionId, connection.ChatId.ToString()!);
+        return connection.ChatId;
     }
-    
-    public async Task SendMessage(Guid userId, string message)
-    {
-        await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", userId, message);
 
-        await _publishEndpoint.Publish(new MessageInfo
+    /// <summary>
+    /// Отправить сообщение
+    /// </summary>
+    /// <param name="request">Данные</param>
+    public async Task SendMessage(SendMessageRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Message))
+            throw new ArgumentException(ChatErrorMessage.MessageIsEmpty);
+        
+        await Clients.Group(request.ChatId.ToString()).SendAsync("ReceiveMessage", new
         {
-            UserId = userId,
-            Message = message
+            request.UserId,
+            request.ChatId,
+            request.Message
         });
-    }
-
-    public async Task SendFile(Guid userId, IFormFile file)
-    {
-        await Clients.Group(userId.ToString()).SendAsync("ReceiveMessage", userId, file);
-
-        byte[] fileBytes;
-        using (var memoryStream = new MemoryStream())
-        {
-            await file.CopyToAsync(memoryStream);
-            fileBytes = memoryStream.ToArray();
-        }
         
-        await _publishEndpoint.Publish(new MessageInfo
-        {
-            UserId = userId,
-            FileContent = new FileContent
-            {
-                Bytes = fileBytes,
-                FileName = file.FileName,
-                ContentType = file.ContentType,
-                Lenght = file.Length,
-                Bucket = userId.ToString()
-            }
-        });
+        await _bus.Publish(request);
     }
 
-    public async Task LeaveChat(Guid userId) => await Groups.RemoveFromGroupAsync(Context.ConnectionId, userId.ToString());
+    /// <summary>
+    /// Выйти из чата
+    /// </summary>
+    /// <param name="chatId">Id отправителя</param>
+    public async Task LeaveChat(Guid chatId)
+    {
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());
+    }
 }

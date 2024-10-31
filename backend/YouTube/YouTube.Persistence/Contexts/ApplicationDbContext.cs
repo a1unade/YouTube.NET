@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Interfaces;
@@ -7,7 +6,7 @@ using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.Persistence.Contexts;
 
-public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IDbContext
+public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, IDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
         : base(options)
@@ -39,7 +38,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, IdentityRole<
     public DbSet<ChatHistory> ChatHistories { get; set; }
     
     public DbSet<ChatMessage> ChatMessages { get; set; }
-    
+
     public DbSet<File> Files { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

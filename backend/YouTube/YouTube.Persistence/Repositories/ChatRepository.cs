@@ -54,13 +54,13 @@ public class ChatRepository : IChatRepository
         if (targetDate == default)
             return new List<ChatMessage>();
         
-
         var paginatedMessages = await _context.ChatHistories
             .AsNoTracking()
             .Where(ch => ch.Id == chatHistoryId)
             .SelectMany(ch => ch.ChatMessages)
             .Where(cm => cm.Timestamp.Date == targetDate)
             .Include(cm => cm.File)
+            .OrderByDescending(x => x.Timestamp)
             .ToListAsync(cancellationToken);
 
         return paginatedMessages;

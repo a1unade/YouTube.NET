@@ -2,7 +2,6 @@ using MediatR;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Responses.Chats;
 using YouTube.Application.DTOs.Chat;
-using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Application.Features.Chats.GetChatMessagesPaginationByDay;
@@ -10,12 +9,10 @@ namespace YouTube.Application.Features.Chats.GetChatMessagesPaginationByDay;
 public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMessagesPaginationQuery, ChatHistoryResponse>
 {
     private readonly IChatRepository _chatRepository;
-    private readonly IS3Service _s3Service;
 
-    public GetChatMessagesPaginationQueryHandler(IChatRepository chatRepository, IS3Service s3Service)
+    public GetChatMessagesPaginationQueryHandler(IChatRepository chatRepository)
     {
         _chatRepository = chatRepository;
-        _s3Service = s3Service;
     }
 
     public async Task<ChatHistoryResponse> Handle(GetChatMessagesPaginationQuery request,
@@ -36,13 +33,11 @@ public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMess
         {
             messagesDto.Add(new ChatMessageDto
             {
+                SenderId = messages.UserId,
+                MessageId = messages.Id,
                 Message = messages.Message,
                 Time = messages.Timestamp,
-                IsRead = messages.IsRead,
-                ContentType = messages.File?.ContentType,
-                FileUrl = messages.File is null
-                    ? null
-                    : await _s3Service.GetFileUrlAsync(messages.File.BucketName, messages.File.FileName, cancellationToken),
+                IsRead = messages.IsRead
             });
         }
 

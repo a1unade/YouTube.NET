@@ -39,11 +39,8 @@ public class GetChatInfoCollectionQueryHandler : IRequestHandler<GetChatInfoColl
             if (messages is not null)
             {
                 chatCardDto.LastMessage = new ChatMessageDto
-                {
-                    FileUrl = messages.File is null
-                        ? null
-                        : await _s3Service.GetFileUrlAsync(messages.File.BucketName, messages.File.FileName,
-                            cancellationToken),
+                { 
+                    SenderId = messages.UserId, 
                     Message = messages.Message,
                     Time = messages.Timestamp,
                     IsRead = messages.IsRead

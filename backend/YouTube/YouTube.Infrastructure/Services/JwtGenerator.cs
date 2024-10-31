@@ -5,16 +5,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
+using YouTube.Infrastructure.Options;
 
 namespace YouTube.Infrastructure.Services;
 
 public class JwtGenerator : IJwtGenerator
 {
-    private readonly IConfiguration _configuration;
-
+    private readonly AuthOptions _options;
     public JwtGenerator(IConfiguration configuration)
     {
-        _configuration = configuration;
+        _options = configuration.GetSection("JwtSettings").Get<AuthOptions>()!;
     }
     public string GenerateToken(User user)
     {
@@ -24,9 +24,9 @@ public class JwtGenerator : IJwtGenerator
             new ("Email", user.Email!)
         };
 
-        var issuer = _configuration["JwtSettings:Issuer"];
-        var audience = _configuration["JwtSettings:Audience"];
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]!));
+        var issuer = _options.Issuer;
+        var audience = _options.Audience;
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

@@ -1,14 +1,10 @@
 using System.Reflection;
-using MassTransit;
 using YouTube.Application.Extensions;
-using YouTube.Infrastructure.Consumers;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
-using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,19 +21,6 @@ builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
-
-builder.Services.AddMassTransit(x =>
-{
-    x.AddConsumer<ChatConsumer>();
-
-    x.UsingInMemory((context, cfg) =>
-    {
-        cfg.ReceiveEndpoint("ChatQueue", e =>
-        {
-            e.ConfigureConsumer<ChatConsumer>(context);
-        });
-    });
 });
 
 var app = builder.Build();
@@ -57,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors(b => b
-    .WithOrigins("http://localhost:5173", "http://localhost:5172") 
+    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:3000") 
     .AllowAnyMethod()                     
     .AllowAnyHeader()                      
     .AllowCredentials());  

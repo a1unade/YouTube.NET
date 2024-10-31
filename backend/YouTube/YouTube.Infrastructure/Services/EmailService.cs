@@ -2,16 +2,18 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using YouTube.Application.Interfaces;
+using YouTube.Infrastructure.Options;
 
 namespace YouTube.Infrastructure.Services;
 
 public class EmailService: IEmailService
 {
-    private readonly IConfigurationSection _configurationSection;
+
+    private readonly EmailOptions _options;
 
     public EmailService(IConfiguration configuration)
     {
-        _configurationSection = configuration.GetSection("EmailSettings");
+        _options = configuration.GetSection("EmailSettings").Get<EmailOptions>()!;
     }
     
     public async Task SendEmailAsync(string email, string subject, string messageBody)
@@ -19,8 +21,8 @@ public class EmailService: IEmailService
         try
         {
             using var smtpClient = new SmtpClient();
-            await smtpClient.ConnectAsync(_configurationSection["Host"], int.Parse(_configurationSection["Port"]!), true);
-            await smtpClient.AuthenticateAsync(_configurationSection["EmailAddress"], _configurationSection["Password"]);
+            await smtpClient.ConnectAsync(_options.Host, _options.Port, true);
+            await smtpClient.AuthenticateAsync(_options.EmailAddress, _options.Password);
             await smtpClient.SendAsync(GenerateMessage(email, subject, messageBody));
             await smtpClient.DisconnectAsync(true);
         }
@@ -34,7 +36,7 @@ public class EmailService: IEmailService
     {
         return new MimeMessage
         {
-            From = {new MailboxAddress("YouTube", _configurationSection["EmailAddress"])},
+            From = {new MailboxAddress("YouTube", _options.EmailAddress)},
             To = {new MailboxAddress("", email)},
             Subject = subject,
             Body = new BodyBuilder { HtmlBody = messageBody }.ToMessageBody()

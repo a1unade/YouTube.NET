@@ -80,13 +80,15 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         
         await _context.Channels.AddAsync(channel, cancellationToken);
 
-        IdentityResult result = await _userManager.CreateAsync(user, request.Password);
+        var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
             throw new IdentityException(errors, HttpStatusCode.BadRequest);
         }
+
+        await _userManager.AddToRoleAsync(user, "User");
         
         await _signInManager.SignInAsync(user, false);
 
