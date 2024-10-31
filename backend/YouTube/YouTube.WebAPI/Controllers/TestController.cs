@@ -153,11 +153,11 @@ public class TestController : ControllerBase
     {
         // Получаем пользователя
         var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("3d40721a-a274-49ee-a3bf-222627aa0b0d"), cancellationToken);
+            x => x.Id == Guid.Parse("3d40721a-a274-49ee-a3bf-222627aa0b0d"), cancellationToken) ?? throw new NotFoundException();
 
         
         var admin = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("155fd664-23f5-4e32-8e69-16deb1470db8"), cancellationToken);
+            x => x.Id == Guid.Parse("155fd664-23f5-4e32-8e69-16deb1470db8"), cancellationToken) ?? throw new NotFoundException();
 
         user.ChatHistory = new ChatHistory();
 
