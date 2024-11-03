@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
@@ -9,6 +10,7 @@ using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
+using YouTube.Infrastructure.Hubs;
 using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.WebAPI.Controllers;
@@ -22,6 +24,7 @@ public class TestController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IDbContext _context;
     private readonly IEmailService _emailService;
+
 
     public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager)
     {
@@ -148,17 +151,14 @@ public class TestController : ControllerBase
         
         return Ok();
     }
-    [HttpPost("AddMessage")]
+    [HttpPost("AddChat")]
     public async Task<IActionResult> AddMessage(CancellationToken cancellationToken)
     {
         // Получаем пользователя
         var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("3d40721a-a274-49ee-a3bf-222627aa0b0d"), cancellationToken) ?? throw new NotFoundException();
+            x => x.Id == Guid.Parse("206e4698-3f1b-42aa-a2b1-15e980da081f"), cancellationToken) ?? throw new NotFoundException();
 
-        
-        var admin = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("155fd664-23f5-4e32-8e69-16deb1470db8"), cancellationToken) ?? throw new NotFoundException();
-
+       
         user.ChatHistory = new ChatHistory();
 
 
@@ -173,15 +173,7 @@ public class TestController : ControllerBase
                 User = user,
                 ChatHistory = user.ChatHistory
             },
-            new ChatMessage
-            {
-                Message = "Даун Ты епт!",
-                Timestamp = DateTime.UtcNow.AddMinutes(1),
-                IsRead = false,
-                UserId = admin.Id,
-                User = admin,
-                ChatHistory = user.ChatHistory
-            },
+            
             new ChatMessage
             {
                 Message = "Добро",
@@ -190,23 +182,12 @@ public class TestController : ControllerBase
                 UserId = user.Id,
                 User = user,
                 ChatHistory = user.ChatHistory
-            },
-            new ChatMessage
-            {
-                Message = "Иди нахуй",
-                Timestamp = DateTime.UtcNow.AddMinutes(5), 
-                IsRead = false,
-                UserId = admin.Id,
-                User = admin,
-                ChatHistory = user.ChatHistory
             }
         };
 
         _context.ChatMessages.AddRange(messages);
         await _context.SaveChangesAsync(cancellationToken);
-    
+        
         return Ok();
     }
-
-    
 }

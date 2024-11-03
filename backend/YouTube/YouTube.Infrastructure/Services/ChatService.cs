@@ -11,7 +11,7 @@ public class ChatService : IChatService
 {
     private readonly IDbContext _context;
     private readonly UserManager<User> _userManager;
-
+    
     public ChatService(IDbContext context, UserManager<User> userManager)
     {
         _context = context;
@@ -39,7 +39,6 @@ public class ChatService : IChatService
 
         _context.ChatHistories.Add(chatHistory);
         await _context.SaveChangesAsync();
-
         return chatHistory.Id;
     }
 }

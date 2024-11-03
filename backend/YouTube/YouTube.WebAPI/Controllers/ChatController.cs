@@ -2,8 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Common.Requests.Chats;
-using YouTube.Application.Features.Chats.GetChatInfoCollectionForCard;
+using YouTube.Application.Features.Chats.GetChatCollection;
 using YouTube.Application.Features.Chats.GetChatMessagesPaginationByDay;
+using YouTube.Application.Features.Chats.PatchReadMessages;
 
 namespace YouTube.WebAPI.Controllers;
 
@@ -27,7 +28,7 @@ public class ChatController : ControllerBase
     [HttpGet("GetHistoryCollectionForCard")]
     public async Task<IActionResult> GetChatInfoCollectionMessage([FromQuery] PaginationRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetChatInfoCollectionQuery(request), cancellationToken);
+        var response = await _mediator.Send(new GetChatCollectionQuery(request), cancellationToken);
         if (response.IsSuccessfully)
             return Ok(response);
         
@@ -49,4 +50,21 @@ public class ChatController : ControllerBase
         
         return BadRequest(response);
     }
+
+    /// <summary>
+    /// Запрос на обновление поля IsRead у сообщений 
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPatch("ReadMessages")]
+    public async Task<IActionResult> ReadMessages([FromBody] ReadMessagesRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new PatchReadMessagesCommand(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(request);
+
+        return BadRequest(request);
+    }
+
 }
