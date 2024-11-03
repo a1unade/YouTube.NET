@@ -45,6 +45,21 @@ public class TestController : ControllerBase
 
         return BadRequest("Pizda");
     }
+
+    [HttpGet("TetsDate")]
+    public async Task<IActionResult> GetDate(CancellationToken cancellationToken)
+    {
+        var date = await _context.ChatMessages.ToListAsync(cancellationToken);
+        foreach (var times in date)
+        {
+            Console.WriteLine($"times.Timestamp.TimeOfDay: {times.Timestamp.TimeOfDay}");
+            Console.WriteLine($"times.Timestamp: {times.Timestamp}");
+            Console.WriteLine($"times.Timestamp.ToString(\"HH:mm\"): {times.Timestamp.ToString("HH:mm")}");
+            Console.WriteLine($"times.Timestamp.Date: {times.Timestamp.Date}");
+        }
+
+        return Ok();
+    }
     
     
     [HttpGet("GetVideoLink")]

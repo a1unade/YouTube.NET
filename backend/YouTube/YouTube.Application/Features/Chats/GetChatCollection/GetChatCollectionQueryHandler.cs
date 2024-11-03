@@ -42,13 +42,12 @@ public class GetChatCollectionQueryHandler : IRequestHandler<GetChatCollectionQu
                     SenderId = messages.UserId,
                     MessageId = messages.Id,
                     Message = messages.Message,
-                    Time = messages.Timestamp,
+                    Time = messages.Timestamp.TimeOfDay,
                     IsRead = messages.IsRead
                 };
             }
-
             chatCardDto.ChatId = history.Id;
-            chatCardDto.UserName = history.User.UserName!;
+            chatCardDto.UserName = history.User.DisplayName;
             chatCardDto.AvatarUrl = (history.User.AvatarUrl is null
                 ? null
                 : await _s3Service.GetFileUrlAsync(history.User.AvatarUrl.BucketName, history.User.AvatarUrl.FileName,

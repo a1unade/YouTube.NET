@@ -19,14 +19,19 @@ public class ChatMessageDto
     /// Сообщение
     /// </summary>
     public string? Message { get; set; }
-    
+
     /// <summary>
     /// Время отправки
     /// </summary>
-    public DateTime Time { get; set; }
+    public TimeSpan Time { get; set; } 
     
     /// <summary>
     /// Прочитано ли
     /// </summary>
     public bool IsRead { get; set; }
+    
+    /// <summary>
+    /// Дата
+    /// </summary>
+    public DateTime Date { get; set; }
 }

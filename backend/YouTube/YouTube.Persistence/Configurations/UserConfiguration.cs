@@ -10,6 +10,9 @@ namespace YouTube.Persistence.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.DisplayName)
+                .IsRequired();
+
             builder.HasMany(x => x.Channels)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId);

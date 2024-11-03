@@ -18,9 +18,14 @@ public class User : IdentityUser<Guid>
     public ICollection<Channel>? Channels { get; set; }
 
     /// <summary>
+    /// Отображаемое имя
+    /// </summary>
+    public string DisplayName { get; set; } = default!;
+    
+    /// <summary>
     /// Транзакции
     /// </summary>
-    public ICollection<Transaction>? Transactions { get; set; } 
+    public ICollection<Transaction>? Transactions { get; set; }
     
     /// <summary>
     /// nav-prop Файл

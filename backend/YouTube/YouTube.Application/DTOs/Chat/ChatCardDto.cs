@@ -24,4 +24,9 @@ public class ChatCardDto
     /// Id чата
     /// </summary>
     public Guid ChatId { get; set; }
+    
+    /// <summary>
+    /// Дата
+    /// </summary>
+    public DateTime Date { get; set; }
 }
