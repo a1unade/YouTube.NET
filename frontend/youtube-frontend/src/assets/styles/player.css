@@ -98,7 +98,7 @@
   animation: close 1s ease forwards;
 }
 
-/* noinspection CssUnusedSymbol */
+/* noinspection ALL */
 .description-opened {
   animation: open 1s ease forwards;
 }

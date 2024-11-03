@@ -1,10 +1,14 @@
 /* istanbul ignore file */
 import MenuButton from './menu-button.tsx';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const LeftMenu = (props: { isOpen: boolean }) => {
-  const { isOpen } = props;
+const LeftMenu = (props: {
+  isOpen: boolean;
+  setChatIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  chatIsOpen: boolean;
+}) => {
+  const { isOpen, setChatIsOpen, chatIsOpen } = props;
   const navigate = useNavigate();
   const location = useLocation();
   const mapRouting: { [p: string]: string } = {
@@ -25,6 +29,11 @@ const LeftMenu = (props: { isOpen: boolean }) => {
     if (currentElement) {
       currentElement.classList.add('menu-button-selected');
     }
+  };
+
+  const handleChatButtonClick = () => {
+    setChatIsOpen(!chatIsOpen);
+    localStorage.setItem('chat', JSON.stringify(chatIsOpen));
   };
 
   return (
@@ -160,7 +169,10 @@ const LeftMenu = (props: { isOpen: boolean }) => {
                 title="Жалобы"
               />
               <MenuButton
-                onClick={() => handleClick('Справка')}
+                onClick={() => {
+                  handleClick('Справка');
+                  handleChatButtonClick();
+                }}
                 selected={selected}
                 title="Справка"
               />

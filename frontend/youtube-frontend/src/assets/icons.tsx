@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+// noinspection JSUnusedGlobalSymbols
 
 export const AddVideo = () => {
   return (

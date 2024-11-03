@@ -1,3 +1,5 @@
+// noinspection JSUnresolvedReference,JSUnusedGlobalSymbols
+
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -7,6 +9,7 @@ import eslintReactRefresh from 'eslint-plugin-react-refresh';
 import prettierPlugin from 'eslint-plugin-prettier';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
+// noinspection JSCheckFunctionSignatures
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default tseslint.config(
   {

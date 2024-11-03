@@ -1,4 +1,5 @@
 /* istanbul ignore file */
+// noinspection JSUnusedGlobalSymbols
 
 import axios from 'axios';
 

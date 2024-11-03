@@ -128,12 +128,14 @@
   width: calc(100% - 24px - 12px);
 }
 
+/* noinspection ALL */
 .horizontal-line {
   height: 1px;
   background-color: rgba(0, 0, 0, 0.1);
   width: 200px;
 }
 
+/* noinspection CssUnusedSymbol */
 .youtube-content-container .sidebar-item {
   display: flex;
   align-items: center;
@@ -161,14 +163,17 @@
   white-space: pre-wrap;
 }
 
+/* noinspection CssUnusedSymbol */
 .section-title-container {
   margin-top: 20px;
 }
 
+/* noinspection CssUnusedSymbol */
 .title-text-display-style:first-child {
   margin-top: 0;
 }
 
+/* noinspection CssUnusedSymbol */
 .header-with-icon {
   box-sizing: border-box;
   display: flex;
@@ -191,6 +196,7 @@
   padding-left: 12px;
 }
 
+/* noinspection CssUnusedSymbol */
 .content-info-text-style {
   box-sizing: border-box;
   width: 100%;
@@ -202,6 +208,7 @@
   white-space: pre-wrap;
 }
 
+/* noinspection CssUnusedSymbol */
 .content-info-block {
   box-sizing: border-box;
   width: 100%;
@@ -296,6 +303,7 @@
   cursor: pointer;
 }
 
+/* noinspection CssUnusedSymbol */
 .main-input {
   border-radius: 20px;
   background-color: transparent;
@@ -364,6 +372,7 @@
   height: 24px;
 }
 
+/* noinspection CssUnusedSymbol */
 .center-box-with-text1 {
   box-sizing: border-box;
   display: flex;
@@ -381,6 +390,7 @@
   position: relative;
 }
 
+/* noinspection CssUnusedSymbol */
 .svg-container1 {
   flex: 0 0 auto;
   width: 24px;
@@ -388,6 +398,7 @@
   color: rgba(3, 3, 3, 1);
 }
 
+/* noinspection CssUnusedSymbol */
 .center-box-with-text1:hover,
 .center-box-with-text:hover {
   background: rgba(230, 230, 230, 1);
@@ -424,6 +435,7 @@
   display: inline-block;
 }
 
+/* noinspection CssUnusedSymbol */
 .dropdown-content {
   margin-top: 10px;
   border-radius: 10px;
@@ -496,6 +508,7 @@
   outline: none;
 }
 
+/* noinspection CssUnusedSymbol */
 .sign-in-button {
   margin-right: 20px;
   background-color: transparent;
@@ -503,6 +516,7 @@
   border: 1px solid #ccc;
 }
 
+/* noinspection CssUnusedSymbol */
 .sign-in-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -555,6 +569,7 @@
   background-color: #0f0f0f;
 }
 
+/* noinspection CssUnusedSymbol */
 .scroll-button {
   background-color: transparent;
   border: none;
@@ -566,10 +581,12 @@
   z-index: 1;
 }
 
+/* noinspection CssUnusedSymbol */
 .scroll-button.left {
   left: 0;
 }
 
+/* noinspection CssUnusedSymbol */
 .scroll-button.right {
   right: 0;
 }
