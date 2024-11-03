@@ -4,7 +4,7 @@ using YouTube.Application.Common.Responses.Chats;
 
 namespace YouTube.Application.Features.Chats.GetChatCollection;
 
-public class GetChatCollectionQuery : PaginationRequest, IRequest<ChatCollectionResponse>
+public class GetChatCollectionQuery : PaginationRequest, IRequest<ChatCardResponse>
 {
     public GetChatCollectionQuery(PaginationRequest request) : base(request)
     {
