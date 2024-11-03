@@ -1,3 +1,5 @@
+// noinspection HttpUrlsUsage
+
 import ReactPlayer from 'react-player';
 import VideoActions from './components/video-actions.tsx';
 import Description from './components/description.tsx';

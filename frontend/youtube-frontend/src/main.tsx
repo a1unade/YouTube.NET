@@ -17,6 +17,7 @@ import { AlertProvider } from './contexts/alert-provider.tsx';
 import Subscriptions from './pages/subscriptions';
 import Playlists from './pages/playlists';
 import ChannelFeatured from './pages/channel';
+import ChatModalWindow from './components/modal/chat-modal-window.tsx';
 
 export const App = () => {
   const [saveVideoActive, setSaveVideoActive] = useState(false);
@@ -25,6 +26,10 @@ export const App = () => {
   const [isOpen, setIsOpen] = useState<boolean>(() => {
     const savedMenuState = localStorage.getItem('menu');
     return savedMenuState !== null ? JSON.parse(savedMenuState) : true;
+  });
+  const [chatIsOpen, setChatIsOpen] = useState<boolean>(() => {
+    const savedChatState = localStorage.getItem('chat');
+    return savedChatState !== null ? JSON.parse(savedChatState) : true;
   });
 
   useEffect(() => {
@@ -54,7 +59,7 @@ export const App = () => {
       </div>
       <div id="layout-page" className="layout-page">
         <Header onClick={handleMenuClick} />
-        <LeftMenu isOpen={isOpen} />
+        <LeftMenu isOpen={isOpen} setChatIsOpen={setChatIsOpen} chatIsOpen={chatIsOpen} />
         <div className="page-content">
           <Routes>
             <Route
@@ -132,12 +137,10 @@ export const App = () => {
           </Routes>
         </div>
       </div>
-      {/* prettier-ignore */}
       <SaveVideoModal active={saveVideoActive} setActive={setSaveVideoActive} />
-      {/* prettier-ignore */}
       <ShareModal shareActive={shareActive} setShareActive={setShareActive} />
-      {/* prettier-ignore */}
       <ReportModal active={reportVideoActive} setActive={setReportVideoActive} />
+      <ChatModalWindow active={chatIsOpen} setActive={setChatIsOpen} />
     </div>
   );
 };

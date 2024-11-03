@@ -13,4 +13,11 @@ services:
       context: ./youtube-accounts
       dockerfile: Dockerfile
     ports:
-      - "5173:80" 
+      - "5173:80"
+
+  youtube-admin:
+    build:
+      context: ./youtube-admin
+      dockerfile: Dockerfile
+    ports:
+      - "5174:80"
