@@ -17,6 +17,11 @@ public class ChatMessage : BaseEntity
     public DateTime Timestamp { get; set; }
     
     /// <summary>
+    /// Прочитано?
+    /// </summary>
+    public bool IsRead { get; set; }
+    
+    /// <summary>
     /// Id пользователя
     /// </summary>
     public Guid UserId { get; set; }
@@ -34,7 +39,7 @@ public class ChatMessage : BaseEntity
     /// <summary>
     /// Сессия чата
     /// </summary>
-    public ChatHistory? ChatHistory { get; set; }
+    public ChatHistory ChatHistory { get; set; } = default!;
     
     /// <summary>
     /// Ид файла

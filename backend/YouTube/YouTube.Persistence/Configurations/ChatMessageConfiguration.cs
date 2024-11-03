@@ -15,6 +15,8 @@ public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>
 
         builder.Property(x => x.Message);
 
+        builder.Property(x => x.IsRead);
+
         builder.HasOne(x => x.ChatHistory)
             .WithMany(x => x.ChatMessages)
             .HasForeignKey(x => x.ChatHistoryId);

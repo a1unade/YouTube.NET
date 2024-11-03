@@ -1,6 +1,9 @@
 
 namespace YouTube.Application.Common.Responses.Auth;
 
+/// <summary>
+/// Ответ при регистрации
+/// </summary>
 public class AuthResponse : BaseResponse
 {
     

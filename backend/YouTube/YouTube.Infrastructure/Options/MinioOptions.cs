@@ -3,9 +3,9 @@ namespace YouTube.Infrastructure.Options;
 public class MinioOptions
 {
     /// <summary>
-    /// Название клиента
+    /// Url
     /// </summary>
-    public string MinioClient { get; set; } = default!;
+    public string EndPoint { get; set; } = default!;
     
     /// <summary>
     /// Логин
@@ -16,19 +16,4 @@ public class MinioOptions
     /// Секрет
     /// </summary>
     public string SecretKey { get; set; } = default!;
-
-    /// <summary>
-    /// Url хранилища
-    /// </summary>
-    public string ServiceUrl { get; set; } = default!;
-
-    /// <summary>
-    /// Название бакета
-    /// </summary>
-    public string BucketName { get; set; } = default!;
-
-    /// <summary>
-    /// Таймаут
-    /// </summary>
-    public TimeSpan TimeOut { get; set; } = TimeSpan.FromMinutes(3);
 }

@@ -1,10 +1,14 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
+using YouTube.Domain.Entities;
 using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.WebAPI.Controllers;
@@ -13,17 +17,19 @@ namespace YouTube.WebAPI.Controllers;
 [Route("[controller]")]
 public class TestController : ControllerBase
 {
+    private readonly UserManager<User> _userManager;
     private readonly IS3Service _service;
     private readonly IMediator _mediator;
     private readonly IDbContext _context;
     private readonly IEmailService _emailService;
 
-    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService)
+    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager)
     {
         _service = service;
         _mediator = mediator;
         _context = context;
         _emailService = emailService;
+        _userManager = userManager;
     }
 
     [HttpGet("GetLink")]
@@ -46,10 +52,31 @@ public class TestController : ControllerBase
     }
     
     [HttpGet("EmailTest")]
+    [Authorize(Roles = "Admin")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
     public async Task<IActionResult> EmailTest()
     {
         await _emailService.SendEmailAsync("bulatfri18@gmail.com", "Хуй", "ХУЙ");
 
+        return Ok();
+    }
+    
+    [HttpPost("HIHIHIHHI")]
+    [Authorize(Roles = "User")]
+    public async Task<IActionResult> Hihihihih(CancellationToken cancellationToken)
+    {
+        var users = await _context.Users.ToListAsync(cancellationToken);
+
+        foreach (var user in users)
+        {
+            var rolesAsync = await _userManager.GetRolesAsync(user);
+
+            foreach (var role in rolesAsync)
+            {
+                Console.WriteLine(role);
+            }
+        }
         return Ok();
     }
 
@@ -111,14 +138,75 @@ public class TestController : ControllerBase
 
   
     
-    [HttpDelete("DeleteAll")]
-    public async Task<IActionResult> DeleteAllUser(CancellationToken cancellationToken)
+    [HttpDelete("Delete")]
+    public async Task<IActionResult> DeleteAllUser(Guid id ,CancellationToken cancellationToken)
     {
-        var user = await _context.Users.ToListAsync(cancellationToken); 
-        _context.Users.RemoveRange(user);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? throw new NotFoundException(); 
+        _context.Users.Remove(user);
 
         await _context.SaveChangesAsync(cancellationToken);
         
         return Ok();
     }
+    [HttpPost("AddMessage")]
+    public async Task<IActionResult> AddMessage(CancellationToken cancellationToken)
+    {
+        // Получаем пользователя
+        var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
+            x => x.Id == Guid.Parse("3d40721a-a274-49ee-a3bf-222627aa0b0d"), cancellationToken) ?? throw new NotFoundException();
+
+        
+        var admin = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
+            x => x.Id == Guid.Parse("155fd664-23f5-4e32-8e69-16deb1470db8"), cancellationToken) ?? throw new NotFoundException();
+
+        user.ChatHistory = new ChatHistory();
+
+
+        var messages = new List<ChatMessage>
+        {
+            new ChatMessage
+            {
+                Message = "Даун?",
+                Timestamp = DateTime.UtcNow,
+                IsRead = false,
+                UserId = user.Id,
+                User = user,
+                ChatHistory = user.ChatHistory
+            },
+            new ChatMessage
+            {
+                Message = "Даун Ты епт!",
+                Timestamp = DateTime.UtcNow.AddMinutes(1),
+                IsRead = false,
+                UserId = admin.Id,
+                User = admin,
+                ChatHistory = user.ChatHistory
+            },
+            new ChatMessage
+            {
+                Message = "Добро",
+                Timestamp = DateTime.UtcNow.AddMinutes(2), 
+                IsRead = false,
+                UserId = user.Id,
+                User = user,
+                ChatHistory = user.ChatHistory
+            },
+            new ChatMessage
+            {
+                Message = "Иди нахуй",
+                Timestamp = DateTime.UtcNow.AddMinutes(5), 
+                IsRead = false,
+                UserId = admin.Id,
+                User = admin,
+                ChatHistory = user.ChatHistory
+            }
+        };
+
+        _context.ChatMessages.AddRange(messages);
+        await _context.SaveChangesAsync(cancellationToken);
+    
+        return Ok();
+    }
+
+    
 }

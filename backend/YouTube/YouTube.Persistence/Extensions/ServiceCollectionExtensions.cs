@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;
@@ -29,7 +31,7 @@ public static class ServiceCollectionExtensions
             options.UseNpgsql(connectionString,
                 builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
         
-        services.AddIdentity<User, IdentityRole<Guid>>(opt =>
+        services.AddIdentity<User, Role>(opt =>
             {
                 opt.Password.RequireDigit = false;
                 opt.Password.RequiredLength = 6;
@@ -55,6 +57,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<Migrator>()
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
             .AddScoped<IUserRepository, UserRepository>()
-            .AddScoped<IVideoRepository, VideoRepository>();
+            .AddScoped<IVideoRepository, VideoRepository>()
+            .AddScoped<IChatRepository, ChatRepository>();
     }
 }

@@ -76,6 +76,11 @@ public interface IDbContext
     /// </summary>
     public DbSet<ChatMessage> ChatMessages { get; set; }
     
+    /// <summary>
+    /// Роли
+    /// </summary>
+    public DbSet<Role> Roles { get; set; }
+    
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     
     DbSet<T> Set<T>() where T : class;
