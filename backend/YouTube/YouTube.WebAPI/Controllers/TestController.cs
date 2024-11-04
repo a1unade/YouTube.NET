@@ -46,20 +46,7 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
 
-    [HttpGet("TetsDate")]
-    public async Task<IActionResult> GetDate(CancellationToken cancellationToken)
-    {
-        var date = await _context.ChatMessages.ToListAsync(cancellationToken);
-        foreach (var times in date)
-        {
-            Console.WriteLine($"times.Timestamp.TimeOfDay: {times.Timestamp.TimeOfDay}");
-            Console.WriteLine($"times.Timestamp: {times.Timestamp}");
-            Console.WriteLine($"times.Timestamp.ToString(\"HH:mm\"): {times.Timestamp.ToString("HH:mm")}");
-            Console.WriteLine($"times.Timestamp.Date: {times.Timestamp.Date}");
-        }
-
-        return Ok();
-    }
+    
     
     
     [HttpGet("GetVideoLink")]
@@ -171,10 +158,13 @@ public class TestController : ControllerBase
     {
         // Получаем пользователя
         var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("206e4698-3f1b-42aa-a2b1-15e980da081f"), cancellationToken) ?? throw new NotFoundException();
+            x => x.Id == Guid.Parse("6c16033a-6d0c-4d41-913b-a5e9b52afda4"), cancellationToken) ?? throw new NotFoundException();
 
        
-        user.ChatHistory = new ChatHistory();
+        user.ChatHistory = new ChatHistory()
+        {
+            StartDate = DateOnly.FromDateTime(DateTime.Now)
+        };
 
 
         var messages = new List<ChatMessage>
@@ -182,7 +172,8 @@ public class TestController : ControllerBase
             new ChatMessage
             {
                 Message = "Даун?",
-                Timestamp = DateTime.UtcNow,
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(1), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(1), 
                 IsRead = false,
                 UserId = user.Id,
                 User = user,
@@ -192,7 +183,8 @@ public class TestController : ControllerBase
             new ChatMessage
             {
                 Message = "Добро",
-                Timestamp = DateTime.UtcNow.AddMinutes(2), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(4), 
+                Date = DateOnly.FromDateTime(DateTime.Now), 
                 IsRead = false,
                 UserId = user.Id,
                 User = user,

@@ -42,9 +42,10 @@ public class ChatRepository : IChatRepository
     public async Task<List<ChatMessage>> GetChatMessagesPagination(Guid chatHistoryId, int page, CancellationToken cancellationToken)
     {
         var uniqueDates = await _context.ChatHistories
+            .AsNoTracking()
             .Where(ch => ch.Id == chatHistoryId)
             .SelectMany(ch => ch.ChatMessages)
-            .Select(cm => cm.Timestamp.Date)
+            .Select(cm => cm.Date)
             .Distinct()
             .OrderByDescending(d => d)
             .ToListAsync(cancellationToken);
@@ -58,9 +59,9 @@ public class ChatRepository : IChatRepository
             .AsNoTracking()
             .Where(ch => ch.Id == chatHistoryId)
             .SelectMany(ch => ch.ChatMessages)
-            .Where(cm => cm.Timestamp.Date == targetDate)
+            .Where(cm => cm.Date == targetDate)
             .Include(cm => cm.File)
-            .OrderByDescending(x => x.Timestamp)
+            .OrderByDescending(x => x.Time)
             .ToListAsync(cancellationToken);
 
         return paginatedMessages;

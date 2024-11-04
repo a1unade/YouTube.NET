@@ -32,7 +32,7 @@ public class ChatService : IChatService
 
         var chatHistory = new ChatHistory
         {
-            StartDate = DateTime.UtcNow,
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
             UserId = user.Id,
             ChatMessages = new List<ChatMessage>()
         };

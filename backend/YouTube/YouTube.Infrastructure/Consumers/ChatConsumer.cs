@@ -28,7 +28,8 @@ public class ChatConsumer : IConsumer<SendMessageRequest>
         var message = new ChatMessage
         {
             Message = context.Message.Message,
-            Timestamp = DateTime.UtcNow,
+            Time = TimeOnly.FromDateTime(DateTime.Now),
+            Date = DateOnly.FromDateTime(DateTime.Now),
             User = user,
             ChatHistory = chatHistory
         };

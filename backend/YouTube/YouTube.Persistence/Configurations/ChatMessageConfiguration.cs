@@ -10,7 +10,10 @@ public class ChatMessageConfiguration : IEntityTypeConfiguration<ChatMessage>
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Timestamp)
+        builder.Property(x => x.Time)
+            .IsRequired();
+        
+        builder.Property(x => x.Date)
             .IsRequired();
 
         builder.Property(x => x.Message);

@@ -32,7 +32,7 @@ public class GetChatCollectionQueryHandler : IRequestHandler<GetChatCollectionQu
 
         foreach (var history in histories)
         {
-            var messages = history.ChatMessages.OrderByDescending(x => x.Timestamp).FirstOrDefault();
+            var messages = history.ChatMessages.OrderByDescending(x => x.Date).FirstOrDefault();
             var chatCardDto = new ChatCardDto();
 
             if (messages is not null)
@@ -42,8 +42,9 @@ public class GetChatCollectionQueryHandler : IRequestHandler<GetChatCollectionQu
                     SenderId = messages.UserId,
                     MessageId = messages.Id,
                     Message = messages.Message,
-                    Time = messages.Timestamp.TimeOfDay,
-                    IsRead = messages.IsRead
+                    Time = messages.Time,
+                    IsRead = messages.IsRead,
+                    Date = messages.Date
                 };
             }
             chatCardDto.ChatId = history.Id;

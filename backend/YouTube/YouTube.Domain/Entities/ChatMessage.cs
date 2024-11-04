@@ -14,7 +14,12 @@ public class ChatMessage : BaseEntity
     /// <summary>
     /// Время
     /// </summary>
-    public DateTime Timestamp { get; set; }
+    public TimeOnly Time { get; set; }
+    
+    /// <summary>
+    /// Дата
+    /// </summary>
+    public DateOnly Date { get; set; }
     
     /// <summary>
     /// Прочитано?

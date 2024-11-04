@@ -18,7 +18,7 @@ public abstract class ContextFactory
         
         context.Users.AddRange(user);
 
-        context.SaveChangesAsync();
+        context.SaveChanges();
         
         return context;
     }

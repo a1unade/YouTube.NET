@@ -23,7 +23,7 @@ public class ChatMessageDto
     /// <summary>
     /// Время отправки
     /// </summary>
-    public TimeSpan Time { get; set; } 
+    public TimeOnly Time { get; set; } 
     
     /// <summary>
     /// Прочитано ли
@@ -33,5 +33,5 @@ public class ChatMessageDto
     /// <summary>
     /// Дата
     /// </summary>
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 }
