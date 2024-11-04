@@ -1,6 +1,7 @@
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using YouTube.Application.Common.Messages.Error;
+using YouTube.Application.Common.Requests.Chats;
 using YouTube.Application.DTOs.Chat;
 using YouTube.Application.Interfaces;
 
@@ -51,11 +52,29 @@ public class SupportChatHub : Hub
         
         await _bus.Publish(request);
     }
+    
+    /// <summary>
+    /// Прочитать сообщение
+    /// </summary>
+    /// <param name="request">Список ид сообщений, ид чата</param>
+    public async Task ReadMessages(ReadMessagesRequest request)
+    {
+        if (request.MessagesId.Count == 0 || request.MessagesId is null)
+            throw new ArgumentException(ChatErrorMessage.MessagesIsEmpty);
+
+        await _chatService.ReadMessagesAsync(request.MessagesId);
+        
+        await Clients.Group(request.ChatId.ToString()).SendAsync("ReadMessages", new
+        {
+            request.ChatId,
+            request.MessagesId
+        });
+    }
 
     /// <summary>
     /// Выйти из чата
     /// </summary>
-    /// <param name="chatId">Id отправителя</param>
+    /// <param name="chatId">Id чата</param>
     public async Task LeaveChat(Guid chatId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());

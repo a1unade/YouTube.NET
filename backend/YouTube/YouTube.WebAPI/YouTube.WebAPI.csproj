@@ -36,10 +36,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-1.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-10.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-11.svg" />

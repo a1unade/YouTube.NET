@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Enums;
+using YouTube.Application.Common.Exceptions;
+using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
+using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.Persistence.Seeder;
 
@@ -10,11 +14,17 @@ public class DbSeeder : IDbSeeder
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
+    private readonly IS3Service _s3Service;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public DbSeeder(UserManager<User> userManager, RoleManager<Role> roleManager)
+
+    public DbSeeder(UserManager<User> userManager, RoleManager<Role> roleManager, IS3Service s3Service,
+        IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _s3Service = s3Service;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     private static List<CategoryType> _baseCategories = new()
@@ -67,7 +77,7 @@ public class DbSeeder : IDbSeeder
     {
         UserName = "Admin",
         Email = "bulatfree18@gmail.com",
-        UserInfo =  new UserInfo
+        UserInfo = new UserInfo
         {
             Name = "ADMIN",
             Surname = "ADMIN",
@@ -82,6 +92,9 @@ public class DbSeeder : IDbSeeder
         await SeedAdminAsync(context, cancellationToken);
         await SeedCategoriesAsync(context, cancellationToken);
         await SeedBaseChannelsAsync(context, cancellationToken);
+        await SeedUserAsync(context, cancellationToken);
+        await SeedUserChannelAsync(context, cancellationToken);
+        await SeedVideoAsync(context, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }
@@ -100,7 +113,7 @@ public class DbSeeder : IDbSeeder
             await context.Categories.AddRangeAsync(
                 newCategories.Select(category => new Category { Name = category.ToString() }), cancellationToken);
     }
-    
+
     private static async Task SeedBaseChannelsAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var existingChannels = await context.Channels.AsNoTracking().ToListAsync(cancellationToken);
@@ -109,7 +122,7 @@ public class DbSeeder : IDbSeeder
             .Where(baseChannel =>
                 existingChannels.All(existingChannel => existingChannel.Name != baseChannel.Name))
             .ToList();
-        
+
         if (newChannels.Any())
             await context.Channels.AddRangeAsync(
                 newChannels.Select(channel => new Channel
@@ -117,11 +130,12 @@ public class DbSeeder : IDbSeeder
                     Name = channel.Name,
                     Description = channel.Description,
                     CreateDate = channel.CreateDate,
-                    User = _user,
+                    User = _user
                 }), cancellationToken);
     }
-    
-    private static async Task SeedRolesAsync(RoleManager<Role> roleManager, IDbContext context, CancellationToken cancellationToken)
+
+    private static async Task SeedRolesAsync(RoleManager<Role> roleManager, IDbContext context,
+        CancellationToken cancellationToken)
     {
         foreach (var roleName in _roles)
         {
@@ -163,5 +177,192 @@ public class DbSeeder : IDbSeeder
         }
 
         await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedUserAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var existingUser = await _userManager.FindByEmailAsync("ashab@gmail.com");
+
+        if (existingUser == null)
+        {
+            var user = new User
+            {
+                UserName = "ashab@gmail.com",
+                Email = "ashab@gmail.com",
+                DisplayName = "Асхаб Тамаев",
+                UserInfo = new UserInfo
+                {
+                    Name = "Асхаб",
+                    Surname = "Тамаев",
+                    BirthDate = default,
+                    Gender = "Male",
+                    Country = "Russia"
+                }
+            };
+
+            var result = await _userManager.CreateAsync(user, "ashab123!");
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
+                await context.SaveChangesAsync(cancellationToken);
+            }
+        }
+    }
+
+    private async Task SeedUserChannelAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(x => x.Email == "ashab@gmail.com", cancellationToken);
+        var channel = await context.Channels.FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
+
+        if (user != null && channel == null)
+        {
+            channel = new Channel
+            {
+                Name = "Tamaev TV",
+                Description = "Это моя машина",
+                CreateDate = DateOnly.FromDateTime(DateTime.Now),
+                SubCount = 231232,
+                Country = "Russia",
+                User = user
+            };
+
+            await context.Channels.AddAsync(channel, cancellationToken);
+            
+            var channelImage = await context.Files
+                .FirstOrDefaultAsync(x => x.Path == channel.Id + "ashab.jpg", cancellationToken);
+
+            if (channelImage is null)
+            {
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/ashab.jpg");
+
+                if (!System.IO.File.Exists(filePath))
+                    throw new NotFoundException();
+
+                await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+                var path = await _s3Service.UploadAsync(new FileContent
+                {
+                    Content = fileStream,
+                    FileName = "ashab.jpg",
+                    ContentType = "image/jpeg",
+                    Lenght = fileStream.Length,
+                    Bucket = channel.Id.ToString()
+                }, cancellationToken);
+
+                var file = new File
+                {
+                    Size = fileStream.Length,
+                    ContentType = "image/jpeg",
+                    Path = path,
+                    FileName = "ashab.jpg",
+                    BucketName = channel.Id.ToString()
+                };
+
+                await context.Files.AddAsync(file, cancellationToken);
+                channel.MainImgFile = file;
+            }
+
+            await context.Channels.AddAsync(channel, cancellationToken);
+        }
+        
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedVideoAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var video = await context.Videos
+            .FirstOrDefaultAsync(x => x.Name == "Mohito" && x.Description == "Tamaev Mohito", cancellationToken);
+
+        var channel = await context.Channels.FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
+
+        if (channel != null)
+        {
+            if (video is null)
+            {
+                video = new Video
+                {
+                    Name = "Mohito",
+                    Description = "Tamaev Mohito",
+                    ViewCount = 1245,
+                    LikeCount = 663,
+                    DisLikeCount = 234,
+                    ReleaseDate = DateOnly.FromDateTime(DateTime.Now),
+                    Country = "Russia",
+                    Channel = channel
+                };
+                var videoPreview =
+                    await context.Files.FirstOrDefaultAsync(x => x.Path == channel.Id + "preview.jpg",
+                        cancellationToken);
+
+                if (videoPreview is null)
+                {
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/preview.jpg");
+
+                    if (!System.IO.File.Exists(filePath))
+                        throw new NotFoundException();
+
+                    await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+                    var path = await _s3Service.UploadAsync(new FileContent
+                    {
+                        Content = fileStream,
+                        FileName = "preview.jpg",
+                        ContentType = "image/jpeg",
+                        Lenght = fileStream.Length,
+                        Bucket = channel.Id.ToString()
+                    }, cancellationToken);
+
+                    var file = new File
+                    {
+                        Size = fileStream.Length,
+                        ContentType = "image/jpeg",
+                        Path = path,
+                        FileName = "preview.jpg",
+                        BucketName = channel.Id.ToString()
+                    };
+
+                    await context.Files.AddAsync(file, cancellationToken);
+                    video.PreviewImg = file;
+                }
+
+                var videoFile =
+                    await context.Files.FirstOrDefaultAsync(x => x.Path == channel.Id + "mohito.mp4",
+                        cancellationToken);
+
+                if (videoFile is null)
+                {
+                    var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "video/mohito.mp4");
+
+                    if (!System.IO.File.Exists(filePath))
+                        throw new NotFoundException();
+
+                    await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+                    var path = await _s3Service.UploadAsync(new FileContent
+                    {
+                        Content = fileStream,
+                        FileName = "mohito.mp4",
+                        ContentType = "video/mp4",
+                        Lenght = fileStream.Length,
+                        Bucket = channel.Id.ToString()
+                    }, cancellationToken);
+
+                    var file = new File
+                    {
+                        Size = fileStream.Length,
+                        ContentType = "video/mp4",
+                        Path = path,
+                        FileName = "mohito.mp4",
+                        BucketName = channel.Id.ToString()
+                    };
+
+                    await context.Files.AddAsync(file, cancellationToken);
+                    video.VideoUrl = file;
+                }
+
+                await context.Videos.AddAsync(video, cancellationToken);
+                await context.SaveChangesAsync(cancellationToken);
+            }
+        }
     }
 }

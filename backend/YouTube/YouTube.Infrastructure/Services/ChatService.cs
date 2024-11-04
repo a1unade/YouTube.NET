@@ -41,4 +41,12 @@ public class ChatService : IChatService
         await _context.SaveChangesAsync();
         return chatHistory.Id;
     }
+
+    public async Task ReadMessagesAsync(List<Guid> messages)
+    {
+        await _context.ChatMessages
+            .Where(x => messages.Contains(x.Id))
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(r => r.IsRead, true));
+    }
 }
