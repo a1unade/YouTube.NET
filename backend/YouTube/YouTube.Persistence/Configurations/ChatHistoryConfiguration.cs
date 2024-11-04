@@ -11,6 +11,7 @@ public class ChatHistoryConfiguration : IEntityTypeConfiguration<ChatHistory>
         builder.HasKey(ch => ch.Id);
 
         builder.Property(ch => ch.StartDate)
+            .HasColumnType("date")
             .IsRequired();
 
         builder.HasOne(ch => ch.User)

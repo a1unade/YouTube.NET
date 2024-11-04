@@ -10,7 +10,7 @@ public class ChatHistory : BaseEntity
     /// <summary>
     /// Дата начала чата
     /// </summary>
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
     
     /// <summary>
     /// Ид Пользователя

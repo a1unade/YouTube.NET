@@ -34,15 +34,14 @@ public static class ServiceCollectionExtensions
         services.AddIdentity<User, Role>(opt =>
             {
                 opt.Password.RequireDigit = false;
-                opt.Password.RequiredLength = 6;
-                opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireLowercase = true;
+                opt.Password.RequiredLength = 6;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireLowercase = false; 
                 opt.SignIn.RequireConfirmedEmail = false;
                 opt.SignIn.RequireConfirmedPhoneNumber = false;
                 opt.User.RequireUniqueEmail = true;
-                opt.User.RequireUniqueEmail = true;
-                opt.SignIn.RequireConfirmedEmail = true;
+                opt.User.AllowedUserNameCharacters = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();

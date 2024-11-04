@@ -56,6 +56,17 @@ public class UserBuilder
     }
     
     /// <summary>
+    /// Установить имя
+    /// </summary>
+    /// <param name="name">имя</param>
+    /// <returns></returns>
+    public UserBuilder SetDisplayName(string name)
+    {
+        User.DisplayName = name;
+        return this;
+    }
+    
+    /// <summary>
     /// Установить email
     /// </summary>
     /// <param name="email">Имя</param>

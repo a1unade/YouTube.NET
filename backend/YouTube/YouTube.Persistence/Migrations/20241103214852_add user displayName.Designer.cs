@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using YouTube.Persistence.Contexts;
@@ -11,9 +12,11 @@ using YouTube.Persistence.Contexts;
 namespace YouTube.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241103214852_add user displayName")]
+    partial class adduserdisplayName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,7 +140,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("VideosId");
 
-                    b.ToTable("PlaylistVideo", (string)null);
+                    b.ToTable("PlaylistVideo");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Category", b =>
@@ -153,7 +156,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Channel", b =>
@@ -202,7 +205,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Channels", (string)null);
+                    b.ToTable("Channels");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.ChannelSubscription", b =>
@@ -222,7 +225,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("SubscriberChannelId");
 
-                    b.ToTable("ChannelSubscriptions", (string)null);
+                    b.ToTable("ChannelSubscriptions");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.ChatHistory", b =>
@@ -231,8 +234,8 @@ namespace YouTube.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -242,7 +245,7 @@ namespace YouTube.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("ChatHistories", (string)null);
+                    b.ToTable("ChatHistories");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.ChatMessage", b =>
@@ -254,9 +257,6 @@ namespace YouTube.Persistence.Migrations
                     b.Property<Guid>("ChatHistoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
                     b.Property<Guid?>("FileId")
                         .HasColumnType("uuid");
 
@@ -266,8 +266,8 @@ namespace YouTube.Persistence.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("text");
 
-                    b.Property<TimeOnly>("Time")
-                        .HasColumnType("time without time zone");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -281,7 +281,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Comment", b =>
@@ -325,7 +325,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("VideoId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.File", b =>
@@ -354,7 +354,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files", (string)null);
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Playlist", b =>
@@ -373,7 +373,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("ChannelId");
 
-                    b.ToTable("Playlists", (string)null);
+                    b.ToTable("Playlists");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Post", b =>
@@ -405,7 +405,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Premium", b =>
@@ -432,7 +432,7 @@ namespace YouTube.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Premiums", (string)null);
+                    b.ToTable("Premiums");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Role", b =>
@@ -489,7 +489,7 @@ namespace YouTube.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.User", b =>
@@ -602,7 +602,7 @@ namespace YouTube.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserInfos", (string)null);
+                    b.ToTable("UserInfos");
                 });
 
             modelBuilder.Entity("YouTube.Domain.Entities.Video", b =>
@@ -675,7 +675,7 @@ namespace YouTube.Persistence.Migrations
                     b.HasIndex("VideoUrlId")
                         .IsUnique();
 
-                    b.ToTable("Videos", (string)null);
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

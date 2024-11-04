@@ -51,6 +51,7 @@ public class GenericRepositoryTests : TestCommandBase
         {
             Id = Guid.NewGuid(),
             UserName = "Kirill",
+            DisplayName = "fawfawf",
             Email = "Kir@gmail.com",
             EmailConfirmed = false,
             PasswordHash = "GAt123fmwf"

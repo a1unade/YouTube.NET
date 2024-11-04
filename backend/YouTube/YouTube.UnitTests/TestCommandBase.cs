@@ -52,6 +52,7 @@ public class TestCommandBase : IDisposable
         User = UserBuilder.CreateBuilder()
             .SetId(UserId)
             .SetUsername("Ilya")
+            .SetDisplayName("Ilay")
             .SetBirthday(new DateOnly(2004, 01, 09))
             .SetEmail("bulatfri18@gmail.com")
             .SetUserInfo()
@@ -233,4 +234,5 @@ public class TestCommandBase : IDisposable
         ContextFactory.Destroy(Context);
         GC.SuppressFinalize(this);
     }
+    
 }

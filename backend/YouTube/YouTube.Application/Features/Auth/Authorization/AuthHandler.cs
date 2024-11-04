@@ -51,7 +51,8 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
 
         user = new User
         {
-            UserName = request.Name + request.SurName,
+            DisplayName = request.Name + " " + request.SurName,
+            UserName = request.Email,
             Email = request.Email,
             EmailConfirmed = false
         };
