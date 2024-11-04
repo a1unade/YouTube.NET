@@ -90,6 +90,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  max-width: 300px;
+  overflow-wrap: break-word;
   width: fit-content;
   height: fit-content;
 }

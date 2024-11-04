@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { AddToPlaylistIcon, FlagIcon, ShareIcon, WatchLater } from '../../assets/icons.tsx';
+import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
 
 const VideoModal = (props: {
   active: boolean;
@@ -10,7 +11,6 @@ const VideoModal = (props: {
   setSaveVideoModalActive: React.Dispatch<React.SetStateAction<boolean>>;
   setReportVideoModalActive: React.Dispatch<React.SetStateAction<boolean>>;
   buttonRef: React.RefObject<HTMLButtonElement>;
-  addAlert: (message: string) => void;
 }) => {
   const {
     active,
@@ -18,10 +18,10 @@ const VideoModal = (props: {
     setShareModalActive,
     setSaveVideoModalActive,
     setReportVideoModalActive,
-    addAlert,
     buttonRef,
   } = props;
   const modalRef = useRef<HTMLDivElement>(null);
+  const { addAlert } = useAlerts();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

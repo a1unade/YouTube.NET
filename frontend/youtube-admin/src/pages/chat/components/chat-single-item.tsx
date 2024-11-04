@@ -13,25 +13,33 @@ const ChatSingleItem = (props: {
   return (
     <div
       className={
-        selected === chat.id
+        selected === chat.chatId
           ? "chat-single-item-layout selected-chat"
           : "chat-single-item-layout"
       }
       onClick={() => {
-        chat.needs_help = false;
-        setSelected(chat.id);
-        navigate(`/chat/${chat.id}`);
+        setSelected(chat.chatId);
+        navigate(`/chat/${chat.chatId}`);
       }}
     >
-      <img src={chat.avatar} className="circular-avatar" alt="" />
+      <img
+        src={
+          chat.avatarUrl ||
+          "https://avatars.githubusercontent.com/u/113981832?v=4"
+        }
+        className="circular-avatar"
+        alt=""
+      />
       <div className="chat-single-item-body">
         <div className="chat-single-item-detailed">
-          <span style={{ fontSize: 14, fontWeight: 800 }}>{chat.user_id}</span>
-          <span>{chat.last_message}</span>
+          <span style={{ fontSize: 14, fontWeight: 800 }}>{chat.userName}</span>
+          <span>{chat.lastMessage?.message}</span>
         </div>
         <div className="chat-single-item-special">
-          <span style={{ fontSize: 10 }}>{chat.date}</span>
-          {chat.needs_help && <div className="chat-single-item-notification" />}
+          <span style={{ fontSize: 10 }}>{chat.lastMessage?.time}</span>
+          {chat.lastMessage && (
+            <div className="chat-single-item-notification" />
+          )}
         </div>
       </div>
     </div>

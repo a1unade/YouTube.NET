@@ -1,13 +1,15 @@
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
 
-const ChatSingleMessage = (props: { message: ChatMessage }) => {
-  const { message } = props;
+const ChatSingleMessage = (props: { message: ChatMessage; userId: string }) => {
+  const { message, userId } = props;
+
+  if (!userId) return null;
 
   return (
     <div className="chat-message-layout">
       <div
         className={
-          message.author === 'admin'
+          message.senderId === userId
             ? 'chat-single-message admin-message'
             : 'chat-single-message user-message'
         }
@@ -37,7 +39,7 @@ const ChatSingleMessage = (props: { message: ChatMessage }) => {
                       viewBox="0,0,300,150"
                     >
                       <g
-                        fill={message.author === 'admin' ? '#fff' : '#0f0f0f'}
+                        fill={message.senderId !== userId ? '#fff' : '#0f0f0f'}
                         fillRule="nonzero"
                         stroke="none"
                         strokeWidth="1"
@@ -68,7 +70,7 @@ const ChatSingleMessage = (props: { message: ChatMessage }) => {
         <div className="chat-single-message-info">
           <span>{message.time}</span>
           <span className="checkmark">
-            {message.is_read ? (
+            {message.isRead ? (
               <>
                 <span className="checked">✓</span>
                 <span className="checked second">✓</span>
