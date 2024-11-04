@@ -1,11 +1,12 @@
 export interface ChatMessage {
+  messageId: string;
   message: string;
-  author: string;
+  senderId: string;
   attachment: {
     type: string;
     file: string;
     link: string;
   } | null;
   time: string;
-  is_read: boolean;
+  isRead: boolean;
 }

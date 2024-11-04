@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 
-const ChatWindowInputSection = () => {
+const ChatWindowInputSection = (props: {
+  chatId: string | null;
+  userId: string;
+  sendMessage: (
+    message: string,
+    userId: string,
+    chatId: string | null,
+  ) => Promise<void>;
+}) => {
+  const { chatId, userId, sendMessage } = props;
   const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
@@ -18,6 +27,13 @@ const ChatWindowInputSection = () => {
     });
   }, [messageText]);
 
+  const handleSendButtonClick = () => {
+    setMessageText("");
+    sendMessage(messageText, userId, chatId).then(() =>
+      console.log("message sent!"),
+    );
+  };
+
   return (
     <div className="input-section-layout">
       <textarea
@@ -32,7 +48,7 @@ const ChatWindowInputSection = () => {
       <div
         className="input-section-send-message-button"
         id="sendButton"
-        onClick={() => setMessageText("")}
+        onClick={handleSendButtonClick}
       >
         <div className="input-section-attachment">
           <svg

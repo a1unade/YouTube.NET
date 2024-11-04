@@ -1,8 +1,12 @@
 export interface ChatSingleItem {
-  id: string;
-  user_id: string;
-  last_message: string;
-  needs_help: boolean;
-  avatar: string;
-  date: string;
+  userName: string;
+  avatarUrl: string | null;
+  lastMessage: {
+    senderId: string;
+    messageId: string;
+    message: string;
+    time: string;
+    isRead: boolean;
+  } | null;
+  chatId: string;
 }

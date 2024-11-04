@@ -10,3 +10,7 @@ tests:
 		cd frontend/youtube-frontend-tests && npm install && npm run test
 
 		cd backend/Youtube && dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --settings ../../.github/coverlet.runsettings
+
+docker-backend:  
+		docker-compose -f backend/Youtube/docker-compose.yml down --rmi all -v
+		docker-compose -f backend/Youtube/docker-compose.yml up --build -d

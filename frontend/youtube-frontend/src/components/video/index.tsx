@@ -3,7 +3,6 @@ import { formatDate, formatViews } from '../../utils/format-functions.ts';
 import { ShowMoreIcon } from '../../assets/icons.tsx';
 import VideoModal from '../modal/video-modal.tsx';
 import React, { useRef, useState } from 'react';
-import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
 
 const Video = (props: {
   id: string;
@@ -13,7 +12,6 @@ const Video = (props: {
 }) => {
   const { id, setSaveVideoActive, setShareActive, setReportVideoActive } = props;
   const [active, setActive] = useState(false);
-  const { addAlert } = useAlerts();
   const navigate = useNavigate();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -94,7 +92,6 @@ const Video = (props: {
                 setShareModalActive={setShareActive}
                 setSaveVideoModalActive={setSaveVideoActive}
                 setReportVideoModalActive={setReportVideoActive}
-                addAlert={addAlert}
                 buttonRef={buttonRef}
               />
             </div>
