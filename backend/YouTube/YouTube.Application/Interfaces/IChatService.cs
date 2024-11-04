@@ -10,4 +10,6 @@ public interface IChatService
     /// <param name="userId">Id пользователя</param>
     /// <returns></returns>
     public Task<Guid> CreateChatAsync(Guid userId);
+
+    public Task ReadMessagesAsync(List<Guid> messages);
 }

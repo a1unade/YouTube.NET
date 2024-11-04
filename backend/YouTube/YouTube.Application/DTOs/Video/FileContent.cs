@@ -31,7 +31,7 @@ public class FileContent
     /// <summary>
     /// Бинарные данные файла
     /// </summary>
-    public Stream? Content { get; set; } 
+    public Stream Content { get; set; } 
     
     /// <summary>
     /// Название файла

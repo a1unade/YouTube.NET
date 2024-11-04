@@ -15,7 +15,7 @@ public class UserInfo : BaseEntity
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
-    public required string Surname { get; set; }
+    public string? Surname { get; set; }
 
     /// <summary>
     /// Дата рождения пользователя
