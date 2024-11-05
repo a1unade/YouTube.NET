@@ -20,7 +20,7 @@ public class PostCheckUserEmailTest : TestCommandBase
         };
 
         var command = new CheckUserEmailCommand(request);
-        var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
+        var handler = new CheckUserEmailHandler(EmailService.Object, UserManager.Object);
 
         var response = await handler.Handle(command, default);
         
@@ -39,7 +39,7 @@ public class PostCheckUserEmailTest : TestCommandBase
         };
 
         var command = new CheckUserEmailCommand(request);
-        var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
+        var handler = new CheckUserEmailHandler(EmailService.Object, UserManager.Object);
 
         var response = await handler.Handle(command, default);
         
@@ -58,7 +58,7 @@ public class PostCheckUserEmailTest : TestCommandBase
         };
 
         var command = new CheckUserEmailCommand(request);
-        var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
+        var handler = new CheckUserEmailHandler(EmailService.Object, UserManager.Object);
 
         await Assert.ThrowsAsync<BadRequestException>(async () => { await handler.Handle(command, default); });
     }
@@ -73,7 +73,7 @@ public class PostCheckUserEmailTest : TestCommandBase
         };
 
         var command = new CheckUserEmailCommand(request);
-        var handler = new CheckUserEmailHandler(UserRepository.Object, EmailService.Object);
+        var handler = new CheckUserEmailHandler(EmailService.Object, UserManager.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () => { await handler.Handle(command, default); });
     }

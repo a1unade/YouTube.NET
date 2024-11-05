@@ -98,10 +98,12 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         
         await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
+        var jwtToken = await _jwtGenerator.GenerateToken(user); 
+
         return new AuthResponse
         {
             IsSuccessfully = true,
-            Token = _jwtGenerator.GenerateToken(user),
+            Token = jwtToken,
             UserId = user.Id
         };
     }

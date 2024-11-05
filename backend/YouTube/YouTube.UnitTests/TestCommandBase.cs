@@ -75,7 +75,7 @@ public class TestCommandBase : IDisposable
         // Мок JwtGenerator
         JwtGenerator = new Mock<IJwtGenerator>();
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
-            .Returns("123");
+            .ReturnsAsync("123");
 
         // Mok S3
         S3Service = new Mock<IS3Service>();

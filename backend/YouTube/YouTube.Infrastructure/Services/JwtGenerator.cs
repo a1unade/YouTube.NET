@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Interfaces;
@@ -12,16 +13,22 @@ namespace YouTube.Infrastructure.Services;
 public class JwtGenerator : IJwtGenerator
 {
     private readonly AuthOptions _options;
-    public JwtGenerator(IConfiguration configuration)
+    private readonly UserManager<User> _userManager;
+    public JwtGenerator(IConfiguration configuration, UserManager<User> userManager)
     {
+        _userManager = userManager;
         _options = configuration.GetSection("JwtSettings").Get<AuthOptions>()!;
     }
-    public string GenerateToken(User user)
+    public async Task<string> GenerateToken(User user)
     {
+        var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+        
         Claim[] claims = 
         {
             new ("Id", user.Id.ToString()),
-            new ("Email", user.Email!)
+            new ("Email", user.Email!),
+            new ("Name", user.DisplayName),
+            new ("Role", isAdmin ? "Admin" : "User")
         };
 
         var issuer = _options.Issuer;
