@@ -1,8 +1,6 @@
-using Moq;
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Features.UserRequests.CheckUserEmail;
-using YouTube.Domain.Entities;
 using Request = YouTube.Application.Common.Requests.User.EmailRequest;
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
 [Collection("CheckUserEmailTest")]
@@ -30,12 +28,9 @@ public class PostCheckUserEmailTest : TestCommandBase
     [Fact]
     public async Task CheckUserEmailHandler_ReturnTrueForNewUser()
     {
-        UserRepository.Setup(x => x.FindByEmail(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((User?)null);
-        
         var request = new Request
         {
-            Email = User.Email!
+            Email = "fawfawf@gmail.com"
         };
 
         var command = new CheckUserEmailCommand(request);
@@ -48,7 +43,7 @@ public class PostCheckUserEmailTest : TestCommandBase
     }
     
     [Fact]
-    public async Task CheckUserEmailHandler_ThrowBadRequestException_ForUserEmailIsConfirmed()
+    public async Task CheckUserEmailHandler_ReturnUserEmailIsConfirmed()
     {
         User.EmailConfirmed = true;
         await Context.SaveChangesAsync();
@@ -60,7 +55,10 @@ public class PostCheckUserEmailTest : TestCommandBase
         var command = new CheckUserEmailCommand(request);
         var handler = new CheckUserEmailHandler(EmailService.Object, UserManager.Object);
 
-        await Assert.ThrowsAsync<BadRequestException>(async () => { await handler.Handle(command, default); });
+        var response = await handler.Handle(command, default);
+        
+        Assert.True(response.Confirmation);
+        Assert.True(response.IsSuccessfully);
     }
     
     [Fact]
