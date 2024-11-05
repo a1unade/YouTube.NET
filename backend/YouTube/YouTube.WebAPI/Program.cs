@@ -40,7 +40,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors(b => b
-    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:3000") 
+    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:5174") 
     .AllowAnyMethod()                     
     .AllowAnyHeader()                      
     .AllowCredentials());  

@@ -1,3 +1,4 @@
+
 namespace YouTube.Application.Interfaces;
 /// <summary>
 /// Сервис для работы с чатом
