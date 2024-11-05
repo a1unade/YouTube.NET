@@ -7,8 +7,10 @@ const Password = (props: {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   email: string;
   password: string;
+  processLogin: () => void;
 }) => {
-  const { setContainerContent, containerContent, email, password, setPassword } = props;
+  const { setContainerContent, processLogin, containerContent, email, password, setPassword } =
+    props;
 
   return (
     <>
@@ -52,7 +54,12 @@ const Password = (props: {
         <button className="left-button" onClick={() => setContainerContent(containerContent - 1)}>
           Сменить аккаунт
         </button>
-        <button className="right-button" onClick={() => alert('logged in!')}>
+        <button
+          className="right-button"
+          onClick={() => {
+            processLogin();
+          }}
+        >
           Далее
         </button>
       </div>

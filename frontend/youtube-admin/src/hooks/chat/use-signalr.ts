@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import {
   HubConnectionBuilder,
   HubConnection,
@@ -84,8 +84,28 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
         time: `${hours}:${minutes}`,
         isRead: false,
       };
-      setChatMessages((prevMessages: ChatMessage[]) => [mes, ...prevMessages]);
+      setChatMessages((prevMessages: ChatMessage[] | null) =>
+        prevMessages ? [mes, ...prevMessages] : [mes],
+      );
     });
+
+    newConnection.on(
+      "ReadMessages",
+      (data: { messagesId: string[]; chatId: string }) => {
+        const { messagesId } = data;
+        if (Array.isArray(messagesId) && messagesId.length > 0) {
+          setChatMessages((prevMessages) =>
+            prevMessages.map((msg) =>
+              messagesId.includes(msg.messageId)
+                ? { ...msg, isRead: true }
+                : msg,
+            ),
+          );
+        } else {
+          console.error("Received data is not an array:", messagesId);
+        }
+      },
+    );
 
     try {
       await newConnection.start();
@@ -115,13 +135,31 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     }
   };
 
-  useEffect(() => {
-    startConnection();
+  const readMessages = async (messagesIds: string[], chatId: string | null) => {
+    if (
+      !connectionRef.current ||
+      connectionRef.current.state !== HubConnectionState.Connected
+    ) {
+      console.error("Connection not established");
+      return;
+    }
 
-    return () => {
-      connectionRef.current?.stop();
-    };
-  }, []);
+    try {
+      await connectionRef.current.invoke("ReadMessages", {
+        messagesId: messagesIds,
+        chatId: chatId,
+      });
+    } catch (error) {
+      console.error("Error sending read messages:", error);
+    }
+  };
 
-  return { joinChat, sendMessage, connectionRef, leaveChat, startConnection };
+  return {
+    joinChat,
+    sendMessage,
+    connectionRef,
+    readMessages,
+    leaveChat,
+    startConnection,
+  };
 };

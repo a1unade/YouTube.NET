@@ -17,6 +17,16 @@ const UserMenu = (props: {
   const { active, setActive, buttonRef } = props;
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const clearCookies = () => {
+    const cookies = document.cookie.split(';');
+
+    for (const cookie of cookies) {
+      const [name] = cookie.split('=');
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+    window.location.reload();
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -61,7 +71,7 @@ const UserMenu = (props: {
             </div>
           </div>
           <div className="dropdown-section">
-            <button className="sidebar-button" style={{ gap: 0 }}>
+            <button className="sidebar-button" style={{ gap: 0 }} onClick={clearCookies}>
               <div className="svg-container">
                 <Exit />
               </div>

@@ -11,9 +11,11 @@ const ChatWindow = (props: {
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
-  userId: string;
+  readMessages: (messagesIds: string[], chatId: string | null) => Promise<void>;
+  userId: string | null;
 }) => {
-  const { chatId, active, userId, chatMessages, setChatMessages, sendMessage } = props;
+  const { chatId, active, userId, readMessages, chatMessages, setChatMessages, sendMessage } =
+    props;
 
   useEffect(() => {
     if (active && chatId) {
@@ -27,35 +29,35 @@ const ChatWindow = (props: {
 
   useEffect(() => {
     const updateUnreadMessages = async () => {
-      const unreadMessagesId = chatMessages
-        .filter((message) => !message.isRead && message.senderId !== userId)
-        .map((message) => message.messageId);
-      console.log(unreadMessagesId);
+      if (chatMessages && chatId) {
+        const unreadMessagesId = chatMessages
+          .filter(
+            (message) => !message.isRead && message.senderId !== userId && message.messageId !== '',
+          )
+          .map((message) => message.messageId);
 
-      if (unreadMessagesId.length > 0) {
-        try {
-          await apiClient.patch('Chat/ReadMessages', { messagesId: unreadMessagesId }).then(() => {
-            setChatMessages((prevMessages) =>
-              prevMessages.map((msg) =>
-                unreadMessagesId.includes(msg.messageId) ? { ...msg, isRead: true } : msg,
-              ),
-            );
-          });
-        } catch (error) {
-          console.error('Error marking messages as read:', error);
+        if (unreadMessagesId.length > 0) {
+          try {
+            await readMessages(unreadMessagesId, chatId);
+            console.log('Unread messages marked as read:', unreadMessagesId);
+          } catch (error) {
+            console.error('Error marking messages as read:', error);
+          }
         }
       }
     };
 
     updateUnreadMessages();
-  }, [chatMessages, userId]);
+  }, [chatMessages, userId, chatId]);
 
   return (
     <div className="chat-selected-layout">
       <div className="chat-section-layout">
-        {chatMessages.map((message: ChatMessage, index: number) => (
-          <ChatSingleMessage key={index} message={message} userId={userId} />
-        ))}
+        {chatMessages !== null
+          ? chatMessages.map((message: ChatMessage, index: number) => (
+              <ChatSingleMessage key={index} message={message} userId={userId} />
+            ))
+          : null}
       </div>
       <ChatWindowInputSection userId={userId} chatId={chatId} sendMessage={sendMessage} />
     </div>

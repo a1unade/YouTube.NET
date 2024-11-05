@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const ChatWindowInputSection = (props: {
   chatId: string | null;
-  userId: string;
+  userId: string | null;
   sendMessage: (
     message: string,
     userId: string,
@@ -29,9 +29,7 @@ const ChatWindowInputSection = (props: {
 
   const handleSendButtonClick = () => {
     setMessageText("");
-    sendMessage(messageText, userId, chatId).then(() =>
-      console.log("message sent!"),
-    );
+    sendMessage(messageText, userId!, chatId);
   };
 
   return (

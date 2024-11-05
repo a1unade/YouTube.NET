@@ -9,7 +9,7 @@ import { ChatHistoryResponse } from "../../../interfaces/chat/chat-history-respo
 const ChatWindow = (props: {
   chat: ChatSingleItem | undefined;
   joinChat: (userId: string, chatId: string | null) => Promise<void>;
-  userId: string;
+  userId: string | null;
   chatId: string | null;
   sendMessage: (
     message: string,
@@ -18,6 +18,7 @@ const ChatWindow = (props: {
   ) => Promise<void>;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  readMessages: (messagesIds: string[], chatId: string) => Promise<void>;
 }) => {
   const {
     chat,
@@ -27,18 +28,23 @@ const ChatWindow = (props: {
     userId,
     chatId,
     chatMessages,
+    readMessages,
   } = props;
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
 
   useEffect(() => {
-    if (chatId !== null && !hasJoinedChat) {
-      joinChat(userId, chatId).then(() => {
-        setHasJoinedChat(true);
-      });
-    } else if (!chat) {
-      setHasJoinedChat(false);
-    }
-  }, [chatId, joinChat, hasJoinedChat]);
+    const checkAndJoinChat = async () => {
+      if (chatId !== null && !hasJoinedChat && userId !== null) {
+        joinChat(userId, chatId).then(() => {
+          setHasJoinedChat(true);
+        });
+      } else if (!chatId) {
+        setHasJoinedChat(false);
+      }
+    };
+
+    checkAndJoinChat();
+  }, [chatId, joinChat, hasJoinedChat, userId]);
 
   useEffect(() => {
     if (chatId && hasJoinedChat) {
@@ -54,32 +60,28 @@ const ChatWindow = (props: {
 
   useEffect(() => {
     const updateUnreadMessages = async () => {
-      const unreadMessagesId = chatMessages
-        .filter((message) => !message.isRead && message.senderId !== userId)
-        .map((message) => message.messageId);
-      console.log(unreadMessagesId);
+      if (chatMessages !== null && chatId !== null) {
+        const unreadMessagesId = chatMessages
+          .filter(
+            (message) =>
+              !message.isRead &&
+              message.senderId !== userId &&
+              message.messageId !== "",
+          )
+          .map((message) => message.messageId);
 
-      if (unreadMessagesId.length > 0) {
-        try {
-          await apiClient
-            .patch("Chat/ReadMessages", { messagesId: unreadMessagesId })
-            .then(() => {
-              setChatMessages((prevMessages) =>
-                prevMessages.map((msg) =>
-                  unreadMessagesId.includes(msg.messageId)
-                    ? { ...msg, is_read: true }
-                    : msg,
-                ),
-              );
-            });
-        } catch (error) {
-          console.error("Error marking messages as read:", error);
+        if (unreadMessagesId.length > 0) {
+          try {
+            await readMessages(unreadMessagesId, chatId);
+          } catch (error) {
+            console.error("Error marking messages as read:", error);
+          }
         }
       }
     };
 
     updateUnreadMessages();
-  }, [chatMessages, userId]);
+  }, [chatMessages, userId, chatId]);
 
   return chatId ? (
     <div className="chat-selected-layout">
@@ -95,9 +97,15 @@ const ChatWindow = (props: {
         <p>{chat?.userName}</p>
       </div>
       <div className="chat-section-layout">
-        {chatMessages.map((message: ChatMessage, index: number) => (
-          <ChatSingleMessage key={index} message={message} userId={userId} />
-        ))}
+        {chatMessages !== null
+          ? chatMessages.map((message: ChatMessage, index: number) => (
+              <ChatSingleMessage
+                key={index}
+                message={message}
+                userId={userId}
+              />
+            ))
+          : null}
       </div>
       <ChatWindowInputSection
         sendMessage={sendMessage}

@@ -7,8 +7,8 @@ import Password from './components/Password';
 import Check from './components/Check';
 import Terms from './components/Terms';
 import apiClient from '../../utils/api-client.ts';
-import { useNavigate } from 'react-router-dom';
 import { AuthResponse } from '../../interfaces/auth-response.ts';
+import { useErrors } from '../../hooks/error/use-errors.ts';
 
 const Register = () => {
   const [containerContent, setContainerContent] = useState(0);
@@ -19,7 +19,7 @@ const Register = () => {
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
   const [date, setDate] = useState('');
-  const navigate = useNavigate();
+  const { setErrorAndRedirect } = useErrors();
 
   const processAuth = () => {
     apiClient
@@ -37,8 +37,12 @@ const Register = () => {
           setContainerContent(containerContent + 1);
           setUserId(response.data.userId);
         } else {
-          navigate('/error');
+          setErrorAndRedirect(response.data.message);
         }
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data.Error || null;
+        setErrorAndRedirect(errorMessage);
       });
   };
 
@@ -103,7 +107,7 @@ const Register = () => {
           />
         );
       case 6:
-        return <Terms setContainerContent={setContainerContent} />;
+        return <Terms setContainerContent={setContainerContent} userId={userId} />;
       default:
         return null;
     }
