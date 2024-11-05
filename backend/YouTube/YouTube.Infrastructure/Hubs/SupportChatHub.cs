@@ -43,13 +43,6 @@ public class SupportChatHub : Hub
         if (string.IsNullOrWhiteSpace(request.Message))
             throw new ArgumentException(ChatErrorMessage.MessageIsEmpty);
         
-        await Clients.Group(request.ChatId.ToString()).SendAsync("ReceiveMessage", new
-        {
-            request.UserId,
-            request.ChatId,
-            request.Message
-        });
-        
         await _bus.Publish(request);
     }
     
