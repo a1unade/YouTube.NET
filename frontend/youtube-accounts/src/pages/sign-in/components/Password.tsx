@@ -9,14 +9,8 @@ const Password = (props: {
   password: string;
   processLogin: () => void;
 }) => {
-  const {
-    setContainerContent,
-    processLogin,
-    containerContent,
-    email,
-    password,
-    setPassword,
-  } = props;
+  const { setContainerContent, processLogin, containerContent, email, password, setPassword } =
+    props;
 
   return (
     <>

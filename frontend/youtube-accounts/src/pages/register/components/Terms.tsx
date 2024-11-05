@@ -68,7 +68,12 @@ const Terms = (props: {
         <button className="left-button" onClick={() => setContainerContent(0)}>
           Отмена
         </button>
-        <button className="right-button" onClick={() => window.location.href = `http://localhost:5172/auth/${userId}`}>Принимаю</button>
+        <button
+          className="right-button"
+          onClick={() => (window.location.href = `http://localhost:5172/auth/${userId}`)}
+        >
+          Принимаю
+        </button>
       </div>
     </>
   );
