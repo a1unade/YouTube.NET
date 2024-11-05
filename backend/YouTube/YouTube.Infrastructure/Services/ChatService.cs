@@ -1,9 +1,7 @@
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.DTOs.Chat;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
 
@@ -12,14 +10,12 @@ namespace YouTube.Infrastructure.Services;
 public class ChatService : IChatService
 {
     private readonly IDbContext _context;
-    private readonly IBus _bus;
     private readonly UserManager<User> _userManager;
     
-    public ChatService(IDbContext context, UserManager<User> userManager, IBus bus)
+    public ChatService(IDbContext context, UserManager<User> userManager)
     {
         _context = context;
         _userManager = userManager;
-        _bus = bus;
     }
     public async Task<Guid> CreateChatAsync(Guid userId)
     {
