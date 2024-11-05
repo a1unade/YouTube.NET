@@ -77,6 +77,7 @@ public class DbSeeder : IDbSeeder
     {
         UserName = "Admin",
         Email = "bulatfree18@gmail.com",
+        DisplayName = "Main Admin",
         UserInfo = new UserInfo
         {
             Name = "ADMIN",
