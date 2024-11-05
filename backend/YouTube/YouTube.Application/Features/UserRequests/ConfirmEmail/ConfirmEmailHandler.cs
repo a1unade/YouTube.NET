@@ -39,6 +39,6 @@ public class ConfirmEmailHandler : IRequestHandler<ConfirmEmailCommand, BaseResp
             
         await _emailService.SendEmailAsync(user.Email!, EmailSuccessMessage.EmailConfirmCodeMessage, code);
 
-        return new BaseResponse { IsSuccessfully = true, Message = _jwtGenerator.GenerateToken(user)};
+        return new BaseResponse { IsSuccessfully = true, Message = await _jwtGenerator.GenerateToken(user)};
     }
 }

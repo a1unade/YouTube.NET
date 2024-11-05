@@ -4,5 +4,5 @@ namespace YouTube.Application.Interfaces;
 
 public interface IJwtGenerator
 {
-    public string GenerateToken(User user);
+    public Task<string> GenerateToken(User user);
 }

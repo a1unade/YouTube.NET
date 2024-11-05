@@ -41,6 +41,8 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
 
         await _signInManager.SignInAsync(user, false);
 
-        return new AuthResponse { IsSuccessfully = true, Token = _jwtGenerator.GenerateToken(user), UserId = user.Id };
+        var jwtToken = await _jwtGenerator.GenerateToken(user); 
+
+        return new AuthResponse { IsSuccessfully = true, Token = jwtToken, UserId = user.Id };
     }
 }
