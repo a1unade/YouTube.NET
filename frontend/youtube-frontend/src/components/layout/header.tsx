@@ -3,8 +3,11 @@ import { MouseEventHandler, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserMenu from '../modal/user-menu.tsx';
 
-const Header = (props: { onClick: MouseEventHandler<HTMLButtonElement> | undefined }) => {
-  const { onClick } = props;
+const Header = (props: {
+  onClick: MouseEventHandler<HTMLButtonElement> | undefined;
+  userId: string | null;
+}) => {
+  const { onClick, userId } = props;
   const [active, setActive] = useState(false);
   const navigate = useNavigate();
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -42,33 +45,44 @@ const Header = (props: { onClick: MouseEventHandler<HTMLButtonElement> | undefin
             <Search />
           </button>
         </div>
-        <div className="user-buttons" style={{ width: 110 }}>
-          <div className="button-container">
-            <button id="add-video-button">
-              <AddVideo />
-            </button>
-          </div>
-          <div style={{ marginRight: 20 }}>
-            <div className="dropdown">
-              <div className="button-container menu" style={{ marginLeft: 0 }}>
-                <button id="user-menu-button" ref={buttonRef} onClick={() => setActive(!active)}>
-                  <img
-                    className="circular-avatar"
-                    src="https://avatars.githubusercontent.com/u/113981832?v=4"
-                    alt=""
-                  />
-                </button>
-              </div>
-              <div
-                style={{
-                  transform: 'translateX(-300px) translateY(10px)',
-                }}
-              >
-                <UserMenu setActive={setActive} active={active} buttonRef={buttonRef} />
+        {userId !== null ? (
+          <div className="user-buttons" style={{ width: 110 }}>
+            <div className="button-container">
+              <button id="add-video-button">
+                <AddVideo />
+              </button>
+            </div>
+            <div style={{ marginRight: 20 }}>
+              <div className="dropdown">
+                <div className="button-container menu" style={{ marginLeft: 0 }}>
+                  <button id="user-menu-button" ref={buttonRef} onClick={() => setActive(!active)}>
+                    <img
+                      className="circular-avatar"
+                      src="https://avatars.githubusercontent.com/u/113981832?v=4"
+                      alt=""
+                    />
+                  </button>
+                </div>
+                <div
+                  style={{
+                    transform: 'translateX(-300px) translateY(10px)',
+                  }}
+                >
+                  <UserMenu setActive={setActive} active={active} buttonRef={buttonRef} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div>
+            <button
+              className="sign-in-button"
+              onClick={() => (window.location.href = 'http://localhost:5173')}
+            >
+              Войти
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

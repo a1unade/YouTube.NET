@@ -2,7 +2,10 @@ import { ChatMessage } from "../../../interfaces/chat/chat-message.ts";
 import { useState } from "react";
 import ChatAttachmentImageModal from "./chat-image-attachment-modal.tsx";
 
-const ChatSingleMessage = (props: { message: ChatMessage; userId: string }) => {
+const ChatSingleMessage = (props: {
+  message: ChatMessage;
+  userId: string | null;
+}) => {
   const { message, userId } = props;
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -70,7 +73,7 @@ const ChatSingleMessage = (props: { message: ChatMessage; userId: string }) => {
         })()}
         <span>{message.message}</span>
         <div className="chat-single-message-info">
-          <span>{message.time}</span>
+          <span>{message.time.split(":").slice(0, 2).join(":")}</span>
           <span className="checkmark">
             {message.isRead ? (
               <>

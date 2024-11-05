@@ -1,6 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { handleNextButtonClick } from '../../../utils/button-handlers.ts';
+import apiClient from '../../../utils/api-client.ts';
+import { EmailResponse } from '../../../interfaces/email-response.ts';
+import { useErrors } from '../../../hooks/error/use-errors.ts';
 
 const Email = (props: {
   setEmail: React.Dispatch<React.SetStateAction<string>>;
@@ -10,6 +13,24 @@ const Email = (props: {
 }) => {
   const { setContainerContent, containerContent, setEmail, email } = props;
   const navigate = useNavigate();
+  const { setErrorAndRedirect } = useErrors();
+
+  const checkUserEmail = () => {
+    apiClient
+      .post<EmailResponse>('User/CheckUserEmail', {
+        email: email,
+      })
+      .then((response) => {
+        const { newUser, confirmation } = response.data;
+
+        if (newUser) setErrorAndRedirect('Аккаунт с таким адресом почты не найден!');
+
+        if (confirmation) setContainerContent(containerContent + 1);
+      })
+      .catch(() => {
+        setContainerContent(containerContent + 1);
+      });
+  };
 
   return (
     <>
@@ -50,6 +71,7 @@ const Email = (props: {
             className="right-button"
             onClick={() => {
               handleNextButtonClick(email);
+              checkUserEmail();
               setContainerContent(containerContent + 1);
             }}
           >

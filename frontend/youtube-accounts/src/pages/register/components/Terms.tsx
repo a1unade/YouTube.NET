@@ -1,7 +1,10 @@
 import React from 'react';
 
-const Terms = (props: { setContainerContent: React.Dispatch<React.SetStateAction<number>> }) => {
-  const { setContainerContent } = props;
+const Terms = (props: {
+  setContainerContent: React.Dispatch<React.SetStateAction<number>>;
+  userId: string;
+}) => {
+  const { setContainerContent, userId } = props;
 
   return (
     <>
@@ -65,7 +68,7 @@ const Terms = (props: { setContainerContent: React.Dispatch<React.SetStateAction
         <button className="left-button" onClick={() => setContainerContent(0)}>
           Отмена
         </button>
-        <button className="right-button">Принимаю</button>
+        <button className="right-button" onClick={() => window.location.href = `http://localhost:5172/auth/${userId}`}>Принимаю</button>
       </div>
     </>
   );

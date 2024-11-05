@@ -67,7 +67,22 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
         time: `${hours}:${minutes}`,
         isRead: false,
       };
-      setChatMessages((prevMessages: ChatMessage[]) => [mes, ...prevMessages]);
+      setChatMessages((prevMessages: ChatMessage[] | null) =>
+        prevMessages ? [mes, ...prevMessages] : [mes],
+      );
+    });
+
+    newConnection.on('ReadMessages', (data: { messagesId: string[]; chatId: string }) => {
+      const { messagesId } = data;
+      if (Array.isArray(messagesId) && messagesId.length > 0) {
+        setChatMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            messagesId.includes(msg.messageId) ? { ...msg, isRead: true } : msg,
+          ),
+        );
+      } else {
+        console.error('Received data is not an array:', messagesId);
+      }
     });
 
     try {
@@ -95,6 +110,22 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     }
   };
 
+  const readMessages = async (messagesIds: string[], chatId: string | null) => {
+    if (!connectionRef.current || connectionRef.current.state !== HubConnectionState.Connected) {
+      console.error('Connection not established');
+      return;
+    }
+
+    try {
+      await connectionRef.current.invoke('ReadMessages', {
+        messagesId: messagesIds,
+        chatId: chatId,
+      });
+    } catch (error) {
+      console.error('Error sending read messages:', error);
+    }
+  };
+
   useEffect(() => {
     startConnection();
 
@@ -103,5 +134,12 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     };
   }, []);
 
-  return { joinChat, sendMessage, connectionRef, leaveChat, startConnection };
+  return {
+    joinChat,
+    sendMessage,
+    connectionRef,
+    readMessages,
+    leaveChat,
+    startConnection,
+  };
 };

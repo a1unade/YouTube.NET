@@ -18,6 +18,9 @@ import Subscriptions from './pages/subscriptions';
 import Playlists from './pages/playlists';
 import ChannelFeatured from './pages/channel';
 import ChatModalWindow from './components/modal/chat-modal-window.tsx';
+import { jwtDecode } from 'jwt-decode';
+import { JWTTokenDecoded } from './interfaces/jwt-token/jwt-token-decoded.ts';
+import AuthRedirect from './pages/auth';
 
 export const App = () => {
   const [saveVideoActive, setSaveVideoActive] = useState(false);
@@ -27,10 +30,35 @@ export const App = () => {
     const savedMenuState = localStorage.getItem('menu');
     return savedMenuState !== null ? JSON.parse(savedMenuState) : true;
   });
-  const [chatIsOpen, setChatIsOpen] = useState<boolean>(() => {
-    const savedChatState = localStorage.getItem('chat');
-    return savedChatState !== null ? JSON.parse(savedChatState) : true;
-  });
+  const [chatIsOpen, setChatIsOpen] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const authCookie = document.cookie.split('; ').find((row) => row.startsWith('authCookie='));
+
+    if (authCookie) {
+      const token = authCookie.split('=')[1];
+      try {
+        const decodedToken = jwtDecode<JWTTokenDecoded>(token);
+
+        if (decodedToken.exp * 1000 < Date.now()) {
+          console.warn('Token has expired');
+          document.cookie = 'authCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        } else {
+          setUserId(decodedToken.Id);
+        }
+      } catch (error) {
+        console.error('Invalid token', error);
+      }
+    } else {
+      const userIdCookie = document.cookie.split('; ').find((row) => row.startsWith('userId='));
+
+      if (userIdCookie) {
+        const userIdValue = userIdCookie.split('=')[1];
+        setUserId(userIdValue);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const layoutPage = document.querySelector('.layout-page');
@@ -58,7 +86,7 @@ export const App = () => {
         ))}
       </div>
       <div id="layout-page" className="layout-page">
-        <Header onClick={handleMenuClick} />
+        <Header onClick={handleMenuClick} userId={userId} />
         <LeftMenu isOpen={isOpen} setChatIsOpen={setChatIsOpen} chatIsOpen={chatIsOpen} />
         <div className="page-content">
           <Routes>
@@ -133,6 +161,7 @@ export const App = () => {
               }
             />
             <Route path="/feed/subscriptions" element={<Subscriptions />} />
+            <Route path="/auth/:userId" element={<AuthRedirect />} />
             <Route path="/feed/playlists" element={<Playlists />} />
           </Routes>
         </div>
@@ -140,7 +169,7 @@ export const App = () => {
       <SaveVideoModal active={saveVideoActive} setActive={setSaveVideoActive} />
       <ShareModal shareActive={shareActive} setShareActive={setShareActive} />
       <ReportModal active={reportVideoActive} setActive={setReportVideoActive} />
-      <ChatModalWindow active={chatIsOpen} setActive={setChatIsOpen} />
+      <ChatModalWindow active={chatIsOpen} setActive={setChatIsOpen} userId={userId} />
     </div>
   );
 };

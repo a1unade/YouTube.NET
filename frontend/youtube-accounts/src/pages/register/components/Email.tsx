@@ -3,6 +3,7 @@ import { handleNextButtonClick } from '../../../utils/button-handlers.ts';
 import apiClient from '../../../utils/api-client.ts';
 import { EmailResponse } from '../../../interfaces/email-response.ts';
 import { useNavigate } from 'react-router-dom';
+import { useErrors } from '../../../hooks/error/use-errors.ts';
 
 const Email = (props: {
   email: string;
@@ -11,6 +12,7 @@ const Email = (props: {
   containerContent: number;
 }) => {
   const navigate = useNavigate();
+  const { setErrorAndRedirect } = useErrors();
   const { email, setEmail, setContainerContent, containerContent } = props;
 
   const checkUserEmail = () => {
@@ -26,6 +28,10 @@ const Email = (props: {
         if (confirmation) setContainerContent(4);
 
         if (error) navigate('/error');
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data.Error || null;
+        setErrorAndRedirect(errorMessage);
       });
   };
 

@@ -36,7 +36,9 @@ const ChatSingleItem = (props: {
           <span>{chat.lastMessage?.message}</span>
         </div>
         <div className="chat-single-item-special">
-          <span style={{ fontSize: 10 }}>{chat.lastMessage?.time}</span>
+          <span style={{ fontSize: 10 }}>
+            {chat.lastMessage?.time.split(":").slice(0, 2).join(":")}
+          </span>
           {chat.lastMessage && (
             <div className="chat-single-item-notification" />
           )}

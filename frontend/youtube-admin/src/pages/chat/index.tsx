@@ -7,15 +7,15 @@ import { useSignalR } from "../../hooks/chat/use-signalr.ts";
 import apiClient from "../../utils/apiClient.ts";
 import { ChatCollectionResponse } from "../../interfaces/chat/chat-collection-response.ts";
 
-const ChatPage = () => {
+const ChatPage = (props: { userId: string | null }) => {
+  const { userId } = props;
   const { id } = useParams<{ id: string }>();
-  const [userId] = useState("4bbb278f-e578-4f79-9a37-1f395f06b785");
   const [chatId, setChatId] = useState<string | null>(id || null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatList, setChatList] = useState<ChatSingleItem[]>([]);
 
   const navigate = useNavigate();
-  const { joinChat, sendMessage, leaveChat } = useSignalR({
+  const { joinChat, sendMessage, leaveChat, readMessages } = useSignalR({
     setChatId,
     setChatMessages,
   });
@@ -53,14 +53,16 @@ const ChatPage = () => {
           <div className="chat-list-section-header">
             <span>Чаты</span>
           </div>
-          {chatList.map((chat: ChatSingleItem) => (
-            <ChatSingleItem
-              selected={chatId}
-              setSelected={setChatId}
-              key={chat.chatId}
-              chat={chat}
-            />
-          ))}
+          {chatList !== null
+            ? chatList.map((chat: ChatSingleItem) => (
+                <ChatSingleItem
+                  selected={chatId}
+                  setSelected={setChatId}
+                  key={chat.chatId}
+                  chat={chat}
+                />
+              ))
+            : null}
         </div>
       </div>
       <ChatWindow
@@ -70,7 +72,12 @@ const ChatPage = () => {
         userId={userId}
         joinChat={joinChat}
         sendMessage={sendMessage}
-        chat={chatList.find((chat) => chat.chatId === chatId)}
+        readMessages={readMessages}
+        chat={
+          chatList !== null
+            ? chatList.find((chat) => chat.chatId === chatId)
+            : undefined
+        }
       />
     </div>
   );
