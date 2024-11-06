@@ -45,10 +45,12 @@ const ChatPage = (props: { userId: string | null }) => {
           `Chat/GetHistoryCollectionForCard?Page=${page}&Size=10`,
         )
         .then((response) => {
-          setChatList((prevData) => [
-            ...prevData,
-            ...response.data.chatCardDtos,
-          ]);
+          if (response.data.chatCardDtos !== null) {
+            setChatList((prevData) => [
+              ...prevData,
+              ...response.data.chatCardDtos,
+            ]);
+          }
 
           if (pageCount === 0) {
             setPageCount(response.data.pageCount);

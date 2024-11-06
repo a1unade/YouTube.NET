@@ -15,7 +15,6 @@ describe('Confirmation component', () => {
     const setContainerContentMock = jest.fn();
     const containerContent = 1;
     const email = 'test@example.com';
-    const userId = 'e53dbfdd-298c-4f2a-addd-f5cf88a7efc9';
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -26,7 +25,6 @@ describe('Confirmation component', () => {
                     email={email}
                     setContainerContent={setContainerContentMock}
                     containerContent={containerContent}
-                    userId={userId}
                 />
             </BrowserRouter>
         );

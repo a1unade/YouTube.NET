@@ -71,10 +71,13 @@ const ChatWindow = (props: {
           if (pageCount === 0) {
             setPageCount(response.data.pageCount);
           }
-          setChatMessages((prevData) => [
-            ...prevData,
-            ...response.data.chatMessages,
-          ]);
+
+          if (response.data.chatMessages !== null) {
+            setChatMessages((prevData) => [
+              ...prevData,
+              ...response.data.chatMessages,
+            ]);
+          }
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
@@ -130,7 +133,7 @@ const ChatWindow = (props: {
     }
   };
 
-  return chatId ? (
+  return chatId !== null ? (
     <div className="chat-selected-layout">
       <div className="chat-single-item-layout">
         <img
