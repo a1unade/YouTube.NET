@@ -16,6 +16,7 @@ const ChatWindow = (props: {
     userId: string,
     chatId: string | null,
   ) => Promise<void>;
+  isConnected: boolean;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   readMessages: (messagesIds: string[], chatId: string) => Promise<void>;
@@ -29,12 +30,13 @@ const ChatWindow = (props: {
     chatId,
     chatMessages,
     readMessages,
+    isConnected,
   } = props;
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
 
   useEffect(() => {
     const checkAndJoinChat = async () => {
-      if (chatId !== null && !hasJoinedChat && userId !== null) {
+      if (chatId !== null && !hasJoinedChat && userId !== null && isConnected) {
         joinChat(userId, chatId).then(() => {
           setHasJoinedChat(true);
         });
@@ -44,7 +46,7 @@ const ChatWindow = (props: {
     };
 
     checkAndJoinChat();
-  }, [chatId, joinChat, hasJoinedChat, userId]);
+  }, [chatId, joinChat, hasJoinedChat, userId, isConnected]);
 
   useEffect(() => {
     if (chatId && hasJoinedChat) {

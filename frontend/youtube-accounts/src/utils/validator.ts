@@ -37,7 +37,9 @@ export const validateName = (name: string) => {
 
 export const validateSurname = (surname: string) => {
   const surnameRegex = /^[a-zA-Z\u0400-\u04FF]+$/;
-  if (!surnameRegex.test(surname) && surname.length !== 0) {
+  if (surname.length === 0) {
+    return errors.emptySurname;
+  } else if (!surnameRegex.test(surname)) {
     return errors.invalidSurname;
   }
   return '';

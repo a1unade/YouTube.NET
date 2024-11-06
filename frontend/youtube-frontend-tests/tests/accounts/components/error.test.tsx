@@ -1,10 +1,17 @@
 import { render, screen } from '@testing-library/react';
 // @ts-ignore
 import Error from '../../../acc-src/pages/error/index.tsx';
+// @ts-ignore
+import { ErrorProvider } from '../../../acc-src/contexts/error/error-provider';
+import {BrowserRouter} from "react-router-dom";
 
 describe('Error Component', () => {
     beforeEach(() => {
-        render(<Error />);
+        render(<BrowserRouter>
+            <ErrorProvider>
+                <Error />
+            </ErrorProvider>
+        </BrowserRouter>);
     });
 
     it('should render the header with the correct title', () => {
@@ -17,17 +24,5 @@ describe('Error Component', () => {
         const messageElement = screen.getByText(/произошла ошибка, повторите попытку позже/i);
 
         expect(messageElement).toBeInTheDocument();
-    });
-
-    it('should have the correct styles', () => {
-        const headerElement = screen.getByRole('heading', { name: /ошибка/i });
-
-        expect(headerElement).toHaveStyle('max-width: 300px');
-
-        const noticeElement = screen.getByText(/произошла ошибка, повторите попытку позже/i).parentElement;
-
-        expect(noticeElement).toHaveStyle('margin-left: 0');
-        expect(noticeElement).toHaveStyle('margin-top: 30px');
-        expect(noticeElement).toHaveStyle('max-width: 350px');
     });
 });

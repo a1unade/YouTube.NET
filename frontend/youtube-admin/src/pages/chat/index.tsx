@@ -15,10 +15,11 @@ const ChatPage = (props: { userId: string | null }) => {
   const [chatList, setChatList] = useState<ChatSingleItem[]>([]);
 
   const navigate = useNavigate();
-  const { joinChat, sendMessage, leaveChat, readMessages } = useSignalR({
-    setChatId,
-    setChatMessages,
-  });
+  const { joinChat, sendMessage, leaveChat, readMessages, isConnected } =
+    useSignalR({
+      setChatId,
+      setChatMessages,
+    });
 
   useEffect(() => {
     apiClient
@@ -73,6 +74,7 @@ const ChatPage = (props: { userId: string | null }) => {
         joinChat={joinChat}
         sendMessage={sendMessage}
         readMessages={readMessages}
+        isConnected={isConnected}
         chat={
           chatList !== null
             ? chatList.find((chat) => chat.chatId === chatId)

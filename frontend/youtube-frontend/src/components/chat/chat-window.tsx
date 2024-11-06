@@ -39,7 +39,6 @@ const ChatWindow = (props: {
         if (unreadMessagesId.length > 0) {
           try {
             await readMessages(unreadMessagesId, chatId);
-            console.log('Unread messages marked as read:', unreadMessagesId);
           } catch (error) {
             console.error('Error marking messages as read:', error);
           }

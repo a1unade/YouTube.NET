@@ -3,4 +3,6 @@ export interface ChatMessageResponse {
   message: string;
   userId: string;
   messageId: string;
+  time: string;
+  isRead: boolean;
 }

@@ -56,16 +56,13 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     connectionRef.current = newConnection;
 
     newConnection.on('ReceiveMessage', (message: ChatMessageResponse) => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
       const mes: ChatMessage = {
-        messageId: '',
+        messageId: message.messageId,
         message: message.message,
         senderId: message.userId,
         attachment: null,
-        time: `${hours}:${minutes}`,
-        isRead: false,
+        time: message.time.split(':').slice(0, 2).join(':'),
+        isRead: message.isRead,
       };
       setChatMessages((prevMessages: ChatMessage[] | null) =>
         prevMessages ? [mes, ...prevMessages] : [mes],
@@ -100,8 +97,6 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
 
     try {
       await connectionRef.current.invoke('LeaveChat', chatId);
-
-      await connectionRef.current.stop();
 
       setChatId(null);
       setChatMessages([]);

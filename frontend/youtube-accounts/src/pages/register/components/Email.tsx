@@ -2,7 +2,6 @@ import React from 'react';
 import { handleNextButtonClick } from '../../../utils/button-handlers.ts';
 import apiClient from '../../../utils/api-client.ts';
 import { EmailResponse } from '../../../interfaces/email-response.ts';
-import { useNavigate } from 'react-router-dom';
 import { useErrors } from '../../../hooks/error/use-errors.ts';
 
 const Email = (props: {
@@ -11,7 +10,6 @@ const Email = (props: {
   setContainerContent: React.Dispatch<React.SetStateAction<number>>;
   containerContent: number;
 }) => {
-  const navigate = useNavigate();
   const { setErrorAndRedirect } = useErrors();
   const { email, setEmail, setContainerContent, containerContent } = props;
 
@@ -21,13 +19,22 @@ const Email = (props: {
         email: email,
       })
       .then((response) => {
-        const { newUser, confirmation, error } = response.data;
+        const { newUser, confirmation } = response.data;
 
-        if (newUser) setContainerContent(containerContent + 1);
+        if (newUser) {
+          setContainerContent(containerContent + 1);
+          return;
+        }
 
-        if (confirmation) setContainerContent(4);
+        if (!confirmation) {
+          setContainerContent(4);
+          return;
+        }
 
-        if (error) navigate('/error');
+        if (!newUser) {
+          setErrorAndRedirect('Аккаунт с таким адресом почты уже зарегистрирован!');
+          return;
+        }
       })
       .catch((error) => {
         const errorMessage = error.response?.data.Error || null;

@@ -4,6 +4,8 @@ import Email from '../../../acc-src/pages/register/components/Email';
 // @ts-ignore
 import apiClient from '../../../acc-src/utils/api-client.ts';
 import {BrowserRouter} from "react-router-dom";
+// @ts-ignore
+import { ErrorProvider } from '../../../acc-src/contexts/error/error-provider';
 
 jest.mock('../../../acc-src/utils/button-handlers.ts');
 
@@ -21,12 +23,14 @@ describe('Email component', () => {
 
         render(
             <BrowserRouter>
-                <Email
-                    email={email}
-                    setEmail={setEmailMock}
-                    setContainerContent={setContainerContentMock}
-                    containerContent={containerContent}
-                />
+                <ErrorProvider>
+                    <Email
+                        email={email}
+                        setEmail={setEmailMock}
+                        setContainerContent={setContainerContentMock}
+                        containerContent={containerContent}
+                    />
+                </ErrorProvider>
             </BrowserRouter>
         );
     });
@@ -92,7 +96,7 @@ describe('Email component', () => {
 
         await waitFor(() => {
             expect(mockedApiClient.post).not.toHaveBeenCalledWith('User/CheckUserEmail', { email: 'test@example.com' });
-            expect(setContainerContentMock).toHaveBeenCalledWith(4);
+            expect(setContainerContentMock).not.toHaveBeenCalledWith(4);
         });
     });
 
@@ -107,7 +111,7 @@ describe('Email component', () => {
 
         await waitFor(() => {
             expect(mockedApiClient.post).not.toHaveBeenCalledWith('User/CheckUserEmail', { email: 'test@example.com' });
-            expect(setContainerContentMock).not.toHaveBeenCalled();
+            expect(setContainerContentMock).toHaveBeenCalled();
         });
     });
 });

@@ -11,6 +11,7 @@ jest.mock('../../../acc-src/utils/button-handlers', () => ({
 describe('Password Component', () => {
     const mockSetContainerContent = jest.fn();
     const mockSetPassword = jest.fn();
+    const mockProcessLogin = jest.fn();
     const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     const defaultProps = {
@@ -19,6 +20,7 @@ describe('Password Component', () => {
         setPassword: mockSetPassword,
         email: 'test@example.com',
         password: '',
+        processLogin: mockProcessLogin,
     };
 
     beforeEach(() => {
@@ -67,6 +69,6 @@ describe('Password Component', () => {
 
         fireEvent.click(nextButton);
 
-        expect(mockAlert).toHaveBeenCalledWith('logged in!');
+        expect(mockAlert).not.toHaveBeenCalled();
     });
 });

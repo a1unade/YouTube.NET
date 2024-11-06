@@ -23,12 +23,24 @@ const Email = (props: {
       .then((response) => {
         const { newUser, confirmation } = response.data;
 
-        if (newUser) setErrorAndRedirect('Аккаунт с таким адресом почты не найден!');
+        if (newUser) {
+          setErrorAndRedirect('Аккаунт с таким адресом почты не найден!');
+          return;
+        }
 
-        if (confirmation) setContainerContent(containerContent + 1);
+        if (!confirmation) {
+          setErrorAndRedirect('Необходимо подтвердить почту!');
+          return;
+        }
+
+        if (!newUser && confirmation) {
+          setContainerContent(containerContent + 1);
+          return;
+        }
       })
-      .catch(() => {
-        setContainerContent(containerContent + 1);
+      .catch((error) => {
+        const errorMessage = error.response?.data.Error || null;
+        setErrorAndRedirect(errorMessage);
       });
   };
 
