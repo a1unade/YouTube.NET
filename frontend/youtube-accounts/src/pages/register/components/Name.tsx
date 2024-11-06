@@ -14,16 +14,13 @@ const Name = (props: {
   const handleNextButtonClick = () => {
     const nameMessage = validateName(name);
     const surnameMessage = validateSurname(surname);
-    if (nameMessage.length > 0) {
+    if (nameMessage.length > 0 && surnameMessage.length > 0) {
       document.getElementById('name')!.classList.add('error', 'shake');
       document.getElementById('name-error')!.classList.remove('hidden');
       document.getElementById('name-message')!.textContent = nameMessage;
       setTimeout(() => {
         document.getElementById('name')!.classList.remove('shake');
       }, 500);
-    }
-
-    if (surnameMessage.length > 0) {
       document.getElementById('surname')!.classList.add('error', 'shake');
       document.getElementById('surname-error')!.classList.remove('hidden');
       document.getElementById('surname-message')!.textContent = surnameMessage;
@@ -73,9 +70,9 @@ const Name = (props: {
           type="text"
           value={surname}
           onChange={(e) => setSurname(e.target.value)}
-          placeholder="Фамилия (необязательно)"
+          placeholder="Фамилия"
         />
-        <label>Фамилия (необязательно)</label>
+        <label>Фамилия</label>
         <div id="surname-error" className="error-message hidden">
           <span>
             <svg

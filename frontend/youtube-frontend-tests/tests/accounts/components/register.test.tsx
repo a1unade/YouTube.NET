@@ -4,6 +4,8 @@ import Register from '../../../acc-src/pages/register/index';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 // @ts-ignore
 import apiClient from '../../../acc-src/utils/api-client.ts';
+// @ts-ignore
+import { ErrorProvider } from '../../../acc-src/contexts/error/error-provider';
 import React from "react";
 
 interface ContainerProps {
@@ -86,7 +88,9 @@ describe('Register component', () => {
 
         render(
             <BrowserRouter>
-                <Register />
+                <ErrorProvider>
+                    <Register />
+                </ErrorProvider>
             </BrowserRouter>
         );
     });

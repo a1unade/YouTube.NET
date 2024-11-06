@@ -8,7 +8,7 @@ describe('Terms component', () => {
     beforeEach(() => {
         jest.clearAllMocks();
 
-        render(<Terms setContainerContent={setContainerContentMock} />);
+        render(<Terms setContainerContent={setContainerContentMock} userId={"8d64c75d-977d-451c-86e9-6c47ac878f58"} />);
     });
 
     it('renders without crashing', () => {

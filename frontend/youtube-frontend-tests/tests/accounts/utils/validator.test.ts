@@ -49,7 +49,7 @@ describe('validateSurname', () => {
     });
 
     it('should return empty string for empty surname', () => {
-        expect(validateSurname('')).toBe('');
+        expect(validateSurname('')).toBe('Введите фамилию.');
     });
 });
 

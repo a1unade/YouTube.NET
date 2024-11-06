@@ -76,7 +76,7 @@ describe('Name Component', () => {
 
     it('shows error messages and adds shake class for name and surname', () => {
         (validateName as jest.Mock).mockReturnValue('Name cannot be empty');
-        (validateSurname as jest.Mock).mockReturnValue('');
+        (validateSurname as jest.Mock).mockReturnValue('Surname cannot be empty');
 
         fireEvent.change(document.getElementById('name')!, { target: { value: '' } });
         fireEvent.click(screen.getByText(/Далее/i));

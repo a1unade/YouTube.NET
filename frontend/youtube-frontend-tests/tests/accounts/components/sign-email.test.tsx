@@ -1,9 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { useNavigate } from 'react-router-dom';
+import {BrowserRouter, useNavigate} from 'react-router-dom';
 // @ts-ignore
 import { handleNextButtonClick } from '../../../acc-src/utils/button-handlers';
 // @ts-ignore
 import Email from '../../../acc-src/pages/sign-in/components/Email.tsx';
+// @ts-ignore
+import { ErrorProvider } from '../../../acc-src/contexts/error/error-provider';
 
 jest.mock('react-router-dom', () => ({
     useNavigate: jest.fn(),
@@ -34,7 +36,10 @@ describe('Email Component', () => {
     };
 
     it('renders the component with all elements', () => {
-        render(<Email {...defaultProps} />);
+        render(
+            <ErrorProvider>
+                <Email {...defaultProps} />
+            </ErrorProvider>);
 
         expect(screen.getByText(/Вход/i)).toBeInTheDocument();
         expect(screen.getByText(/Перейдите на YouTube/i)).toBeInTheDocument();
@@ -44,7 +49,10 @@ describe('Email Component', () => {
     });
 
     it('handles email input change', () => {
-        render(<Email {...defaultProps} />);
+        render(
+            <ErrorProvider>
+                <Email {...defaultProps} />
+            </ErrorProvider>);
         const emailInput = screen.getByPlaceholderText(/Адрес эл. почты/i);
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -53,7 +61,11 @@ describe('Email Component', () => {
     });
 
     it('navigates to the signup page when "Создать аккаунт" is clicked', () => {
-        render(<Email {...defaultProps} />);
+        render(
+                <ErrorProvider>
+                    <Email {...defaultProps} />
+                </ErrorProvider>);
+
         const createAccountButton = screen.getByText(/Создать аккаунт/i);
 
         fireEvent.click(createAccountButton);
@@ -62,7 +74,10 @@ describe('Email Component', () => {
     });
 
     it('calls handleNextButtonClick when "Далее" is clicked', () => {
-        render(<Email {...defaultProps} email="test@example.com" />);
+        render(
+                <ErrorProvider>
+                    <Email {...defaultProps} email="test@example.com" />
+                </ErrorProvider>);
 
         const nextButton = document.getElementsByClassName("right-button")[0] as HTMLButtonElement;
 

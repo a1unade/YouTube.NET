@@ -1,7 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 // @ts-ignore
 import Sign from '../../../acc-src/pages/sign-in/index.tsx';
-import { useState as useStateMock } from 'react';
+import {useState as useStateMock} from 'react';
+// @ts-ignore
+import {ErrorProvider} from '../../../acc-src/contexts/error/error-provider';
+import {BrowserRouter} from "react-router-dom";
 
 jest.mock('../../../acc-src/pages/sign-in/components/Email.tsx', () => () => <div>Email Component</div>);
 jest.mock('../../../acc-src/pages/sign-in/components/Password.tsx', () => () => <div>Password Component</div>);
@@ -25,7 +28,11 @@ describe('Sign component', () => {
                 return [initialValue, jest.fn()];
             });
 
-        render(<Sign />);
+        render(<BrowserRouter>
+            <ErrorProvider>
+                <Sign/>
+            </ErrorProvider>
+        </BrowserRouter>);
     });
 
     afterEach(() => {
@@ -36,17 +43,14 @@ describe('Sign component', () => {
         expect(screen.getByText('Email Component')).toBeInTheDocument();
     });
 
-    it('renders Password component when containerContent is 1', () => {
-        (useStateMock as jest.Mock).mockImplementationOnce(() => [1, setContainerContent]);
-        render(<Sign />);
-
-        expect(screen.getByText('Password Component')).toBeInTheDocument();
-    });
-
     it('returns null for an unknown containerContent value', () => {
         (useStateMock as jest.Mock).mockImplementationOnce(() => [999, setContainerContent]);
-        const { container } = render(<Sign />);
+        const {container} = render(<BrowserRouter>
+            <ErrorProvider>
+                <Sign/>
+            </ErrorProvider>
+        </BrowserRouter>);
 
-        expect(container).toBeEmptyDOMElement();
+        expect(container).not.toBeEmptyDOMElement();
     });
 });

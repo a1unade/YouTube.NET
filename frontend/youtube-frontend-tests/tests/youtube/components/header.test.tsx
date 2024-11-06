@@ -9,7 +9,7 @@ describe('Header component', () => {
     beforeEach(() => {
         render(
             <BrowserRouter>
-                <Header onClick={mockOnClick} />
+                <Header onClick={mockOnClick} userId={"8d64c75d-977d-451c-86e9-6c47ac878f58"} />
             </BrowserRouter>
         );
     });

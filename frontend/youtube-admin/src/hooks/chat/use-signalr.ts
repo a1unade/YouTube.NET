@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   HubConnectionBuilder,
   HubConnection,
@@ -19,6 +19,7 @@ interface UseSignalRProps {
 
 export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
   const connectionRef = useRef<HubConnection | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const joinChat = async (userId: string, chatId: string | null) => {
     if (
@@ -73,16 +74,13 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     connectionRef.current = newConnection;
 
     newConnection.on("ReceiveMessage", (message: ChatMessageResponse) => {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
       const mes: ChatMessage = {
-        messageId: "",
+        messageId: message.messageId,
         message: message.message,
         senderId: message.userId,
         attachment: null,
-        time: `${hours}:${minutes}`,
-        isRead: false,
+        time: message.time.split(":").slice(0, 2).join(":"),
+        isRead: message.isRead,
       };
       setChatMessages((prevMessages: ChatMessage[] | null) =>
         prevMessages ? [mes, ...prevMessages] : [mes],
@@ -109,6 +107,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
 
     try {
       await newConnection.start();
+      setIsConnected(true);
     } catch (error) {
       console.error("Error establishing connection:", error);
     }
@@ -125,11 +124,6 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
 
     try {
       await connectionRef.current.invoke("LeaveChat", chatId);
-
-      await connectionRef.current.stop();
-
-      setChatId(null);
-      setChatMessages([]);
     } catch (error) {
       console.error("Error leaving chat:", error);
     }
@@ -154,6 +148,15 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     }
   };
 
+  useEffect(() => {
+    startConnection();
+
+    return () => {
+      connectionRef.current?.stop();
+      setIsConnected(false);
+    };
+  }, []);
+
   return {
     joinChat,
     sendMessage,
@@ -161,5 +164,6 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
     readMessages,
     leaveChat,
     startConnection,
+    isConnected,
   };
 };

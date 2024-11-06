@@ -242,7 +242,7 @@
 .admin-message {
   float: left;
   background: silver;
-  padding: 10px;
+  padding: 10px 20px 10px 10px;
   border-radius: 10px 10px 0;
   position: relative;
   line-height: 1.5em;
@@ -251,7 +251,7 @@
 .user-message {
   float: right !important;
   background: silver;
-  padding: 10px;
+  padding: 10px 10px 10px 20px;
   position: relative;
   border-radius: 10px 10px 10px 0;
   line-height: 1.5em;

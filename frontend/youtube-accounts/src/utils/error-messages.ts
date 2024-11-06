@@ -3,6 +3,7 @@ const errorMessages = {
   invalidEmail: 'Введен некорректный адрес электронной почты.',
   invalidPhoneNumber: 'Введен некорректный номер телефона.',
   emptyName: 'Введите имя.',
+  emptySurname: 'Введите фамилию.',
   invalidName: 'Проверьте правильность своего имени.',
   invalidSurname: 'Проверьте правильность своей фамилии.',
   invalidDate: 'Укажите правильную дату.',
