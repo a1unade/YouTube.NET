@@ -5,4 +5,5 @@ export interface ChatMessageResponse {
   messageId: string;
   time: string;
   isRead: boolean;
+  date: string;
 }
