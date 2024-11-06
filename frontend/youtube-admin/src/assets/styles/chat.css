@@ -489,3 +489,18 @@
 .icon-container div:hover {
   background: rgba(0, 0, 0, 0.2);
 }
+
+.date-separator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  margin: 10px auto;
+  background-color: #f0f0f5;
+  color: #555;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  max-width: 200px;
+}

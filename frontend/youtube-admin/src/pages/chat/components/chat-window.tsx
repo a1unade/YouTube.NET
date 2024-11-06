@@ -6,6 +6,15 @@ import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../../utils/apiClient.ts";
 import { ChatHistoryResponse } from "../../../interfaces/chat/chat-history-response.ts";
 
+const formatDate = (date: Date) => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString(undefined, options);
+};
+
 const ChatWindow = (props: {
   chat: ChatSingleItem | undefined;
   joinChat: (userId: string, chatId: string | null) => Promise<void>;
@@ -136,13 +145,28 @@ const ChatWindow = (props: {
       </div>
       <div className="chat-section-layout" ref={componentRef}>
         {chatMessages !== null
-          ? chatMessages.map((message: ChatMessage, index: number) => (
-              <ChatSingleMessage
-                key={index}
-                message={message}
-                userId={userId}
-              />
-            ))
+          ? chatMessages.map((message: ChatMessage, index: number) => {
+              const messageDate = new Date(message.date);
+              const nextMessageDate =
+                index < chatMessages.length - 1
+                  ? new Date(chatMessages[index + 1].date)
+                  : null;
+
+              const isEndOfDay =
+                !nextMessageDate ||
+                nextMessageDate.toDateString() !== messageDate.toDateString();
+
+              return (
+                <React.Fragment key={index}>
+                  <ChatSingleMessage message={message} userId={userId} />
+                  {isEndOfDay && (
+                    <div className="date-separator">
+                      {formatDate(messageDate)}
+                    </div>
+                  )}
+                </React.Fragment>
+              );
+            })
           : null}
       </div>
       <ChatWindowInputSection

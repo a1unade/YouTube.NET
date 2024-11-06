@@ -9,4 +9,5 @@ export interface ChatMessage {
   } | null;
   time: string;
   isRead: boolean;
+  date: string;
 }

@@ -83,13 +83,34 @@ const ChatWindow = (props: {
     }
   };
 
+  const formatDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="chat-selected-layout">
       <div className="chat-section-layout" ref={componentRef}>
         {chatMessages !== null
-          ? chatMessages.map((message: ChatMessage, index: number) => (
-              <ChatSingleMessage key={index} message={message} userId={userId} />
-            ))
+          ? chatMessages.map((message: ChatMessage, index: number) => {
+              const messageDate = new Date(message.date);
+              const nextMessageDate =
+                index < chatMessages.length - 1 ? new Date(chatMessages[index + 1].date) : null;
+
+              const isEndOfDay =
+                !nextMessageDate || nextMessageDate.toDateString() !== messageDate.toDateString();
+
+              return (
+                <React.Fragment key={index}>
+                  <ChatSingleMessage message={message} userId={userId} />
+                  {isEndOfDay && <div className="date-separator">{formatDate(messageDate)}</div>}
+                </React.Fragment>
+              );
+            })
           : null}
       </div>
       <ChatWindowInputSection userId={userId} chatId={chatId} sendMessage={sendMessage} />
