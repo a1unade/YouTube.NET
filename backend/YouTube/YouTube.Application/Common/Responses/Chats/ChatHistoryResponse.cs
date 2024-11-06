@@ -11,4 +11,9 @@ public class ChatHistoryResponse : BaseResponse
     /// Список сообщений
     /// </summary>
     public List<ChatMessageDto>? ChatMessages { get; set; }
+    
+    /// <summary>
+    /// Страница
+    /// </summary>
+    public int PageCount { get; set; }
 }

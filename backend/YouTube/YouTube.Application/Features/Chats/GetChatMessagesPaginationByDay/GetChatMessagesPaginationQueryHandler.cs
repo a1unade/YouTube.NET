@@ -46,6 +46,7 @@ public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMess
         {
             IsSuccessfully = true,
             ChatMessages = messagesDto,
+            PageCount = await _chatRepository.GetUniqueDates(request.ChatId, cancellationToken)
         };
     }
 }

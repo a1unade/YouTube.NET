@@ -58,10 +58,10 @@ public class UserController : ControllerBase
     /// <summary>
     /// Запрос на отправку сообщения с кодом подтверждения
     /// </summary>
-    /// <param name="request">Id пользователя</param>
+    /// <param name="request">Почта пользователя</param>
     /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("ConfirmEmail")]
-    public async Task<IActionResult> ConfirmEmail(IdRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> ConfirmEmail(EmailRequest request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new ConfirmEmailCommand(request), cancellationToken);
 
@@ -72,22 +72,16 @@ public class UserController : ControllerBase
     }
     
     /// <summary>
-    /// Проверка кода для подтверждения почты (При авторизации)
+    /// Проверка кода для подтверждения почты
     /// </summary>
     /// <param name="request">Код и Id пользователя</param>
     /// <param name="cancellationToken">Токен отмены</param>
     [HttpPost("CodeCheckForEmail")]
     public async Task<IActionResult> CodeCheckForEmail(CodeCheckRequest request, CancellationToken cancellationToken)
     {
-        
         var result = await _mediator.Send(new CodeCheckForConfirmEmailCommand(request), cancellationToken);
         if (result.IsSuccessfully)
         {
-            Response.Cookies.Append("authCookie", result.Message!, new CookieOptions
-            {
-                Path = "/",
-                Expires = DateTimeOffset.Now.AddHours(2),
-            });
             return Ok(result);
         }
 

@@ -22,10 +22,10 @@ public class CodeCheckForConfirmEmailHandler : IRequestHandler<CodeCheckForConfi
 
     public async Task<BaseResponse> Handle(CodeCheckForConfirmEmailCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Code) || request.Id == Guid.Empty)
+        if (string.IsNullOrWhiteSpace(request.Code) || string.IsNullOrWhiteSpace(request.Email))
             throw new ValidationException();
 
-        var user = await _userManager.FindByIdAsync(request.Id.ToString());
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is null)
             throw new NotFoundException(UserErrorMessage.UserNotFound);

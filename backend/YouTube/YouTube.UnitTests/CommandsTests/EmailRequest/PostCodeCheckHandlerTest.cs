@@ -17,7 +17,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
     {
         var request = new Request
         {
-            Id = User.Id,
+            Email = User.Email!,
             Code = "123456"
         };
 
@@ -35,7 +35,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
     {
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = User.Id,
+            Email = User.Email!,
             Code = ""
         };
 
@@ -50,7 +50,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
     {
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = Guid.NewGuid(),
+            Email = "fwkfwk@gmail.com",
             Code = "123456"
         };
 
@@ -71,7 +71,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
         UserManager.Setup(x => x.GetClaimsAsync(It.IsAny<User>())).ReturnsAsync(() => new List<Claim>());
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = User.Id,
+            Email = User.Email!,
             Code = "123456"
         };
 
@@ -92,7 +92,7 @@ public class PostCodeCheckHandlerTest : TestCommandBase
     {
         var request = new Application.Common.Requests.Email.CodeCheckRequest
         {
-            Id = User.Id,
+            Email = User.Email!,
             Code = "999999"
         };
 
