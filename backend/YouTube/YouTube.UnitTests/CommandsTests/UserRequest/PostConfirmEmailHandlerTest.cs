@@ -31,7 +31,7 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     {
         var request = new Application.Common.Requests.User.EmailRequest
         {
-            Email = User.Email!
+            Email = ""
         };
 
         var command = new ConfirmEmailCommand(request);
