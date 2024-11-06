@@ -45,9 +45,6 @@ public class TestController : ControllerBase
 
         return BadRequest("Pizda");
     }
-
-    
-    
     
     [HttpGet("GetVideoLink")]
     public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
@@ -153,42 +150,165 @@ public class TestController : ControllerBase
         
         return Ok();
     }
-    [HttpPost("AddChat")]
-    public async Task<IActionResult> AddMessage(CancellationToken cancellationToken)
+    
+    /// <summary>
+    /// Нагенерировать сообщения задним числом для пагинации
+    /// </summary>
+    /// <param name="chatId">чат ид</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    [HttpPost("AddMessagesForChat")]
+    public async Task<IActionResult> AddMessage(Guid chatId, CancellationToken cancellationToken)
     {
-        // Получаем пользователя
-        var user = await _context.Users.Include(x => x.ChatHistory).FirstOrDefaultAsync(
-            x => x.Id == Guid.Parse("6c16033a-6d0c-4d41-913b-a5e9b52afda4"), cancellationToken) ?? throw new NotFoundException();
-
-       
-        user.ChatHistory = new ChatHistory()
-        {
-            StartDate = DateOnly.FromDateTime(DateTime.Now)
-        };
-
-
+        var chat = await _context.ChatHistories
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(x => x.Id == chatId, cancellationToken) ?? throw new NotFoundException();
+        
+        var admin = await _context.Users.FirstOrDefaultAsync(
+            x => x.DisplayName == "Main Admin", cancellationToken) ?? throw new NotFoundException();
+        
         var messages = new List<ChatMessage>
         {
             new ChatMessage
             {
-                Message = "Даун?",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(1), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(1), 
+                Message = "Привет",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
                 IsRead = false,
-                UserId = user.Id,
-                User = user,
-                ChatHistory = user.ChatHistory
+                User = chat.User,
+                ChatHistory = chat
             },
             
             new ChatMessage
             {
-                Message = "Добро",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(4), 
-                Date = DateOnly.FromDateTime(DateTime.Now), 
+                Message = "Здравствуйте",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
                 IsRead = false,
-                UserId = user.Id,
-                User = user,
-                ChatHistory = user.ChatHistory
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Что хотел?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Не понял прикола",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Алло",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Кто там?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Не важно",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Информацию принял",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            
+            new ChatMessage
+            {
+                Message = "Здравствуйте",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-10), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Добрый день",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Сколько будет 3 * 3",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-8), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Ну 9, а что?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "По приколу написал",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-6), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+            
+            new ChatMessage
+            {
+                Message = "Пон",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
             }
         };
 

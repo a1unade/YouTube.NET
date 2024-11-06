@@ -66,4 +66,24 @@ public class ChatRepository : IChatRepository
 
         return paginatedMessages;
     }
+
+    public async Task<int> GetUniqueDates(Guid id, CancellationToken cancellationToken)
+    {
+        var uniqueDates = await _context.ChatHistories
+            .AsNoTracking()
+            .Where(ch => ch.Id == id)
+            .SelectMany(ch => ch.ChatMessages)
+            .Select(cm => cm.Date)
+            .Distinct()
+            .OrderByDescending(d => d)
+            .ToListAsync(cancellationToken);
+
+        return uniqueDates.Count;
+    }
+
+    public int GetChatsPageCount(int size)
+    {
+        var chatCount = (double)_context.ChatHistories.Count() / size;
+        return (int)Math.Ceiling(chatCount);
+    }
 }

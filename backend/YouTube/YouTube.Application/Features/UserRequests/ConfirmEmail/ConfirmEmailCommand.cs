@@ -1,12 +1,13 @@
 using MediatR;
 using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.Common.Requests.User;
 using YouTube.Application.Common.Responses;
 
 namespace YouTube.Application.Features.UserRequests.ConfirmEmail;
 
-public class ConfirmEmailCommand : IdRequest, IRequest<BaseResponse>
+public class ConfirmEmailCommand : EmailRequest, IRequest<BaseResponse>
 {
-    public ConfirmEmailCommand(IdRequest request) : base(request)
+    public ConfirmEmailCommand(EmailRequest request) : base(request)
     {
     }
 }

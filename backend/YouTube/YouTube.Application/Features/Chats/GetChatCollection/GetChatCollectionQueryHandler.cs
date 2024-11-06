@@ -60,7 +60,8 @@ public class GetChatCollectionQueryHandler : IRequestHandler<GetChatCollectionQu
         return new ChatCardResponse
         {
             IsSuccessfully = true,
-            ChatCardDtos = chatsDto
+            ChatCardDtos = chatsDto,
+            PageCount = _repository.GetChatsPageCount(request.Size)
         };
     }
 }

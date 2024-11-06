@@ -12,13 +12,13 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     [Fact]
     public async Task ConfirmEmailHandler_Success()
     {
-        var request = new IdRequest
+        var request = new Application.Common.Requests.User.EmailRequest
         {
-            Id = User.Id
+            Email = User.Email!
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, EmailService.Object);
         var response = await handler.Handle(command,default);
 
         
@@ -29,13 +29,13 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     [Fact]
     public async Task ConfirmEmailHandler_ThrowsValidationException_ForInvalidIdRequest()
     {
-        var request = new IdRequest
+        var request = new Application.Common.Requests.User.EmailRequest
         {
-            Id = Guid.Empty
+            Email = User.Email!
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, EmailService.Object);
         
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -46,13 +46,13 @@ public class PostConfirmEmailHandlerTest : TestCommandBase
     [Fact]
     public async Task ConfirmEmailHandler_ThrowsNotFoundException_ForInvalidIdRequest()
     {
-        var request = new IdRequest
+        var request = new Application.Common.Requests.User.EmailRequest
         {
-            Id = Guid.NewGuid()
+            Email = "fkoawkfwkaofok@gmail.com"
         };
 
         var command = new ConfirmEmailCommand(request);
-        var handler = new ConfirmEmailHandler(UserManager.Object, JwtGenerator.Object, EmailService.Object);
+        var handler = new ConfirmEmailHandler(UserManager.Object, EmailService.Object);
         
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

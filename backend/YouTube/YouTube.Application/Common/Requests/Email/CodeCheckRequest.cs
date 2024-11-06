@@ -4,15 +4,15 @@ public class CodeCheckRequest
 {
     public CodeCheckRequest()
     {
-        
     }
+
     public CodeCheckRequest(CodeCheckRequest request)
     {
         Code = request.Code;
-        Id = request.Id;
+        Email = request.Email;
     }
-    
-    public string Code { get; set; }  = default!;
-    
-    public Guid Id { get; set; }
+
+    public string Code { get; set; } = default!;
+
+    public string Email { get; set; } = default!;
 }
