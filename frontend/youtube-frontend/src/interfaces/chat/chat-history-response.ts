@@ -4,4 +4,5 @@ export interface ChatHistoryResponse {
   chatMessages: ChatMessage[];
   isSuccessfully: boolean;
   message: string | null;
+  pageCount: number;
 }

@@ -81,6 +81,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
         attachment: null,
         time: message.time.split(":").slice(0, 2).join(":"),
         isRead: message.isRead,
+        date: message.date,
       };
       setChatMessages((prevMessages: ChatMessage[] | null) =>
         prevMessages ? [mes, ...prevMessages] : [mes],

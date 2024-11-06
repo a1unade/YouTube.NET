@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+/* istanbul ignore file */
+
+import { useState } from 'react';
 import errorMessages from '../../../utils/error-messages.ts';
 import apiClient from '../../../utils/api-client.ts';
 import { useNavigate } from 'react-router-dom';
 
-const Confirmation = (props: {
-  email: string;
-  setContainerContent: React.Dispatch<React.SetStateAction<number>>;
-  containerContent: number;
-}) => {
-  const { email, setContainerContent, containerContent } = props;
+const Confirmation = (props: { email: string }) => {
+  const { email } = props;
   const navigate = useNavigate();
   const [code, setCode] = useState('');
   const handleNextButtonClick = () => {
@@ -27,7 +25,7 @@ const Confirmation = (props: {
         })
         .then((response) => {
           if (response.status === 200) {
-            setContainerContent(containerContent + 1);
+            navigate('/');
           } else {
             navigate('/error');
           }
@@ -73,13 +71,6 @@ const Confirmation = (props: {
         </div>
       </div>
       <div className="sign-buttons">
-        <button
-          className="left-button"
-          style={{ minWidth: 'fit-content', padding: 10 }}
-          onClick={() => setContainerContent(containerContent - 1)}
-        >
-          Назад
-        </button>
         <button className="right-button" onClick={handleNextButtonClick}>
           Далее
         </button>

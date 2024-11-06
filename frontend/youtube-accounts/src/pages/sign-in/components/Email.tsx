@@ -29,7 +29,7 @@ const Email = (props: {
         }
 
         if (!confirmation) {
-          setErrorAndRedirect('Необходимо подтвердить почту!');
+          setContainerContent(2);
           return;
         }
 

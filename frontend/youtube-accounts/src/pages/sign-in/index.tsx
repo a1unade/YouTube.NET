@@ -8,6 +8,7 @@ import { useErrors } from '../../hooks/error/use-errors.ts';
 import { jwtDecode } from 'jwt-decode';
 import { JWTTokenDecoded } from '../../interfaces/jwt-token-decoded.ts';
 import { AuthResponse } from '../../interfaces/auth-response.ts';
+import Confirmation from './components/Confirmation.tsx';
 
 const Sign = () => {
   const [containerContent, setContainerContent] = useState(0);
@@ -64,6 +65,8 @@ const Sign = () => {
             processLogin={processLogin}
           />
         );
+      case 2:
+        return <Confirmation email={email} />;
       default:
         return null;
     }
