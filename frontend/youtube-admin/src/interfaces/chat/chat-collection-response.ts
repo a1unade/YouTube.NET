@@ -4,4 +4,5 @@ export interface ChatCollectionResponse {
   chatCardDtos: ChatSingleItem[];
   isSuccessfully: boolean;
   message: string | null;
+  pageCount: number;
 }

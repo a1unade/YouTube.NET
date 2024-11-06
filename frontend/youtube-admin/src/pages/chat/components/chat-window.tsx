@@ -2,7 +2,7 @@ import { ChatSingleItem } from "../../../interfaces/chat/chat-single-item.ts";
 import { ChatMessage } from "../../../interfaces/chat/chat-message.ts";
 import ChatSingleMessage from "./chat-single-message.tsx";
 import ChatWindowInputSection from "./chat-window-input-section.tsx";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../../utils/apiClient.ts";
 import { ChatHistoryResponse } from "../../../interfaces/chat/chat-history-response.ts";
 
@@ -33,6 +33,10 @@ const ChatWindow = (props: {
     isConnected,
   } = props;
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
+  const [fetching, setFetching] = useState(true);
+  const [page, setPage] = useState(1);
+  const componentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const checkAndJoinChat = async () => {
@@ -49,16 +53,26 @@ const ChatWindow = (props: {
   }, [chatId, joinChat, hasJoinedChat, userId, isConnected]);
 
   useEffect(() => {
-    if (chatId && hasJoinedChat) {
+    if (fetching && chatId && hasJoinedChat) {
       apiClient
         .get<ChatHistoryResponse>(
-          `Chat/ChatMessagesByDay?Page=1&ChatId=${chatId}`,
+          `Chat/ChatMessagesByDay?Page=${page}&ChatId=${chatId}`,
         )
         .then((response) => {
-          setChatMessages(response.data.chatMessages);
-        });
+          if (pageCount === 0) {
+            setPageCount(response.data.pageCount);
+          }
+          setChatMessages((prevData) => [
+            ...prevData,
+            ...response.data.chatMessages,
+          ]);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        })
+        .finally(() => setFetching(false));
     }
-  }, [chatId, hasJoinedChat]);
+  }, [fetching, chatId, hasJoinedChat]);
 
   useEffect(() => {
     const updateUnreadMessages = async () => {
@@ -85,6 +99,28 @@ const ChatWindow = (props: {
     updateUnreadMessages();
   }, [chatMessages, userId, chatId]);
 
+  useEffect(() => {
+    const currentRef = componentRef.current;
+    if (currentRef) {
+      currentRef.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [chatMessages, pageCount, setFetching]);
+
+  const handleScroll = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.scrollTop < 600 && page < pageCount) {
+      setFetching(true);
+      setPage(page + 1);
+    }
+  };
+
   return chatId ? (
     <div className="chat-selected-layout">
       <div className="chat-single-item-layout">
@@ -98,7 +134,7 @@ const ChatWindow = (props: {
         />
         <p>{chat?.userName}</p>
       </div>
-      <div className="chat-section-layout">
+      <div className="chat-section-layout" ref={componentRef}>
         {chatMessages !== null
           ? chatMessages.map((message: ChatMessage, index: number) => (
               <ChatSingleMessage

@@ -94,7 +94,6 @@ const Register = () => {
             email={email}
             setContainerContent={setContainerContent}
             containerContent={containerContent}
-            userId={userId}
           />
         );
       case 5:

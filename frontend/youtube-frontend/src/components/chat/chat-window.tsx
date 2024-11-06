@@ -1,7 +1,7 @@
 import ChatSingleMessage from './chat-single-message.tsx';
 import ChatWindowInputSection from './chat-window-input-section.tsx';
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import apiClient from '../../utils/apiClient.ts';
 import { ChatHistoryResponse } from '../../interfaces/chat/chat-history-response.ts';
 
@@ -17,15 +17,27 @@ const ChatWindow = (props: {
   const { chatId, active, userId, readMessages, chatMessages, setChatMessages, sendMessage } =
     props;
 
+  const [pageCount, setPageCount] = useState(0);
+  const [fetching, setFetching] = useState(true);
+  const [page, setPage] = useState(1);
+  const componentRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (active && chatId) {
+    if (fetching && chatId && active) {
       apiClient
-        .get<ChatHistoryResponse>(`Chat/ChatMessagesByDay?Page=1&ChatId=${chatId}`)
+        .get<ChatHistoryResponse>(`Chat/ChatMessagesByDay?Page=${page}&ChatId=${chatId}`)
         .then((response) => {
-          setChatMessages(response.data.chatMessages);
-        });
+          if (pageCount === 0) {
+            setPageCount(response.data.pageCount);
+          }
+          setChatMessages((prevData) => [...prevData, ...response.data.chatMessages]);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        })
+        .finally(() => setFetching(false));
     }
-  }, [active, chatId]);
+  }, [fetching, chatId, active]);
 
   useEffect(() => {
     const updateUnreadMessages = async () => {
@@ -49,9 +61,31 @@ const ChatWindow = (props: {
     updateUnreadMessages();
   }, [chatMessages, userId, chatId]);
 
+  useEffect(() => {
+    const currentRef = componentRef.current;
+    if (currentRef) {
+      currentRef.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [chatMessages, pageCount, setFetching]);
+
+  const handleScroll = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.scrollTop < 600 && page < pageCount) {
+      setFetching(true);
+      setPage(page + 1);
+    }
+  };
+
   return (
     <div className="chat-selected-layout">
-      <div className="chat-section-layout">
+      <div className="chat-section-layout" ref={componentRef}>
         {chatMessages !== null
           ? chatMessages.map((message: ChatMessage, index: number) => (
               <ChatSingleMessage key={index} message={message} userId={userId} />
