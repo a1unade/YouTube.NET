@@ -122,7 +122,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         var response = await handler.Handle(query, default);
 
         Assert.True(response.IsSuccessfully);
-        Assert.Equal(null, response.Channel.BannerImage);
-        Assert.Equal(null, response.Channel.MainImage);
+        Assert.Null(response.Channel.BannerImage);
+        Assert.Null(response.Channel.MainImage);
     }
 }
