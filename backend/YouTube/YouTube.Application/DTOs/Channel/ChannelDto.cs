@@ -2,9 +2,10 @@ namespace YouTube.Application.DTOs.Channel;
 
 public class ChannelDto
 {
-    public string? BannerUrl { get; set; }
+    public Guid Id { get; set; }
+    public string? BannerImage { get; set; }
 
-    public string? MainImgUrl { get; set; }
+    public string? MainImage { get; set; }
      
     public int Subscribers { get; set; }
     
@@ -12,7 +13,5 @@ public class ChannelDto
 
     public string? Description { get; set; } 
     
-    public string? Country { get; set; }
-    
-    public DateOnly CreateDate { get; set; }
+    public int VideoCount { get; set; }
 }

@@ -94,7 +94,7 @@ public class DbSeeder : IDbSeeder
         await SeedCategoriesAsync(context, cancellationToken);
         await SeedBaseChannelsAsync(context, cancellationToken);
         await SeedUserAsync(context, cancellationToken);
-        await SeedUserChannelAsync(context, cancellationToken);
+        await SeedUserChannelAndLinksAsync(context, cancellationToken);
         await SeedVideoAsync(context, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
@@ -210,10 +210,12 @@ public class DbSeeder : IDbSeeder
         }
     }
 
-    private async Task SeedUserChannelAsync(IDbContext context, CancellationToken cancellationToken)
+    private async Task SeedUserChannelAndLinksAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var user = await context.Users.FirstOrDefaultAsync(x => x.Email == "ashab@gmail.com", cancellationToken);
-        var channel = await context.Channels.FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
+        var channel = await context.Channels
+            .Include(x => x.Links)
+            .FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
 
         if (user != null && channel == null)
         {
@@ -228,7 +230,7 @@ public class DbSeeder : IDbSeeder
             };
 
             await context.Channels.AddAsync(channel, cancellationToken);
-            
+
             var channelImage = await context.Files
                 .FirstOrDefaultAsync(x => x.Path == channel.Id + "ashab.jpg", cancellationToken);
 
@@ -264,6 +266,32 @@ public class DbSeeder : IDbSeeder
             }
 
             await context.Channels.AddAsync(channel, cancellationToken);
+        }
+
+        var links = channel!.Links.ToList();
+
+        if (!links.Any())
+        {
+            links.AddRange(new[]
+            {
+                new Link
+                {
+                    Reference = "https://vk.com/id446657723",
+                    Channel = channel
+                },
+                new Link
+                {
+                    Reference = "https://t.me/BuLbl4_13",
+                    Channel = channel
+                },
+                new Link
+                {
+                    Reference = "https://steamcommunity.com/profiles/76561199096782472",
+                    Channel = channel
+                }
+            });
+            
+            context.Links.AddRange(links);
         }
         
         await context.SaveChangesAsync(cancellationToken);

@@ -35,6 +35,8 @@ public class TestCommandBase : IDisposable
     protected Mock<IJwtGenerator> JwtGenerator { get; }
     
     protected Mock<IUserRepository> UserRepository { get; }
+    
+    protected Mock<IChannelRepository> ChannelRepository { get; }
 
     protected Mock<IVideoRepository> VideoRepository { get; }
     protected Mock<IGenericRepository<User>> GenericRepository { get; }
@@ -121,6 +123,10 @@ public class TestCommandBase : IDisposable
             {
                 return Context.Users.FirstOrDefault(user => user.Email == email);
             });
+
+        ChannelRepository = new Mock<IChannelRepository>();
+        ChannelRepository.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(UserChannel);
 
         VideoRepository = new Mock<IVideoRepository>();
 

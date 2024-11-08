@@ -81,6 +81,8 @@ public interface IDbContext
     /// </summary>
     public DbSet<Role> Roles { get; set; }
     
+    public DbSet<Link> Links { get; set; }
+    
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     
     DbSet<T> Set<T>() where T : class;

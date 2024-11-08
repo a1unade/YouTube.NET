@@ -41,6 +41,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, 
 
     public DbSet<File> Files { get; set; }
     
+    public DbSet<Link> Links { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Extensions.ServiceCollectionExtensions).Assembly);

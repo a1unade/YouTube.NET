@@ -1,34 +1,30 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses.Channel;
 using YouTube.Application.DTOs.Channel;
 using YouTube.Application.Interfaces;
+using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Application.Features.Channel.GetChannel;
 
 public class GetChannelQueryHandler : IRequestHandler<GetChannelQuery, ChannelResponse>
 {
-    private readonly IDbContext _context;
     private readonly IS3Service _s3Service;
+    private readonly IChannelRepository _channelRepository;
 
-    public GetChannelQueryHandler(IDbContext context, IS3Service s3Service)
+    public GetChannelQueryHandler(IS3Service s3Service, IChannelRepository channelRepository)
     {
-        _context = context;
         _s3Service = s3Service;
+        _channelRepository = channelRepository;
     }
     public async Task<ChannelResponse> Handle(GetChannelQuery request, CancellationToken cancellationToken)
     {
         if (request.Id == Guid.Empty)
             throw new ValidationException();
 
-        var channel = await _context.Channels
-            .AsNoTracking()
-            .Include(x => x.BannerImg)
-            .Include(x => x.MainImgFile)
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
-
+        var channel = await _channelRepository.GetById(request.Id, cancellationToken);
+        
         if (channel is null)
             throw new NotFoundException(ChannelErrorMessage.ChannelNotFound);
 
@@ -36,11 +32,11 @@ public class GetChannelQueryHandler : IRequestHandler<GetChannelQuery, ChannelRe
         var main = string.Empty;
         
         if (channel.BannerImg is not null)
-            banner = await _s3Service.GetFileUrlAsync(channel.BannerImg.BucketName!, channel.BannerImg.FileName,
+            banner = await _s3Service.GetFileUrlAsync(channel.BannerImg.BucketName, channel.BannerImg.FileName,
                 cancellationToken);
 
         if (channel.MainImgFile is not null)
-            main = await _s3Service.GetFileUrlAsync(channel.MainImgFile!.BucketName!, channel.MainImgId.ToString()!,
+            main = await _s3Service.GetFileUrlAsync(channel.MainImgFile!.BucketName, channel.MainImgId.ToString()!,
                 cancellationToken);
         
         return new ChannelResponse
@@ -48,13 +44,13 @@ public class GetChannelQueryHandler : IRequestHandler<GetChannelQuery, ChannelRe
             IsSuccessfully = true,
             Channel = new ChannelDto
             {
-                BannerUrl = banner,
-                MainImgUrl = main,
-                Subscribers = channel.SubCount,
+                Id = channel.Id,
                 Name = channel.Name,
+                MainImage = main,
+                BannerImage = banner,
+                Subscribers = channel.SubCount,
                 Description = channel.Description,
-                Country = channel.Country,
-                CreateDate = channel.CreateDate
+                VideoCount = _channelRepository.GetChannelVideoCount(request.Id)
             }
         };
     }

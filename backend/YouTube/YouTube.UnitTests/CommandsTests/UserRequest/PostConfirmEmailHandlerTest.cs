@@ -1,7 +1,6 @@
 using Xunit;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Features.UserRequests.ConfirmEmail;
 
 namespace YouTube.UnitTests.CommandsTests.UserRequest;
