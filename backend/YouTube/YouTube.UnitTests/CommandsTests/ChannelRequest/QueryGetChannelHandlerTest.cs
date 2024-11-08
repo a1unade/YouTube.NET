@@ -22,7 +22,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         };
 
         var query = new GetChannelQuery(request);
-        var handler = new GetChannelQueryHandler(Context, S3Service.Object);
+        var handler = new GetChannelQueryHandler(S3Service.Object, ChannelRepository.Object);
 
         var response = await handler.Handle(query, default);
 
@@ -39,7 +39,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         };
 
         var query = new GetChannelQuery(request);
-        var handler = new GetChannelQueryHandler(Context, S3Service.Object);
+        var handler = new GetChannelQueryHandler(S3Service.Object, ChannelRepository.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () => { await handler.Handle(query, default); });
     }
@@ -53,7 +53,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         };
 
         var query = new GetChannelQuery(request);
-        var handler = new GetChannelQueryHandler(Context, S3Service.Object);
+        var handler = new GetChannelQueryHandler(S3Service.Object, ChannelRepository.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -81,7 +81,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
 
         var request = new IdRequest { Id = UserChannel.Id };
         var query = new GetChannelQuery(request);
-        var handler = new GetChannelQueryHandler(Context, S3Service.Object);
+        var handler = new GetChannelQueryHandler(S3Service.Object, ChannelRepository.Object);
 
         S3Service.Setup(s => s.GetFileUrlAsync(It.IsAny<string>(), It.IsAny<string>(), default))
             .ReturnsAsync("image.jpg");
@@ -89,8 +89,8 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         var response = await handler.Handle(query, default);
 
         Assert.True(response.IsSuccessfully);
-        Assert.Equal("image.jpg", response.Channel.BannerUrl);
-        Assert.Equal("image.jpg", response.Channel.MainImgUrl);
+        Assert.Equal("image.jpg", response.Channel.BannerImage);
+        Assert.Equal("image.jpg", response.Channel.MainImage);
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
 
         var request = new IdRequest { Id = channel.Id };
         var query = new GetChannelQuery(request);
-        var handler = new GetChannelQueryHandler(Context, S3Service.Object);
+        var handler = new GetChannelQueryHandler(S3Service.Object, ChannelRepository.Object);
 
         S3Service.Setup(s => s.GetFileUrlAsync(It.IsAny<string>(), It.IsAny<string>(), default))
             .ReturnsAsync((string)null!);
@@ -120,7 +120,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         var response = await handler.Handle(query, default);
 
         Assert.True(response.IsSuccessfully);
-        Assert.Equal(String.Empty, response.Channel.BannerUrl);
-        Assert.Equal(String.Empty, response.Channel.MainImgUrl);
+        Assert.Equal(String.Empty, response.Channel.BannerImage);
+        Assert.Equal(String.Empty, response.Channel.MainImage);
     }
 }

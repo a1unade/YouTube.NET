@@ -93,4 +93,9 @@ public class Channel : BaseEntity
     /// Подписчики
     /// </summary>
     public ICollection<ChannelSubscription> Subscribers { get; set; } = default!;
+
+    /// <summary>
+    /// Список ссылок
+    /// </summary>
+    public ICollection<Link> Links { get; set; } = default!;
 }

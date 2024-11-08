@@ -57,6 +57,7 @@ public static class ServiceCollectionExtensions
             .AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>))
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IVideoRepository, VideoRepository>()
-            .AddScoped<IChatRepository, ChatRepository>();
+            .AddScoped<IChatRepository, ChatRepository>()
+            .AddScoped<IChannelRepository, ChannelRepository>();
     }
 }
