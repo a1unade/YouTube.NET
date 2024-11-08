@@ -47,6 +47,8 @@ public class QueryGetChannelHandlerTest : TestCommandBase
     [Fact]
     public async Task GetChannelHandlerById_ThrowNotFoundException_ForInvalidId()
     {
+        ChannelRepository.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Channel?)null);
         var request = new IdRequest
         {
             Id = Guid.NewGuid()
@@ -120,7 +122,7 @@ public class QueryGetChannelHandlerTest : TestCommandBase
         var response = await handler.Handle(query, default);
 
         Assert.True(response.IsSuccessfully);
-        Assert.Equal(String.Empty, response.Channel.BannerImage);
-        Assert.Equal(String.Empty, response.Channel.MainImage);
+        Assert.Equal(null, response.Channel.BannerImage);
+        Assert.Equal(null, response.Channel.MainImage);
     }
 }
