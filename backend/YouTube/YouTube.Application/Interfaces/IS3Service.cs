@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using YouTube.Application.DTOs.Video;
 
 namespace YouTube.Application.Interfaces;
@@ -24,5 +25,15 @@ public interface IS3Service
     /// <returns>Ссылка на файл</returns>
     Task<string> GetFileUrlAsync(string bucketName, string fileName, CancellationToken cancellationToken);
 
-    Task<string> GetObjectAsync(string bucketName, string fileName, CancellationToken cancellationToken);
+    /// <summary>
+    /// Получить поток 
+    /// </summary>
+    /// <param name="bucketName">Бакет</param>
+    /// <param name="fileName">Название файл</param>
+    /// <param name="contentType">контент тайп</param>
+    /// <param name="response">Http response</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Stream файла</returns>
+    Task StreamFileAsync(string bucketName, string fileName, string contentType, HttpResponse response,
+        CancellationToken cancellationToken);
 }

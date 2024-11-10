@@ -5,7 +5,6 @@ using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses.User;
-using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Application.Features.Email.CodeCheckForChangePassword;
 

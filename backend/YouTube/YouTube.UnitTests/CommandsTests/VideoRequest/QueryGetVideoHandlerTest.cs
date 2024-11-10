@@ -18,7 +18,7 @@ public class QueryGetVideoHandlerTest : TestCommandBase
         };
 
         var query = new GetVideoQuery(request);
-        var handler = new GetVideoQueryHandler(Context, S3Service.Object);
+        var handler = new GetVideoQueryHandler(Context);
         var result = await handler.Handle(query, default);
 
         Assert.True(result.IsSuccessfully);
@@ -33,7 +33,7 @@ public class QueryGetVideoHandlerTest : TestCommandBase
         };
 
         var query = new GetVideoQuery(request);
-        var handler = new GetVideoQueryHandler(Context, S3Service.Object);
+        var handler = new GetVideoQueryHandler(Context);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -50,7 +50,7 @@ public class QueryGetVideoHandlerTest : TestCommandBase
         };
 
         var query = new GetVideoQuery(request);
-        var handler = new GetVideoQueryHandler(Context, S3Service.Object);
+        var handler = new GetVideoQueryHandler(Context);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -71,7 +71,7 @@ public class QueryGetVideoHandlerTest : TestCommandBase
         UserVideo.ChannelId = Guid.NewGuid();
         await Context.SaveChangesAsync();
         var query = new GetVideoQuery(request);
-        var handler = new GetVideoQueryHandler(Context, S3Service.Object);
+        var handler = new GetVideoQueryHandler(Context);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {

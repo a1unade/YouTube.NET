@@ -7,9 +7,12 @@ services:
       dockerfile: YouTube.WebAPI/Dockerfile 
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-      - AWS_S3_SERVICE_URL=minio:9000
+      - S3Storage_AccessKey=minioadmin
+      - S3Storage_SecretKey=minioadmin
+      - S3Storage_Endpoint=minio:9000
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_DEFAULT_BUCKETS=defaultbucket
       - REDIS_CONNECTION_STRING=redis:6379
     depends_on:
       - db
@@ -19,6 +22,8 @@ services:
       - "8080:8080"
     networks:
       - youtube_network
+    volumes:
+      - data_protection:/root/.aspnet/DataProtection-Keys
     
   db:
     image: postgres:16
@@ -42,7 +47,7 @@ services:
       - youtube_network
 
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -58,6 +63,7 @@ services:
 volumes:
   db_data:
   minio_data:
+  data_protection:
 
 networks:
   youtube_network:

@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+
 var app = builder.Build();
 
 using var scoped = app.Services.CreateScope();
@@ -40,7 +41,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors(b => b
-    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:5174") 
+    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:5174", "http://localhost:3000") 
     .AllowAnyMethod()                     
     .AllowAnyHeader()                      
     .AllowCredentials());  

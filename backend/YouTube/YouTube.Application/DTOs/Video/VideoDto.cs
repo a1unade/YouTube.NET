@@ -2,9 +2,9 @@ namespace YouTube.Application.DTOs.Video;
 
 public class VideoDto
 {
-    public string VideoUrl { get; set; } = default!;
+    public Guid VideoFileId { get; set; } 
 
-    public string PreviewUrl { get; set; } = default!;
+    public Guid PreviewId { get; set; } 
     
     public int ViewCount { get; set; }
 
