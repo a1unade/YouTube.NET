@@ -12,12 +12,12 @@ services:
       - S3Storage_Endpoint=minio:9000
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
-      - MINIO_DEFAULT_BUCKETS=defaultbucket
       - REDIS_CONNECTION_STRING=redis:6379
     depends_on:
       - db
       - redis
       - minio
+      - rabbit  
     ports:
       - "8080:8080"
     networks:
@@ -57,6 +57,17 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    networks:
+      - youtube_network
+
+  rabbit: 
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     networks:
       - youtube_network
 

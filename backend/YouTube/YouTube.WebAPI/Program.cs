@@ -2,6 +2,8 @@ using System.Reflection;
 using YouTube.Application.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
+using YouTube.MessageBus.Extensions;
+using YouTube.MessageBus.Options;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
@@ -12,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationLayer();
+
+//builder.Services.Configure<RabbitOptions>(IConfiguration.GetSection("RabbitOptions"));
+builder.Services.AddMessageBus(builder.Configuration.GetSection(nameof(RabbitOptions)).Get<RabbitOptions>()!);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddPersistenceLayer(builder.Configuration);

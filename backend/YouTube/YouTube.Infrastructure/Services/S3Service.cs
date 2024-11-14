@@ -33,23 +33,26 @@ public class S3Service : IS3Service
         return content.Bucket + "/" + content.FileName;
     }
     
-    public async Task StreamFileAsync(string bucketName, string fileName, string contentType, HttpResponse response, CancellationToken cancellationToken)
+    
+    public async Task<Stream> GetFileStreamAsync(string bucketName, string fileName, CancellationToken cancellationToken)
     {
         var bucketExist = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName), cancellationToken);
         if (!bucketExist)
             throw new NotFoundException("Bucket not found");
 
-        response.ContentType = contentType;
-        response.Headers["Content-Disposition"] = $"attachment; filename={fileName}";
-
+        var memoryStream = new MemoryStream();
         await _minioClient.GetObjectAsync(new GetObjectArgs()
             .WithBucket(bucketName)
             .WithObject(fileName)
             .WithCallbackStream(async stream =>
             {
-                await stream.CopyToAsync(response.Body, cancellationToken);
+                await stream.CopyToAsync(memoryStream, cancellationToken);
             }), cancellationToken);
+
+        memoryStream.Position = 0; // Устанавливаем начальную позицию для чтения
+        return memoryStream;
     }
+
 
     public async Task<string> GetFileUrlAsync(string bucketName, string fileName,
         CancellationToken cancellationToken)

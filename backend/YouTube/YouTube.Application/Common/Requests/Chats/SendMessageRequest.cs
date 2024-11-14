@@ -1,4 +1,4 @@
-namespace YouTube.Application.DTOs.Chat;
+namespace YouTube.Application.Common.Requests.Chats;
 /// <summary>
 /// Сообщение
 /// </summary>

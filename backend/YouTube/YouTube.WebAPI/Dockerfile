@@ -9,6 +9,7 @@ WORKDIR /src
 COPY ["YouTube.WebAPI/YouTube.WebAPI.csproj", "YouTube.WebAPI/"]
 COPY ["YouTube.Persistence/YouTube.Persistence.csproj", "YouTube.Persistence/"]
 COPY ["YouTube.Infrastructure/YouTube.Infrastructure.csproj", "YouTube.Infrastructure/"]
+COPY ["YouTube.MessageBus/YouTube.MessageBus.csproj", "YouTube.MessageBus/"]
 COPY ["YouTube.Domain/YouTube.Domain.csproj", "YouTube.Domain/"]
 COPY ["YouTube.Application/YouTube.Application.csproj", "YouTube.Application/"]
 RUN dotnet restore "YouTube.WebAPI/YouTube.WebAPI.csproj"
