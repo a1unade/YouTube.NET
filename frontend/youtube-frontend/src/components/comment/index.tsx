@@ -1,11 +1,11 @@
-import { CommentType } from '../../../types/comment/comment-type.ts';
+import { CommentType } from '../../types/comment/comment-type.ts';
 import { useState } from 'react';
 import {
   ButtonDislikeIcon,
   ButtonDislikeIconFilled,
   ButtonLikeIcon,
   ButtonLikeIconFilled,
-} from '../../../assets/icons.tsx';
+} from '../../assets/icons.tsx';
 
 const Comment = (props: { comment: CommentType }) => {
   const { comment } = props;

@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { navigationMap } from '../../types/channel/channel-navigation-map.ts';
 import ChannelAbout from './components/channel-about.tsx';
 import ChannelPlaylists from './components/channel-playlists.tsx';
+import ChannelPosts from './components/channel-posts.tsx';
 
 const ChannelFeatured = (props: {
   setSaveVideoActive: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,6 +51,14 @@ const ChannelFeatured = (props: {
         );
       case 'Плейлисты':
         return <ChannelPlaylists />;
+      case 'Сообщество':
+        return (
+          <ChannelPosts
+            setReportVideoActive={setReportVideoActive}
+            setSaveVideoActive={setSaveVideoActive}
+            channel={channel}
+          />
+        );
       case 'О канале':
         return <ChannelAbout description={channel.description} />;
     }

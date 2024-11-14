@@ -1,7 +1,9 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import ChatSingleMessage from './chat-single-message.tsx';
 import ChatWindowInputSection from './chat-window-input-section.tsx';
+
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
-import React, { useEffect, useRef, useState } from 'react';
 import apiClient from '../../utils/apiClient.ts';
 import { ChatHistoryResponse } from '../../interfaces/chat/chat-history-response.ts';
 

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { HubConnectionBuilder, HubConnection, HubConnectionState } from '@microsoft/signalr';
+
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
 import { ChatMessageResponse } from '../../interfaces/chat/chat-message-response.ts';
 
@@ -123,7 +124,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
   };
 
   useEffect(() => {
-    startConnection();
+    startConnection().then(() => console.log('Connection started'));
 
     return () => {
       connectionRef.current?.stop();

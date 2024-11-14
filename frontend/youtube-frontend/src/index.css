@@ -6,6 +6,7 @@
 @import url('./assets/styles/channel.css');
 @import url('./assets/styles/playlist.css');
 @import url('./assets/styles/chat.css');
+@import url('./assets/styles/post.css');
 
 :root {
   line-height: 1.5;

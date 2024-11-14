@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Comment from './comment';
+import Index from '../../../components/comment';
 import { CommentType } from '../../../types/comment/comment-type.ts';
 
 const CommentSection = () => {
@@ -78,7 +78,7 @@ const CommentSection = () => {
       </div>
       <div className="player-comments-list">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Index key={comment.id} comment={comment} />
         ))}
       </div>
     </div>
