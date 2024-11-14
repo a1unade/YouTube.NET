@@ -84,6 +84,21 @@ public class TestController : ControllerBase
 
         return Ok("Message published");
     }
+
+    [HttpGet("GetAllMessage")]
+    public async Task<IActionResult> GetAllMessage(Guid id, CancellationToken cancellationToken)
+    {
+        var user = await _context.ChatMessages
+                .Where(x => x.UserId == id)
+                .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException();
+
+        return Ok(new
+        {
+            user
+        });
+
+    }
     
     [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)

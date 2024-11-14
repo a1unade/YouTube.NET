@@ -15,7 +15,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationLayer();
 
-//builder.Services.Configure<RabbitOptions>(IConfiguration.GetSection("RabbitOptions"));
 builder.Services.AddMessageBus(builder.Configuration.GetSection(nameof(RabbitOptions)).Get<RabbitOptions>()!);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
