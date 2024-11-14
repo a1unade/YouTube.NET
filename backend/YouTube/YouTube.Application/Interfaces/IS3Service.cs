@@ -30,10 +30,7 @@ public interface IS3Service
     /// </summary>
     /// <param name="bucketName">Бакет</param>
     /// <param name="fileName">Название файл</param>
-    /// <param name="contentType">контент тайп</param>
-    /// <param name="response">Http response</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Stream файла</returns>
-    Task StreamFileAsync(string bucketName, string fileName, string contentType, HttpResponse response,
-        CancellationToken cancellationToken);
+    Task<Stream> GetFileStreamAsync(string bucketName, string fileName, CancellationToken cancellationToken);
 }

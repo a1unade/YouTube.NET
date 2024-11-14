@@ -1,10 +1,8 @@
-using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using YouTube.Application.Interfaces;
-using YouTube.Infrastructure.Consumers;
 using YouTube.Infrastructure.Options;
 using YouTube.Infrastructure.Services;
 
@@ -15,21 +13,7 @@ public static class ServiceCollectionExtensions
     public static void AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddServices();
-        services.AddMessageBus();
         services.AddS3Storage(configuration);
-    }
-
-    private static void AddMessageBus(this IServiceCollection services)
-    {
-        services.AddMassTransit(x =>
-        {
-            x.AddConsumer<ChatConsumer>();
-
-            x.UsingInMemory((context, cfg) =>
-            {
-                cfg.ConfigureEndpoints(context);
-            });
-        });
     }
 
     private static void AddServices(this IServiceCollection services)

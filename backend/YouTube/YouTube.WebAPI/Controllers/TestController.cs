@@ -1,3 +1,4 @@
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Minio;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.Common.Requests.Chats;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
@@ -24,8 +26,9 @@ public class TestController : ControllerBase
     private readonly IDbContext _context;
     private readonly IEmailService _emailService;
     private readonly IS3Service _s3Service;
+    private readonly IBus _bus;
 
-    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service)
+    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus)
     {
         _service = service;
         _mediator = mediator;
@@ -33,6 +36,68 @@ public class TestController : ControllerBase
         _emailService = emailService;
         _userManager = userManager;
         _s3Service = s3Service;
+        _bus = bus;
+    }
+
+    [HttpGet("GetBusRabbit")]
+    public async Task<IActionResult> TestRabbit(Guid id,string hui, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+                       .Include(x => x.ChatHistory)
+                       .FirstOrDefaultAsync(
+                       x => x.Id == id, cancellationToken)
+                   ?? throw new NotFoundException();
+
+        var messages = await _context.ChatMessages.Where(x => x.UserId == user.Id).ToListAsync(cancellationToken);
+        return Ok(new
+        {
+            user,
+            messages
+        });
+    }
+    
+    [HttpPost("TestBus")]
+    public async Task<IActionResult> TestRab(Guid id, string hui, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+                       .Include(x => x.ChatHistory)
+                       .FirstOrDefaultAsync(
+                           x => x.Id == id, cancellationToken)
+                   ?? throw new NotFoundException();
+
+        if (user.ChatHistory == null!)
+        {
+            user.ChatHistory = new ChatHistory();
+            await _context.ChatHistories.AddAsync(user.ChatHistory, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+        
+        
+        
+        
+        await _bus.Publish(new SendMessageRequest
+        {
+            UserId = user.Id,
+            ChatId = user.ChatHistory.Id,
+            Message = hui
+        }, cancellationToken: cancellationToken);
+
+        return Ok("Message published");
+    }
+
+    [HttpGet("GetAllMessage")]
+    public async Task<IActionResult> GetAllMessage(Guid id, CancellationToken cancellationToken)
+    {
+        var user = await _context.ChatMessages
+                .Where(x => x.UserId == id)
+                .ToListAsync(cancellationToken)
+            ?? throw new NotFoundException();
+
+        return Ok(new
+        {
+            user
+        });
+
     }
     
     [HttpGet("GetLink")]

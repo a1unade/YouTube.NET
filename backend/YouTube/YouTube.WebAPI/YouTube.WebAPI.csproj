@@ -32,6 +32,7 @@
     <ItemGroup>
       <ProjectReference Include="..\YouTube.Application\YouTube.Application.csproj" />
       <ProjectReference Include="..\YouTube.Infrastructure\YouTube.Infrastructure.csproj" />
+      <ProjectReference Include="..\YouTube.MessageBus\YouTube.MessageBus.csproj" />
       <ProjectReference Include="..\YouTube.Persistence\YouTube.Persistence.csproj" />
     </ItemGroup>
 
