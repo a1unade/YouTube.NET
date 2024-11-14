@@ -2,15 +2,14 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Minio;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
-using YouTube.Infrastructure.Hubs;
 using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.WebAPI.Controllers;
@@ -24,17 +23,18 @@ public class TestController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IDbContext _context;
     private readonly IEmailService _emailService;
+    private readonly IS3Service _s3Service;
 
-
-    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager)
+    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service)
     {
         _service = service;
         _mediator = mediator;
         _context = context;
         _emailService = emailService;
         _userManager = userManager;
+        _s3Service = s3Service;
     }
-
+    
     [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
@@ -46,12 +46,7 @@ public class TestController : ControllerBase
         return BadRequest("Pizda");
     }
     
-    [HttpGet("GetVideoLink")]
-    public async Task<IActionResult> GetVideoLink(CancellationToken cancellationToken)
-    {
-        var kink = await _service.GetObjectAsync("avatar", "IMG_4520.MP4", cancellationToken);
-        return Ok(kink);
-    }
+
     
     [HttpGet("EmailTest")]
     [Authorize(Roles = "Admin")]

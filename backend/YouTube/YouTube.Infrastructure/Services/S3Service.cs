@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
+using YouTube.Application.Common.Exceptions;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 
@@ -17,6 +19,7 @@ public class S3Service : IS3Service
     public async Task<string> UploadAsync(FileContent content, CancellationToken cancellationToken)
     {
         await BucketExistAsync(content.Bucket, cancellationToken);
+        
         var uploadFile = new PutObjectArgs()
             .WithBucket(content.Bucket)
             .WithObject(content.FileName)
@@ -29,55 +32,37 @@ public class S3Service : IS3Service
 
         return content.Bucket + "/" + content.FileName;
     }
+    
+    public async Task StreamFileAsync(string bucketName, string fileName, string contentType, HttpResponse response, CancellationToken cancellationToken)
+    {
+        var bucketExist = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName), cancellationToken);
+        if (!bucketExist)
+            throw new NotFoundException("Bucket not found");
+
+        response.ContentType = contentType;
+        response.Headers["Content-Disposition"] = $"attachment; filename={fileName}";
+
+        await _minioClient.GetObjectAsync(new GetObjectArgs()
+            .WithBucket(bucketName)
+            .WithObject(fileName)
+            .WithCallbackStream(async stream =>
+            {
+                await stream.CopyToAsync(response.Body, cancellationToken);
+            }), cancellationToken);
+    }
 
     public async Task<string> GetFileUrlAsync(string bucketName, string fileName,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var link = await _minioClient.PresignedGetObjectAsync(new PresignedGetObjectArgs()
-                    .WithBucket(bucketName)
-                    .WithObject(fileName)
-                    .WithExpiry(60 * 60 * 24))
-                .ConfigureAwait(false);
-
-            return link ?? string.Empty;
-        }
-        catch(Exception)
-        {
-            return string.Empty;
-        }
-        
-    }
-
-    public async Task<string> GetObjectAsync(string bucketName, string fileName, CancellationToken cancellationToken)
-    {
-        var bucket = new BucketExistsArgs()
-            .WithBucket(bucketName);
-
-        bool bucketExist = await _minioClient.BucketExistsAsync(bucket, cancellationToken);
-
-        if (!bucketExist)
-            return "Bucket not found";
-
-        // Обратный вызов для обработки потока данных
-        await _minioClient.GetObjectAsync(new GetObjectArgs()
-                    .WithBucket(bucketName)
-                    .WithObject(fileName)
-                    .WithCallbackStream(stream =>
-                    {
-                        using (var reader = new StreamReader(stream))
-                        {
-                            var content = reader.ReadToEnd();
-                            //Console.WriteLine(content); // Выводим данные в консоль или обрабатываем их
-                        }
-                    }),
-                cancellationToken)
+        var link = await _minioClient.PresignedGetObjectAsync(new PresignedGetObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(fileName)
+                .WithExpiry(60 * 60 * 24))
             .ConfigureAwait(false);
-
-        return "Object processed";
+        
+        return link ?? string.Empty;
     }
-
+    
     private async Task BucketExistAsync(string bucketName, CancellationToken cancellationToken)
     {
         var bucketExist =

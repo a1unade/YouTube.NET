@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;
 using YouTube.Domain.Entities;

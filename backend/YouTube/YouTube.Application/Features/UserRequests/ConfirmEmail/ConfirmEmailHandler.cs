@@ -6,7 +6,6 @@ using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Messages.Success;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Application.Features.UserRequests.ConfirmEmail;
 

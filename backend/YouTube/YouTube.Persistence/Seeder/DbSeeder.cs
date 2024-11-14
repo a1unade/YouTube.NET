@@ -217,7 +217,7 @@ public class DbSeeder : IDbSeeder
             .Include(x => x.Links)
             .FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
 
-        if (user != null && channel == null)
+        if (channel == null && user != null)
         {
             channel = new Channel
             {
@@ -230,73 +230,57 @@ public class DbSeeder : IDbSeeder
             };
 
             await context.Channels.AddAsync(channel, cancellationToken);
-
-            var channelImage = await context.Files
-                .FirstOrDefaultAsync(x => x.Path == channel.Id + "ashab.jpg", cancellationToken);
-
-            if (channelImage is null)
-            {
-                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/ashab.jpg");
-
-                if (!System.IO.File.Exists(filePath))
-                    throw new NotFoundException();
-
-                await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-                var path = await _s3Service.UploadAsync(new FileContent
-                {
-                    Content = fileStream,
-                    FileName = "ashab.jpg",
-                    ContentType = "image/jpeg",
-                    Lenght = fileStream.Length,
-                    Bucket = channel.Id.ToString()
-                }, cancellationToken);
-
-                var file = new File
-                {
-                    Size = fileStream.Length,
-                    ContentType = "image/jpeg",
-                    Path = path,
-                    FileName = "ashab.jpg",
-                    BucketName = channel.Id.ToString()
-                };
-
-                await context.Files.AddAsync(file, cancellationToken);
-                channel.MainImgFile = file;
-            }
-
-            await context.Channels.AddAsync(channel, cancellationToken);
         }
 
-        var links = channel!.Links.ToList();
+        var channelImage = await context.Files
+            .FirstOrDefaultAsync(x => x.Path == channel!.Id + "ashab.jpg", cancellationToken);
 
-        if (!links.Any())
+        if (channelImage == null)
         {
-            links.AddRange(new[]
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "images/ashab.jpg");
+
+            if (!System.IO.File.Exists(filePath))
+                throw new NotFoundException("Файл изображения не найден");
+
+            await using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            var path = await _s3Service.UploadAsync(new FileContent
             {
-                new Link
-                {
-                    Reference = "https://vk.com/id446657723",
-                    Channel = channel
-                },
-                new Link
-                {
-                    Reference = "https://t.me/BuLbl4_13",
-                    Channel = channel
-                },
-                new Link
-                {
-                    Reference = "https://steamcommunity.com/profiles/76561199096782472",
-                    Channel = channel
-                }
-            });
-            
-            context.Links.AddRange(links);
+                Content = fileStream,
+                FileName = "ashab.jpg",
+                ContentType = "image/jpeg",
+                Lenght = fileStream.Length,
+                Bucket = channel!.Id.ToString()
+            }, cancellationToken);
+
+            var file = new File
+            {
+                Size = fileStream.Length,
+                ContentType = "image/jpeg",
+                Path = path,
+                FileName = "ashab.jpg",
+                BucketName = channel.Id.ToString()
+            };
+
+            await context.Files.AddAsync(file, cancellationToken);
+            channel.MainImgFile = file;
         }
-        
+
+        // Проверка и добавление связей канала
+        if (channel!.Links == null! || !channel.Links.Any())
+        {
+            channel.Links = new List<Link>
+            {
+                new() { Reference = "https://vk.com/id446657723", Channel = channel },
+                new() { Reference = "https://t.me/BuLbl4_13", Channel = channel },
+                new() { Reference = "https://steamcommunity.com/profiles/76561199096782472", Channel = channel }
+            };
+            await context.Links.AddRangeAsync(channel.Links, cancellationToken);
+        }
+
         await context.SaveChangesAsync(cancellationToken);
     }
-
+    
     private async Task SeedVideoAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var video = await context.Videos
