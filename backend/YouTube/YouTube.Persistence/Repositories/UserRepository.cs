@@ -26,7 +26,11 @@ public class UserRepository : IUserRepository
         if (userString is not null)
             return JsonSerializer.Deserialize<User>(userString);
         
-        var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var user = await _context.Users
+            .AsNoTracking()
+            .Include(x => x.UserInfo)
+            .Include(x => x.Subscriptions)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (user is not null)
         {
@@ -44,5 +48,13 @@ public class UserRepository : IUserRepository
     public async Task<User?> FindByEmail(string email, CancellationToken cancellationToken)
     {
         return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+    }
+
+    public async Task<User?> GetUserWithChannel(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .Include(x => x.Channels)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }

@@ -23,7 +23,7 @@ public class GetChannelQueryHandler : IRequestHandler<GetChannelQuery, ChannelRe
         if (request.Id == Guid.Empty)
             throw new ValidationException();
 
-        var channel = await _channelRepository.GetById(request.Id, cancellationToken);
+        var channel = await _channelRepository.GetByIdWithImg(request.Id, cancellationToken);
         
         if (channel is null)
             throw new NotFoundException(ChannelErrorMessage.ChannelNotFound);

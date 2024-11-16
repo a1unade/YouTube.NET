@@ -14,7 +14,7 @@ public class ChannelRepository : IChannelRepository
         _context = context;
     }
     
-    public async Task<Channel?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<Channel?> GetByIdWithImg(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Channels
             .AsNoTracking()
