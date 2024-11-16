@@ -72,9 +72,6 @@ public class TestController : ControllerBase
             await _context.SaveChangesAsync(cancellationToken);
         }
         
-        
-        
-        
         await _bus.Publish(new SendMessageRequest
         {
             UserId = user.Id,

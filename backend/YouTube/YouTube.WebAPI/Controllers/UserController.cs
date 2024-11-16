@@ -9,6 +9,7 @@ using YouTube.Application.Features.Email.ForgotPasswordSendEmail;
 using YouTube.Application.Features.UserRequests.ChangePassword;
 using YouTube.Application.Features.UserRequests.CheckUserEmail;
 using YouTube.Application.Features.UserRequests.ConfirmEmail;
+using YouTube.Application.Features.UserRequests.GetById;
 
 namespace YouTube.WebAPI.Controllers;
 
@@ -114,5 +115,22 @@ public class UserController : ControllerBase
             return Ok(result);
         
         return BadRequest(result);
+    }
+
+    /// <summary>
+    /// Получить информацию о пользователе
+    /// </summary>
+    /// <param name="idRequest">Id пользователя</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о пользователе</returns>
+    [HttpGet("GetUserById")]
+    public async Task<IActionResult> GetUserById([FromQuery] IdRequest idRequest, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetUserByIdQuery(idRequest), cancellationToken);
+
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return Forbid();
     }
 }

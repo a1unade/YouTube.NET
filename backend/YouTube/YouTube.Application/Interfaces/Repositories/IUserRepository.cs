@@ -22,4 +22,12 @@ public interface IUserRepository
     /// <param name="cancellationToken">СancellationToken</param>
     /// <returns>User or null</returns>
     Task<User?> FindByEmail(string email, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить пользователя с его каналом
+    /// </summary>
+    /// <param name="id">Id пользователя</param>
+    /// <param name="cancellationToken">СancellationToken</param>
+    /// <returns></returns>
+    Task<User?> GetUserWithChannel(Guid id, CancellationToken cancellationToken);
 }

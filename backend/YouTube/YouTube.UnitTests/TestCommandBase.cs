@@ -125,7 +125,7 @@ public class TestCommandBase : IDisposable
             });
 
         ChannelRepository = new Mock<IChannelRepository>();
-        ChannelRepository.Setup(x => x.GetById(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        ChannelRepository.Setup(x => x.GetByIdWithImg(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(UserChannel);
 
         VideoRepository = new Mock<IVideoRepository>();

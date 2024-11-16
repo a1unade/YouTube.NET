@@ -54,9 +54,12 @@ public class ChatService : IChatService
         var messageContext = messageInfo.Message;
         
         var user = await _context.Users
-                       .Include(x => x.ChatHistory)
                        .FirstOrDefaultAsync(x => x.Id == messageContext.UserId)
                    ?? throw new NotFoundException(UserErrorMessage.UserNotFound);
+
+        var chat = await _context.ChatHistories
+                       .FirstOrDefaultAsync(x => x.Id == messageContext.ChatId)
+                   ?? throw new NotFoundException(ChatErrorMessage.ChatNotFound);
         
         var message = new ChatMessage
         {
@@ -64,7 +67,7 @@ public class ChatService : IChatService
             Time = TimeOnly.FromDateTime(DateTime.Now),
             Date = DateOnly.FromDateTime(DateTime.Now),
             User = user,
-            ChatHistory = user.ChatHistory
+            ChatHistory = chat
         };
 
         await _context.ChatMessages.AddAsync(message);
@@ -78,7 +81,7 @@ public class ChatService : IChatService
                 ChatId = message.ChatHistoryId,
                 Message = message.Message,
                 Date = message.Date,
-                Time = message.Time,
+                Time = message.Time
             });
     }
     

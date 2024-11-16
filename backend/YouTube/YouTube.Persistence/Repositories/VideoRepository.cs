@@ -47,4 +47,16 @@ public class VideoRepository : IVideoRepository
             .Take(size)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<Video>> GetVideosByIds(List<Guid> guids, CancellationToken cancellationToken)
+    {
+        if(!guids.Any() || guids == null!)
+        {
+            return new List<Video>();
+        }
+        return await _context.Videos
+            .AsNoTracking()
+            .Where(x => guids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+    }
 }

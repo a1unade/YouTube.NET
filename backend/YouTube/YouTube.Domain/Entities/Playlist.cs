@@ -8,14 +8,29 @@ namespace YouTube.Domain.Entities;
 public class Playlist : BaseEntity
 {
     /// <summary>
-    /// Видно ли его?
+    /// Видно ли его всем
     /// </summary>
     public bool IsHidden { get; set; }
 
     /// <summary>
+    /// Название
+    /// </summary>
+    public string Name { get; set; } = default!;
+
+    /// <summary>
+    /// Описание
+    /// </summary>
+    public string? Description { get; set; }
+    
+    /// <summary>
+    /// Дата создания
+    /// </summary>
+    public DateOnly CreateDate { get; set; }
+
+    /// <summary>
     /// Видосы в плейлисте
     /// </summary>
-    public ICollection<Video> Videos { get; set; } = default!;
+    public ICollection<Video>? Videos { get; set; } = default!;
     
     /// <summary>
     /// Id Канала

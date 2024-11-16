@@ -13,4 +13,9 @@ public class BaseResponse
     /// Сообщение
     /// </summary>
     public string? Message { get; set; }
+    
+    /// <summary>
+    /// Id сущности
+    /// </summary>
+    public Guid? EntityId { get; set; }
 }

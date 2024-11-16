@@ -12,6 +12,13 @@ public class PlaylistConfiguration : IEntityTypeConfiguration<Playlist>
 
         builder.Property(x => x.IsHidden);
 
+        builder.Property(x => x.Name)
+            .IsRequired();
+
+        builder.Property(x => x.Description);
+
+        builder.Property(x => x.CreateDate);
+        
         builder.HasOne(x => x.Channel)
             .WithMany(x => x.Playlists)
             .HasForeignKey(x => x.ChannelId);

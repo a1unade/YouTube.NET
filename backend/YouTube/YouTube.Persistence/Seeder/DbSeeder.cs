@@ -96,11 +96,12 @@ public class DbSeeder : IDbSeeder
         await SeedUserAsync(context, cancellationToken);
         await SeedUserChannelAndLinksAsync(context, cancellationToken);
         await SeedVideoAsync(context, cancellationToken);
+        await SeedPlaylistAsync(context, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }
 
-
+  
     private static async Task SeedCategoriesAsync(IDbContext context, CancellationToken cancellationToken)
     {
         var existingCategories = await context.Categories.AsNoTracking().ToListAsync(cancellationToken);
@@ -376,6 +377,35 @@ public class DbSeeder : IDbSeeder
                 await context.Videos.AddAsync(video, cancellationToken);
                 await context.SaveChangesAsync(cancellationToken);
             }
+        }
+    }
+    
+    private async Task SeedPlaylistAsync(IDbContext context, CancellationToken cancellationToken)
+    {
+        var playlists = await context.Playlists
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+        
+        var channel = await context.Channels
+            .FirstOrDefaultAsync(x => x.Name == "Tamaev TV", cancellationToken);
+        
+        var video = await context.Videos
+            .FirstOrDefaultAsync(x => x.Name == "Mohito" && x.Description == "Tamaev Mohito", cancellationToken);
+
+        if (!playlists.Any() && channel != null && video != null)
+        {
+            var playlist = new Playlist
+            {
+                Name = "Tamaev mems",
+                Description = "Тамаев раздает стиля",
+                CreateDate = DateOnly.FromDateTime(DateTime.Now),
+                Videos = new List<Video> { video },
+                ChannelId = channel.Id,
+                Channel = channel
+            };
+
+            await context.Playlists.AddAsync(playlist, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }
