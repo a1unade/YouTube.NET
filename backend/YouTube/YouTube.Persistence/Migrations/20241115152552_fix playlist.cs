@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace YouTube.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class fixplaylist : Migration
+    public partial class Fixplaylist : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

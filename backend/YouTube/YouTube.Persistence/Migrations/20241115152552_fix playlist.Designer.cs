@@ -13,7 +13,7 @@ namespace YouTube.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20241115152552_fix playlist")]
-    partial class fixplaylist
+    partial class Fixplaylist
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
