@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 // @ts-ignore
 import CommentSection from "../../../temp-src/pages/player/components/comment-section.tsx";
 
-jest.mock("../../../temp-src/pages/player/components/comment.tsx", () => {
+jest.mock("../../../temp-src/components/comment/index.tsx", () => {
     return jest.fn(({ comment }) => (
         <div data-testid="comment">
             <img src={comment.authorProfileImageUrl} alt={comment.authorDisplayName} />

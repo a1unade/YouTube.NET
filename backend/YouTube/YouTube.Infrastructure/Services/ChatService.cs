@@ -77,7 +77,7 @@ public class ChatService : IChatService
             .SendAsync("ReceiveMessage", new
             {
                 MessageId = message.Id,
-                UserId = message.User,
+                UserId = message.User.Id,
                 ChatId = message.ChatHistoryId,
                 Message = message.Message,
                 Date = message.Date,

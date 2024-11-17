@@ -25,6 +25,13 @@ const ChatWindow = (props: {
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (chatId === null) {
+      setFetching(true);
+      setPage(1);
+    }
+  }, [chatId]);
+
+  useEffect(() => {
     if (fetching && chatId && active) {
       apiClient
         .get<ChatHistoryResponse>(`Chat/ChatMessagesByDay?Page=${page}&ChatId=${chatId}`)

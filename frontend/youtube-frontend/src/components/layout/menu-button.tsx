@@ -79,7 +79,7 @@ const MenuButton = (props: {
 			filled: <SettingsIconFilled />,
 		},
 		"Жалобы": { default: <FlagIcon />, filled: <FlagIconFilled /> },
-		"Справка": { default: <HelpIcon />, filled: <HelpIcon /> },
+		"Поддержка": { default: <HelpIcon />, filled: <HelpIcon /> },
 		"Отправить отзыв": { default: <AlertIcon />, filled: <AlertIcon /> },
 		"В тренде": { default: <Popular />, filled: <PopularFilled /> },
 		"Музыка": { default: <Music />, filled: <MusicFilled /> },
