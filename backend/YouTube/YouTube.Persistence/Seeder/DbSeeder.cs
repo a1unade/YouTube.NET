@@ -84,7 +84,8 @@ public class DbSeeder : IDbSeeder
             Surname = "ADMIN",
             BirthDate = default,
             Gender = "male"
-        }
+        },
+        EmailConfirmed = true
     };
 
     public async Task SeedAsync(IDbContext context, CancellationToken cancellationToken = default)

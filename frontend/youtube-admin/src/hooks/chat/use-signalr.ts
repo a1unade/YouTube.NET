@@ -83,6 +83,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
         isRead: message.isRead,
         date: message.date,
       };
+
       setChatMessages((prevMessages: ChatMessage[] | null) =>
         prevMessages ? [mes, ...prevMessages] : [mes],
       );

@@ -174,7 +174,7 @@ const LeftMenu = (props: {
                   handleChatButtonClick();
                 }}
                 selected={selected}
-                title="Справка"
+                title="Поддержка"
               />
               <MenuButton
                 onClick={() => handleClick('Отправить отзыв')}

@@ -23,7 +23,7 @@ const ChatWindowInputSection = (props: {
 
   const handleSendButtonClick = () => {
     setMessageText('');
-    sendMessage(messageText, userId!, chatId).then(() => console.log('message sent!'));
+    sendMessage(messageText, userId!, chatId);
   };
 
   return (

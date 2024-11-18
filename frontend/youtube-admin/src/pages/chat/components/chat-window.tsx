@@ -48,6 +48,13 @@ const ChatWindow = (props: {
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    if (chatId === null) {
+      setFetching(true);
+      setPage(1);
+    }
+  }, [chatId]);
+
+  useEffect(() => {
     const checkAndJoinChat = async () => {
       if (chatId !== null && !hasJoinedChat && userId !== null && isConnected) {
         joinChat(userId, chatId).then(() => {
