@@ -1,4 +1,4 @@
-namespace YouTube.MessageBus.Options;
+namespace YouTube.Infrastructure.Options;
 
 /// <summary>
 /// Конфигурация для RabbitMq

@@ -1,3 +1,4 @@
+using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddServices();
         services.AddS3Storage(configuration);
+        services.AddMessageBus(configuration);
     }
 
     private static void AddServices(this IServiceCollection services)
@@ -37,5 +39,26 @@ public static class ServiceCollectionExtensions
             .Build());
 
         services.AddScoped<IS3Service, S3Service>();
+    }
+    
+    private static void AddMessageBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        var options = configuration.GetSection(nameof(RabbitOptions)).Get<RabbitOptions>()!;
+        
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host($"rabbitmq://{options.Hostname}", h =>
+                {
+                    h.Username(options.Username);
+                    h.Password(options.Password);
+                });
+                
+                cfg.ConfigureEndpoints(context);
+            });
+        });
     }
 }

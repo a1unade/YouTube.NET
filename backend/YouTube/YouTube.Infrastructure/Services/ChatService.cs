@@ -1,13 +1,9 @@
-using MassTransit;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
-using YouTube.Application.Common.Requests.Chats;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
-using YouTube.Infrastructure.Hubs;
 
 namespace YouTube.Infrastructure.Services;
 
@@ -15,14 +11,12 @@ public class ChatService : IChatService
 {
     private readonly IDbContext _context;
     private readonly UserManager<User> _userManager;
-    private readonly IHubContext<SupportChatHub> _hubContext;
 
     
-    public ChatService(IDbContext context, UserManager<User> userManager, IHubContext<SupportChatHub> hubContext)
+    public ChatService(IDbContext context, UserManager<User> userManager)
     {
         _context = context;
         _userManager = userManager;
-        _hubContext = hubContext;
     }
     public async Task<Guid> CreateChatAsync(Guid userId)
     {
@@ -47,42 +41,6 @@ public class ChatService : IChatService
         _context.ChatHistories.Add(chatHistory);
         await _context.SaveChangesAsync();
         return chatHistory.Id;
-    }
-
-    public async Task AddMessageAsync(ConsumeContext<SendMessageRequest> messageInfo)
-    {
-        var messageContext = messageInfo.Message;
-        
-        var user = await _context.Users
-                       .FirstOrDefaultAsync(x => x.Id == messageContext.UserId)
-                   ?? throw new NotFoundException(UserErrorMessage.UserNotFound);
-
-        var chat = await _context.ChatHistories
-                       .FirstOrDefaultAsync(x => x.Id == messageContext.ChatId)
-                   ?? throw new NotFoundException(ChatErrorMessage.ChatNotFound);
-        
-        var message = new ChatMessage
-        {
-            Message = messageContext.Message,
-            Time = TimeOnly.FromDateTime(DateTime.Now),
-            Date = DateOnly.FromDateTime(DateTime.Now),
-            User = user,
-            ChatHistory = chat
-        };
-
-        await _context.ChatMessages.AddAsync(message);
-        await _context.SaveChangesAsync();
-        
-        await _hubContext.Clients.Group(messageContext.ChatId.ToString())
-            .SendAsync("ReceiveMessage", new
-            {
-                MessageId = message.Id,
-                UserId = message.User.Id,
-                ChatId = message.ChatHistoryId,
-                Message = message.Message,
-                Date = message.Date,
-                Time = message.Time
-            });
     }
     
     public async Task ReadMessagesAsync(List<Guid> messages) 
