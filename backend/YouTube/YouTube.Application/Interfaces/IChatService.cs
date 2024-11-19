@@ -1,3 +1,6 @@
+using MassTransit;
+using YouTube.Application.Common.Requests.Chats;
+
 namespace YouTube.Application.Interfaces;
 /// <summary>
 /// Сервис для работы с чатом
@@ -17,4 +20,10 @@ public interface IChatService
     /// <param name="messages">Список id сообщений</param>
     /// <returns></returns>
     public Task ReadMessagesAsync(List<Guid> messages);
+
+    /// <summary>
+    /// Добавить сообщение
+    /// </summary>
+    /// <param name="request">запрос с сообщением</param>
+    public Task AddMessageAsync(SendMessageRequest request);
 }

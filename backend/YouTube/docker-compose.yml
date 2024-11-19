@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: YouTube.WebAPI/Dockerfile 
+    container_name: Youtube.WebAPI
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - S3Storage_AccessKey=minioadmin
@@ -20,6 +21,29 @@ services:
       - rabbit  
     ports:
       - "8080:8080"
+    networks:
+      - youtube_network
+    volumes:
+      - data_protection:/root/.aspnet/DataProtection-Keys
+
+  busapi:
+    build:
+      context: .
+      dockerfile: YouTube.BusAPI/Dockerfile 
+    container_name: Youtube.BusAPI
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitOptions_Username=guest
+      - RabbitOptions_Password=guest
+      - RabbitOptions_Hostname=rabbit
+      - REDIS_CONNECTION_STRING=redis:6379
+    depends_on:
+      - db
+      - redis
+      - minio
+      - rabbit  
+    ports:
+      - "8090:8090"
     networks:
       - youtube_network
     volumes:

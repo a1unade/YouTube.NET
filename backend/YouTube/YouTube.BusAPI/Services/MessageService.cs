@@ -13,14 +13,11 @@ namespace YouTube.BusAPI.Services;
 
 public class MessageService : IMessageService
 {
-    private readonly IHubContext<SupportChatHub> _hubContext;
     private readonly IDbContext _context;
-    
     
     public MessageService(IDbContext context, IHubContext<SupportChatHub> hubContext)
     {
         _context = context;
-        _hubContext = hubContext;
     }
     
     public async Task AddMessageAsync(ConsumeContext<SendMessageRequest> messageInfo)
@@ -46,16 +43,5 @@ public class MessageService : IMessageService
 
         await _context.ChatMessages.AddAsync(message);
         await _context.SaveChangesAsync();
-        
-        await _hubContext.Clients.Group(messageContext.ChatId.ToString())
-            .SendAsync("ReceiveMessage", new
-            {
-                MessageId = message.Id,
-                UserId = message.User.Id,
-                ChatId = message.ChatHistoryId,
-                Message = message.Message,
-                Date = message.Date,
-                Time = message.Time
-            });
     }
 }

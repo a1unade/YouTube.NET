@@ -13,12 +13,10 @@ namespace YouTube.Infrastructure.Hubs;
 public class SupportChatHub : Hub
 {
     private readonly IChatService _chatService;
-    private readonly IBus _bus;
 
     public SupportChatHub(IChatService chatService, IBus bus)
     {
         _chatService = chatService;
-        _bus = bus;
     }
 
     /// <summary>
@@ -42,8 +40,8 @@ public class SupportChatHub : Hub
     {
         if (string.IsNullOrWhiteSpace(request.Message))
             throw new ArgumentException(ChatErrorMessage.MessageIsEmpty);
-        
-        await _bus.Publish(request);
+
+        await _chatService.AddMessageAsync(request);
     }
     
     /// <summary>
