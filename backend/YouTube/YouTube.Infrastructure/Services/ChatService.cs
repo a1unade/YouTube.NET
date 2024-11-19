@@ -53,7 +53,7 @@ public class ChatService : IChatService
         return chatHistory.Id;
     }
 
-    public async Task AddMessageAsync(SendMessageRequest request)
+    public async Task SendMessageAsync(SendMessageRequest request)
     {
         var messageRequest = new MessageRequest
         {
@@ -71,6 +71,7 @@ public class ChatService : IChatService
                 MessageId = messageRequest.MessageId,
                 UserId = messageRequest.UserId,
                 ChatId = messageRequest.ChatId,
+                Message = messageRequest.Message,
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 Time = TimeOnly.FromDateTime(DateTime.Now)
             });

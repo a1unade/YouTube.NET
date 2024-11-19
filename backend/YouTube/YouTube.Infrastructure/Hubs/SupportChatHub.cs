@@ -41,7 +41,7 @@ public class SupportChatHub : Hub
         if (string.IsNullOrWhiteSpace(request.Message))
             throw new ArgumentException(ChatErrorMessage.MessageIsEmpty);
 
-        await _chatService.AddMessageAsync(request);
+        await _chatService.SendMessageAsync(request);
     }
     
     /// <summary>
