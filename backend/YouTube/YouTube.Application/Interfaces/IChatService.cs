@@ -25,5 +25,5 @@ public interface IChatService
     /// Добавить сообщение
     /// </summary>
     /// <param name="request">запрос с сообщением</param>
-    public Task AddMessageAsync(SendMessageRequest request);
+    public Task SendMessageAsync(SendMessageRequest request);
 }
