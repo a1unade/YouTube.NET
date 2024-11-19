@@ -268,7 +268,6 @@ public class DbSeeder : IDbSeeder
             channel.MainImgFile = file;
         }
 
-        // Проверка и добавление связей канала
         if (channel!.Links == null! || !channel.Links.Any())
         {
             channel.Links = new List<Link>

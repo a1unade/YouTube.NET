@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.DTOs.Chat;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
 using YouTube.Infrastructure.Hubs;
@@ -17,8 +18,8 @@ public class ChatService : IChatService
     private readonly UserManager<User> _userManager;
     private readonly IHubContext<SupportChatHub> _hubContext;
     private readonly IBus _bus;
-    
-    public ChatService(IDbContext context, UserManager<User> userManager, 
+
+    public ChatService(IDbContext context, UserManager<User> userManager,
         IHubContext<SupportChatHub> hubContext, IBus bus)
     {
         _context = context;
@@ -26,11 +27,12 @@ public class ChatService : IChatService
         _hubContext = hubContext;
         _bus = bus;
     }
+
     public async Task<Guid> CreateChatAsync(Guid userId)
     {
         var user = await _context.Users
                        .Include(u => u.ChatHistory)
-                       .FirstOrDefaultAsync(u => u.Id == userId) 
+                       .FirstOrDefaultAsync(u => u.Id == userId)
                    ?? throw new NotFoundException(UserErrorMessage.UserNotFound);
 
         if (!await _userManager.IsInRoleAsync(user, "User"))
@@ -53,30 +55,29 @@ public class ChatService : IChatService
 
     public async Task AddMessageAsync(SendMessageRequest request)
     {
-        var message = new ChatMessage
+        var messageRequest = new MessageRequest
         {
-            Message = request.Message,
-            Time = TimeOnly.FromDateTime(DateTime.Now),
-            Date = DateOnly.FromDateTime(DateTime.Now),
+            ChatId = request.ChatId,
+            UserId = request.UserId,
+            MessageId = Guid.NewGuid(),
+            Message = request.Message
         };
 
-        await _bus.Publish(request);
-        
+        await _bus.Publish(messageRequest);
+
         await _hubContext.Clients.Group(request.ChatId.ToString())
             .SendAsync("ReceiveMessage", new
             {
-                MessageId = message.Id,
-                UserId = message.User.Id,
-                ChatId = message.ChatHistoryId,
-                Message = message.Message,
-                Date = message.Date,
-                Time = message.Time
+                MessageId = messageRequest.MessageId,
+                UserId = messageRequest.UserId,
+                ChatId = messageRequest.ChatId,
+                Date = DateOnly.FromDateTime(DateTime.Now),
+                Time = TimeOnly.FromDateTime(DateTime.Now)
             });
     }
-    
-    public async Task ReadMessagesAsync(List<Guid> messages) 
+
+    public async Task ReadMessagesAsync(List<Guid> messages)
         => await _context.ChatMessages
             .Where(x => messages.Contains(x.Id))
-            .ExecuteUpdateAsync(x => x.
-                SetProperty(r => r.IsRead, true));
+            .ExecuteUpdateAsync(x => x.SetProperty(r => r.IsRead, true));
 }
