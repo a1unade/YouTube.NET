@@ -41,11 +41,28 @@ import {
 import { IconMapping } from '../../types/icon/icons.ts';
 import { MouseEventHandler } from 'react';
 
+/**
+ * Компонент кнопки для меню.
+ *
+ * Отображает кнопку с иконкой и текстом, которая изменяет свое состояние
+ * в зависимости от того, выбрана ли она, и вызывает обработчик клика.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {string} props.title - Заголовок кнопки.
+ * @param {string} props.selected - Текущий выбранный элемент меню.
+ * @param {MouseEventHandler<HTMLButtonElement> | undefined} props.onClick - Функция для обработки клика по кнопке.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса кнопки меню с иконкой и текстом.
+ *
+ * @example Пример использования:
+ *   <MenuButton title="Главная" selected={selected} onClick={handleClick} />
+ */
+
 const MenuButton = (props: {
   title: string;
   selected: string;
   onClick: MouseEventHandler<HTMLButtonElement> | undefined;
-}) => {
+}): JSX.Element => {
   const { title, selected, onClick } = props;
   // prettier-ignore
   const iconMapping: IconMapping = {

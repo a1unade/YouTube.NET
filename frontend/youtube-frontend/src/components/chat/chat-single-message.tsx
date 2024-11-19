@@ -7,20 +7,33 @@ import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
  *
  * Используется только в чате техподдержки, стили для авторов сообщений подставляются автоматически.
  *
- * @param props
- * @param props.message {ChatMessage} Данные о сообщении.
- * @param props.userId {string | null} Идентификатор пользователя, для определения стилей у сообщения (должно находиться слева или справа, в зависимости от автора).
+ * @param {Object} props - Свойства компонента.
+ * @param {ChatMessage} props.message - Данные о сообщении, включающие текст, время, информацию о прочтении и вложениях.
+ * @param {string | null} props.userId - Идентификатор пользователя для определения стилей сообщения (слева или справа).
  *
  * @example Добавление сообщения со стороны админа.
- *   <ChatSingleMessage message={message} userId={"Admin ID"}>
+ *   <ChatSingleMessage message={{ message: 'Hello', time: '12:00', senderId: 'Admin ID', isRead: true }} userId={"Admin ID"} />
  *
  * @example Добавление сообщения со стороны пользователя.
- *   <ChatSingleMessage message={message} userId={"User ID"}>
+ *   <ChatSingleMessage message={{ message: 'Hi!', time: '12:01', senderId: 'User ID', isRead: false }} userId={"User ID"} />
+ *
+ * @example Добавление сообщения с вложением.
+ *   <ChatSingleMessage message={{
+ *     messageId: 'Message ID',
+ *     message: 'Check this file',
+ *     time: '12:02',
+ *     senderId: 'User ID',
+ *     isRead: false,
+ *     attachment: { type: 'file', link: 'url/to/file', file: 'document.pdf' },
+ *     date: '12.01'
+ *   }} userId={"User ID"} />
  *
  * @returns {null | JSX.Element}
+ * {null} - Если идентификатор пользователя не определён.
+ * {JSX.Element} - Если идентификатор пользователя доступен и диалог с администратором начался.
  *
- * {null} - В случае, если идентификатор пользователя не определён.
- * {JSX.Element} - В случае, если идентификатор пользователя был получен и диалог с админом начался.
+ * @throws {Error} - Выбрасывает ошибку, если сообщение не соответствует ожидаемому формату.
+ * @usage Использовать компонент в чате, для отображения сообщений.
  */
 
 const ChatSingleMessage = (props: {

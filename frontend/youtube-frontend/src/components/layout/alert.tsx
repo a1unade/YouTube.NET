@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react';
 
-const Alert = (props: { message: string; onClose: () => void }) => {
+/**
+ * Компонент уведомления.
+ *
+ * Отображает сообщение и автоматически скрывается через 2 секунды.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {string} props.message - Текст сообщения, отображаемого в уведомлении.
+ * @param {() => void} props.onClose - Функция, вызываемая при закрытии уведомления.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса уведомления.
+ *
+ * @example Пример использования:
+ *   <Alert message="Успешно сохранено!" onClose={() => console.log('Закрыто')} />
+ */
+
+const Alert = (props: { message: string; onClose: () => void }): JSX.Element => {
   const { message, onClose } = props;
   const [visible, setVisible] = useState(false);
 

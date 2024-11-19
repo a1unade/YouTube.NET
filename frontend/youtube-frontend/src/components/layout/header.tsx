@@ -3,10 +3,26 @@ import { MouseEventHandler, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserMenu from '../modal/user-menu.tsx';
 
+/**
+ * Компонент шапки приложения.
+ *
+ * Отображает логотип, поле поиска и кнопки для пользователя.
+ * Включает в себя меню пользователя, если пользователь вошёл в систему.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {MouseEventHandler<HTMLButtonElement> | undefined} props.onClick - Функция для обработки клика по кнопке (например, меню).
+ * @param {string | null} props.userId - Идентификатор пользователя. Если `null`, отображается кнопка "Войти".
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса шапки приложения.
+ *
+ * @example Пример использования:
+ *   <Header onClick={handleClick} userId={currentUserId} />
+ */
+
 const Header = (props: {
   onClick: MouseEventHandler<HTMLButtonElement> | undefined;
   userId: string | null;
-}) => {
+}): JSX.Element => {
   const { onClick, userId } = props;
   const [active, setActive] = useState(false);
   const navigate = useNavigate();

@@ -8,11 +8,19 @@ import { formatViews } from '../../utils/format-functions.ts';
 /**
  * Карточка канала.
  *
- * Используется на страницах: "Подписки", "Канал".
- * @param {ChannelShortType} props.channel Данные о канале
- * @returns {JSX.Element}
+ * Компонент представляет собой элемент карточки канала, который
+ * используется для отображения информации о канале и управления подпиской.
+ * Работает на страницах: "Подписки", "Канал".
  *
- * <ChannelElement channel={channelExample} />
+ * @param {Object} props - Свойства компонента.
+ * @param {ChannelShortType} props.channel - Данные о канале, включающие информацию о названии, описании, количестве подписчиков и видео.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса для отображения информации о канале.
+ *
+ * @example Пример использования компонента:
+ *   <ChannelElement channel={channelExample} />
+ *
+ * @usage Использовать компонент на страницах, где требуется отображение информации о каналах и управление подпиской.
  */
 
 const ChannelElement = (props: { channel: ChannelShortType }): JSX.Element => {

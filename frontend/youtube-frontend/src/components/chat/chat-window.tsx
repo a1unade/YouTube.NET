@@ -7,6 +7,39 @@ import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
 import apiClient from '../../utils/apiClient.ts';
 import { ChatHistoryResponse } from '../../interfaces/chat/chat-history-response.ts';
 
+/**
+ * Компонент окна чата, отображает историю чата и блок для отправки сообщений.
+ *
+ * Используется в модальном окне чата техподдержки. Компонент отвечает за
+ * загрузку и отображение сообщений, а также за обработку отправки новых
+ * сообщений и обновление статуса прочтения.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {boolean} props.active - Состояние модального окна чата: открыто (`true`) или закрыто (`false`).
+ * @param {string | null} props.chatId - Идентификатор чата для загрузки его истории, входа в чат и отправки сообщений. Если `null`, чат не выбран.
+ * @param {ChatMessage[]} props.chatMessages - Массив объектов, представляющих историю сообщений чата.
+ * @param {React.Dispatch<React.SetStateAction<ChatMessage[]>>} props.setChatMessages - Функция для обновления состояния истории сообщений чата. Позволяет добавлять или изменять сообщения.
+ * @param {(message: string, userId: string, chatId: string | null) => Promise<void>} props.sendMessage - Функция, отправляющая сообщение в чат. Возвращает `Promise`, которое исполнится после отправки.
+ * @param {(messagesIds: string[], chatId: string | null) => Promise<void>} props.readMessages - Функция для обновления статуса прочтения сообщений.
+ * @param {string | null} props.userId - Идентификатор пользователя. Используется для определения стилей сообщения (слева или справа).
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса чата, содержащий историю сообщений и поле для ввода нового сообщения.
+ *                      Возвращает `null`, если чат не выбран.
+ *
+ * @throws {Error} Выбрасывается при ошибках, связанных с запросами к API.
+ *
+ * @example Пример использования компонента:
+ *   <ChatWindow
+ *     active={true}
+ *     chatId="123"
+ *     chatMessages={[]}
+ *     setChatMessages={(messages) => {}}
+ *     sendMessage={async (msg, userId, chatId) => {}}
+ *     readMessages={async (ids, chatId) => {}}
+ *     userId="user1"
+ *   />
+ */
+
 const ChatWindow = (props: {
   active: boolean;
   chatId: string | null;
@@ -15,7 +48,7 @@ const ChatWindow = (props: {
   sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
   readMessages: (messagesIds: string[], chatId: string | null) => Promise<void>;
   userId: string | null;
-}) => {
+}): JSX.Element => {
   const { chatId, active, userId, readMessages, chatMessages, setChatMessages, sendMessage } =
     props;
 

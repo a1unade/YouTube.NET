@@ -7,7 +7,22 @@ import {
   ButtonLikeIconFilled,
 } from '../../assets/icons.tsx';
 
-const Comment = (props: { comment: CommentType }) => {
+/**
+ * Компонент комментария.
+ *
+ * Отображает информацию о комментарии, включая изображение профиля автора,
+ * текст комментария, а также кнопки для лайков и дизлайков.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {CommentType} props.comment - Данные о комментарии, включая информацию о авторе и тексте комментария.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса комментария с возможностью лайков и дизлайков.
+ *
+ * @example Пример использования компонента:
+ *   <Comment comment={commentExample} />
+ */
+
+const Comment = (props: { comment: CommentType }): JSX.Element => {
   const { comment } = props;
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);

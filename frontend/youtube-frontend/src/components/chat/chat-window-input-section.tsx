@@ -1,10 +1,32 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Компонент секции ввода сообщений чата.
+ *
+ * Отвечает за ввод текста сообщения и его отправку в чат.
+ * Позволяет пользователю вводить текст, который затем отправляется
+ * с использованием переданной функции отправки сообщений.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {string | null} props.chatId - Идентификатор чата, в который будет отправлено сообщение. Если `null`, сообщение не будет отправлено.
+ * @param {string | null} props.userId - Идентификатор пользователя, который отправляет сообщение.
+ * @param {(message: string, userId: string, chatId: string | null) => Promise<void>} props.sendMessage - Функция для отправки сообщения в чат.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса секции ввода сообщения, содержащий текстовое поле и кнопку отправки.
+ *
+ * @example Пример использования компонента:
+ *   <ChatWindowInputSection
+ *     chatId="123"
+ *     userId="user1"
+ *     sendMessage={async (msg, userId, chatId) => {  реализация отправки сообщения  }
+ *     />
+ */
+
 const ChatWindowInputSection = (props: {
   chatId: string | null;
   userId: string | null;
   sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
-}) => {
+}): JSX.Element => {
   const { chatId, userId, sendMessage } = props;
   const [messageText, setMessageText] = useState('');
 

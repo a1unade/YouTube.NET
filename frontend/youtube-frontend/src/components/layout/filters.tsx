@@ -1,7 +1,21 @@
 import { useState } from 'react';
 import { FiltersProps } from '../../interfaces/filter/filter-props.ts';
 
-const Filters = ({ filters }: FiltersProps) => {
+/**
+ * Компонент фильтров.
+ *
+ * Отображает набор кнопок, позволяющих выбрать один из доступных фильтров.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {FiltersProps} props.filters - Массив объектов фильтров, каждый из которых содержит id и название.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса с кнопками фильтров.
+ *
+ * @example Пример использования:
+ *   <Filters filters={[{ id: 1, name: 'Фильтр 1' }, { id: 2, name: 'Фильтр 2' }]} />
+ */
+
+const Filters = ({ filters }: FiltersProps): JSX.Element => {
   const [selectedFilter, setSelectedFilter] = useState<number>(0);
 
   return (

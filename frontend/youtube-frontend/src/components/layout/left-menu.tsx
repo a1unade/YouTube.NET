@@ -3,11 +3,28 @@ import MenuButton from './menu-button.tsx';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+/**
+ * Компонент левого меню.
+ *
+ * Отображает боковое меню с навигацией по различным разделам приложения.
+ * Позволяет открывать или закрывать чат, а также управлять состоянием выбранного элемента меню.
+ *
+ * @param {Object} props - Свойства компонента.
+ * @param {boolean} props.isOpen - Указывает, открыто ли меню.
+ * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setChatIsOpen - Функция для изменения состояния чата.
+ * @param {boolean} props.chatIsOpen - Указывает, открыт ли чат.
+ *
+ * @returns {JSX.Element} Возвращает элемент интерфейса бокового меню.
+ *
+ * @example Пример использования:
+ *   <LeftMenu isOpen={true} setChatIsOpen={setChatOpen} chatIsOpen={chatOpen} />
+ */
+
 const LeftMenu = (props: {
   isOpen: boolean;
   setChatIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   chatIsOpen: boolean;
-}) => {
+}): JSX.Element => {
   const { isOpen, setChatIsOpen, chatIsOpen } = props;
   const navigate = useNavigate();
   const location = useLocation();
