@@ -1,10 +1,10 @@
 using MassTransit;
-using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.DTOs.Chat;
 using YouTube.BusAPI.Interfaces;
 
 namespace YouTube.BusAPI.Consumers;
 
-public class ChatConsumer : IConsumer<SendMessageRequest>
+public class ChatConsumer : IConsumer<MessageRequest>
 {
     private readonly IMessageService _messageService;
     
@@ -13,7 +13,7 @@ public class ChatConsumer : IConsumer<SendMessageRequest>
         _messageService = messageService;
     }
     
-    public async Task Consume(ConsumeContext<SendMessageRequest> context)
+    public async Task Consume(ConsumeContext<MessageRequest> context)
     {
         await _messageService.AddMessageAsync(context);
     }

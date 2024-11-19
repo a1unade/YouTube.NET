@@ -1,13 +1,12 @@
 using MassTransit;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.DTOs.Chat;
 using YouTube.Application.Interfaces;
 using YouTube.BusAPI.Interfaces;
 using YouTube.Domain.Entities;
-using YouTube.Infrastructure.Hubs;
 
 namespace YouTube.BusAPI.Services;
 
@@ -15,12 +14,12 @@ public class MessageService : IMessageService
 {
     private readonly IDbContext _context;
     
-    public MessageService(IDbContext context, IHubContext<SupportChatHub> hubContext)
+    public MessageService(IDbContext context)
     {
         _context = context;
     }
     
-    public async Task AddMessageAsync(ConsumeContext<SendMessageRequest> messageInfo)
+    public async Task AddMessageAsync(ConsumeContext<MessageRequest> messageInfo)
     {
         var messageContext = messageInfo.Message;
         
@@ -34,6 +33,7 @@ public class MessageService : IMessageService
         
         var message = new ChatMessage
         {
+            Id = messageContext.MessageId,
             Message = messageContext.Message,
             Time = TimeOnly.FromDateTime(DateTime.Now),
             Date = DateOnly.FromDateTime(DateTime.Now),
