@@ -58,6 +58,7 @@ export const App = () => {
         ))}
       </div>
       <Routes>
+        <Route path="/" element={<ChatPage userId={userId} />} />
         <Route path="/chat" element={<ChatPage userId={userId} />} />
         <Route path="/chat/:id" element={<ChatPage userId={userId} />} />
         <Route path="/auth/:userId" element={<AuthRedirect />} />
