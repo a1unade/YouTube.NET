@@ -51,6 +51,7 @@ const ChatWindow = (props: {
     if (chatId === null) {
       setFetching(true);
       setPage(1);
+      setChatMessages([]);
     }
   }, [chatId]);
 
