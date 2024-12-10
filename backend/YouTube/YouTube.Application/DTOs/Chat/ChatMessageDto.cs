@@ -19,6 +19,11 @@ public class ChatMessageDto
     /// Сообщение
     /// </summary>
     public string? Message { get; set; }
+    
+    /// <summary>
+    /// Файл
+    /// </summary>
+    public Guid? FileId { get; set; }
 
     /// <summary>
     /// Время отправки

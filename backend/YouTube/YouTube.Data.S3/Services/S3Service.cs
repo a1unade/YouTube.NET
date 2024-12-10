@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
 using YouTube.Application.Common.Exceptions;
-using YouTube.Application.DTOs.Video;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.Interfaces;
 
-namespace YouTube.Infrastructure.Services;
+namespace YouTube.Data.S3.Services;
 
 public class S3Service : IS3Service
 {
@@ -49,7 +48,7 @@ public class S3Service : IS3Service
                 await stream.CopyToAsync(memoryStream, cancellationToken);
             }), cancellationToken);
 
-        memoryStream.Position = 0; // Устанавливаем начальную позицию для чтения
+        memoryStream.Position = 0; 
         return memoryStream;
     }
 

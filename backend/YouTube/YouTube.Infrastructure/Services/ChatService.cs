@@ -60,7 +60,8 @@ public class ChatService : IChatService
             ChatId = request.ChatId,
             UserId = request.UserId,
             MessageId = Guid.NewGuid(),
-            Message = request.Message
+            Message = request.Message,
+            FileId = request.FileId
         };
 
         await _bus.Publish(messageRequest);
@@ -72,6 +73,7 @@ public class ChatService : IChatService
                 UserId = messageRequest.UserId,
                 ChatId = messageRequest.ChatId,
                 Message = messageRequest.Message,
+                FileId = messageRequest.FileId,
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 Time = TimeOnly.FromDateTime(DateTime.Now)
             });

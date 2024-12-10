@@ -38,7 +38,8 @@ public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMess
                 Message = messages.Message,
                 Time = messages.Time,
                 Date = messages.Date,
-                IsRead = messages.IsRead
+                IsRead = messages.IsRead,
+                FileId = messages.FileId
             });
         }
 

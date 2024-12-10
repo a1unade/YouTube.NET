@@ -1,6 +1,11 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
+using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.Features.Files.GetFileStream;
+using YouTube.Application.Features.Files.UploadMessageFile;
 using YouTube.Application.Interfaces;
 
 namespace YouTube.WebAPI.Controllers;
@@ -11,11 +16,49 @@ public class FileController : ControllerBase
 {
     private readonly IS3Service _s3Service;
     private readonly IDbContext _context;
+    private readonly IMediator _mediator;
 
-    public FileController(IS3Service s3Service, IDbContext context)
+    public FileController(IS3Service s3Service, IDbContext context, IMediator mediator)
     {
         _s3Service = s3Service;
         _context = context;
+        _mediator = mediator;
+    }
+
+    /// <summary>
+    /// Загрузить файл из чата
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("[action]")]
+    public async Task<IActionResult> UploadFile(UploadMessageFileRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new UploadMessageFileCommand(request), cancellationToken);
+
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);
+    }
+    
+    /// <summary>
+    /// Получить stream файла
+    /// </summary>
+    /// <param name="id">Id Видео</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Stream файла</returns>
+    [HttpGet("GetFileStream/{id}")]
+    public async Task<IActionResult> GetFileStream([FromRoute] Guid id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetFileStreamQuery(new IdRequest { Id = id }), cancellationToken);
+
+        if (response.IsSuccessfully && response.ContentType != null!)
+        {
+            return new FileStreamResult(response.Stream, response.ContentType) { FileDownloadName = response.FileName };
+        }
+
+        return BadRequest(response);
     }
 
     /// <summary>
@@ -24,7 +67,7 @@ public class FileController : ControllerBase
     /// <param name="id">Id Видео</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Stream файла</returns>
-    [HttpGet("GetStream/{id}")]
+    [HttpGet("GetVideoStream/{id}")]
     public async Task<IActionResult> GetStreamFromVideoAsync([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var video = await _context.Videos

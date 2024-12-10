@@ -3,14 +3,14 @@ WORKDIR /app
 EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 COPY ["YouTube.WebAPI/YouTube.WebAPI.csproj", "YouTube.WebAPI/"]
-COPY ["YouTube.Persistence/YouTube.Persistence.csproj", "YouTube.Persistence/"]
-COPY ["YouTube.Infrastructure/YouTube.Infrastructure.csproj", "YouTube.Infrastructure/"]
-COPY ["YouTube.Domain/YouTube.Domain.csproj", "YouTube.Domain/"]
 COPY ["YouTube.Application/YouTube.Application.csproj", "YouTube.Application/"]
+COPY ["YouTube.Infrastructure/YouTube.Infrastructure.csproj", "YouTube.Infrastructure/"]
+COPY ["YouTube.Data.S3/YouTube.Data.S3.csproj", "YouTube.Data.S3/"]
+COPY ["YouTube.Domain/YouTube.Domain.csproj", "YouTube.Domain/"]
+COPY ["YouTube.Persistence/YouTube.Persistence.csproj", "YouTube.Persistence/"]
 RUN dotnet restore "YouTube.WebAPI/YouTube.WebAPI.csproj"
 
 COPY . .
