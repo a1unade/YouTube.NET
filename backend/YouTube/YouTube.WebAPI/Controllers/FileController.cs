@@ -55,7 +55,7 @@ public class FileController : ControllerBase
     
         if (response.IsSuccessfully && response.ContentType != null!)
         {
-            HttpContext.Response.Headers.Add("Content-Disposition", $"attachment; filename={response.FileName}");
+            HttpContext.Response.Headers.Append("Content-Disposition", $"attachment; filename={response.FileName}");
             return new FileStreamResult(response.Stream, response.ContentType) { FileDownloadName = response.FileName };
         }
 
