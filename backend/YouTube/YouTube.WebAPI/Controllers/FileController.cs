@@ -52,9 +52,10 @@ public class FileController : ControllerBase
     public async Task<IActionResult> GetFileStream([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetFileStreamQuery(new IdRequest { Id = id }), cancellationToken);
-
+    
         if (response.IsSuccessfully && response.ContentType != null!)
         {
+            HttpContext.Response.Headers.Add("Content-Disposition", $"attachment; filename={response.FileName}");
             return new FileStreamResult(response.Stream, response.ContentType) { FileDownloadName = response.FileName };
         }
 
