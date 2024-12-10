@@ -2,11 +2,13 @@ using MediatR;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Responses.Chats;
 using YouTube.Application.DTOs.Chat;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.Interfaces.Repositories;
 
 namespace YouTube.Application.Features.Chats.GetChatMessagesPaginationByDay;
 
-public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMessagesPaginationQuery, ChatHistoryResponse>
+public class
+    GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMessagesPaginationQuery, ChatHistoryResponse>
 {
     private readonly IChatRepository _chatRepository;
 
@@ -38,7 +40,10 @@ public class GetChatMessagesPaginationQueryHandler : IRequestHandler<GetChatMess
                 Message = messages.Message,
                 Time = messages.Time,
                 Date = messages.Date,
-                IsRead = messages.IsRead
+                IsRead = messages.IsRead,
+                FileType = messages.FileId != null 
+                    ? new FileTypeDto { FileId = messages.FileId, ContentType = messages.File?.ContentType! } 
+                    : null
             });
         }
 

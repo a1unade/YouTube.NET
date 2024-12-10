@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using MockQueryable;
 using YouTube.Application.Common.Messages.Success;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 using YouTube.Application.Interfaces.Repositories;

@@ -24,4 +24,9 @@ public class MessageRequest
     /// Сообщение
     /// </summary>
     public string Message { get; set; } = default!;
+    
+    /// <summary>
+    /// Файл id
+    /// </summary>
+    public Guid? FileId { get; set; }
 }

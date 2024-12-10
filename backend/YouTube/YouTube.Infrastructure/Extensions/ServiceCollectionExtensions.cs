@@ -14,7 +14,6 @@ public static class ServiceCollectionExtensions
     public static void AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddServices();
-        services.AddS3Storage(configuration);
         services.AddMessageBus(configuration);
     }
 
@@ -26,19 +25,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IJwtGenerator, JwtGenerator>()
             .AddScoped<IChatService, ChatService>()
             .AddSignalR();
-    }
-
-    private static void AddS3Storage(this IServiceCollection services, IConfiguration configuration)
-    {
-        var options = configuration.GetSection("S3Storage").Get<MinioOptions>()!;
-
-        services.AddMinio(configureClient => configureClient
-            .WithEndpoint(options.EndPoint)
-            .WithCredentials(options.AccessKey, options.SecretKey)
-            .WithSSL(false)
-            .Build());
-
-        services.AddScoped<IS3Service, S3Service>();
     }
     
     private static void AddMessageBus(this IServiceCollection services, IConfiguration configuration)

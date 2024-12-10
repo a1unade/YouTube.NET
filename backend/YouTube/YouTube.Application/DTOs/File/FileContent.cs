@@ -1,4 +1,4 @@
-namespace YouTube.Application.DTOs.Video;
+namespace YouTube.Application.DTOs.File;
 
 public class FileContent
 {

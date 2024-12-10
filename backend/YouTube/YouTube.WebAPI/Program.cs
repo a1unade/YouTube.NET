@@ -1,5 +1,6 @@
 using System.Reflection;
 using YouTube.Application.Extensions;
+using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
 using YouTube.Persistence.Extensions;
@@ -14,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApplicationLayer();
 
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+builder.Services.AddS3Storage(builder.Configuration);
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);

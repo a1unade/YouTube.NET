@@ -1,3 +1,5 @@
+using YouTube.Application.DTOs.File;
+
 namespace YouTube.Application.DTOs.Chat;
 
 /// <summary>
@@ -19,6 +21,11 @@ public class ChatMessageDto
     /// Сообщение
     /// </summary>
     public string? Message { get; set; }
+    
+    /// <summary>
+    /// Файл
+    /// </summary>
+    public FileTypeDto? FileType { get; set; }
 
     /// <summary>
     /// Время отправки

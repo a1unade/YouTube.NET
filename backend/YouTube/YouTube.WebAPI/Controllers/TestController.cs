@@ -1,6 +1,7 @@
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Minio;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
@@ -28,7 +30,8 @@ public class TestController : ControllerBase
     private readonly IS3Service _s3Service;
     private readonly IBus _bus;
 
-    public TestController(IS3Service service,IMediator mediator, IDbContext context,IEmailService emailService,  UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus)
+    public TestController(IS3Service service, IMediator mediator, IDbContext context, IEmailService emailService,
+        UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus)
     {
         _service = service;
         _mediator = mediator;
@@ -39,13 +42,23 @@ public class TestController : ControllerBase
         _bus = bus;
     }
 
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllMessages(CancellationToken cancellationToken)
+    {
+        var messages = await _context.ChatMessages
+            .Include(x => x.File)
+            .ToListAsync(cancellationToken);
+
+        return Ok(messages);
+    }
+
     [HttpGet("GetBusRabbit")]
-    public async Task<IActionResult> TestRabbit(Guid id,string hui, CancellationToken cancellationToken)
+    public async Task<IActionResult> TestRabbit(Guid id, string hui, CancellationToken cancellationToken)
     {
         var user = await _context.Users
                        .Include(x => x.ChatHistory)
                        .FirstOrDefaultAsync(
-                       x => x.Id == id, cancellationToken)
+                           x => x.Id == id, cancellationToken)
                    ?? throw new NotFoundException();
 
         var messages = await _context.ChatMessages.Where(x => x.UserId == user.Id).ToListAsync(cancellationToken);
@@ -55,7 +68,7 @@ public class TestController : ControllerBase
             messages
         });
     }
-    
+
     [HttpPost("TestBus")]
     public async Task<IActionResult> TestRab(Guid id, string hui, CancellationToken cancellationToken)
     {
@@ -71,7 +84,7 @@ public class TestController : ControllerBase
             await _context.ChatHistories.AddAsync(user.ChatHistory, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
-        
+
         await _bus.Publish(new SendMessageRequest
         {
             UserId = user.Id,
@@ -86,17 +99,16 @@ public class TestController : ControllerBase
     public async Task<IActionResult> GetAllMessage(Guid id, CancellationToken cancellationToken)
     {
         var user = await _context.ChatMessages
-                .Where(x => x.UserId == id)
-                .ToListAsync(cancellationToken)
-            ?? throw new NotFoundException();
+                       .Where(x => x.UserId == id)
+                       .ToListAsync(cancellationToken)
+                   ?? throw new NotFoundException();
 
         return Ok(new
         {
             user
         });
-
     }
-    
+
     [HttpGet("GetLink")]
     public async Task<IActionResult> GetLink(string bucketId, string objectName, CancellationToken cancellationToken)
     {
@@ -107,9 +119,8 @@ public class TestController : ControllerBase
 
         return BadRequest("Pizda");
     }
-    
 
-    
+
     [HttpGet("EmailTest")]
     [Authorize(Roles = "Admin")]
     [ProducesResponseType(200)]
@@ -120,7 +131,7 @@ public class TestController : ControllerBase
 
         return Ok();
     }
-    
+
     [HttpPost("HIHIHIHHI")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Hihihihih(CancellationToken cancellationToken)
@@ -136,6 +147,7 @@ public class TestController : ControllerBase
                 Console.WriteLine(role);
             }
         }
+
         return Ok();
     }
 
@@ -146,7 +158,7 @@ public class TestController : ControllerBase
         if (response.IsSuccessfully)
             return Ok(response);
 
-        return BadRequest(response);    
+        return BadRequest(response);
     }
 
     /// <summary>
@@ -178,7 +190,7 @@ public class TestController : ControllerBase
 
             else
                 channel.MainImgFile = fileToDb;
-            
+
             await _context.SaveChangesAsync(cancellationToken);
 
             await _service.UploadAsync(new FileContent
@@ -189,25 +201,24 @@ public class TestController : ControllerBase
                 Lenght = file.Length,
                 Bucket = channel.Id.ToString()
             }, cancellationToken);
-
         }
 
         return Ok();
     }
 
-  
-    
+
     [HttpDelete("Delete")]
-    public async Task<IActionResult> DeleteAllUser(Guid id ,CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteAllUser(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ?? throw new NotFoundException(); 
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ??
+                   throw new NotFoundException();
         _context.Users.Remove(user);
 
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return Ok();
     }
-    
+
     /// <summary>
     /// Нагенерировать сообщения задним числом для пагинации
     /// </summary>
@@ -221,148 +232,148 @@ public class TestController : ControllerBase
         var chat = await _context.ChatHistories
             .Include(x => x.User)
             .FirstOrDefaultAsync(x => x.Id == chatId, cancellationToken) ?? throw new NotFoundException();
-        
+
         var admin = await _context.Users.FirstOrDefaultAsync(
             x => x.DisplayName == "Main Admin", cancellationToken) ?? throw new NotFoundException();
-        
+
         var messages = new List<ChatMessage>
         {
             new ChatMessage
             {
                 Message = "Привет",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Здравствуйте",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Что хотел?",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Не понял прикола",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Алло",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Кто там?",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Не важно",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Информацию принял",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
-            
+
+
             new ChatMessage
             {
                 Message = "Здравствуйте",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-10), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-10),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Добрый день",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Сколько будет 3 * 3",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-8), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-8),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Ну 9, а что?",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "По приколу написал",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-6), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-6),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = chat.User,
                 ChatHistory = chat
             },
-            
+
             new ChatMessage
             {
                 Message = "Пон",
-                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5), 
-                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1), 
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
                 IsRead = false,
                 User = admin,
                 ChatHistory = chat
@@ -371,7 +382,188 @@ public class TestController : ControllerBase
 
         _context.ChatMessages.AddRange(messages);
         await _context.SaveChangesAsync(cancellationToken);
-        
+
         return Ok();
+    }
+
+    /// <summary>
+    /// Нагенерировать сообщения задним числом для пагинации
+    /// </summary>
+    /// <param name="userId">чат ид</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    [HttpPost("CreateChat")]
+    public async Task<IActionResult> NewChat(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId, cancellationToken) ??
+                   throw new NotFoundException();
+
+        var admin = await _context.Users.FirstOrDefaultAsync(x => x.DisplayName == "Main Admin", cancellationToken) ??
+                    throw new NotFoundException();
+
+        var chat = new ChatHistory
+        {
+            StartDate = DateOnly.FromDateTime(DateTime.Now),
+            User = user,
+            ChatMessages = new List<ChatMessage>()
+        };
+
+        await _context.ChatHistories.AddAsync(chat, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+
+        var messages = new List<ChatMessage>
+        {
+            new ChatMessage
+            {
+                Message = "Привет",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Здравствуйте",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Что хотел?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Не понял прикола",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-4),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Алло",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Кто там?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Не важно",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Информацию принял",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-2),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-3),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+
+            new ChatMessage
+            {
+                Message = "Здравствуйте",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-10),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Добрый день",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-9),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Сколько будет 3 * 3",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-8),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Ну 9, а что?",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-7),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "По приколу написал",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-6),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = chat.User,
+                ChatHistory = chat
+            },
+
+            new ChatMessage
+            {
+                Message = "Пон",
+                Time = TimeOnly.FromDateTime(DateTime.Now).AddMinutes(-5),
+                Date = DateOnly.FromDateTime(DateTime.Now).AddDays(-1),
+                IsRead = false,
+                User = admin,
+                ChatHistory = chat
+            }
+        };
+
+        _context.ChatMessages.AddRange(messages);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Ok(new
+        {
+            chatId = chat.Id,
+            userId = user.Id
+        });
     }
 }

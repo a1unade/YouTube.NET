@@ -1,4 +1,3 @@
-using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Requests.Chats;
@@ -14,7 +13,7 @@ public class SupportChatHub : Hub
 {
     private readonly IChatService _chatService;
 
-    public SupportChatHub(IChatService chatService, IBus bus)
+    public SupportChatHub(IChatService chatService)
     {
         _chatService = chatService;
     }
@@ -38,7 +37,7 @@ public class SupportChatHub : Hub
     /// <param name="request">Данные</param>
     public async Task SendMessage(SendMessageRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Message))
+        if (request.Message == null)
             throw new ArgumentException(ChatErrorMessage.MessageIsEmpty);
 
         await _chatService.SendMessageAsync(request);

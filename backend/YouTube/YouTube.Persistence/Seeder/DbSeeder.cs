@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Enums;
 using YouTube.Application.Common.Exceptions;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;

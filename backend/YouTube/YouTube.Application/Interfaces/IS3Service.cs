@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.DTOs.Video;
 
 namespace YouTube.Application.Interfaces;

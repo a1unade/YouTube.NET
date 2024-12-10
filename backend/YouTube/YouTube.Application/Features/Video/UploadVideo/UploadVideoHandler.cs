@@ -3,9 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
-using YouTube.Application.DTOs.Video;
+using YouTube.Application.DTOs.File;
 using YouTube.Application.Interfaces;
-using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.Application.Features.Video.UploadVideo;
 
@@ -34,8 +33,8 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
         var category = await _context.Categories
             .FirstOrDefaultAsync(x => x.Name == request.Category, cancellationToken);
 
-        File videoFile = new File();
-        File previewFile = new File();
+        var videoFile = new Domain.Entities.File();
+        var previewFile = new Domain.Entities.File();
 
         foreach (var file in request.Files)
         {
@@ -54,7 +53,7 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
                 Bucket = channel.Id.ToString()
             }, cancellationToken);
 
-            var fileToDb = new File
+            var fileToDb = new Domain.Entities.File
             {
                 Size = file.Length,
                 ContentType = file.ContentType,
