@@ -1,4 +1,6 @@
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
+import ChatAttachmentImageModal from '../modal/chat-image-attachment-modal.tsx';
+import { useState } from 'react';
 
 /**
  * Компонент сообщения в чате.
@@ -28,6 +30,7 @@ const ChatSingleMessage = (props: {
   userId: string | null;
 }): JSX.Element | null => {
   const { message, userId } = props;
+  const [isModalOpen, setModalOpen] = useState(false);
 
   if (!userId) return null;
 
@@ -50,6 +53,7 @@ const ChatSingleMessage = (props: {
                       style={{ cursor: 'pointer' }}
                       src={message.attachment.link}
                       alt="attachment"
+                      onClick={() => setModalOpen(true)}
                     />
                   </>
                 );
@@ -108,6 +112,11 @@ const ChatSingleMessage = (props: {
             </span>
           </div>
         </div>
+        <ChatAttachmentImageModal
+          src={message.attachment?.link}
+          setActive={setModalOpen}
+          active={isModalOpen}
+        />
       </div>
     </>
   );
