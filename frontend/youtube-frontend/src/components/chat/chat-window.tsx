@@ -14,7 +14,12 @@ const ChatWindow = (props: {
   chatId: string | null;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
-  sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
+  sendMessage: (
+    message: string,
+    userId: string,
+    fileId: string | null,
+    chatId: string | null,
+  ) => Promise<void>;
   readMessages: (messagesIds: string[], chatId: string | null) => Promise<void>;
   userId: string | null;
 }) => {
@@ -155,6 +160,7 @@ const ChatWindow = (props: {
         setShouldSendFile={setShouldSendFile}
         shouldSendFile={shouldSendFile}
         file={file}
+        setLoading={setFileIsLoading}
       />
       <ChatConfirmAttachmentModal
         file={file!}

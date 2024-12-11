@@ -6,12 +6,18 @@ import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
 const ChatWindowInputSection = (props: {
   chatId: string | null;
   userId: string | null;
-  sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
+  sendMessage: (
+    message: string,
+    userId: string,
+    fileId: string | null,
+    chatId: string | null,
+  ) => Promise<void>;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
   setConfirmIsActive: React.Dispatch<React.SetStateAction<boolean>>;
   shouldSendFile: boolean;
   file: File | null;
   setShouldSendFile: React.Dispatch<React.SetStateAction<boolean>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {
     chatId,
@@ -22,20 +28,19 @@ const ChatWindowInputSection = (props: {
     shouldSendFile,
     setShouldSendFile,
     file,
+    setLoading,
   } = props;
 
   const [messageText, setMessageText] = useState('');
-  const [attachmentId, setAttachmentId] = useState('');
+  const [attachmentId, setAttachmentId] = useState<string | null>(null);
   const { addAlert } = useAlerts();
-
-  console.log(attachmentId);
 
   useEffect(() => {
     const messageInput = document.getElementById('messageInput') as HTMLTextAreaElement;
     const sendButton = document.getElementById('sendButton') as HTMLDivElement;
 
     messageInput.addEventListener('input', () => {
-      if (messageInput.value !== '' || messageText !== '') {
+      if (messageInput.value !== '' || messageText !== '' || file !== null) {
         sendButton.style.display = 'flex';
       } else {
         sendButton.style.display = 'none';
@@ -63,6 +68,7 @@ const ChatWindowInputSection = (props: {
           }
         })
         .finally(() => {
+          setLoading(false);
           setShouldSendFile(false);
         });
     }
@@ -70,7 +76,7 @@ const ChatWindowInputSection = (props: {
 
   const handleSendButtonClick = () => {
     setMessageText('');
-    sendMessage(messageText, userId!, chatId);
+    sendMessage(messageText, userId!, attachmentId, chatId);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
