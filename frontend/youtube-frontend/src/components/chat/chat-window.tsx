@@ -161,6 +161,7 @@ const ChatWindow = (props: {
         shouldSendFile={shouldSendFile}
         file={file}
         setLoading={setFileIsLoading}
+        setHasAttachment={setHasAttachment}
       />
       <ChatConfirmAttachmentModal
         file={file!}
