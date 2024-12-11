@@ -66,6 +66,8 @@ public class ChatService : IChatService
 
         await _bus.Publish(messageRequest);
 
+        var file = await _context.Files.FirstOrDefaultAsync(x => x.Id == request.FileId);
+
         await _hubContext.Clients.Group(request.ChatId.ToString())
             .SendAsync("ReceiveMessage", new
             {
@@ -73,7 +75,7 @@ public class ChatService : IChatService
                 UserId = messageRequest.UserId,
                 ChatId = messageRequest.ChatId,
                 Message = messageRequest.Message,
-                FileId = messageRequest.FileId,
+                Attachment = new { messageRequest.FileId, file?.ContentType },
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 Time = TimeOnly.FromDateTime(DateTime.Now)
             });
