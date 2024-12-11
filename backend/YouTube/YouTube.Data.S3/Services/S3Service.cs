@@ -32,27 +32,35 @@ public class S3Service : IS3Service
         return content.Bucket + "/" + content.FileName;
     }
     
+    
     public async Task<Stream> GetFileStreamAsync(string bucketName, string fileName, CancellationToken cancellationToken)
     {
         var bucketExist = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName), cancellationToken);
         if (!bucketExist)
             throw new NotFoundException("Bucket not found");
 
-        Stream s3Stream = null!;
-        var getObjectArgs = new GetObjectArgs()
-            .WithBucket(bucketName)
-            .WithObject(fileName)
-            .WithCallbackStream(stream =>
-            {
-                s3Stream = stream;
-            });
-    
-        await _minioClient.GetObjectAsync(getObjectArgs, cancellationToken);
+        var memoryStream = new MemoryStream();
+        try
+        {
+            await _minioClient.GetObjectAsync(new GetObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(fileName)
+                .WithCallbackStream(async stream =>
+                {
+                    await using (stream) 
+                    {
+                        await stream.CopyToAsync(memoryStream, cancellationToken);
+                    }
+                }), cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            await memoryStream.DisposeAsync(); 
+            throw new Exception("Error while getting the file stream", ex);
+        }
 
-        if (s3Stream == null)
-            throw new Exception("Failed to retrieve stream.");
-
-        return s3Stream;
+        memoryStream.Position = 0; 
+        return memoryStream;
     }
 
     public async Task<string> GetFileUrlAsync(string bucketName, string fileName,
