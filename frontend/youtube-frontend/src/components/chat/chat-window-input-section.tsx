@@ -18,6 +18,7 @@ const ChatWindowInputSection = (props: {
   file: File | null;
   setShouldSendFile: React.Dispatch<React.SetStateAction<boolean>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setHasAttachment: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {
     chatId,
@@ -29,6 +30,7 @@ const ChatWindowInputSection = (props: {
     setShouldSendFile,
     file,
     setLoading,
+    setHasAttachment,
   } = props;
 
   const [messageText, setMessageText] = useState('');
@@ -36,17 +38,14 @@ const ChatWindowInputSection = (props: {
   const { addAlert } = useAlerts();
 
   useEffect(() => {
-    const messageInput = document.getElementById('messageInput') as HTMLTextAreaElement;
     const sendButton = document.getElementById('sendButton') as HTMLDivElement;
 
-    messageInput.addEventListener('input', () => {
-      if (messageInput.value !== '' || messageText !== '' || file !== null) {
-        sendButton.style.display = 'flex';
-      } else {
-        sendButton.style.display = 'none';
-      }
-    });
-  }, [messageText]);
+    if (messageText.trim() !== '' || file) {
+      sendButton.style.display = 'flex';
+    } else {
+      sendButton.style.display = 'none';
+    }
+  }, [messageText, file]);
 
   useEffect(() => {
     if (shouldSendFile && file !== null) {
@@ -76,7 +75,7 @@ const ChatWindowInputSection = (props: {
 
   const handleSendButtonClick = () => {
     setMessageText('');
-    sendMessage(messageText, userId!, attachmentId, chatId);
+    sendMessage(messageText, userId!, attachmentId, chatId).then(() => setHasAttachment(false));
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

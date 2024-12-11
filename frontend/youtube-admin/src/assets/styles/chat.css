@@ -219,6 +219,14 @@
   color: #fff;
 }
 
+.admin-message g {
+  fill: #fff !important;
+}
+
+.user-message g {
+  fill: #0f0f0f !important;
+}
+
 .user-message a {
   border: 1px solid #0f0f0f !important;
   color: #0f0f0f;
