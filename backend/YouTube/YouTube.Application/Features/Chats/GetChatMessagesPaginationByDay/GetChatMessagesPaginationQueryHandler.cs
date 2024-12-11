@@ -41,7 +41,7 @@ public class
                 Time = messages.Time,
                 Date = messages.Date,
                 IsRead = messages.IsRead,
-                FileType = messages.FileId != null 
+                Attachment = messages.FileId != null 
                     ? new FileTypeDto { FileId = messages.FileId, ContentType = messages.File?.ContentType! } 
                     : null
             });

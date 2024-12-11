@@ -19,16 +19,16 @@ const ChatAttachmentImageModal = (props: {
     };
   }, [active]);
 
-  // TODO: загрузка фотографии
   const handleDownload = () => {
-    // const link = document.createElement("a");
-    // link.href = src!;
-    // link.setAttribute("download", "filename.jpg");
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    const link = document.createElement('a');
+    link.href = src!;
+    link.setAttribute('download', 'filename');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     addAlert('Файл скачан');
   };
+
   return (
     <div>
       <div

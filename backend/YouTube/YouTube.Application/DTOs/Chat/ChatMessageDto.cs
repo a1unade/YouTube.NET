@@ -25,7 +25,7 @@ public class ChatMessageDto
     /// <summary>
     /// Файл
     /// </summary>
-    public FileTypeDto? FileType { get; set; }
+    public FileTypeDto? Attachment { get; set; }
 
     /// <summary>
     /// Время отправки

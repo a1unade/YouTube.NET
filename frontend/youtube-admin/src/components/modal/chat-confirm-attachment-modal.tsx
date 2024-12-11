@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 const ChatConfirmAttachmentModal = (props: {
   file: File;
@@ -21,12 +21,12 @@ const ChatConfirmAttachmentModal = (props: {
 
   useEffect(() => {
     if (active) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [active]);
 
@@ -49,11 +49,15 @@ const ChatConfirmAttachmentModal = (props: {
   return (
     <div>
       <div
-        className={`modal-overlay ${active ? 'active' : ''}`}
+        className={`modal-overlay ${active ? "active" : ""}`}
         onClick={() => setActive(false)}
         role="dialog"
       >
-        <div className="modal-content" style={{ width: 650 }} onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal-content"
+          style={{ width: 650 }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <p>Вы действительно хотите добавить файл</p>
           <p>{file.name} ?</p>
           <div className="confirm-buttons">
