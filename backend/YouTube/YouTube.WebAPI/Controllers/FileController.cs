@@ -41,7 +41,7 @@ public class FileController : ControllerBase
 
         return BadRequest(response);
     }
-    
+
     /// <summary>
     /// Получить stream файла
     /// </summary>
@@ -51,16 +51,18 @@ public class FileController : ControllerBase
     [HttpGet("GetFileStream/{id}")]
     public async Task<IActionResult> GetFileStream([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new GetFileStreamQuery(new IdRequest { Id = id }), cancellationToken);
-    
+        var response = await _mediator.Send(new GetFileStreamQuery(new IdRequest { Id = id }), cancellationToken);        
+        
         if (response.IsSuccessfully && response.ContentType != null!)
         {
-            HttpContext.Response.Headers.Append("Content-Disposition", $"attachment; filename={response.FileName}");
-            return new FileStreamResult(response.Stream, response.ContentType) { FileDownloadName = response.FileName };
+            var encodedFileName = System.Net.WebUtility.UrlEncode(response.FileName);
+            HttpContext.Response.Headers.Append("Content-Disposition", $"attachment; filename={encodedFileName}");
+            return new FileStreamResult(response.Stream, response.ContentType) { FileDownloadName = encodedFileName };
         }
 
-        return BadRequest(response);
+        throw new BadRequestException("Content type is not set.");
     }
+
 
     /// <summary>
     /// Получить stream файла
