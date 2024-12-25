@@ -371,7 +371,7 @@
 }
 
 .input-section-send-message-button {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;

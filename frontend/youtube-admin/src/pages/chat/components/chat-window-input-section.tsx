@@ -18,6 +18,7 @@ const ChatWindowInputSection = (props: {
   file: File | null;
   setShouldSendFile: React.Dispatch<React.SetStateAction<boolean>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setHasAttachment: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {
     chatId,
@@ -29,6 +30,7 @@ const ChatWindowInputSection = (props: {
     setShouldSendFile,
     file,
     setLoading,
+    setHasAttachment,
   } = props;
   const [messageText, setMessageText] = useState("");
   const [attachmentId, setAttachmentId] = useState<string | null>(null);
@@ -76,8 +78,9 @@ const ChatWindowInputSection = (props: {
   }, [shouldSendFile, file]);
 
   const handleSendButtonClick = () => {
-    setMessageText("");
+    setMessageText('');
     sendMessage(messageText, userId!, attachmentId, chatId);
+    setHasAttachment(false);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
