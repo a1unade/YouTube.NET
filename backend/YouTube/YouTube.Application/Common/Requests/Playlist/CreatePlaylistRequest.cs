@@ -38,7 +38,7 @@ public class CreatePlaylistRequest
     public bool IsHidden { get; set; }
 
     /// <summary>
-    /// Ид видео которые будут в плейлисте
+    /// Ид видео которые будут в плейлисте(их может и не быть)
     /// </summary>
-    public List<Guid> VideosId { get; set; } = default!;
+    public List<Guid>? VideosId { get; set; } 
 }

@@ -63,6 +63,21 @@ public class S3Service : IS3Service
         return memoryStream;
     }
 
+    public async Task RemoveFileAsync(string bucketName, string fileName, CancellationToken cancellationToken)
+    {
+        var bucketExist = await _minioClient.BucketExistsAsync(
+            new BucketExistsArgs().WithBucket(bucketName), cancellationToken);
+
+        if (!bucketExist)
+            throw new NotFoundException("Bucket not found");
+
+        await _minioClient.RemoveObjectAsync(
+            new RemoveObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(fileName), 
+            cancellationToken);
+    }
+
     public async Task<string> GetFileUrlAsync(string bucketName, string fileName,
         CancellationToken cancellationToken)
     {

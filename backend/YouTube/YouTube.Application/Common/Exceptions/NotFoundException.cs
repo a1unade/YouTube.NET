@@ -12,6 +12,7 @@ public class NotFoundException : Exception
         [typeof(User)] = "Пользователь не найден",
         [typeof(UserInfo)] = "Информация о пользователе не найдена",
         [typeof(Video)] = "Видео не найдено",
+        [typeof(Playlist)] = "Плейлист не найден",
         [typeof(ChatMessage)] = "Сообщение не найдено",
         [typeof(ChatHistory)] = "История чата не найдена",
         [typeof(Category)] = "Категория не найдена"

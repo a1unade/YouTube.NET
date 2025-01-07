@@ -34,4 +34,13 @@ public interface IS3Service
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Stream файла</returns>
     Task<Stream> GetFileStreamAsync(string bucketName, string fileName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Удалить файл из хранидища
+    /// </summary>
+    /// <param name="bucketName">Бакет</param>
+    /// <param name="fileName">Название файл</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Удалить файл</returns>
+    Task RemoveFileAsync(string bucketName, string fileName, CancellationToken cancellationToken);
 }

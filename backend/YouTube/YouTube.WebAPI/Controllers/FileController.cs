@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.Common.Requests.Files;
+using YouTube.Application.Features.Files.AddFileWithMetadata;
 using YouTube.Application.Features.Files.GetFileStream;
 using YouTube.Application.Features.Files.UploadMessageFile;
 using YouTube.Application.Interfaces;
@@ -85,5 +87,16 @@ public class FileController : ControllerBase
         {
             FileDownloadName = videoFile.FileName
         };
+    }
+
+    [HttpPost("UploadFile")]
+    public async Task<IActionResult> UploadFileWithMetadata(FileWithMetadataRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new AddFileWithMetadataCommand(request), cancellationToken);
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);
     }
 }

@@ -43,11 +43,12 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
 
             if (file.Length <= 0)
                 throw new ArgumentException("Некорректное количество байт");
-            
+
+            var fileId = Guid.NewGuid();
             var path = await _s3Service.UploadAsync(new FileContent
             {
                 Content = file.OpenReadStream(),
-                FileName = file.FileName,
+                FileName = fileId.ToString(),
                 ContentType = file.ContentType,
                 Lenght = file.Length,
                 Bucket = channel.Id.ToString()
@@ -55,6 +56,7 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
 
             var fileToDb = new Domain.Entities.File
             {
+                Id = fileId,
                 Size = file.Length,
                 ContentType = file.ContentType,
                 Path = path,

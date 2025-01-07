@@ -27,7 +27,7 @@ public class PostAuthHandlerTest : TestCommandBase
 
         var command = new AuthCommand(request);
         var handler = new AuthHandler(UserManager.Object, SignInManager.Object, UserRepository.Object,
-            JwtGenerator.Object, EmailService.Object, Context);
+            JwtGenerator.Object, EmailService.Object, Context, PlaylistService.Object);
         var response = await handler.Handle(command, default);
 
         Assert.NotNull(response);
@@ -50,7 +50,7 @@ public class PostAuthHandlerTest : TestCommandBase
 
         var command = new AuthCommand(request);
         var handler = new AuthHandler(UserManager.Object, SignInManager.Object, UserRepository.Object,
-            JwtGenerator.Object, EmailService.Object, Context);
+            JwtGenerator.Object, EmailService.Object, Context, PlaylistService.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -73,7 +73,7 @@ public class PostAuthHandlerTest : TestCommandBase
 
         var command = new AuthCommand(request);
         var handler = new AuthHandler(UserManager.Object, SignInManager.Object, UserRepository.Object,
-            JwtGenerator.Object, EmailService.Object, Context);
+            JwtGenerator.Object, EmailService.Object, Context, PlaylistService.Object);
 
         var exception = await Assert.ThrowsAsync<BadRequestException>(async () =>
         {
@@ -101,7 +101,7 @@ public class PostAuthHandlerTest : TestCommandBase
     
         var command = new AuthCommand(request);
         var handler = new AuthHandler(UserManager.Object, SignInManager.Object, UserRepository.Object,
-            JwtGenerator.Object, EmailService.Object, Context);
+            JwtGenerator.Object, EmailService.Object, Context, PlaylistService.Object);
     
         await Assert.ThrowsAsync<IdentityException>(async () =>
         {

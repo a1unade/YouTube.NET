@@ -12,7 +12,7 @@ public class EfFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
         
         var optionBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
         
-        optionBuilder.UseNpgsql("Host=db;Port=5432;Username=postgres;Password=youtube;");
+        optionBuilder.UseNpgsql("Host=db;Port=5432;Username=postgres;Password=youtube");
         
         return new ApplicationDbContext(optionBuilder.Options);
     }
