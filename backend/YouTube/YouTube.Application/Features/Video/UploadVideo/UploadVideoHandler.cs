@@ -50,7 +50,7 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
                 Content = file.OpenReadStream(),
                 FileName = fileId.ToString(),
                 ContentType = file.ContentType,
-                Lenght = file.Length,
+                Length = file.Length,
                 Bucket = channel.Id.ToString()
             }, cancellationToken);
 

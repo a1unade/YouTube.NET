@@ -23,7 +23,7 @@ public class S3Service : IS3Service
             .WithBucket(content.Bucket)
             .WithObject(content.FileName)
             .WithStreamData(content.Content)
-            .WithObjectSize(content.Lenght)
+            .WithObjectSize(content.Length)
             .WithContentType(content.ContentType);
 
         await _minioClient.PutObjectAsync(uploadFile, cancellationToken)
@@ -36,6 +36,7 @@ public class S3Service : IS3Service
     public async Task<Stream> GetFileStreamAsync(string bucketName, string fileName, CancellationToken cancellationToken)
     {
         var bucketExist = await _minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName), cancellationToken);
+        
         if (!bucketExist)
             throw new NotFoundException("Bucket not found");
 

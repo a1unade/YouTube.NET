@@ -32,7 +32,7 @@ public class UploadMessageFileCommandHandler : IRequestHandler<UploadMessageFile
             Content = request.File.OpenReadStream(),
             FileName = request.File.FileName,
             ContentType = request.File.ContentType,
-            Lenght = request.File.Length,
+            Length = request.File.Length,
             Bucket = user.Id.ToString()
         }, cancellationToken);
 

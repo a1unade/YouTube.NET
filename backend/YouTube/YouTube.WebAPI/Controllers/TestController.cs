@@ -198,7 +198,7 @@ public class TestController : ControllerBase
                 Content = file.OpenReadStream(),
                 FileName = file.FileName,
                 ContentType = file.ContentType,
-                Lenght = file.Length,
+                Length = file.Length,
                 Bucket = channel.Id.ToString()
             }, cancellationToken);
         }
