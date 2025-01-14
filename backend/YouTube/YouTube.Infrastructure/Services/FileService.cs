@@ -21,8 +21,9 @@ public class FileService : IFileService
         _s3Service = s3Service;
         _context = context;
     }
-    
-    public async Task<string> UploadFileOnPermanentStorage(Guid fileId, IFormFile file, CancellationToken cancellationToken)
+
+    public async Task<FileIdWithPath> UploadFileOnPermanentStorage(Guid fileId, Guid userId, IFormFile file,
+        CancellationToken cancellationToken)
     {
         var cacheDataJson = await _cache.GetStringAsync($"file:{fileId}", cancellationToken);
 
@@ -48,11 +49,11 @@ public class FileService : IFileService
 
         var updateCacheMetadata = JsonConvert.SerializeObject(cacheData);
         await _cache.SetStringAsync($"file:{fileId}", updateCacheMetadata, cancellationToken);
-        
+
         if (cacheData.Counter == 2)
         {
             var newPath = await MoveToPermanentStorageAsync(cacheData.Metadata, cancellationToken);
-            return newPath;
+            return new FileIdWithPath { FileId = fileId, Path = newPath };
         }
 
         var fileEntity = new File
@@ -64,21 +65,22 @@ public class FileService : IFileService
             FileName = cacheData.Metadata.FileName,
             BucketName = _tempBucketName
         };
-
+        
         await _context.Files.AddAsync(fileEntity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        
-        return path;
+
+        return new FileIdWithPath { FileId = fileId, Path = path };
     }
 
     public async Task<string> MoveToPermanentStorageAsync(MetadataDto metadata, CancellationToken cancellationToken)
     {
-        var sourceFileStream = await _s3Service.GetFileStreamAsync(_tempBucketName, metadata.FileId.ToString(), cancellationToken);
+        var sourceFileStream =
+            await _s3Service.GetFileStreamAsync(_tempBucketName, metadata.FileId.ToString(), cancellationToken);
 
         var fileContent = new FileContent
         {
             Bucket = metadata.UserId.ToString(),
-            FileName =  metadata.FileId.ToString(),
+            FileName = metadata.FileId.ToString(),
             Content = sourceFileStream,
             Length = sourceFileStream.Length,
             ContentType = metadata.ContentType

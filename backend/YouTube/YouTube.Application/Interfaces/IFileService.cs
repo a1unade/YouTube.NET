@@ -8,7 +8,7 @@ namespace YouTube.Application.Interfaces;
 /// </summary>
 public interface IFileService
 {
-    Task<string> UploadFileOnPermanentStorage(Guid fileId, IFormFile file, CancellationToken cancellationToken);
+    Task<FileIdWithPath> UploadFileOnPermanentStorage(Guid fileId, Guid userId, IFormFile file,  CancellationToken cancellationToken);
 
 
     /// <summary>
