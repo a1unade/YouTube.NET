@@ -19,12 +19,13 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, BaseR
         if (request.File.Length <= 0)
             throw new ValidationException("Размер 0");
 
-        var path = await _service.UploadFileOnPermanentStorage(request.FileId, request.File, cancellationToken);
+        var fileIdWithPathDto = await _service.UploadFileOnPermanentStorage(request.FileId, request.UserId, request.File, cancellationToken);
 
         return new BaseResponse
         {
             IsSuccessfully = true,
-            Message = $"Файл находится по пути : {path}"
+            Message = $"Файл находится по пути : {fileIdWithPathDto.Path}",
+            EntityId = fileIdWithPathDto.FileId
         };
     }
 }
