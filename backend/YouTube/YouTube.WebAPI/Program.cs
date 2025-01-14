@@ -1,5 +1,12 @@
+using System;
+using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using YouTube.Application.Extensions;
 using YouTube.Application.Interfaces;
 using YouTube.Data.S3.Extensions;
@@ -16,18 +23,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationLayer();
-
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddS3Storage(builder.Configuration);
-
 builder.Services.AddPersistenceLayer(builder.Configuration);
+
 builder.Services.AddRedis(builder.Configuration);
+
 builder.Services.AddHostedService<RedisCleanupBackgroundService>();
-builder.Services.AddSingleton<RedisCleanupBackgroundService>(provider => new RedisCleanupBackgroundService(
-        provider.GetRequiredService<IDbContext>(),
-        provider.GetRequiredService<IDistributedCache>(),
-        builder.Configuration.GetConnectionString("Redis")!,
-        provider.GetRequiredService<ILogger<RedisCleanupBackgroundService>>()));
 
 builder.Services.AddSwaggerGen(options =>
 {

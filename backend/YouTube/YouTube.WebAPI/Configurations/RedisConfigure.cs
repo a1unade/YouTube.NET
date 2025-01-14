@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace YouTube.WebAPI.Configurations;
 
 public static class RedisConfigure
