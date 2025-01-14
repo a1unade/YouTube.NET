@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+
 namespace YouTube.WebAPI.Configurations;
 
 public static class CorsConfigure
