@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using YouTube.Application.Common.Exceptions;
@@ -49,10 +48,10 @@ public class FileService : IFileService
 
         var updateCacheMetadata = JsonConvert.SerializeObject(cacheData);
         await _cache.SetStringAsync($"file:{fileId}", updateCacheMetadata, cancellationToken);
-
+        
         if (cacheData.Counter == 2)
         {
-            var newPath = await MoveToPermanentStorageAsync(fileId, cacheData.Metadata.UserId, cancellationToken);
+            var newPath = await MoveToPermanentStorageAsync(cacheData.Metadata, cancellationToken);
             return newPath;
         }
 
@@ -72,30 +71,35 @@ public class FileService : IFileService
         return path;
     }
 
-    public async Task<string> MoveToPermanentStorageAsync(Guid fileId, Guid userId, CancellationToken cancellationToken)
+    public async Task<string> MoveToPermanentStorageAsync(MetadataDto metadata, CancellationToken cancellationToken)
     {
-        var file = await _context.Files.FirstOrDefaultAsync(x => x.Id == fileId, cancellationToken)
-                   ?? throw new NotFoundException($"Файл с ID {fileId} не найден.");
-
-        var sourceFileStream = await _s3Service.GetFileStreamAsync(_tempBucketName, fileId.ToString(), cancellationToken);
+        var sourceFileStream = await _s3Service.GetFileStreamAsync(_tempBucketName, metadata.FileId.ToString(), cancellationToken);
 
         var fileContent = new FileContent
         {
-            Bucket = userId.ToString(),
-            FileName = fileId.ToString(),
+            Bucket = metadata.UserId.ToString(),
+            FileName =  metadata.FileId.ToString(),
             Content = sourceFileStream,
             Length = sourceFileStream.Length,
-            ContentType = file.ContentType!
+            ContentType = metadata.ContentType
         };
 
         var newPath = await _s3Service.UploadAsync(fileContent, cancellationToken);
 
-        await _s3Service.RemoveFileAsync(_tempBucketName, fileId.ToString(), cancellationToken);
+        await _s3Service.RemoveFileAsync(_tempBucketName, metadata.FileId.ToString(), cancellationToken);
 
-        await _cache.RemoveAsync($"file:{fileId}", cancellationToken);
+        await _cache.RemoveAsync($"file:{metadata.FileId}", cancellationToken);
+        var fileEntity = new File
+        {
+            Id = metadata.FileId,
+            Size = metadata.Size,
+            ContentType = metadata.ContentType,
+            Path = newPath,
+            FileName = metadata.FileName,
+            BucketName = metadata.UserId.ToString()
+        };
 
-        file.Path = newPath;
-        file.BucketName = userId.ToString();
+        await _context.Files.AddAsync(fileEntity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
         return newPath;

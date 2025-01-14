@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IJwtGenerator, JwtGenerator>()
             .AddScoped<IPlaylistService, PlaylistService>()
             .AddScoped<IChatService, ChatService>()
+            .AddScoped<IFileService, FileService>()
             .AddSignalR();
     }
     

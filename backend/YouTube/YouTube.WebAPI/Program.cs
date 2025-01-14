@@ -1,5 +1,7 @@
 using System.Reflection;
+using Microsoft.Extensions.Caching.Distributed;
 using YouTube.Application.Extensions;
+using YouTube.Application.Interfaces;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
@@ -21,6 +23,11 @@ builder.Services.AddS3Storage(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
 builder.Services.AddHostedService<RedisCleanupBackgroundService>();
+builder.Services.AddSingleton<RedisCleanupBackgroundService>(provider => new RedisCleanupBackgroundService(
+        provider.GetRequiredService<IDbContext>(),
+        provider.GetRequiredService<IDistributedCache>(),
+        builder.Configuration.GetConnectionString("Redis")!,
+        provider.GetRequiredService<ILogger<RedisCleanupBackgroundService>>()));
 
 builder.Services.AddSwaggerGen(options =>
 {

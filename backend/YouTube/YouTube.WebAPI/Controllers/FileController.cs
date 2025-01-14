@@ -35,7 +35,7 @@ public class FileController : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns></returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> UploadFile(UploadMessageFileRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadFileForMessage(UploadMessageFileRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new UploadMessageFileCommand(request), cancellationToken);
 
