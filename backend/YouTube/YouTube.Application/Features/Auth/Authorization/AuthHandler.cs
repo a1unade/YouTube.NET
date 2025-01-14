@@ -21,13 +21,15 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
     private readonly IJwtGenerator _jwtGenerator;
     private readonly IEmailService _emailService;
     private readonly IDbContext _context;
+    private readonly IPlaylistService _playlistService;
 
     public AuthHandler(UserManager<User> userManager,
         SignInManager<User> signInManager,
         IUserRepository userRepository,
         IJwtGenerator jwtGenerator,
         IEmailService emailService,
-        IDbContext context)
+        IDbContext context,
+        IPlaylistService playlistService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -35,6 +37,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         _jwtGenerator = jwtGenerator;
         _emailService = emailService;
         _context = context;
+        _playlistService = playlistService;
     }
 
     public async Task<AuthResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
@@ -71,7 +74,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         var channel = new Domain.Entities.Channel
         {
             Id = Guid.NewGuid(),
-            Name = user.UserName,
+            Name = user.DisplayName,
             Description = null,
             CreateDate = DateOnly.FromDateTime(DateTime.Today),
             SubCount = 0,
@@ -80,6 +83,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         };
         
         await _context.Channels.AddAsync(channel, cancellationToken);
+        await _playlistService.CreateDefaultPlaylists(channel, cancellationToken);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 

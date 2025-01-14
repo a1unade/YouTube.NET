@@ -6,6 +6,7 @@ using YouTube.Infrastructure.Hubs;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
+using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,7 @@ builder.Services.AddS3Storage(builder.Configuration);
 
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
+builder.Services.AddHostedService<RedisCleanupBackgroundService>();
 
 builder.Services.AddSwaggerGen(options =>
 {

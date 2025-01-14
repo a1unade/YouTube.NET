@@ -55,7 +55,6 @@ public class VideoRepository : IVideoRepository
             return new List<Video>();
         }
         return await _context.Videos
-            .AsNoTracking()
             .Where(x => guids.Contains(x.Id))
             .ToListAsync(cancellationToken);
     }

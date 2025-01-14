@@ -34,7 +34,7 @@ public class FileContent
     public Stream? Content { get; set; } 
     
     /// <summary>
-    /// Название файла
+    /// Название файла но скорее всего это id Файла
     /// </summary>
     public string FileName { get; set; } = default!;
 
@@ -46,7 +46,7 @@ public class FileContent
     /// <summary>
     /// Размер в байтах
     /// </summary>
-    public long Lenght { get; set; }
+    public long Length { get; set; }
 
     /// <summary>
     /// Название бакета

@@ -252,7 +252,7 @@ public class DbSeeder : IDbSeeder
                 Content = fileStream,
                 FileName = "ashab.jpg",
                 ContentType = "image/jpeg",
-                Lenght = fileStream.Length,
+                Length = fileStream.Length,
                 Bucket = channel!.Id.ToString()
             }, cancellationToken);
 
@@ -323,7 +323,7 @@ public class DbSeeder : IDbSeeder
                         Content = fileStream,
                         FileName = "preview.jpg",
                         ContentType = "image/jpeg",
-                        Lenght = fileStream.Length,
+                        Length = fileStream.Length,
                         Bucket = channel.Id.ToString()
                     }, cancellationToken);
 
@@ -358,7 +358,7 @@ public class DbSeeder : IDbSeeder
                         Content = fileStream,
                         FileName = "mohito.mp4",
                         ContentType = "video/mp4",
-                        Lenght = fileStream.Length,
+                        Length = fileStream.Length,
                         Bucket = channel.Id.ToString()
                     }, cancellationToken);
 

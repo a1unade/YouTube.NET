@@ -38,6 +38,8 @@ public class TestCommandBase : IDisposable
     protected Mock<IUserRepository> UserRepository { get; }
     
     protected Mock<IChannelRepository> ChannelRepository { get; }
+    
+    protected Mock<IPlaylistService> PlaylistService { get; }
 
     protected Mock<IVideoRepository> VideoRepository { get; }
     protected Mock<IGenericRepository<User>> GenericRepository { get; }
@@ -80,6 +82,11 @@ public class TestCommandBase : IDisposable
         JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
             .ReturnsAsync("123");
 
+        // Мок сервисов 
+
+        PlaylistService = new Mock<IPlaylistService>();
+
+        PlaylistService.Setup(x => x.CreateDefaultPlaylists(It.IsAny<Channel>(), It.IsAny<CancellationToken>()));
         // Mok S3
         S3Service = new Mock<IS3Service>();
 

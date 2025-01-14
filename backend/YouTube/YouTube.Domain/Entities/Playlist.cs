@@ -8,7 +8,7 @@ namespace YouTube.Domain.Entities;
 public class Playlist : BaseEntity
 {
     /// <summary>
-    /// Видно ли его всем
+    /// Скрыт ли он
     /// </summary>
     public bool IsHidden { get; set; }
 

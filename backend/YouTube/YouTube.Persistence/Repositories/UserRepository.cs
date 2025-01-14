@@ -44,7 +44,6 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-
     public async Task<User?> FindByEmail(string email, CancellationToken cancellationToken)
     {
         return await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email, cancellationToken);

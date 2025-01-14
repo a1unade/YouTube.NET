@@ -2,7 +2,6 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio;
 using YouTube.Application.Interfaces;
 using YouTube.Infrastructure.Options;
 using YouTube.Infrastructure.Services;
@@ -23,6 +22,7 @@ public static class ServiceCollectionExtensions
             .AddTransient<IMediator, Mediator>()
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IJwtGenerator, JwtGenerator>()
+            .AddScoped<IPlaylistService, PlaylistService>()
             .AddScoped<IChatService, ChatService>()
             .AddSignalR();
     }

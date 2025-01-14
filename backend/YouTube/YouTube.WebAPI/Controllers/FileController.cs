@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Common.Requests.Chats;
+using YouTube.Application.Common.Requests.Files;
+using YouTube.Application.Features.Files.AddMetadata;
 using YouTube.Application.Features.Files.GetFileStream;
+using YouTube.Application.Features.Files.UploadFile;
 using YouTube.Application.Features.Files.UploadMessageFile;
 using YouTube.Application.Interfaces;
 
@@ -85,5 +88,39 @@ public class FileController : ControllerBase
         {
             FileDownloadName = videoFile.FileName
         };
+    }
+
+    /// <summary>
+    /// Загрузить файл
+    /// </summary>
+    /// <param name="request">Данные</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("UploadFile")]
+    public async Task<IActionResult> UploadFile(FileRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new UploadFileCommand(request), cancellationToken);
+
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);
+    }
+
+    /// <summary>
+    /// Загрузить метаданные
+    /// </summary>
+    /// <param name="request">метаданные</param>
+    /// <param name="cancellationToken">токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("UploadMetadata")]
+    public async Task<IActionResult> UploadMetadata(MetadataRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new AddMetadataCommand(request), cancellationToken);
+        
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);
     }
 }
