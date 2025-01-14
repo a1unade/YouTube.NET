@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,16 +18,19 @@ public class RedisCleanupBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly TimeSpan _cleanupInterval = TimeSpan.FromDays(1);
-    private readonly string _redisConnectionString = "localhost:6379";
+    private readonly string _redisConnectionString;
     private readonly ILogger<RedisCleanupBackgroundService> _logger;
 
     public RedisCleanupBackgroundService(
         IServiceProvider serviceProvider,
+        IConfiguration configuration,
         ILogger<RedisCleanupBackgroundService> logger)
     {
         _serviceProvider = serviceProvider;
+        _redisConnectionString = configuration.GetConnectionString("Redis")!;
         _logger = logger;
     }
+
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
