@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import apiClient from "../../../utils/apiClient.ts";
 import { UploadFileResponse } from "../../../interfaces/file/upload-file-response.ts";
 import { useAlerts } from "../../../hooks/alert/use-alerts.ts";
-import { UploadMetadataResponse } from "../../../interfaces/file/upload-metadata-response.ts";
 
 const ChatWindowInputSection = (props: {
   chatId: string | null;
