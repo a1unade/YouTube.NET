@@ -1,33 +1,33 @@
 .upload-page-container {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .upload-page-form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .upload-page-file-input {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .upload-page-submit-button {
-    padding: 10px;
-    background-color: #ccc; /* Серый цвет кнопки */
-    color: black; /* Цвет текста кнопки */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #ccc; /* Серый цвет кнопки */
+  color: black; /* Цвет текста кнопки */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .upload-page-submit-button:disabled {
-    background-color: #e0e0e0; /* Светло-серый для неактивной кнопки */
-    cursor: not-allowed;
+  background-color: #e0e0e0; /* Светло-серый для неактивной кнопки */
+  cursor: not-allowed;
 }
