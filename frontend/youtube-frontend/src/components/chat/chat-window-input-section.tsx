@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '../../utils/apiClient.ts';
 import { UploadFileResponse } from '../../interfaces/file/upload-file-response.ts';
 import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
-import { UploadMetadataResponse } from '../../interfaces/file/upload-metadata-response.ts';
 
 const ChatWindowInputSection = (props: {
   chatId: string | null;
@@ -50,49 +49,22 @@ const ChatWindowInputSection = (props: {
 
   useEffect(() => {
     if (shouldSendFile && file !== null) {
+      const formData = new FormData();
+      formData.append('UserId', userId!);
+      formData.append('File', file);
+
       apiClient
-        .post<UploadMetadataResponse>('File/UploadMetadata', {
-          fileName: file.name,
-          size: file.size.toString(),
-          contentType: file.type,
-          userId: userId,
+        .post<UploadFileResponse>('file/UploadFileForMessage', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
         .then((response) => {
-          const metaStatus = response.data.isSuccessfully;
-
-          if (metaStatus) {
+          if (response.data.isSuccessfully) {
             setAttachmentId(response.data.entityId);
-
-            return apiClient.post<UploadFileResponse>(
-              'File/UploadFile',
-              {
-                fileId: response.data.entityId,
-                userId: userId,
-                file: file!,
-              },
-              {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
-                },
-              },
-            );
           } else {
             addAlert(response.data.message!);
-            throw new Error('Metadata upload failed');
           }
-        })
-        .then((response) => {
-          if (response) {
-            if (response.data.isSuccessfully) {
-              setAttachmentId(response.data.entityId);
-            } else {
-              addAlert(response.data.message!);
-            }
-          }
-        })
-        .catch((error) => {
-          console.error('Error during uploads', error);
-          addAlert('Произошла ошибка при загрузке.');
         })
         .finally(() => {
           setLoading(false);
