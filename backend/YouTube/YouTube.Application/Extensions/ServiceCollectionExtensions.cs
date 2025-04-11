@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediator();
         services.AddValidators();
+        services.AddHttpContextAccessor();
     }
     
     private static void AddMediator(this IServiceCollection services)

@@ -28,6 +28,11 @@ public class Transaction : BaseEntity
     public required string Operation { get; set; }
     
     /// <summary>
+    /// Статус
+    /// </summary>
+    public PaymentStatus Status { get; set; }
+    
+    /// <summary>
     /// Id Пользователя
     /// </summary>
     public Guid UserId { get; set; }

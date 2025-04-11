@@ -11,8 +11,18 @@
         <UserSecretsId>215b9df2-427f-46a5-bc21-2b56f7e70e0e</UserSecretsId>
     </PropertyGroup>
 
+   
+    
     <ItemGroup>
         <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3373" />
+        <PackageReference Include="Google.Protobuf" Version="3.30.2" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.70.0" />
+        <PackageReference Include="Grpc.AspNetCore.Server" Version="2.70.0" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.70.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.70.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="MassTransit" Version="8.3.0" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.0" />
         <PackageReference Include="MediatR" Version="12.2.0" />
@@ -22,7 +32,7 @@
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
         <PackageReference Include="Minio.AspNetCore" Version="6.0.1" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -32,10 +42,20 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\YouTube.Payment\YouTube.Payment.csproj" />
       <ProjectReference Include="..\YouTube.Application\YouTube.Application.csproj" />
       <ProjectReference Include="..\YouTube.Data.S3\YouTube.Data.S3.csproj" />
       <ProjectReference Include="..\YouTube.Infrastructure\YouTube.Infrastructure.csproj" />
       <ProjectReference Include="..\YouTube.Persistence\YouTube.Persistence.csproj" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf
+                Include="..\YouTube.Payment\Protos\payment.proto"
+                GrpcServices="Client"
+                Link="Protos/payment.proto"
+                ProtoRoot="..\YouTube.Payment\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -56,6 +76,5 @@
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-8.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-9.svg" />
     </ItemGroup>
-
 
 </Project>

@@ -18,7 +18,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext(configuration);
         services.AddContextAndRepositories();
-        services.AddHttpContextAccessor();
     }
     
     private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
