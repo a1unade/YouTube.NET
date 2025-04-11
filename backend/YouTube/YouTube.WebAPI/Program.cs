@@ -1,28 +1,28 @@
-using System;
-using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
+using YouTube.Payment.Protos;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
-
+Console.WriteLine(builder.Configuration["PaymentService:GrpcEndpoint"]!);
+builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["PaymentService:GrpcEndpoint"]!);
+});
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
+
 builder.Services.AddS3Storage(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
-
 builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddHostedService<RedisCleanupBackgroundService>();

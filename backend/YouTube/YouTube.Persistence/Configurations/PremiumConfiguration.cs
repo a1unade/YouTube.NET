@@ -19,6 +19,9 @@ public class PremiumConfiguration : IEntityTypeConfiguration<Premium>
         builder.Property(x => x.EndDate)
             .IsRequired();
 
+        builder.Property(x => x.IsActive)
+            .IsRequired();
+
         builder.HasOne(s => s.User)
             .WithOne(u => u.Subscriptions)
             .HasForeignKey<Premium>(s => s.UserId);

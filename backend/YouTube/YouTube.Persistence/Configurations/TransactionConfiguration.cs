@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using YouTube.Domain.Common;
 using YouTube.Domain.Entities;
 
 namespace YouTube.Persistence.Configurations;
@@ -18,6 +19,13 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 
         builder.Property(x => x.Operation)
             .IsRequired();
+
+        builder.Property(x => x.Status)
+            .IsRequired()
+            .HasConversion(
+                x => x.ToString(),
+                v => (PaymentStatus)Enum.Parse(typeof(PaymentStatus), v)
+                );
         
         builder.Property(x => x.Description)
             .HasMaxLength(255);

@@ -21,6 +21,11 @@ public class Premium : BaseEntity
     /// Цена
     /// </summary>
     public decimal Price { get; set; }
+    
+    /// <summary>
+    /// Активна?
+    /// </summary>
+    public bool IsActive { get; set; }
 
     /// <summary>
     /// Id пользователя

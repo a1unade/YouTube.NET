@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option csharp_namespace = "YouTube.Payment.Protos";
+
+service PaymentService {
+  rpc Withdraw (WithdrawRequest) returns (PaymentResponse);
+  rpc Refund (RefundRequest) returns (PaymentResponse);
+
+  rpc CreateWallet (CreateWalletRequest) returns (WalletResponse);
+  rpc TopUpWallet (TopUpRequest) returns (WalletResponse);
+  rpc GetWalletBalance (WalletRequest) returns (WalletBalanceResponse);
+}
+
+message WithdrawRequest {
+  string user_id = 1;
+  double amount = 2;
+  string transaction_id = 3;
+}
+
+message RefundRequest {
+  string user_id = 1;
+  double amount = 2;
+  string transaction_id = 3;
+}
+
+message PaymentResponse {
+  bool success = 1;
+  string userId = 2;
+  string transactionId = 3;
+  string error = 4;
+}
+
+// Новые сообщения для работы с кошельком
+message CreateWalletRequest {
+  string user_id = 1;
+  double balance = 2;
+  string name = 3;
+}
+
+message TopUpRequest {
+  string user_id = 1;
+  double amount = 2;
+  string transaction_id = 3;
+}
+
+message WalletRequest {
+  string user_id = 1;
+}
+
+message WalletResponse {
+  bool success = 1;
+  string wallet_id = 2;
+  string user_id = 3;
+  string error = 5;
+}
+
+message WalletBalanceResponse {
+  bool success = 1;
+  string wallet_id = 2;
+  string user_id = 3;
+  double balance = 4;
+  string error = 6;
+}
