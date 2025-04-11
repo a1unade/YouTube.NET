@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useAlerts } from "../../../hooks/alert/use-alerts.ts";
+import React, { useEffect } from 'react';
+import { useAlerts } from '../../hooks/alert/use-alerts.tsx';
 
 const ChatAttachmentImageModal = (props: {
   src: string | undefined;
@@ -7,36 +7,32 @@ const ChatAttachmentImageModal = (props: {
   setActive: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { src, active, setActive } = props;
-
   const { addAlert } = useAlerts();
-
   useEffect(() => {
     if (active) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
-
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, [active]);
 
-  // TODO: загрузка фотографии
   const handleDownload = () => {
-    // const link = document.createElement("a");
-    // link.href = src!;
-    // link.setAttribute("download", "filename.jpg");
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-    addAlert("Файл скачан");
+    const link = document.createElement('a');
+    link.href = src!;
+    link.setAttribute('download', 'filename');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    addAlert('Файл скачан');
   };
 
   return (
     <div>
       <div
-        className={`modal-overlay ${active ? "active" : ""}`}
+        className={`chat-modal-overlay ${active ? 'active' : ''}`}
         onClick={() => setActive(false)}
         role="dialog"
       >
@@ -67,12 +63,11 @@ const ChatAttachmentImageModal = (props: {
             </svg>
           </div>
         </div>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="chat-modal-content" onClick={(e) => e.stopPropagation()}>
           <img src={src} alt="image" />
         </div>
       </div>
     </div>
   );
 };
-
 export default ChatAttachmentImageModal;

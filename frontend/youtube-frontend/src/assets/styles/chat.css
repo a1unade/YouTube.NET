@@ -83,6 +83,7 @@
   overflow: hidden scroll;
   padding-top: 20px;
   padding-bottom: 20px;
+  transition: height 0.5s ease;
   gap: 20px;
 }
 
@@ -141,6 +142,14 @@
 .admin-message a {
   border: 1px solid #fff;
   color: #fff;
+}
+
+.admin-message g {
+  fill: #fff !important;
+}
+
+.user-message g {
+  fill: #0f0f0f !important;
 }
 
 .user-message a {
@@ -264,6 +273,9 @@
   height: 50px;
   padding-left: 20px;
   gap: 20px;
+  transition:
+    height 0.5s ease,
+    opacity 0.5s ease;
 }
 
 .input-section-attachment {
@@ -348,4 +360,149 @@
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   max-width: 200px;
+}
+
+/* CHAT ATTACHMENT IMAGE MODAL */
+
+.chat-modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.chat-modal-content {
+  width: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.chat-modal-content img {
+  border-radius: 8px;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  transition:
+    transform 0.3s ease,
+    width 0.3s ease,
+    height 0.3s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.icon-container {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+  z-index: 1100;
+}
+
+.icon-container svg {
+  fill: #fff;
+}
+
+.icon-container div {
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.icon-container div:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* CHAT ADDED ATTACHMENT */
+
+.chat-added-attachment-layout {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.loading-indicator span {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.remove-attachment {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* CONFIRM FILE SEND MODAL */
+
+.confirm-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirm-buttons button {
+  background-color: transparent !important;
+  width: fit-content !important;
+  border-radius: 30px;
+  border: none;
+  padding: 10px 20px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.confirm-buttons button:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.confirm-buttons .btn-red {
+  color: red;
+}
+
+.confirm-buttons .btn-red:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.confirm-buttons .btn-blue {
+  color: blue;
+}
+
+.confirm-buttons .btn-blue:hover {
+  background-color: rgba(0, 0, 255, 0.1);
 }

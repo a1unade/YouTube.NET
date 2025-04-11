@@ -3,10 +3,9 @@ export interface ChatMessage {
   message: string;
   senderId: string;
   attachment: {
-    type: string;
-    file: string;
-    link: string;
-  } | null;
+    contentType: string;
+    fileId: string;
+  };
   time: string;
   isRead: boolean;
   date: string;

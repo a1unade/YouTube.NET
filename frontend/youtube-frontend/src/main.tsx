@@ -21,6 +21,8 @@ import ChatModalWindow from './components/modal/chat-modal-window.tsx';
 import { jwtDecode } from 'jwt-decode';
 import { JWTTokenDecoded } from './interfaces/jwt-token/jwt-token-decoded.ts';
 import AuthRedirect from './pages/auth';
+import Premium from './pages/premium';
+import UploadPage from './pages/upload';
 
 export const App = () => {
   const [saveVideoActive, setSaveVideoActive] = useState(false);
@@ -163,6 +165,8 @@ export const App = () => {
             <Route path="/feed/subscriptions" element={<Subscriptions />} />
             <Route path="/auth/:userId" element={<AuthRedirect />} />
             <Route path="/feed/playlists" element={<Playlists />} />
+            <Route path="/premium" element={<Premium />} />
+            <Route path="/upload" element={<UploadPage userId={userId} />} />
           </Routes>
         </div>
       </div>

@@ -46,6 +46,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
   const sendMessage = async (
     message: string,
     userId: string,
+    fileId: string | null,
     chatId: string | null,
   ) => {
     if (
@@ -56,7 +57,12 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
       return;
     }
 
-    const request = { UserId: userId, ChatId: chatId, Message: message };
+    const request = {
+      UserId: userId,
+      ChatId: chatId,
+      Message: message,
+      FileId: fileId,
+    };
 
     try {
       await connectionRef.current.invoke("SendMessage", request);
@@ -78,7 +84,7 @@ export const useSignalR = ({ setChatId, setChatMessages }: UseSignalRProps) => {
         messageId: message.messageId,
         message: message.message,
         senderId: message.userId,
-        attachment: null,
+        attachment: message.attachment,
         time: message.time.split(":").slice(0, 2).join(":"),
         isRead: message.isRead,
         date: message.date,
