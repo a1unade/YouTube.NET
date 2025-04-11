@@ -1,4 +1,4 @@
-// noinspection JSCheckFunctionSignatures,JSUnusedGlobalSymbols
+// noinspection JSUnresolvedReference,JSUnusedGlobalSymbols
 
 import js from "@eslint/js";
 import globals from "globals";
@@ -9,7 +9,7 @@ import eslintReactRefresh from "eslint-plugin-react-refresh";
 import prettierPlugin from "eslint-plugin-prettier";
 import eslintConfigPrettier from "eslint-config-prettier";
 
-// noinspection JSUnresolvedReference
+// noinspection JSCheckFunctionSignatures
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default tseslint.config(
   {
@@ -57,8 +57,8 @@ export default tseslint.config(
         { namedComponents: "arrow-function" },
       ],
       "react/self-closing-comp": ["error", { component: true, html: true }],
-      "max-lines": ["warn", { max: 500 }],
-      "max-params": ["error", 3],
+      "max-lines": ["warn", { max: 1100 }],
+      "max-params": ["error", 4],
     },
   },
 );

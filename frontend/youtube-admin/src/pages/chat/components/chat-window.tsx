@@ -5,6 +5,8 @@ import ChatWindowInputSection from "./chat-window-input-section.tsx";
 import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../../utils/apiClient.ts";
 import { ChatHistoryResponse } from "../../../interfaces/chat/chat-history-response.ts";
+import ChatConfirmAttachmentModal from "../../../components/modal/chat-confirm-attachment-modal.tsx";
+import ChatAddedAttachment from "./chat-added-attachment.tsx";
 
 const formatDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -23,6 +25,7 @@ const ChatWindow = (props: {
   sendMessage: (
     message: string,
     userId: string,
+    fileId: string | null,
     chatId: string | null,
   ) => Promise<void>;
   isConnected: boolean;
@@ -46,6 +49,11 @@ const ChatWindow = (props: {
   const [fetching, setFetching] = useState(true);
   const [page, setPage] = useState(1);
   const componentRef = useRef<HTMLDivElement | null>(null);
+  const [hasAttachment, setHasAttachment] = useState(false);
+  const [fileIsLoading, setFileIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [confirmIsActive, setConfirmIsActive] = useState(false);
+  const [shouldSendFile, setShouldSendFile] = useState(false);
 
   useEffect(() => {
     if (chatId === null) {
@@ -143,7 +151,12 @@ const ChatWindow = (props: {
 
   return chatId !== null ? (
     <div className="chat-selected-layout">
-      <div className="chat-single-item-layout">
+      <div
+        className="chat-single-item-layout"
+        style={{
+          height: hasAttachment ? "calc(100vh - 400px)" : "calc(100vh - 140px)",
+        }}
+      >
         <img
           src={
             chat?.avatarUrl ||
@@ -154,7 +167,10 @@ const ChatWindow = (props: {
         />
         <p>{chat?.userName}</p>
       </div>
-      <div className="chat-section-layout" ref={componentRef}>
+      <div
+        className={`chat-section-layout ${hasAttachment ? "with-attachment" : ""}`}
+        ref={componentRef}
+      >
         {chatMessages !== null
           ? chatMessages.map((message: ChatMessage, index: number) => {
               const messageDate = new Date(message.date);
@@ -180,10 +196,34 @@ const ChatWindow = (props: {
             })
           : null}
       </div>
+      {hasAttachment && (
+        <ChatAddedAttachment
+          file={file}
+          setFile={setFile}
+          isLoading={fileIsLoading}
+          setHasAttachment={setHasAttachment}
+        />
+      )}
       <ChatWindowInputSection
-        sendMessage={sendMessage}
-        chatId={chatId}
         userId={userId}
+        chatId={chatId}
+        sendMessage={sendMessage}
+        setFile={setFile}
+        setConfirmIsActive={setConfirmIsActive}
+        setShouldSendFile={setShouldSendFile}
+        shouldSendFile={shouldSendFile}
+        file={file}
+        setLoading={setFileIsLoading}
+        setHasAttachment={setHasAttachment}
+      />
+      <ChatConfirmAttachmentModal
+        file={file!}
+        active={confirmIsActive}
+        setActive={setConfirmIsActive}
+        setShouldSendFile={setShouldSendFile}
+        setFile={setFile}
+        setHasAttachment={setHasAttachment}
+        setFileIsLoading={setFileIsLoading}
       />
     </div>
   ) : (

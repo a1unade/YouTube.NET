@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+    kompose.version: 1.35.0 (9532ceef3)
+  labels:
+    io.kompose.service: youtube-admin
+  name: youtube-admin
+spec:
+  ports:
+    - name: "5174"
+      port: 5174
+      targetPort: 80
+  selector:
+    io.kompose.service: youtube-admin

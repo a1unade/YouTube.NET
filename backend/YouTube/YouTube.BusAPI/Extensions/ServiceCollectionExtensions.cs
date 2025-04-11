@@ -36,7 +36,8 @@ public static class ServiceCollectionExtensions
                     h.Password(options.Password);
                 });
                 
-                cfg.ConfigureEndpoints(context);                
+
+                cfg.ConfigureEndpoints(context);
             });
         });
     }

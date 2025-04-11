@@ -6,13 +6,20 @@ import ChatWindowInputSection from './chat-window-input-section.tsx';
 import { ChatMessage } from '../../interfaces/chat/chat-message.ts';
 import apiClient from '../../utils/apiClient.ts';
 import { ChatHistoryResponse } from '../../interfaces/chat/chat-history-response.ts';
+import ChatAddedAttachment from './chat-added-attachment.tsx';
+import ChatConfirmAttachmentModal from '../modal/chat-confirm-attachment-modal.tsx';
 
 const ChatWindow = (props: {
   active: boolean;
   chatId: string | null;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
-  sendMessage: (message: string, userId: string, chatId: string | null) => Promise<void>;
+  sendMessage: (
+    message: string,
+    userId: string,
+    fileId: string | null,
+    chatId: string | null,
+  ) => Promise<void>;
   readMessages: (messagesIds: string[], chatId: string | null) => Promise<void>;
   userId: string | null;
 }) => {
@@ -23,6 +30,11 @@ const ChatWindow = (props: {
   const [fetching, setFetching] = useState(true);
   const [page, setPage] = useState(1);
   const componentRef = useRef<HTMLDivElement | null>(null);
+  const [hasAttachment, setHasAttachment] = useState(false);
+  const [fileIsLoading, setFileIsLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [confirmIsActive, setConfirmIsActive] = useState(false);
+  const [shouldSendFile, setShouldSendFile] = useState(false);
 
   useEffect(() => {
     if (chatId === null) {
@@ -102,12 +114,17 @@ const ChatWindow = (props: {
       month: 'long',
       day: 'numeric',
     };
+
     return date.toLocaleDateString(undefined, options);
   };
 
   return (
     <div className="chat-selected-layout">
-      <div className="chat-section-layout" ref={componentRef}>
+      <div
+        className="chat-section-layout"
+        style={{ height: hasAttachment ? '400px' : '450px' }}
+        ref={componentRef}
+      >
         {chatMessages !== null
           ? chatMessages.map((message: ChatMessage, index: number) => {
               const messageDate = new Date(message.date);
@@ -126,7 +143,35 @@ const ChatWindow = (props: {
             })
           : null}
       </div>
-      <ChatWindowInputSection userId={userId} chatId={chatId} sendMessage={sendMessage} />
+      {hasAttachment && (
+        <ChatAddedAttachment
+          file={file}
+          setFile={setFile}
+          isLoading={fileIsLoading}
+          setHasAttachment={setHasAttachment}
+        />
+      )}
+      <ChatWindowInputSection
+        userId={userId}
+        chatId={chatId}
+        sendMessage={sendMessage}
+        setFile={setFile}
+        setConfirmIsActive={setConfirmIsActive}
+        setShouldSendFile={setShouldSendFile}
+        shouldSendFile={shouldSendFile}
+        file={file}
+        setLoading={setFileIsLoading}
+        setHasAttachment={setHasAttachment}
+      />
+      <ChatConfirmAttachmentModal
+        file={file!}
+        active={confirmIsActive}
+        setActive={setConfirmIsActive}
+        setShouldSendFile={setShouldSendFile}
+        setFile={setFile}
+        setHasAttachment={setHasAttachment}
+        setFileIsLoading={setFileIsLoading}
+      />
     </div>
   );
 };
