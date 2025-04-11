@@ -51,11 +51,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf
-                Include="..\YouTube.Payment\Protos\payment.proto"
-                GrpcServices="Client"
-                Link="Protos/payment.proto"
-                ProtoRoot="..\YouTube.Payment\" />
+        <ProjectReference Include="..\YouTube.Proto\YouTube.Proto.csproj" />
+
+        <Protobuf Include="..\YouTube.Proto\Protos\payment.proto"
+                  GrpcServices="Both"
+                  Link="Protos/payment.proto"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -76,5 +76,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-8.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\avatars\users-9.svg" />
     </ItemGroup>
+
+
 
 </Project>

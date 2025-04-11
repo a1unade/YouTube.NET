@@ -25,20 +25,27 @@
         <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     </ItemGroup>
-
-    <ItemGroup>
-        <Protobuf Include="Protos\payment.proto" GrpcServices="Server" />
-    </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\YouTube.Payment.Data\YouTube.Payment.Data.csproj" />
     </ItemGroup>
-        
+
+    <ItemGroup>
+        <ProjectReference Include="..\YouTube.Proto\YouTube.Proto.csproj" />
+
+        <Protobuf Include="..\YouTube.Proto\Protos\payment.proto"
+                  GrpcServices="Server"
+                  Link="Protos/payment.proto"/>
+    </ItemGroup>
     <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Remove="appsettings.json" />
+        <Content Remove="appsettings.Development.json" />
+    </ItemGroup>
    
 
 </Project>

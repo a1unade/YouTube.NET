@@ -7,6 +7,9 @@ WORKDIR /src
 
 COPY ["YouTube.Payment/YouTube.Payment.csproj", "YouTube.Payment/"]
 COPY ["YouTube.Payment.Data/YouTube.Payment.Data.csproj", "YouTube.Payment.Data/"]
+COPY ["YouTube.Proto/YouTube.Proto.csproj", "YouTube.Proto/"]
+COPY ["YouTube.Proto/Protos/payment.proto", "YouTube.Proto/Protos/"]
+
 RUN dotnet restore "YouTube.Payment/YouTube.Payment.csproj"
 
 COPY . .

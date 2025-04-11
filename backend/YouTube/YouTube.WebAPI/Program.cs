@@ -1,20 +1,33 @@
 using System.Reflection;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
-using YouTube.Payment.Protos;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
+using YouTube.Proto;
 using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 Console.WriteLine(builder.Configuration["PaymentService:GrpcEndpoint"]!);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ConfigureEndpointDefaults(lo => 
+    {
+        lo.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+});
+
+
+
 builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 {
-    options.Address = new Uri(builder.Configuration["PaymentService:GrpcEndpoint"]!);
+    options.Address = new Uri("http://localhost:8085");
 });
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

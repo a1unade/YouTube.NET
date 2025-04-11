@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Application.Common.Requests.Base;
@@ -6,7 +7,7 @@ using YouTube.Application.Common.Requests.Payment;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Common;
 using YouTube.Domain.Entities;
-using YouTube.Payment.Protos;
+using YouTube.Proto;
 using CreateWalletRequest = YouTube.Application.Common.Requests.Payment.CreateWalletRequest;
 
 namespace YouTube.WebAPI.Controllers;
@@ -17,12 +18,12 @@ public class PaymentController : ControllerBase
 {
     private readonly IDbContext _context;
     private readonly PaymentService.PaymentServiceClient _paymentClient;
-
-
+    
     public PaymentController(IDbContext context, PaymentService.PaymentServiceClient paymentClient)
     {
         _context = context;
-        _paymentClient = paymentClient;
+        var channel = GrpcChannel.ForAddress("http://localhost:8085");
+        _paymentClient = new PaymentService.PaymentServiceClient(channel);
     }
 
     [HttpPost("[action]")]
@@ -114,18 +115,34 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("[action]")]
-    public async Task<IActionResult> CreateWallet(CreateWalletRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateWallet([FromBody] CreateWalletRequest request,
+        CancellationToken cancellationToken)
     {
-        var response = await _paymentClient.CreateWalletAsync(new Payment.Protos.CreateWalletRequest
+        try
         {
-            UserId = request.UserIdPostgres,
-            Balance = request.Balance,
-            Name = request.Name
-        }, cancellationToken: cancellationToken);
+            var response = await _paymentClient.CreateWalletAsync(
+                new Proto.CreateWalletRequest
+                {
+                    UserId = request.UserIdPostgres,
+                    Balance = request.Balance,
+                    Name = request.Name
+                },
+                cancellationToken: cancellationToken);
 
-        return Ok(response);
+            if (!response.Success)
+            {
+                return BadRequest(response.Error);
+            }
+
+            return Ok(response);
+        }
+        catch (RpcException ex)
+        {
+            Console.WriteLine($"gRPC error: {ex.Status.Detail}");
+            return StatusCode(500, $"gRPC error: {ex.Status.Detail}");
+        }
     }
-    
+
     [HttpPost("[action]")]
     public async Task<IActionResult> UpdateBalance(UpdateBalanceRequest request, CancellationToken cancellationToken)
     {

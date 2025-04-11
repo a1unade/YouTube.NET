@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "YouTube.Payment.Protos";
+option csharp_namespace = "YouTube.Proto";
 
 service PaymentService {
   rpc Withdraw (WithdrawRequest) returns (PaymentResponse);
