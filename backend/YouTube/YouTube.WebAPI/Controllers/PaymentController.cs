@@ -18,8 +18,7 @@ public class PaymentController : ControllerBase
 {
     private readonly IDbContext _context;
     private readonly PaymentService.PaymentServiceClient _paymentClient;
-
-
+    
     public PaymentController(IDbContext context, PaymentService.PaymentServiceClient paymentClient)
     {
         _context = context;
