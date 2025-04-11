@@ -16,6 +16,11 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
     });
+    options.ConfigureEndpointDefaults(lo => 
+    {
+        lo.Protocols = HttpProtocols.Http2;
+    });
+    
 });
 
 builder.Services.AddGrpc(); 
@@ -24,7 +29,7 @@ builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("Mo
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return new MongoClient(settings.ConnectionString);
+    return new MongoClient("mongodb://localhost:27017");
 });
 builder.Services.AddScoped<IMongoContext>(s =>
 {
@@ -35,9 +40,6 @@ builder.Services.AddScoped<IMongoContext>(s =>
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-}
 
 app.UseRouting();
 

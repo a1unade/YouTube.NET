@@ -13,6 +13,10 @@ public static class ServiceCollectionExtensions
     {
         var options = configuration.GetSection("S3Storage").Get<MinioOptions>()!;
 
+        Console.WriteLine(options.AccessKey);
+        Console.WriteLine(options.EndPoint);
+        Console.WriteLine(options.SecretKey);
+
         services.AddMinio(configureClient => configureClient
             .WithEndpoint(options.EndPoint)
             .WithCredentials(options.AccessKey, options.SecretKey)
