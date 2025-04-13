@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   webapi:
     build:
@@ -21,10 +19,12 @@ services:
       - redis
       - minio
       - rabbit
+
     ports:
       - "8080:8080"
     networks:
       - youtube_network
+    restart: always
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
@@ -40,14 +40,18 @@ services:
       - RabbitOptions_Hostname=rabbit
       - REDIS_CONNECTION_STRING=redis:6379
     depends_on:
-      - db
-      - redis
-      - minio
-      - rabbit  
+      db:
+        condition: service_healthy
+      payment_db:
+        condition: service_healthy
+      rabbit:
+        condition: service_healthy
+      redis:
     ports:
       - "8090:8090"
     networks:
       - youtube_network
+    restart: always
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
@@ -63,10 +67,12 @@ services:
     depends_on:
       payment_db:
         condition: service_healthy
+
     ports:
       - "8085:8085"
     networks:
       - youtube_network
+    restart: always
 
   db:
     image: postgres:16
@@ -75,12 +81,18 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: youtube
       POSTGRES_DB: youtube 
+
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - youtube_network
+    restart: always
+    healthcheck:      
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s     
+      retries: 5
 
   payment_db:
     image: postgres:16
@@ -97,10 +109,16 @@ services:
       start_period: 30s
     volumes:
       - payment_db_data:/var/lib/postgresql/data
+
     ports:
       - "5433:5432"
     networks:
       - youtube_network
+    restart: always
+    healthcheck:      
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s     
+      retries: 5
 
   redis:
     container_name: Youtube.Redis
@@ -109,6 +127,7 @@ services:
       - "6379:6379"
     networks:
       - youtube_network
+    restart: always
 
   minio:
     image: quay.io/minio/minio
@@ -122,6 +141,7 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    restart: always
     networks:
       - youtube_network
 
@@ -136,12 +156,18 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - youtube_network
+    restart: always
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
 
 volumes:
   db_data:
   payment_db_data: 
   minio_data:
   data_protection:
+  payment_data:
 
 networks:
   youtube_network:
