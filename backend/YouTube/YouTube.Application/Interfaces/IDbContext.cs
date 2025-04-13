@@ -83,7 +83,7 @@ public interface IDbContext
     
     public DbSet<Link> Links { get; set; }
     
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         
-        DbSet<T> Set<T>() where T : class;
+    DbSet<T> Set<T>() where T : class;
 }

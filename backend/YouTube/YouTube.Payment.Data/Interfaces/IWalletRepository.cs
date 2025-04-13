@@ -1,14 +1,12 @@
-using MongoDB.Bson;
 using YouTube.Payment.Data.Entities;
 
 namespace YouTube.Payment.Data.Interfaces;
 
 public interface IWalletRepository
 {
-    Task<Wallet> CreateWalletAsync(Guid userId, string name, decimal balance,
-        CancellationToken cancellationToken = default);
+    Task<Wallet> CreateWalletAsync(Guid userId, string name, decimal balance, CancellationToken cancellationToken);
 
-    Task<Wallet?> GetByIdAsync(ObjectId walletId, CancellationToken cancellationToken = default);
+    Task<Wallet?> GetByIdAsync(Guid walletId, CancellationToken cancellationToken = default);
 
     Task<Wallet?> GetByPostgresIdAsync(Guid userId, CancellationToken cancellationToken = default);
 

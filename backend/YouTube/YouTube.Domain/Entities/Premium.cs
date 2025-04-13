@@ -36,4 +36,17 @@ public class Premium : BaseEntity
     /// Юзер
     /// </summary>
     public User User { get; set; } = default!;
+    
+    public Premium Clone()
+    {
+        return new Premium
+        {
+            Id = this.Id,
+            StartDate = this.StartDate,
+            EndDate = this.EndDate,
+            Price = this.Price,
+            IsActive = this.IsActive,
+            UserId = this.UserId
+        };
+    }
 }

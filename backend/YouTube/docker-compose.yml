@@ -14,15 +14,13 @@ services:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
       - REDIS_CONNECTION_STRING=redis:6379
-      - MongoDbSettings__ConnectionString=mongodb://mongo:27017
-      - MongoDbSettings__DatabaseName=youtube-payments
-      - PaymentService__GrpcEndpoint=http://payment:5001
+      - PaymentService__GrpcEndpoint=http://payment:8085
     depends_on:
       - db
+      - payment_db 
       - redis
       - minio
       - rabbit
-      - mongo
     ports:
       - "8080:8080"
     networks:
@@ -60,13 +58,13 @@ services:
     container_name: Youtube.Payment
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - MongoDbSettings__ConnectionString=mongodb://mongo:27017
-      - MongoDbSettings__DatabaseName=youtube-payments
-      - ASPNETCORE_URLS=http://+:8085  
+      - ConnectionStrings__PaymentDb=Host=payment_db;Port=5432;Username=postgres;Password=youtube;Database=payment_db;Pooling=true;Timeout=30;CommandTimeout=30
+      - ASPNETCORE_URLS=http://+:8085
     depends_on:
-      - mongo
+      payment_db:
+        condition: service_healthy
     ports:
-      - "8085:8085"  
+      - "8085:8085"
     networks:
       - youtube_network
 
@@ -76,6 +74,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: youtube
+      POSTGRES_DB: youtube 
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
@@ -83,16 +82,23 @@ services:
     networks:
       - youtube_network
 
-  mongo:
-    image: mongo:6.0
-    container_name: Youtube.Mongo
+  payment_db:
+    image: postgres:16
+    container_name: Youtube.PaymentDb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: youtube
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: youtube
+      POSTGRES_DB: payment_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d payment_db"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 30s
     volumes:
-      - mongo_data:/data/db
+      - payment_db_data:/var/lib/postgresql/data
     ports:
-      - "27017:27017"
+      - "5433:5432"
     networks:
       - youtube_network
 
@@ -133,7 +139,7 @@ services:
 
 volumes:
   db_data:
-  mongo_data:
+  payment_db_data: 
   minio_data:
   data_protection:
 

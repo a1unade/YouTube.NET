@@ -11,7 +11,6 @@ using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
-Console.WriteLine(builder.Configuration["PaymentService:GrpcEndpoint"]!);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -22,10 +21,9 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 
-
 builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 {
-    options.Address = new Uri("http://localhost:8085");
+    options.Address = new Uri(builder.Configuration["PaymentService:GrpcEndpoint"]!);
 });
 
 builder.Services.AddControllers();
