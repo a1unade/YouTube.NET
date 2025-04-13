@@ -6,7 +6,6 @@ using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
-using YouTube.Proto;
 using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
@@ -21,15 +20,11 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 
-builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
-{
-    options.Address = new Uri(builder.Configuration["PaymentService:GrpcEndpoint"]!);
-});
-
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddApplicationLayer();
+builder.Services.AddApplicationLayer(builder.Configuration);
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 
 builder.Services.AddS3Storage(builder.Configuration);

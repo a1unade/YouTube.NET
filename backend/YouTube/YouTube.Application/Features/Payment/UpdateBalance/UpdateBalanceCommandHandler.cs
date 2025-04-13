@@ -1,7 +1,6 @@
-using Grpc.Net.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
@@ -15,12 +14,13 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
 {
     private readonly IDbContext _context;
     private readonly PaymentService.PaymentServiceClient _client;
+    private readonly ILogger<UpdateBalanceCommandHandler> _logger;
 
-    public UpdateBalanceCommandHandler(IConfiguration configuration, IDbContext context)
+    public UpdateBalanceCommandHandler(IDbContext context, PaymentService.PaymentServiceClient client, ILogger<UpdateBalanceCommandHandler> logger)
     {
         _context = context;
-        var channel = GrpcChannel.ForAddress(configuration["PaymentService:GrpcEndpoint"]!);
-        _client = new PaymentService.PaymentServiceClient(channel);
+        _client = client;
+        _logger = logger;
     }
     
     public async Task<BaseResponse> Handle(UpdateBalanceCommand request, CancellationToken cancellationToken)
@@ -31,9 +31,10 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
         if (user == null)
             return new BaseResponse(false, UserErrorMessage.UserNotFound);
 
+        var transactionId = Guid.NewGuid();
         var transaction = new Transaction
         {
-            Id = Guid.NewGuid(),
+            Id = transactionId,
             Date = DateTime.UtcNow,
             Price = (decimal)request.Amount,
             Description = $"+{request.Amount}",
@@ -44,6 +45,8 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
 
         await _context.Transactions.AddAsync(transaction, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
+        
+        await using var dbTransaction = await _context.BeginTransactionAsync(cancellationToken);
 
         try
         {
@@ -55,6 +58,7 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
 
             if (!response.Success)
             {
+                await dbTransaction.RollbackAsync(cancellationToken);
                 transaction.Status = PaymentStatus.Failed;
                 await _context.SaveChangesAsync(cancellationToken);
                 
@@ -63,6 +67,7 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
 
             transaction.Status = PaymentStatus.Completed;
             await _context.SaveChangesAsync(cancellationToken);
+            await dbTransaction.CommitAsync(cancellationToken);
 
             return new BaseResponse(true, "Balance updated successfully")
             {
@@ -71,12 +76,46 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
         }
         catch (Exception ex)
         {
-            transaction.Status = PaymentStatus.Failed;
-            await _context.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await dbTransaction.RollbackAsync(cancellationToken);
+                transaction.Status = PaymentStatus.Failed;
+                await _context.SaveChangesAsync(cancellationToken);
 
-            return new BaseResponse(false, $"Failed to update balance: {ex.Message}");
+                await CompensateTopUp(Guid.Parse(request.UserPostgresId), transactionId, request.Amount);
+                
+                return new BaseResponse(false, $"Failed to update balance: {ex.Message}");
+            }
+            catch (Exception compensationEx)
+            {
+                _logger.LogError(compensationEx, "Ошибка при компенсации пополнения баланса");
+                return new BaseResponse(false, "Ошибка при отмене операции пополнения");
+            }
         }
     }
-    
+    private async Task CompensateTopUp(Guid userId, Guid transactionId, double amount)
+    {
+        try
+        {
+            var compensateResponse = await _client.TopUpWalletAsync(new TopUpRequest
+            {
+                UserId = userId.ToString(),
+                Amount = -amount, 
+                TransactionId = transactionId.ToString()
+            });
+
+            if (!compensateResponse.Success)
+            {
+                _logger.LogError($"Не удалось компенсировать пополнение: {compensateResponse.Error}");
+            }
+            
+            _logger.LogInformation($"Компенсация пополнения для пользователя {userId}, транзакция {transactionId}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка при компенсации пополнения баланса");
+            throw;
+        }
+    }
 }
 
