@@ -1,6 +1,5 @@
-using Grpc.Net.Client;
+using System.Globalization;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using YouTube.Application.Common.Responses;
 using YouTube.Proto;
 
@@ -10,10 +9,9 @@ public class GetBalanceQueryHandler : IRequestHandler<GetBalanceQuery, BaseRespo
 {
     private readonly PaymentService.PaymentServiceClient _client;
 
-    public GetBalanceQueryHandler(IConfiguration configuration)
+    public GetBalanceQueryHandler(PaymentService.PaymentServiceClient client)
     {
-        var channel = GrpcChannel.ForAddress(configuration["PaymentService:GrpcEndpoint"]!);
-        _client = new PaymentService.PaymentServiceClient(channel);
+        _client = client;
     }
     
     public async Task<BaseResponse> Handle(GetBalanceQuery request, CancellationToken cancellationToken)
@@ -33,11 +31,11 @@ public class GetBalanceQueryHandler : IRequestHandler<GetBalanceQuery, BaseRespo
             return new BaseResponse
             {
                 IsSuccessfully = true,
-                Message = response.Balance.ToString(),
+                Message = response.Balance.ToString(CultureInfo.CurrentCulture),
                 EntityId = Guid.Parse(response.UserId)
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return new BaseResponse(false, "Сервис временно не доступен");
         }

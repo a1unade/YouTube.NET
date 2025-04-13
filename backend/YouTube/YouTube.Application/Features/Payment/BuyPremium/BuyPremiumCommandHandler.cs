@@ -1,8 +1,7 @@
 using Grpc.Core;
-using Grpc.Net.Client;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Interfaces;
@@ -16,12 +15,14 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
 {
     private readonly IDbContext _context;
     private readonly PaymentService.PaymentServiceClient _paymentClient;
+    private readonly ILogger<BuyPremiumCommandHandler> _logger;
+
     
-    public BuyPremiumCommandHandler(IDbContext context, IConfiguration configuration)
+    public BuyPremiumCommandHandler(IDbContext context, PaymentService.PaymentServiceClient client, ILogger<BuyPremiumCommandHandler> logger)
     {
         _context = context;
-        var channel = GrpcChannel.ForAddress(configuration["PaymentService:GrpcEndpoint"]!);
-        _paymentClient = new PaymentService.PaymentServiceClient(channel);
+       _paymentClient = client;
+       _logger = logger;
     }
 
     public async Task<BaseResponse> Handle(BuyPremiumCommand request, CancellationToken cancellationToken)
@@ -33,9 +34,11 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
         if (user == null)
             return new BaseResponse{ Message = UserErrorMessage.UserNotFound};
 
+        
+        var transactionId = Guid.NewGuid();
         var paymentTransaction = new Transaction
         {
-            Id = Guid.NewGuid(),
+            Id = transactionId,
             Date = DateTime.UtcNow,
             Price = request.Price,
             Description = "Premium subscription payment",
@@ -46,7 +49,9 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
 
         await _context.Transactions.AddAsync(paymentTransaction, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-
+        
+        await using var dbTransaction = await _context.BeginTransactionAsync(cancellationToken);
+        
         try
         {
             var paymentResponse = await _paymentClient.WithdrawAsync(
@@ -58,21 +63,15 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
                 },
                 cancellationToken: cancellationToken);
 
-
-            Console.WriteLine("Пытаемся списать средства");
             if (!paymentResponse.Success)
             {
+                await dbTransaction.RollbackAsync(cancellationToken);
                 paymentTransaction.Status = PaymentStatus.Failed;
                 await _context.SaveChangesAsync(cancellationToken);
-                return new BaseResponse
-                {
-                    Message = paymentResponse.Error
-                };
+                
+                return new BaseResponse { Message = paymentResponse.Error };
             }
             
-
-            // Обновляем подписку
-            Console.WriteLine("Обновляем подписку");
             if (user.Subscriptions == null)
             {
                 user.Subscriptions = new Premium
@@ -91,17 +90,20 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
                 user.Subscriptions.EndDate = user.Subscriptions.EndDate > DateTime.UtcNow
                     ? user.Subscriptions.EndDate.Value.AddMonths(1)
                     : DateTime.UtcNow.AddMonths(1);
+                
                 user.Subscriptions.IsActive = true;
                 user.Subscriptions.Price = request.Price;
             }
 
             paymentTransaction.Status = PaymentStatus.Completed;
             await _context.SaveChangesAsync(cancellationToken);
-            Console.WriteLine("Sohranili");
+
+            await dbTransaction.CommitAsync(cancellationToken);
 
             return new BaseResponse
             {
                 IsSuccessfully = true,
+                EntityId = user.Id,
                 Message = user.Subscriptions.IsActive
                     ? $"Подписка продлена до {user.Subscriptions.EndDate:dd.MM.yyyy}"
                     : "Премиум подписка успешно активирована"
@@ -109,36 +111,46 @@ public class BuyPremiumCommandHandler : IRequestHandler<BuyPremiumCommand, BaseR
         }
         catch (Exception ex)
         {
-            // Откатываем изменения
-            Console.WriteLine(" Откатываем изменения");
-            paymentTransaction.Status = PaymentStatus.Failed;
-            await _context.SaveChangesAsync(cancellationToken);
-
-            // Пытаемся вернуть деньги (если это не таймаут)
-            if (ex is not RpcException { StatusCode: StatusCode.DeadlineExceeded })
+            try
             {
-                try
+                await dbTransaction.RollbackAsync(cancellationToken);
+                paymentTransaction.Status = PaymentStatus.Failed;
+                await _context.SaveChangesAsync(cancellationToken);
+
+                if (ex is not RpcException { StatusCode: StatusCode.DeadlineExceeded })
                 {
-                    Console.WriteLine("Пытаемся вернуть деньги");
-                    await _paymentClient.RefundAsync(new RefundRequest
-                    {
-                        UserId = user.Id.ToString(),
-                        Amount = (double)paymentTransaction.Price,
-                        TransactionId = paymentTransaction.Id.ToString(),
-                    });
+                    await CompensateWithdrawal(user.Id, transactionId, request.Price);
                 }
-                catch
+
+                return ex switch
                 {
-                    return new BaseResponse { Message = "Не получилось вернуть деньги" };
-                }
+                    RpcException { StatusCode: StatusCode.DeadlineExceeded } =>
+                        new BaseResponse { Message = "Сервис оплаты временно недоступен" },
+                    _ => new BaseResponse { Message = "Произошла ошибка при обработке платежа" }
+                };
             }
-
-            return ex switch
+            catch (Exception compensationEx)
             {
-                RpcException { StatusCode: StatusCode.DeadlineExceeded } =>
-                    new BaseResponse { Message = "Сервис оплаты временно недоступен" },
-                _ => new BaseResponse { Message = "Произошла ошибка при обработке платежа" }
-            };
+                _logger.LogError(compensationEx, "Ошибка при компенсации транзакции");
+                return new BaseResponse { Message = "Ошибка при отмене операции" };
+            }
+        }
+    }
+    private async Task CompensateWithdrawal(Guid userId, Guid transactionId, decimal amount)
+    {
+        try
+        {
+            await _paymentClient.RefundAsync(new RefundRequest
+            {
+                UserId = userId.ToString(),
+                Amount = (double)amount,
+                TransactionId = transactionId.ToString()
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка при возврате средств");
+            throw;
         }
     }
 }

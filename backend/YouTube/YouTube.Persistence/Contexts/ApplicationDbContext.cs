@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using YouTube.Application.Interfaces;
 using YouTube.Domain.Entities;
 using File = YouTube.Domain.Entities.File;
@@ -42,6 +43,12 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, 
     public DbSet<File> Files { get; set; }
     
     public DbSet<Link> Links { get; set; }
+    
+    public IDbContextTransaction? CurrentTransaction
+        => Database.CurrentTransaction;
+    
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) 
+        => await Database.BeginTransactionAsync(cancellationToken);
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

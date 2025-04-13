@@ -23,14 +23,11 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
                 .FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
 
             if (wallet == null)
-            {
                 return new PaymentResponse { Success = false, Error = "Wallet not found" };
-            }
 
             if (wallet.Balance < (decimal)request.Amount)
-            {
                 return new PaymentResponse { Success = false, Error = "Not enough funds" };
-            }
+            
 
             wallet.Balance -= (decimal)request.Amount;
 
@@ -45,11 +42,7 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
         }
         catch (Exception e)
         {
-            return new PaymentResponse
-            {
-                Success = false,
-                Error = "500 " + e.Message
-            };
+            return new PaymentResponse { Success = false, Error = e.Message };
         }
     }
 
@@ -57,22 +50,16 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
     {
         try
         {
-            var wallet =
-                await _context.Wallets.FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
+            var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
 
             if (wallet == null)
-            {
                 return new PaymentResponse { Success = false, Error = "Wallet not found" };
-            }
 
             wallet.Balance += (decimal)request.Amount;
 
             await _context.SaveChangesAsync();
 
-            return new PaymentResponse
-            {
-                Success = true
-            };
+            return new PaymentResponse { Success = true };
         }
         catch (Exception e)
         {
@@ -110,13 +97,7 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error creating wallet for user {UserId}", request.UserId);
-            Console.WriteLine(ex);
-            Console.WriteLine(ex.Message);
-         
-            throw new RpcException(new Status(
-                StatusCode.Internal,
-                $"Failed to create wallet: {ex.Message}"));
+            throw new RpcException(new Status(StatusCode.Internal, $"Failed to create wallet: {ex.Message}"));
         }
     }
 
@@ -154,9 +135,8 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
             .FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
         
         if (wallet == null)
-        {
             return new WalletBalanceResponse { UserId = request.UserId, Balance = 0, Error = "Not found" };
-        }
+        
 
         return new WalletBalanceResponse
         {

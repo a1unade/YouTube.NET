@@ -1,7 +1,5 @@
 using Grpc.Core;
-using Grpc.Net.Client;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using YouTube.Application.Common.Responses;
 using YouTube.Proto;
 
@@ -11,10 +9,9 @@ public class CreateWalletCommandHandler : IRequestHandler<CreateWalletCommand, B
 {
     private readonly PaymentService.PaymentServiceClient _client;
 
-    public CreateWalletCommandHandler(IConfiguration configuration)
+    public CreateWalletCommandHandler(PaymentService.PaymentServiceClient client)
     {
-        var channel = GrpcChannel.ForAddress(configuration["PaymentService:GrpcEndpoint"]!);
-        _client = new PaymentService.PaymentServiceClient(channel);
+        _client = client;
     }
     
     public async Task<BaseResponse> Handle(CreateWalletCommand request, CancellationToken cancellationToken)
