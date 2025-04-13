@@ -34,9 +34,13 @@ export const App = () => {
   });
   const [chatIsOpen, setChatIsOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [balance, setBalance] = useState<string>('');
 
   useEffect(() => {
     const authCookie = document.cookie.split('; ').find((row) => row.startsWith('authCookie='));
+    const balanceId = document.cookie.split('; ').find((row) => row.startsWith('balanceId='));
+
+    if (balanceId) setBalance(balanceId);
 
     if (authCookie) {
       const token = authCookie.split('=')[1];
@@ -165,7 +169,7 @@ export const App = () => {
             <Route path="/feed/subscriptions" element={<Subscriptions />} />
             <Route path="/auth/:userId" element={<AuthRedirect />} />
             <Route path="/feed/playlists" element={<Playlists />} />
-            <Route path="/premium" element={<Premium />} />
+            <Route path="/premium" element={<Premium userId={userId} balanceId={balance} />} />
             <Route path="/upload" element={<UploadPage userId={userId} />} />
           </Routes>
         </div>
