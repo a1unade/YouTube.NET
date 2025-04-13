@@ -1,12 +1,27 @@
 /* istanbul ignore file */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import apiClient from '../../../utils/api-client.ts';
 
 const Terms = (props: {
   setContainerContent: React.Dispatch<React.SetStateAction<number>>;
   userId: string;
+  name: string;
+  surname: string;
 }) => {
-  const { setContainerContent, userId } = props;
+  const { setContainerContent, userId, name, surname } = props;
+
+  useEffect(() => {
+    apiClient
+      .post('Payment/CreateWallet', {
+        name: `${name} ${surname}`,
+        userIdPostgres: userId,
+        balance: 0,
+      })
+      .then((res) => {
+        if (res.status !== 200) console.error(res.data);
+      });
+  });
 
   return (
     <>

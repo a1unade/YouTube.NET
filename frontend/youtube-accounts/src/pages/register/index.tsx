@@ -106,7 +106,14 @@ const Register = () => {
           />
         );
       case 6:
-        return <Terms setContainerContent={setContainerContent} userId={userId} />;
+        return (
+          <Terms
+            setContainerContent={setContainerContent}
+            userId={userId}
+            name={name}
+            surname={surname}
+          />
+        );
       default:
         return null;
     }
