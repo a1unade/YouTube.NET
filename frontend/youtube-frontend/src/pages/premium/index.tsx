@@ -5,7 +5,8 @@ import AddFundsModal from '../../components/modal/addfunds-modal.tsx';
 const Premium = (props: { userId: string | null; balanceId: string }) => {
   const { userId, balanceId } = props;
   const [modal, setModal] = useState(false);
-
+  const [addFundsModal, setAddFundsModal] = useState(false);
+ 
   return (
     <div className="premium-page-layout">
       <div className="premium-header-layout">
@@ -18,6 +19,9 @@ const Premium = (props: { userId: string | null; balanceId: string }) => {
         <h3>1 месяц всего за 249 ₽ • Отменить можно в любой момент</h3>
         <button className="premium-pay-button" onClick={() => setModal(true)}>
           Попробовать
+        </button>
+        <button className="premium-pay-button" onClick={() => setAddFundsModal(true)}>
+          Пополнить
         </button>
         <h3>Или выберите более выгодный план — 6 месяцев или год</h3>
         <h6 className="premium-notice-section">
@@ -133,7 +137,7 @@ const Premium = (props: { userId: string | null; balanceId: string }) => {
         </div>
       </div>
       <PaymentModal active={modal} setActive={setModal} userId={userId} balanceId={balanceId} />
-      <AddFundsModal active={modal} setActive={setModal} userId={userId} balanceId={balanceId} />
+      <AddFundsModal active={addFundsModal} setActive={setAddFundsModal} userId={userId} balanceId={balanceId} />
     </div>
   );
 };
