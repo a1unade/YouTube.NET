@@ -21,7 +21,7 @@ const AddFundsModal = ({
   const [amount, setAmount] = useState(0);
   const { addAlert } = useAlerts();
 
-  console.log(balanceId)
+  console.log(balanceId);
 
   useEffect(() => {
     if (!userId || userId === '') setActive(false);
@@ -47,11 +47,7 @@ const AddFundsModal = ({
         transactionId: userId,
       })
       .then((res) => {
-        if (res.status === 200) {
-          addAlert(res.data.message);
-        } else {
-          addAlert('Произошла ошибка');
-        }
+        addAlert(res.data.message);
       });
   };
 
@@ -89,6 +85,7 @@ const AddFundsModal = ({
 
             <div className="premium-selector">
               <input
+                type="number"
                 placeholder="Введите сумму"
                 onChange={(e) => setAmount(parseInt(e.target.value))}
               />

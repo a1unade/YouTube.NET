@@ -6,7 +6,7 @@ const Premium = (props: { userId: string | null; balanceId: string }) => {
   const { userId, balanceId } = props;
   const [modal, setModal] = useState(false);
   const [addFundsModal, setAddFundsModal] = useState(false);
- 
+
   return (
     <div className="premium-page-layout">
       <div className="premium-header-layout">
@@ -137,7 +137,12 @@ const Premium = (props: { userId: string | null; balanceId: string }) => {
         </div>
       </div>
       <PaymentModal active={modal} setActive={setModal} userId={userId} balanceId={balanceId} />
-      <AddFundsModal active={addFundsModal} setActive={setAddFundsModal} userId={userId} balanceId={balanceId} />
+      <AddFundsModal
+        active={addFundsModal}
+        setActive={setAddFundsModal}
+        userId={userId}
+        balanceId={balanceId}
+      />
     </div>
   );
 };

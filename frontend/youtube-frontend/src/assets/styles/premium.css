@@ -244,3 +244,27 @@ select:required:invalid {
 select:not(:required:invalid) {
   color: rgb(32, 33, 36);
 }
+
+.premium-selector input {
+  height: 54px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  padding-left: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.premium-selector input::placeholder {
+  transition: all 0.3s ease;
+  opacity: 1;
+}
+
+.premium-selector input:focus {
+  border: 2px solid rgb(26, 115, 232);
+}
+
+.premium-selector input:focus::placeholder {
+  transition: all 0.3s ease;
+  opacity: 0;
+}
