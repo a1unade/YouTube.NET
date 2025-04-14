@@ -21,6 +21,8 @@ const AddFundsModal = ({
   const [amount, setAmount] = useState(0);
   const { addAlert } = useAlerts();
 
+  console.log(balanceId)
+
   useEffect(() => {
     if (!userId || userId === '') setActive(false);
 
@@ -29,7 +31,7 @@ const AddFundsModal = ({
     setOwnerName('ИМЯ ВЛАДЕЛЬЦА');
     setExpiryDate('12/29');
 
-    apiClient.get<PaymentResponse>(`Payment/GetBalance/Id=${balanceId}`).then((res) => {
+    apiClient.get<PaymentResponse>(`Payment/GetBalance?Id=${userId}`).then((res) => {
       setBalance(res.data.message);
     });
     return () => {
@@ -40,9 +42,9 @@ const AddFundsModal = ({
   const processPayment = () => {
     apiClient
       .post<PaymentResponse>('Payment/UpdateBalance', {
-        id: userId,
+        userPostgresId: userId,
         amount: amount,
-        transactionId: balanceId,
+        transactionId: userId,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -87,7 +89,6 @@ const AddFundsModal = ({
 
             <div className="premium-selector">
               <input
-                type="number"
                 placeholder="Введите сумму"
                 onChange={(e) => setAmount(parseInt(e.target.value))}
               />
@@ -119,7 +120,7 @@ const AddFundsModal = ({
               }}
             >
               <h3 style={{ marginBottom: 20, marginTop: 20 }}>К оплате: </h3>
-              <span>{balance}₽</span>
+              <span>{amount}₽</span>
             </div>
             <div style={{ marginBottom: 20 }}>
               <svg

@@ -149,7 +149,10 @@ const LeftMenu = (props: {
                 title="Творческая студия"
               />
               <MenuButton
-                onClick={() => handleClick('YouTube Premium')}
+                onClick={() => {
+                  handleClick('YouTube Premium'); 
+                  navigate("/premium")}
+                }
                 selected={selected}
                 title="YouTube Premium"
               />

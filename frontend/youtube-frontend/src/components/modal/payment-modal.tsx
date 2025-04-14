@@ -29,6 +29,7 @@ const PaymentModal = ({
   const [balance, setBalance] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<Plan>('');
   const { addAlert } = useAlerts();
+  console.log(balanceId);
 
   useEffect(() => {
     if (!userId || userId === '') setActive(false);
@@ -38,7 +39,7 @@ const PaymentModal = ({
     setOwnerName('ИМЯ ВЛАДЕЛЬЦА');
     setExpiryDate('12/29');
 
-    apiClient.get<PaymentResponse>(`Payment/GetBalance/Id=${balanceId}`).then((res) => {
+    apiClient.get<PaymentResponse>(`Payment/GetBalance?Id=${userId}`).then((res) => {
       setBalance(res.data.message);
     });
     return () => {
@@ -48,7 +49,7 @@ const PaymentModal = ({
 
   const processPayment = () => {
     apiClient
-      .post<PaymentResponse>('Payment/ProcessPayment', {
+      .post<PaymentResponse>('Payment/ProcessPremiumPayment', {
         id: userId,
         price: mapPrice[selectedPlan],
       })
