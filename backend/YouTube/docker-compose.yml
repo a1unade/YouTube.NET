@@ -1,44 +1,50 @@
+version: '3.8'
+
 services:
   webapi:
     build:
       context: .
-      dockerfile: YouTube.WebAPI/Dockerfile 
-    container_name: Youtube.WebApi
+      dockerfile: YouTube.WebAPI/Dockerfile
+    container_name: youtube.webapi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - S3Storage_AccessKey=minioadmin
-      - S3Storage_SecretKey=minioadmin
-      - S3Storage_Endpoint=minio:9000
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin
-      - REDIS_CONNECTION_STRING=redis:6379
-      - PaymentService__GrpcEndpoint=http://payment:8085
+      ASPNETCORE_ENVIRONMENT: Development
+      S3Storage_AccessKey: minioadmin
+      S3Storage_SecretKey: minioadmin
+      S3Storage_Endpoint: minio:9000
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      REDIS_CONNECTION_STRING: redis:6379
+      PaymentService__GrpcEndpoint: http://payment:8085
     depends_on:
-      - db
-      - payment_db 
-      - redis
-      - minio
-      - rabbit
-
+      db:
+        condition: service_healthy
+      payment_db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+      rabbit:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
       - youtube_network
-    restart: always
+    restart: unless-stopped
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
   busapi:
     build:
       context: .
-      dockerfile: YouTube.BusAPI/Dockerfile 
-    container_name: Youtube.BusApi
+      dockerfile: YouTube.BusAPI/Dockerfile
+    container_name: youtube.busapi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - RabbitOptions_Username=guest
-      - RabbitOptions_Password=guest
-      - RabbitOptions_Hostname=rabbit
-      - REDIS_CONNECTION_STRING=redis:6379
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitOptions_Username: guest
+      RabbitOptions_Password: guest
+      RabbitOptions_Hostname: rabbit
+      REDIS_CONNECTION_STRING: redis:6379
     depends_on:
       db:
         condition: service_healthy
@@ -47,11 +53,12 @@ services:
       rabbit:
         condition: service_healthy
       redis:
+        condition: service_started
     ports:
       - "8090:8090"
     networks:
       - youtube_network
-    restart: always
+    restart: unless-stopped
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
@@ -59,44 +66,43 @@ services:
     build:
       context: .
       dockerfile: YouTube.Payment/Dockerfile
-    container_name: Youtube.Payment
+    container_name: youtube.payment
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__PaymentDb=Host=payment_db;Port=5432;Username=postgres;Password=youtube;Database=payment_db;Pooling=true;Timeout=30;CommandTimeout=30
-      - ASPNETCORE_URLS=http://+:8085
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PaymentDb: Host=payment_db;Port=5432;Username=postgres;Password=youtube;Database=payment_db;Pooling=true;Timeout=30;CommandTimeout=30
+      ASPNETCORE_URLS: http://+:8085
     depends_on:
       payment_db:
         condition: service_healthy
-
     ports:
       - "8085:8085"
     networks:
       - youtube_network
-    restart: always
+    restart: unless-stopped
 
   db:
     image: postgres:16
-    container_name: Youtube.Postgres
+    container_name: youtube.db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: youtube
-      POSTGRES_DB: youtube 
-
+      POSTGRES_DB: youtube
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - youtube_network
-    restart: always
-    healthcheck:      
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 5s     
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d youtube"]
+      interval: 5s
+      timeout: 5s
       retries: 5
 
   payment_db:
     image: postgres:16
-    container_name: Youtube.PaymentDb
+    container_name: youtube.payment_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: youtube
@@ -104,34 +110,34 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d payment_db"]
       interval: 5s
-      timeout: 10s
-      retries: 20
-      start_period: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     volumes:
       - payment_db_data:/var/lib/postgresql/data
-
     ports:
       - "5433:5432"
     networks:
       - youtube_network
-    restart: always
-    healthcheck:      
-      test: ["CMD", "pg_isready", "-U", "postgres"]
-      interval: 5s     
-      retries: 5
+    restart: unless-stopped
 
   redis:
-    container_name: Youtube.Redis
-    image: "redis:latest"
+    image: redis:7-alpine
+    container_name: youtube.redis
     ports:
       - "6379:6379"
     networks:
       - youtube_network
-    restart: always
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: quay.io/minio/minio
-    container_name: Youtube.MinioS3
+    container_name: youtube.minio
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -141,33 +147,38 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
-    restart: always
     networks:
       - youtube_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
-  rabbit: 
-    image: rabbitmq:3-management
-    container_name: Youtube.RabbitMq
-    ports:
-      - "5672:5672"
-      - "15672:15672" 
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    container_name: youtube.rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - youtube_network
-    restart: always
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 10s
+      test: ["CMD", "rabbitmq-diagnostics", "status"]
+      interval: 30s
+      timeout: 10s
       retries: 5
 
 volumes:
   db_data:
-  payment_db_data: 
+  payment_db_data:
   minio_data:
   data_protection:
-  payment_data:
 
 networks:
   youtube_network:
