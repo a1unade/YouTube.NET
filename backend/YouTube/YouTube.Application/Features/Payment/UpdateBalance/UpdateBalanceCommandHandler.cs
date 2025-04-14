@@ -69,7 +69,7 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
             await _context.SaveChangesAsync(cancellationToken);
             await dbTransaction.CommitAsync(cancellationToken);
 
-            return new BaseResponse(true, "Balance updated successfully")
+            return new BaseResponse(true, "Баланс успешно обновлен")
             {
                 EntityId = Guid.Parse(response.UserId)
             };
@@ -84,7 +84,7 @@ public class UpdateBalanceCommandHandler : IRequestHandler<UpdateBalanceCommand,
 
                 await CompensateTopUp(Guid.Parse(request.UserPostgresId), transactionId, request.Amount);
                 
-                return new BaseResponse(false, $"Failed to update balance: {ex.Message}");
+                return new BaseResponse(false, $"Не удалось обновить баланс: {ex.Message}");
             }
             catch (Exception compensationEx)
             {
