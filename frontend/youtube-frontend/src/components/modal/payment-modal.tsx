@@ -54,11 +54,7 @@ const PaymentModal = ({
         price: mapPrice[selectedPlan],
       })
       .then((res) => {
-        if (res.status === 200) {
-          addAlert(res.data.message);
-        } else {
-          addAlert('Произошла ошибка');
-        }
+        addAlert(res.data.message);
       });
   };
 
