@@ -2,6 +2,7 @@ using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using YouTube.Payment.Data.Entities;
 using YouTube.Payment.Data.Interfaces;
+using YouTube.Payment.Messages;
 using YouTube.Proto;
 
 namespace YouTube.Payment.Services;
@@ -23,10 +24,10 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
                 .FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
 
             if (wallet == null)
-                return new PaymentResponse { Success = false, Error = "Wallet not found" };
+                return new PaymentResponse { Success = false, Error = WalletMessages.WalletNotFound };
 
             if (wallet.Balance < (decimal)request.Amount)
-                return new PaymentResponse { Success = false, Error = "Not enough funds" };
+                return new PaymentResponse { Success = false, Error = WalletMessages.NotEnoughFounds };
             
 
             wallet.Balance -= (decimal)request.Amount;
@@ -53,7 +54,7 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
             var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
 
             if (wallet == null)
-                return new PaymentResponse { Success = false, Error = "Wallet not found" };
+                return new PaymentResponse { Success = false, Error = WalletMessages.WalletNotFound };
 
             wallet.Balance += (decimal)request.Amount;
 
@@ -112,7 +113,7 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
             {
                 Success = false,
                 UserId = request.UserId,
-                Error = "Wallet not found"
+                Error = WalletMessages.WalletNotFound
             };
         }
         
@@ -135,7 +136,7 @@ public class PaymentGrpcService : PaymentService.PaymentServiceBase
             .FirstOrDefaultAsync(x => x.UserIdPostgres == Guid.Parse(request.UserId));
         
         if (wallet == null)
-            return new WalletBalanceResponse { UserId = request.UserId, Balance = 0, Error = "Not found" };
+            return new WalletBalanceResponse { UserId = request.UserId, Balance = 0, Error = WalletMessages.WalletNotFound };
         
 
         return new WalletBalanceResponse
