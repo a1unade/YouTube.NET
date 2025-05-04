@@ -22,7 +22,13 @@ class VideoItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.network(thumbnailUrl, fit: BoxFit.cover),
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Image.network(
+            thumbnailUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -37,10 +43,12 @@ class VideoItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(height: 4),
                     Text(
                       '$channelName · $views · $timeAgo',

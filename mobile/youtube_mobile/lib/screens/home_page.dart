@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../widgets/app_bar_youtube.dart';
-import '../widgets/bottom_nav_bar.dart';
 import '../widgets/video_item.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: YouTubeAppBar(),
       body: ListView.builder(
         itemCount: 4,
         itemBuilder: (context, index) {
@@ -21,7 +20,6 @@ class HomePage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: YouTubeBottomNavBar(),
     );
   }
 }
