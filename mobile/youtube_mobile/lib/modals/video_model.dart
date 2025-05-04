@@ -5,6 +5,7 @@ class VideoModel {
   final String timeAgo;
   final String thumbnailUrl;
   final String avatarUrl;
+  final String videoUrl;
 
   VideoModel({
     required this.title,
@@ -13,5 +14,6 @@ class VideoModel {
     required this.timeAgo,
     required this.thumbnailUrl,
     required this.avatarUrl,
+    required this.videoUrl,
   });
 }
