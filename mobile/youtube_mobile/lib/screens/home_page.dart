@@ -17,6 +17,7 @@ class HomePage extends StatelessWidget {
             timeAgo: '${index + 1} дня назад',
             thumbnailUrl: 'https://i.pinimg.com/736x/ac/9e/2a/ac9e2ade1537c8a48c679ce51a7846da.jpg',
             avatarUrl: 'https://yt3.googleusercontent.com/MW4JvUKyyL_3Gh9gsnlMdNGBjjmFlV4wITdlpM3bt4uGPpTdyAK3bAyJayWMZoUPqz45qFpqp2o=s160-c-k-c0x00ffffff-no-rj',
+            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
           );
         },
       ),
