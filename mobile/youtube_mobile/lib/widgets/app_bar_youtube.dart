@@ -5,7 +5,7 @@ class YouTubeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       title: SvgPicture.network(
         'https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg',
         height: 24,
