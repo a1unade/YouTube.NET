@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CommentSection extends StatelessWidget {
+  const CommentSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -8,7 +10,7 @@ class CommentSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Комментарии', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          Text('Комментарии', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
           Row(
             children: [
@@ -21,7 +23,7 @@ class CommentSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('user123', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                    Text('Крутое видео, жду продолжения!', style: TextStyle(color: Colors.white)),
+                    Text('Крутое видео, жду продолжения!', style: TextStyle(color: Colors.black)),
                   ],
                 ),
               ),

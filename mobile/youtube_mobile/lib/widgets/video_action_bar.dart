@@ -42,12 +42,12 @@ class _VideoActionBarState extends State<VideoActionBar> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildAction(Icons.thumb_up, isLiked ? '$likeCount' : '$likeCount',
-            toggleLike, isLiked ? Colors.blue : Colors.white),
+            toggleLike, isLiked ? Colors.blue : Colors.black),
         _buildAction(Icons.thumb_down, 'Не нравится', toggleDislike,
-            isDisliked ? Colors.blue : Colors.white),
-        _buildAction(Icons.share, 'Поделиться', () {}, Colors.white),
-        _buildAction(Icons.movie_creation, 'Ремикс', () {}, Colors.white),
-        _buildAction(Icons.download, 'Скачать', () {}, Colors.white),
+            isDisliked ? Colors.blue : Colors.black),
+        _buildAction(Icons.share, 'Поделиться', () {}, Colors.black),
+        _buildAction(Icons.movie_creation, 'Ремикс', () {}, Colors.black),
+        _buildAction(Icons.download, 'Скачать', () {}, Colors.black),
       ],
     );
   }
@@ -61,7 +61,7 @@ class _VideoActionBarState extends State<VideoActionBar> {
         children: [
           Icon(icon, color: color),
           SizedBox(height: 4),
-          Text(label, style: TextStyle(color: Colors.white, fontSize: 12)),
+          Text(label, style: TextStyle(color: Colors.black, fontSize: 12)),
         ],
       ),
     );

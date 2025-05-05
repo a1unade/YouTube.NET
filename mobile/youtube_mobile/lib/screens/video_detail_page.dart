@@ -9,12 +9,12 @@ import '../widgets/video_action_bar.dart';
 class VideoDetailPage extends StatelessWidget {
   final VideoModel video;
 
-  const VideoDetailPage({required this.video});
+  const VideoDetailPage({super.key, required this.video});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: ListView(
           children: [
@@ -23,7 +23,7 @@ class VideoDetailPage extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Text(
                 video.title,
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(

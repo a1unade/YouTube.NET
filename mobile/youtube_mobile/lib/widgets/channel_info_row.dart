@@ -28,7 +28,7 @@ class _ChannelInfoRowState extends State<ChannelInfoRow> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.video.channelName,
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                 Text('1 млн подписчиков', style: TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
@@ -37,15 +37,15 @@ class _ChannelInfoRowState extends State<ChannelInfoRow> {
             onPressed: () {
               setState(() => isSubscribed = !isSubscribed);
             },
+            style: TextButton.styleFrom(
+              backgroundColor: isSubscribed ? Colors.grey.shade800 : Colors.red,
+            ),
             child: Text(
               isSubscribed ? 'Вы подписаны' : 'Подписаться',
               style: TextStyle(
                 color: isSubscribed ? Colors.grey : Colors.white,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            style: TextButton.styleFrom(
-              backgroundColor: isSubscribed ? Colors.grey.shade800 : Colors.red,
             ),
           ),
         ],
