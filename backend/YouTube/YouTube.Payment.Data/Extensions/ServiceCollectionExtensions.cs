@@ -13,7 +13,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddDbContext<PaymentContext>(options =>
         {
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PaymentDb");
+            //var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PaymentDb");
+            var connectionString = "Host=localhost;Username=postgres;Password=Bulat2004;Database=payment_db";
         
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {

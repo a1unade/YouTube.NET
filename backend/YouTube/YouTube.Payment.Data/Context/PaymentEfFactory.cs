@@ -13,7 +13,11 @@ public class PaymentEfFactory : IDesignTimeDbContextFactory<PaymentContext>
         
         var optionBuilder = new DbContextOptionsBuilder<PaymentContext>();
         
-        optionBuilder.UseNpgsql("Host=payment_db;Username=postgres;Password=youtube;Database=payment_db");
+        var connectionString = "Host=localhost;Username=postgres;Password=Bulat2004;Database=payment_db";
+        //var connectionString = "Host=payment_db;Username=postgres;Password=youtube;Database=payment_db";
+        //var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PaymentDb");
+
+        optionBuilder.UseNpgsql(connectionString);
         
         return new PaymentContext(optionBuilder.Options);
     }

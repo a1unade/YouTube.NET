@@ -2,6 +2,7 @@ namespace YouTube.Application.Common.Responses.User;
 
 public class UserInfoResponse : BaseResponse
 {
+    public Guid ChannelId { get; set; }
     public string Name { get; set; } = default!;
 
     public string SurName { get; set; } = default!;
