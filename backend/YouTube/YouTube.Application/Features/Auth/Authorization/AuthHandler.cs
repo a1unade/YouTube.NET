@@ -42,73 +42,101 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(AuthCommand request, CancellationToken cancellationToken)
     {
-        if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty() || 
+        if (request.Email.IsNullOrEmpty() || request.Password.IsNullOrEmpty() ||
             request.Gender.IsNullOrEmpty() || request.SurName.IsNullOrEmpty() ||
             request.Name.IsNullOrEmpty())
+        {
             throw new ValidationException();
-
-        var user = await _userRepository.FindByEmail(request.Email, cancellationToken);
-
-        if (user is not null)
-            throw new BadRequestException(AuthErrorMessages.EmailIsBusy);
-
-        user = new User
-        {
-            DisplayName = request.Name + " " + request.SurName,
-            UserName = request.Email,
-            Email = request.Email,
-            EmailConfirmed = false
-        };
-        
-        var userInfo = new UserInfo
-        {
-            Name = request.Name,
-            Surname = request.SurName,
-            BirthDate = DateOnly.FromDateTime(request.DateOfBirth),
-            Gender = request.Gender,
-            Country = request.Country
-        };
-
-        user.UserInfo = userInfo;
-        
-        var channel = new Domain.Entities.Channel
-        {
-            Id = Guid.NewGuid(),
-            Name = user.DisplayName,
-            Description = null,
-            CreateDate = DateOnly.FromDateTime(DateTime.Today),
-            SubCount = 0,
-            Country = request.Country,
-            User = user
-        };
-        
-        await _context.Channels.AddAsync(channel, cancellationToken);
-        await _playlistService.CreateDefaultPlaylists(channel, cancellationToken);
-
-        var result = await _userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new IdentityException(errors, HttpStatusCode.BadRequest);
         }
 
-        await _userManager.AddToRoleAsync(user, "User");
-        
-        await _signInManager.SignInAsync(user, false);
+        // Проверка существования пользователя
+        var existingUser = await _userRepository.FindByEmail(request.Email, cancellationToken);
+        if (existingUser is not null)
+            throw new BadRequestException(AuthErrorMessages.EmailIsBusy);
 
-        var code = _emailService.GenerateRandomCode();
-        await _userManager.AddClaimAsync(user, new Claim(EmailSuccessMessage.EmailConfirmCodeString, code));
-        
-        await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
+        // Начинаем транзакцию
+        await using var transaction = await _context.BeginTransactionAsync(cancellationToken);
 
-        var jwtToken = await _jwtGenerator.GenerateToken(user); 
-
-        return new AuthResponse
+        try
         {
-            IsSuccessfully = true,
-            Token = jwtToken,
-            UserId = user.Id
-        };
+            // Создаем пользователя (без указания ID, чтобы Identity сам его сгенерировал)
+            var user = new User
+            {
+                DisplayName = $"{request.Name} {request.SurName}",
+                UserName = request.Email,
+                Email = request.Email,
+                EmailConfirmed = false
+            };
+
+            // Создаем пользователя в Identity
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new IdentityException(errors, HttpStatusCode.BadRequest);
+            }
+
+            // Добавляем роль
+            await _userManager.AddToRoleAsync(user, "User");
+
+            // Создаем UserInfo
+            user.UserInfo = new UserInfo
+            {
+                Name = request.Name,
+                Surname = request.SurName,
+                BirthDate = DateOnly.FromDateTime(request.DateOfBirth),
+                Gender = request.Gender,
+                Country = request.Country,
+                UserId = user.Id // Явно устанавливаем связь
+            };
+
+            // Создаем канал
+            var channel = new Domain.Entities.Channel
+            {
+                Id = Guid.NewGuid(),
+                Name = user.DisplayName,
+                Description = null,
+                CreateDate = DateOnly.FromDateTime(DateTime.Today),
+                SubCount = 0,
+                Country = request.Country,
+                UserId = user.Id // Явно устанавливаем связь
+            };
+
+            await _context.Channels.AddAsync(channel, cancellationToken);
+            
+            // Создаем плейлисты
+            await _playlistService.CreateDefaultPlaylists(channel, cancellationToken);
+
+            // Сохраняем все изменения
+            await _context.SaveChangesAsync(cancellationToken);
+
+            // Генерируем код подтверждения
+            var code = _emailService.GenerateRandomCode();
+            await _userManager.AddClaimAsync(user, new Claim(EmailSuccessMessage.EmailConfirmCodeString, code));
+
+            // Отправляем email
+            await _emailService.SendEmailAsync(user.Email, EmailSuccessMessage.EmailConfirmCodeMessage, code);
+
+            // Входим в систему
+            await _signInManager.SignInAsync(user, false);
+
+            // Генерируем токен
+            var jwtToken = await _jwtGenerator.GenerateToken(user);
+
+            // Фиксируем транзакцию
+            await transaction.CommitAsync(cancellationToken);
+
+            return new AuthResponse
+            {
+                IsSuccessfully = true,
+                Token = jwtToken,
+                UserId = user.Id
+            };
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
+        }
     }
 }

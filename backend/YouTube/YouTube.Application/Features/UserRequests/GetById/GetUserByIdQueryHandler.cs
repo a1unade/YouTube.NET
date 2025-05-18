@@ -31,7 +31,8 @@ public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserInf
             SurName = user.UserInfo.Surname!,
             Email = user.Email!,
             UserName = user.DisplayName,
-            IsPremium = user.Subscriptions != null
+            IsPremium = user.Subscriptions != null,
+            ChannelId = user.Channels?.FirstOrDefault()?.Id ?? Guid.Empty
         };
     }
 }

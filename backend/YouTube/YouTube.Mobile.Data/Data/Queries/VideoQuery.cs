@@ -28,12 +28,24 @@ public class VideoQuery
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (video is null)
-            throw new GraphQLException("Видео не найдено");
-
+        {
+            return new VideoResponse
+            {
+                IsSuccessfully = false,
+                Message = "Видео не найдено"
+            };
+        }
+        
         var channel = await context.Channels.FirstOrDefaultAsync(x => x.Id == video.ChannelId, cancellationToken);
 
         if (channel is null)
-            throw new GraphQLException(ChannelErrorMessage.ChannelNotFound);
+        {
+            return new VideoResponse
+            {
+                IsSuccessfully = false,
+                Message = ChannelErrorMessage.ChannelNotFound
+            };
+        }
 
         return new VideoResponse
         {
