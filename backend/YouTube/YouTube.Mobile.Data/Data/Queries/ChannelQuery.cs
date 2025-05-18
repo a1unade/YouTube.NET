@@ -15,7 +15,6 @@ public class ChannelQuery
     [GraphQLDescription("Получить канал по Id")]
     public async Task<ChannelResponse> GetChannel(
         [ID] Guid id,
-        [Service] IS3Service s3Service,
         [Service] IChannelRepository channelRepository,
         CancellationToken cancellationToken
         )
@@ -53,7 +52,6 @@ public class ChannelQuery
         int page,
         int size,
         [Service] IDbContext context,
-        [Service] IS3Service s3Service,
         CancellationToken cancellationToken
     )
     {

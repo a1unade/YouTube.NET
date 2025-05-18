@@ -58,7 +58,6 @@ public class VideoQuery
         int size,
         string? sort,
         string? category,
-        [Service] IS3Service s3Service,
         [Service] IVideoRepository videoRepository,
         CancellationToken cancellationToken
         )
