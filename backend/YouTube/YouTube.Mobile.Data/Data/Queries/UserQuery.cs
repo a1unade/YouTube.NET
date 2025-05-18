@@ -25,12 +25,15 @@ public class UserQuery
             .Include(x => x.Channels)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        if (user == null || user.UserInfo == null)
+        if (user == null || user.UserInfo == null!)
         {
-            throw new GraphQLException(UserErrorMessage.UserNotFound);
+            return new UserInfoResponse
+            {
+                IsSuccessfully = false,
+                Message = UserErrorMessage.UserNotFound
+            };
         }
-
-
+        
         Guid channelId = Guid.Empty;
 
         if (user.Channels != null)
@@ -62,7 +65,7 @@ public class UserQuery
 
         if (user == null || user.Channels == null)
         {
-            throw new GraphQLException(UserErrorMessage.UserNotFound);
+            return new BaseResponse(false, UserErrorMessage.UserNotFound);
         }
         
         return new BaseResponse

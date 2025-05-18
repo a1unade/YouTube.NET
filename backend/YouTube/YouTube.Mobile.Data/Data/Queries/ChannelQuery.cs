@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client.Exceptions;
+using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses.Channel;
 using YouTube.Application.DTOs.Channel;
 using YouTube.Application.Interfaces;
@@ -19,8 +21,16 @@ public class ChannelQuery
         CancellationToken cancellationToken
         )
     {
-        var channel = await channelRepository.GetByIdWithImg(id, cancellationToken)
-                      ?? throw new GraphQLException("Channel not found");
+        var channel = await channelRepository.GetByIdWithImg(id, cancellationToken);
+
+        if (channel == null)
+        {
+            return new ChannelResponse
+            {
+                IsSuccessfully = false,
+                Message = ChannelErrorMessage.ChannelNotFound
+            };
+        }
         
         var banner = Guid.Empty;
         var main = Guid.Empty;
