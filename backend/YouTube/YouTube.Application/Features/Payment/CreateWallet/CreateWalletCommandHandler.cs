@@ -44,7 +44,7 @@ public class CreateWalletCommandHandler : IRequestHandler<CreateWalletCommand, B
         {
             return new BaseResponse
             {
-                Message = $"gRPC error: {ex.Status.Detail}"
+                Message = $"gRPC error: {ex.Status.Detail} Message: {ex.Message}"
             };
         }
     }

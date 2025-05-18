@@ -1,8 +1,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using YouTube.Application.Common.Requests.Base;
+using YouTube.Application.Common.Requests.Channel;
 using YouTube.Application.Features.Channel.GetChannel;
 using YouTube.Application.Features.Channel.GetChannelLinks;
+using YouTube.Application.Features.Channel.SubscribeToChannel;
 
 namespace YouTube.WebAPI.Controllers;
 [ApiController]
@@ -37,7 +39,7 @@ public class ChannelController : ControllerBase
     /// </summary>
     /// <param name="request">Id канала</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>подробнуа информация о канале вместе с ссылками</returns>
+    /// <returns>Подробная информация о канале вместе со ссылками</returns>
     [HttpGet("GetChannelLinks")]
     public async Task<IActionResult> GetChannelWithLinks([FromQuery] IdRequest request,
         CancellationToken cancellationToken)
@@ -48,5 +50,23 @@ public class ChannelController : ControllerBase
             return Ok(response);
 
         return NotFound(response);
+    }
+
+    /// <summary>
+    /// Подписаться на канал
+    /// </summary>
+    /// <param name="request">ID каналов</param>
+    /// <param name="cancellation">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("SubscribeToChannel")]
+    public async Task<IActionResult> SubscribeToChannel(SubscribeToChannelRequest request,
+        CancellationToken cancellation)
+    {
+        var response = await _mediator.Send(new SubscribeToChannelCommand(request), cancellation);
+
+        if (response.IsSuccessfully)
+            return Ok(response);
+
+        return BadRequest(response);
     }
 }

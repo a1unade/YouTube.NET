@@ -17,7 +17,7 @@ public class ChannelSubscription
     public Channel Subscriber { get; set; } = default!;
 
     /// <summary>
-    /// Id канала который подписался
+    /// Id канала на который подписались
     /// </summary>
     public Guid  SubscribedToChannelId { get; set; }
 

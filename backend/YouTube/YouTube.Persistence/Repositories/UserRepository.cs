@@ -53,6 +53,8 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users
             .AsNoTracking()
+            .Include(x => x.UserInfo)
+            .Include(x => x.Subscriptions)
             .Include(x => x.Channels)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

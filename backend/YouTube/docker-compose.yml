@@ -1,6 +1,30 @@
 version: '3.8'
 
 services:
+
+  mobiledata:
+    build:
+      context: .
+      dockerfile: YouTube.Mobile.Data/Dockerfile
+    container_name: youtube.mobiledata
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8070
+      GraphQL__Endpoint: http://webapi:8080/graphql
+      S3Storage__Endpoint: http://minio:9000
+      S3Storage__AccessKey: minioadmin
+      S3Storage__SecretKey: minioadmin
+    depends_on:
+      webapi:
+        condition: service_started
+      minio:
+        condition: service_started
+    ports:
+      - "8070:8070"
+    networks:
+      - youtube_network
+    restart: unless-stopped
+    
   webapi:
     build:
       context: .
@@ -86,7 +110,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: youtube
-      POSTGRES_DB: youtube
+      POSTGRES_DB: youtube_db
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
