@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import '../modals/video_model.dart';
 
-class ChannelInfoRow extends StatefulWidget {
-  final VideoModel video;
+class ChannelInfoRow extends StatelessWidget {
+  final Map<String, dynamic> channelData;
 
-  const ChannelInfoRow({required this.video});
-
-  @override
-  State<ChannelInfoRow> createState() => _ChannelInfoRowState();
-}
-
-class _ChannelInfoRowState extends State<ChannelInfoRow> {
-  bool isSubscribed = false;
+  const ChannelInfoRow({super.key, required this.channelData});
 
   @override
   Widget build(BuildContext context) {
@@ -20,30 +12,27 @@ class _ChannelInfoRowState extends State<ChannelInfoRow> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(widget.video.avatarUrl),
+            backgroundImage: NetworkImage('http://localhost:8080/File/GetFileStream/${channelData['mainImage']}'),
           ),
           SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.video.channelName,
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                Text('1 млн подписчиков', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(channelData['name'] ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('${channelData['subscribers'] ?? 0} подписчиков', style: TextStyle(color: Colors.grey, fontSize: 12)),
               ],
             ),
           ),
           TextButton(
-            onPressed: () {
-              setState(() => isSubscribed = !isSubscribed);
-            },
             style: TextButton.styleFrom(
-              backgroundColor: isSubscribed ? Colors.grey.shade800 : Colors.red,
+              backgroundColor: Colors.red,
             ),
+            onPressed: () {  },
             child: Text(
-              isSubscribed ? 'Вы подписаны' : 'Подписаться',
+              'Подписаться',
               style: TextStyle(
-                color: isSubscribed ? Colors.grey : Colors.white,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

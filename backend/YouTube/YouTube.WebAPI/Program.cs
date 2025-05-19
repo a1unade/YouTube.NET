@@ -40,6 +40,17 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+    
 var app = builder.Build();
 
 using var scoped = app.Services.CreateScope();
@@ -56,11 +67,7 @@ app.UseCustomExceptionMiddleware();
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors(b => b
-    .WithOrigins("http://localhost:5173", "http://localhost:5172", "http://localhost:5174", "http://localhost:3000") 
-    .AllowAnyMethod()                     
-    .AllowAnyHeader()                      
-    .AllowCredentials());  
+app.UseCors("AllowAll");
 
 app.MapHub<SupportChatHub>("/supportChatHub");
 

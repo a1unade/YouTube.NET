@@ -4,16 +4,42 @@ import 'package:youtube_mobile/screens/premium_page.dart';
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: auth.isLoggedIn ? _buildProfileContent(context, auth) : _buildLoginPrompt(context),
+class _ProfileScreenState extends State<ProfileScreen> {
+  late Future<void> _autoLoginFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _autoLoginFuture = Provider.of<AuthProvider>(context, listen: false).tryAutoLogin();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _autoLoginFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          return Consumer<AuthProvider>(
+            builder: (context, auth, _) {
+              return Scaffold(
+                backgroundColor: Colors.white,
+                body: auth.isLoggedIn ? _buildProfileContent(context, auth) : _buildLoginPrompt(context),
+              );
+            },
+          );
+        }
+      },
     );
   }
 
@@ -22,24 +48,24 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Вы не вошли в аккаунт', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 20),
+          const Text('Вы не вошли в аккаунт', style: TextStyle(fontSize: 18)),
+          const SizedBox(height: 20),
           SizedBox(
             width: 200,
             child: ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => LoginScreen()),
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: const EdgeInsets.symmetric(vertical: 15),
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: Text('Войти', style: TextStyle(fontSize: 16)),
+              child: const Text('Войти', style: TextStyle(fontSize: 16)),
             ),
           ),
         ],
@@ -53,39 +79,45 @@ class ProfileScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 30,
               backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=3'),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text("Имя", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                Text("example@gmail.com", style: TextStyle(color: Colors.grey)),
+              children: [
+                Text(auth.userId ?? "Имя", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text("example@gmail.com", style: TextStyle(color: Colors.grey)),
               ],
             ),
-            Spacer(),
-            Icon(Icons.keyboard_arrow_right),
+            const Spacer(),
+            const Icon(Icons.keyboard_arrow_right),
           ],
         ),
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         _buildTile(Icons.person, "Мой канал"),
         _buildTile(Icons.play_circle_outline, "Ваши видео"),
         _buildTile(Icons.download_outlined, "Загрузки"),
         _buildTile(Icons.workspace_premium, "YouTube Premium", () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => PremiumPage(userId: 'user123', balanceId: 'balance456')),
+            MaterialPageRoute(builder: (_) => PremiumPage(userId: auth.userId ?? '', balanceId: auth.walletId ?? '')),
           );
         }),
-        Divider(height: 40),
+        const Divider(height: 40),
         _buildTile(Icons.settings, "Настройки"),
         _buildTile(Icons.help_outline, "Справка и отзыв"),
         ListTile(
-          leading: Icon(Icons.logout),
-          title: Text("Выйти"),
-          onTap: () => auth.logOut(),
+          leading: const Icon(Icons.logout),
+          title: const Text("Выйти"),
+          onTap: () {
+            auth.logOut();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+            );
+          },
         ),
       ],
     );
@@ -95,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
-      trailing: Icon(Icons.keyboard_arrow_right),
+      trailing: const Icon(Icons.keyboard_arrow_right),
       onTap: onTap,
     );
   }

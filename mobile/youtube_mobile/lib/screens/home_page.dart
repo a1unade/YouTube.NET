@@ -1,25 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/home/home_state.dart';
+import '../bloc/home/home_bloc.dart';
+import '../bloc/home/home_event.dart';
+import '../services/video_service.dart';
 import '../widgets/video_item.dart';
+import '../models/video_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return VideoItem(
-            title: 'Кто Найдёт Больше Всего Дорогих Вещей Челлендж ! (Бустер, Куертов, Кореш, Парадеич, Кокошка, Лимба) $index',
-            channelName: 'ExileShow',
-            views: '${1000 * (index + 1)} просмотров',
-            timeAgo: '${index + 1} дня назад',
-            thumbnailUrl: 'https://i.pinimg.com/736x/ac/9e/2a/ac9e2ade1537c8a48c679ce51a7846da.jpg',
-            avatarUrl: 'https://yt3.googleusercontent.com/MW4JvUKyyL_3Gh9gsnlMdNGBjjmFlV4wITdlpM3bt4uGPpTdyAK3bAyJayWMZoUPqz45qFpqp2o=s160-c-k-c0x00ffffff-no-rj',
-            videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          );
-        },
+    return BlocProvider(
+      create: (_) => HomeBloc(VideoService())..add(LoadVideos()),
+      child: Scaffold(
+        body: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is HomeLoaded) {
+              return ListView.builder(
+                itemCount: state.videos.length,
+                itemBuilder: (context, index) {
+                  final v = state.videos[index];
+
+                  return VideoItem(
+                    video: Video(
+                      previewUrl: 'http://localhost:8080/File/GetFileStream/${v.previewUrl}',
+                      channelImageUrl: 'http://localhost:8080/File/GetFileStream/${v.channelImageUrl}',
+                      videoName: v.videoName,
+                      views: v.views,
+                      releaseDate: v.releaseDate,
+                      videoId: v.videoId,
+                      channelId: v.channelId,
+                    ),
+                  );
+                },
+              );
+            } else if (state is HomeError) {
+              return Center(child: Text('Ошибка: ${state.message}'));
+            }
+
+            return SizedBox.shrink();
+          },
+        ),
       ),
     );
   }
