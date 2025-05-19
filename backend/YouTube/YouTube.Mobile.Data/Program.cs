@@ -53,8 +53,21 @@ builder.Services.AddGrpcClient<PaymentService.PaymentServiceClient>(options =>
 {
     options.Address = new Uri(builder.Configuration["PaymentService:GrpcEndpoint"]!);
 });
+
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll", builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+    
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.MapGraphQL(); 
 
 app.Run();
