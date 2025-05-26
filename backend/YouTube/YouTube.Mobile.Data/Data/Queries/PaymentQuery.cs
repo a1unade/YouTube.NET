@@ -54,7 +54,7 @@ public class PaymentQuery
         {
             throw new GraphQLException($"Ошибка сервиса платежей: {ex.Status.Detail}");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             throw new GraphQLException("Внутренняя ошибка сервера");
         }

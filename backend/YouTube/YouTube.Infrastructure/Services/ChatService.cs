@@ -53,7 +53,7 @@ public class ChatService : IChatService
         return chatHistory.Id;
     }
 
-    public async Task SendMessageAsync(SendMessageRequest request)
+    public async Task<Guid> SendMessageAsync(SendMessageRequest request)
     {
         var messageRequest = new MessageRequest
         {
@@ -79,6 +79,24 @@ public class ChatService : IChatService
                 Date = DateOnly.FromDateTime(DateTime.Now),
                 Time = TimeOnly.FromDateTime(DateTime.Now)
             });
+
+        return messageRequest.MessageId;
+    }
+    
+    public async Task<Guid> SendMessageGrpcAsync(SendMessageRequest request)
+    {
+        var messageRequest = new MessageRequest
+        {
+            ChatId = request.ChatId,
+            UserId = request.UserId,
+            MessageId = Guid.NewGuid(),
+            Message = request.Message,
+            FileId = request.FileId
+        };
+
+        await _bus.Publish(messageRequest);
+        
+        return messageRequest.MessageId;
     }
 
     public async Task ReadMessagesAsync(List<Guid> messages)

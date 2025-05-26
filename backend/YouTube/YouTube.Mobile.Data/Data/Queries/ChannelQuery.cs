@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses.Channel;
 using YouTube.Application.DTOs.Channel;
