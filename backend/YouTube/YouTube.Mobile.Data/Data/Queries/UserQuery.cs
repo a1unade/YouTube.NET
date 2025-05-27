@@ -3,7 +3,7 @@ using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.Common.Responses.User;
 using YouTube.Application.Interfaces;
-using YouTube.Application.Interfaces.Repositories;
+using YouTube.Domain.Entities;
 
 namespace YouTube.Mobile.Data.Data.Queries;
 
@@ -13,6 +13,11 @@ namespace YouTube.Mobile.Data.Data.Queries;
 [ExtendObjectType("Query")]
 public class UserQuery
 {
+    
+    public IAsyncEnumerable<User> GetUsers([Service] IDbContext dbContext) => 
+        dbContext.Users.AsNoTracking().AsAsyncEnumerable();
+    
+    
     [GraphQLDescription("Получить пользователя")]
     public async Task<UserInfoResponse> GetUser(
         [ID] Guid id,

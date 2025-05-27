@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using YouTube.Application.Interfaces;
+using YouTube.Infrastructure.Helpers;
 using YouTube.Infrastructure.Options;
 using YouTube.Infrastructure.Services;
 
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddServices();
         services.AddMessageBus(configuration);
+        services.AddGrpcClient(configuration);
     }
 
     private static void AddServices(this IServiceCollection services)
@@ -25,6 +27,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPlaylistService, PlaylistService>()
             .AddScoped<IChatService, ChatService>()
             .AddScoped<IFileService, FileService>()
+            .AddSingleton<IChatConnectionManager, ChatConnectionManager>()
             .AddSignalR();
     }
     
@@ -48,4 +51,12 @@ public static class ServiceCollectionExtensions
             });
         });
     }
+    
+    private static void AddGrpcClient(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddGrpcClient<Proto.ChatService.ChatServiceClient>(options =>
+        {
+            options.Address = new Uri(configuration["ChatService:GrpcEndpoint"]!);
+        });
+    }   
 }

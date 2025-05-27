@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using YouTube.Application.Common.Exceptions;
 using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses.Video;
 using YouTube.Application.DTOs.Video;

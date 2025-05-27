@@ -4,6 +4,7 @@ using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
 using YouTube.Infrastructure.Hubs;
+using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
 using YouTube.WebAPI.Configurations;
@@ -13,11 +14,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ConfigureEndpointDefaults(lo => 
+    // HTTP/1.1 и HTTP/2 (например, для Swagger, REST API) на 8080
+    options.ListenAnyIP(8080, listenOptions =>
     {
-        lo.Protocols = HttpProtocols.Http1AndHttp2;
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
+
+    // Чистый HTTP/2 для gRPC на 8081
+    options.ListenAnyIP(8081, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
     });
 });
+
 
 
 builder.Services.AddGrpc();
@@ -64,13 +73,13 @@ if (app.Environment.IsDevelopment())
 }
 // TODO  (Logging)
 app.UseCustomExceptionMiddleware();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseCors("AllowAll");
 
 app.MapHub<SupportChatHub>("/supportChatHub");
-
+app.MapGrpcService<GrpcChatService>();
 app.UseAuthentication();
 app.UseAuthorization();
 
