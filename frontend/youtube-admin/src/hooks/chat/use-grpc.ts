@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChatServiceClient } from "../../generated/ChatServiceClientPb";
-import {
+import type {
   JoinChatRequest,
   SendMessageRequest,
   ChatMessageResponse,
