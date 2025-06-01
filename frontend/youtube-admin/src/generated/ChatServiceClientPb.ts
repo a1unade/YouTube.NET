@@ -17,7 +17,7 @@
 
 import * as grpcWeb from 'grpc-web';
 
-import * as chat_pb from './chat_pb';
+import * as chat_pb from './chat_pb.ts';
 
 
 export class ChatServiceClient {

@@ -132,4 +132,3 @@ export namespace ChatMessageResponse {
         isRead: boolean,
     }
 }
-

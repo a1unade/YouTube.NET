@@ -24,7 +24,18 @@ services:
     networks:
       - youtube_network
     restart: unless-stopped
-    
+
+  grpc-web-proxy:
+    image: envoyproxy/envoy:v1.25-latest
+    container_name: youtube.mobile-proxy
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+    ports:
+      - "8082:8082"
+    networks:
+      - youtube_network
+    command: ["envoy", "-c", "/etc/envoy/envoy.yaml"]
+
   webapi:
     build:
       context: .

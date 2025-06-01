@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../services/chat_service.dart';
 import '../src/generated/chat.pb.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String userId;
+
+  const ChatScreen({super.key, required this.userId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -16,15 +17,14 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
   final List<ChatMessageResponse> _messages = [];
   late final ChatGrpcClient _client;
-  late final String _userId;
+  late final String _userId = widget.userId;
   String? _chatId;
   StreamSubscription<ChatMessageResponse>? _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    _userId = const Uuid().v4(); // или получай из логина
-    _client = ChatGrpcClient('10.0.2.2', 8081); // Android: 10.0.2.2 = localhost
+    _client = ChatGrpcClient('localhost', 8082);
     _initChat();
   }
 

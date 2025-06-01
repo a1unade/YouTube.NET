@@ -4,7 +4,7 @@ import type {
   JoinChatRequest,
   SendMessageRequest,
   ChatMessageResponse,
-} from "../../generated/chat_pb";
+} from "../../generated/chat_pb"
 import { ChatMessage } from "../../interfaces/chat/chat-message.ts";
 import { ClientReadableStream } from "grpc-web";
 
@@ -29,6 +29,9 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
       }
 
       const request = new JoinChatRequest();
+      console.log("JoinChatRequest:", JoinChatRequest);
+
+      console.log("typeof request.setChatId:", typeof request.setUserId);
       request.setUserId(userId);
       if (chatId) request.setChatId(chatId);
 
@@ -68,7 +71,10 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
 
   const sendMessage = (chatId: string, userId: string, message: string) => {
     return new Promise<void>((resolve, reject) => {
+      console.log("SendMessageRequest class:", SendMessageRequest);
       const request = new SendMessageRequest();
+      console.log("request instance:", request);
+      console.log("typeof request.setChatId:", typeof request.setChatId);
       request.setChatId(chatId);
       request.setUserId(userId);
       request.setMessage(message);

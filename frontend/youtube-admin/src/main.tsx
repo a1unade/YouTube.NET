@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { JWTTokenDecoded } from "./interfaces/jwt-token/jwt-token-decoded.ts";
 import AuthRedirect from "./pages/auth";
+import GrpcChatPage from "./pages/chat/grpc";
 
 export const App = () => {
   const { alerts, removeAlert } = useAlerts();
@@ -61,6 +62,11 @@ export const App = () => {
         <Route path="/" element={<ChatPage userId={userId} />} />
         <Route path="/chat" element={<ChatPage userId={userId} />} />
         <Route path="/chat/:id" element={<ChatPage userId={userId} />} />
+        <Route path="/grpc-chat" element={<GrpcChatPage userId={userId} />} />
+        <Route
+          path="/grpc-chat/:id"
+          element={<GrpcChatPage userId={userId} />}
+        />
         <Route path="/auth/:userId" element={<AuthRedirect />} />
       </Routes>
     </>
