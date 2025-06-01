@@ -35,7 +35,8 @@ class VideoDetailPage extends StatelessWidget {
                 return ListView(
                   children: [
                     VideoPlayerWidget(
-                      videoUrl: 'http://localhost:8080/File/GetVideoStream/${video.videoFileId}',
+                     // videoUrl: 'http://localhost:8080/File/GetVideoStream/${video.videoFileId}',
+                       videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
                     ),
                     Padding(
                       padding: const EdgeInsets.all(12.0),
