@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ChatServiceClient } from "../../generated/ChatServiceClientPb";
-import type {
+import {
   JoinChatRequest,
   SendMessageRequest,
   ChatMessageResponse,
-} from "../../generated/chat_pb"
+} from "../../generated/chat_pb";
 import { ChatMessage } from "../../interfaces/chat/chat-message.ts";
 import { ClientReadableStream } from "grpc-web";
 

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import '../services/chat_service.dart';
 import '../src/generated/chat.pb.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userId;
+  final String chatId;
 
-  const ChatScreen({super.key, required this.userId});
+  const ChatScreen({super.key, required this.userId, required this.chatId});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -18,7 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<ChatMessageResponse> _messages = [];
   late final ChatGrpcClient _client;
   late final String _userId = widget.userId;
-  String? _chatId;
+  late final _chatId = widget.chatId;
   StreamSubscription<ChatMessageResponse>? _streamSubscription;
 
   @override
@@ -29,9 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _initChat() async {
-    final response = await _client.joinChat(_userId);
+    final response = await _client.joinChat(_userId, _chatId);
     print('JoinChat response: chatId = ${response.chatId}');
-    _chatId = response.chatId;
     _listenToMessages();
   }
 
