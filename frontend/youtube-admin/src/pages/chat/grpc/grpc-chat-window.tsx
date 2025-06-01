@@ -1,12 +1,10 @@
 import { ChatSingleItem } from "../../../interfaces/chat/chat-single-item.ts";
 import { ChatMessage } from "../../../interfaces/chat/chat-message.ts";
-import ChatSingleMessage from "./chat-single-message.tsx";
-import ChatWindowInputSection from "./chat-window-input-section.tsx";
+import ChatSingleMessage from "../components/chat-single-message.tsx";
 import React, { useEffect, useRef, useState } from "react";
 import apiClient from "../../../utils/apiClient.ts";
 import { ChatHistoryResponse } from "../../../interfaces/chat/chat-history-response.ts";
-import ChatConfirmAttachmentModal from "../../../components/modal/chat-confirm-attachment-modal.tsx";
-import ChatAddedAttachment from "./chat-added-attachment.tsx";
+import GrpcChatWindowInput from "./grpc-chat-window-input.tsx";
 
 const formatDate = (date: Date) => {
   const options: Intl.DateTimeFormatOptions = {
@@ -17,21 +15,19 @@ const formatDate = (date: Date) => {
   return date.toLocaleDateString(undefined, options);
 };
 
-const ChatWindow = (props: {
+const GrpcChatWindow = (props: {
   chat: ChatSingleItem | undefined;
   joinChat: (userId: string, chatId: string | null) => Promise<void>;
   userId: string | null;
   chatId: string | null;
   sendMessage: (
-    message: string,
+    chatId: string,
     userId: string,
-    fileId: string | null,
-    chatId: string | null,
+    message: string,
   ) => Promise<void>;
   isConnected: boolean;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
-  readMessages: (messagesIds: string[], chatId: string) => Promise<void>;
 }) => {
   const {
     chat,
@@ -41,7 +37,6 @@ const ChatWindow = (props: {
     userId,
     chatId,
     chatMessages,
-    readMessages,
     isConnected,
   } = props;
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
@@ -49,11 +44,6 @@ const ChatWindow = (props: {
   const [fetching, setFetching] = useState(true);
   const [page, setPage] = useState(1);
   const componentRef = useRef<HTMLDivElement | null>(null);
-  const [hasAttachment, setHasAttachment] = useState(false);
-  const [fileIsLoading, setFileIsLoading] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
-  const [confirmIsActive, setConfirmIsActive] = useState(false);
-  const [shouldSendFile, setShouldSendFile] = useState(false);
 
   useEffect(() => {
     if (chatId === null) {
@@ -64,8 +54,9 @@ const ChatWindow = (props: {
   }, [chatId]);
 
   useEffect(() => {
+    console.log({ chatId, hasJoinedChat, userId, isConnected });
     const checkAndJoinChat = async () => {
-      if (chatId !== null && !hasJoinedChat && userId !== null && isConnected) {
+      if (chatId !== null && !hasJoinedChat && userId !== null) {
         joinChat(userId, chatId).then(() => {
           setHasJoinedChat(true);
         });
@@ -103,31 +94,6 @@ const ChatWindow = (props: {
   }, [fetching, chatId, hasJoinedChat]);
 
   useEffect(() => {
-    const updateUnreadMessages = async () => {
-      if (chatMessages !== null && chatId !== null) {
-        const unreadMessagesId = chatMessages
-          .filter(
-            (message) =>
-              !message.isRead &&
-              message.senderId !== userId &&
-              message.messageId !== "",
-          )
-          .map((message) => message.messageId);
-
-        if (unreadMessagesId.length > 0) {
-          try {
-            await readMessages(unreadMessagesId, chatId);
-          } catch (error) {
-            console.error("Error marking messages as read:", error);
-          }
-        }
-      }
-    };
-
-    updateUnreadMessages();
-  }, [chatMessages, userId, chatId]);
-
-  useEffect(() => {
     const currentRef = componentRef.current;
     if (currentRef) {
       currentRef.addEventListener("scroll", handleScroll);
@@ -151,12 +117,7 @@ const ChatWindow = (props: {
 
   return chatId !== null ? (
     <div className="chat-selected-layout">
-      <div
-        className="chat-single-item-layout"
-        style={{
-          height: hasAttachment ? "calc(100vh - 400px)" : "calc(100vh - 140px)",
-        }}
-      >
+      <div className="chat-single-item-layout">
         <img
           src={
             chat?.avatarUrl ||
@@ -167,10 +128,7 @@ const ChatWindow = (props: {
         />
         <p>{chat?.userName}</p>
       </div>
-      <div
-        className={`chat-section-layout ${hasAttachment ? "with-attachment" : ""}`}
-        ref={componentRef}
-      >
+      <div className="chat-section-layout" ref={componentRef}>
         {chatMessages !== null
           ? chatMessages.map((message: ChatMessage, index: number) => {
               const messageDate = new Date(message.date);
@@ -196,34 +154,10 @@ const ChatWindow = (props: {
             })
           : null}
       </div>
-      {hasAttachment && (
-        <ChatAddedAttachment
-          file={file}
-          setFile={setFile}
-          isLoading={fileIsLoading}
-          setHasAttachment={setHasAttachment}
-        />
-      )}
-      <ChatWindowInputSection
+      <GrpcChatWindowInput
         userId={userId}
         chatId={chatId}
         sendMessage={sendMessage}
-        setFile={setFile}
-        setConfirmIsActive={setConfirmIsActive}
-        setShouldSendFile={setShouldSendFile}
-        shouldSendFile={shouldSendFile}
-        file={file}
-        setLoading={setFileIsLoading}
-        setHasAttachment={setHasAttachment}
-      />
-      <ChatConfirmAttachmentModal
-        file={file!}
-        active={confirmIsActive}
-        setActive={setConfirmIsActive}
-        setShouldSendFile={setShouldSendFile}
-        setFile={setFile}
-        setHasAttachment={setHasAttachment}
-        setFileIsLoading={setFileIsLoading}
       />
     </div>
   ) : (
@@ -233,4 +167,4 @@ const ChatWindow = (props: {
   );
 };
 
-export default ChatWindow;
+export default GrpcChatWindow;

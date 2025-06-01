@@ -1,13 +1,14 @@
-import ChatSingleItem from "./components/chat-single-item.tsx";
-import ChatWindow from "./components/chat-window.tsx";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChatMessage } from "../../interfaces/chat/chat-message.ts";
-import { useSignalR } from "../../hooks/chat/use-signalr.ts";
-import apiClient from "../../utils/apiClient.ts";
-import { ChatCollectionResponse } from "../../interfaces/chat/chat-collection-response.ts";
+import { ChatMessage } from "../../../interfaces/chat/chat-message.ts";
+import apiClient from "../../../utils/apiClient.ts";
+import { ChatCollectionResponse } from "../../../interfaces/chat/chat-collection-response.ts";
+import { useGrpc } from "../../../hooks/chat/use-grpc.ts";
+import GrpcChatWindow from "./grpc-chat-window.tsx";
+import GrpcChatSingleItem from "./grpc-chat-single-item.tsx";
+import { ChatSingleItem } from "../../../interfaces/chat/chat-single-item.ts";
 
-const ChatPage = (props: { userId: string | null }) => {
+const GrpcChatPage = (props: { userId: string | null }) => {
   const { userId } = props;
   const { id } = useParams<{ id: string }>();
   const [pageCount, setPageCount] = useState(0);
@@ -19,11 +20,10 @@ const ChatPage = (props: { userId: string | null }) => {
   const componentRef = useRef<HTMLDivElement | null>(null);
 
   const navigate = useNavigate();
-  const { joinChat, sendMessage, leaveChat, readMessages, isConnected } =
-    useSignalR({
-      setChatId,
-      setChatMessages,
-    });
+  const { joinChat, sendMessage, leaveChat, isConnected } = useGrpc({
+    setChatId,
+    setChatMessages,
+  });
 
   useEffect(() => {
     const currentRef = componentRef.current;
@@ -67,7 +67,7 @@ const ChatPage = (props: { userId: string | null }) => {
     if (event.key === "Escape") {
       setChatId(null);
       navigate("/chat");
-      leaveChat(chatId);
+      leaveChat();
     }
   };
 
@@ -101,7 +101,7 @@ const ChatPage = (props: { userId: string | null }) => {
           </div>
           {chatList !== null
             ? chatList.map((chat: ChatSingleItem) => (
-                <ChatSingleItem
+                <GrpcChatSingleItem
                   selected={chatId}
                   setSelected={setChatId}
                   key={chat.chatId}
@@ -111,14 +111,13 @@ const ChatPage = (props: { userId: string | null }) => {
             : null}
         </div>
       </div>
-      <ChatWindow
+      <GrpcChatWindow
         chatMessages={chatMessages}
         setChatMessages={setChatMessages}
         chatId={chatId}
         userId={userId}
         joinChat={joinChat}
         sendMessage={sendMessage}
-        readMessages={readMessages}
         isConnected={isConnected}
         chat={
           chatList !== null
@@ -130,4 +129,4 @@ const ChatPage = (props: { userId: string | null }) => {
   );
 };
 
-export default ChatPage;
+export default GrpcChatPage;

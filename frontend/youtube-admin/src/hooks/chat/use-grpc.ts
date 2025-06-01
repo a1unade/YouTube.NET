@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { ChatServiceClient } from "../../generated/ChatServiceClientPb";
-import {
-  JoinChatRequest,
-  SendMessageRequest,
-  ChatMessageResponse,
-} from "../../generated/chat_pb";
+import * as ChatPb from "../../generated/chat_pb";
 import { ChatMessage } from "../../interfaces/chat/chat-message.ts";
 import { ClientReadableStream } from "grpc-web";
 
@@ -19,7 +15,7 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
   );
   const [isConnected, setIsConnected] = useState(false);
   const [chatStream, setChatStream] =
-    useState<ClientReadableStream<ChatMessageResponse> | null>(null);
+    useState<ClientReadableStream<ChatPb.ChatMessageResponse> | null>(null);
 
   const joinChat = (chatId: string | null, userId: string | null) => {
     return new Promise<void>((resolve, reject) => {
@@ -28,7 +24,10 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
         return;
       }
 
-      const request = new JoinChatRequest();
+      const request = new ChatPb.JoinChatRequest();
+      console.log("JoinChatRequest:", ChatPb.JoinChatRequest);
+
+      console.log("typeof request.setChatId:", typeof request.setUserId);
       request.setUserId(userId);
       if (chatId) request.setChatId(chatId);
 
@@ -36,7 +35,7 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
         const stream = client.messageStream(request, {});
         setChatStream(stream);
 
-        stream.on("data", (message: ChatMessageResponse) => {
+        stream.on("data", (message: ChatPb.ChatMessageResponse) => {
           setChatMessages((prev) => [
             ...prev,
             {
@@ -68,7 +67,10 @@ export function useGrpc({ setChatMessages, setChatId }: UseGrpcProps) {
 
   const sendMessage = (chatId: string, userId: string, message: string) => {
     return new Promise<void>((resolve, reject) => {
+      console.log("SendMessageRequest class:", ChatPb.SendMessageRequest);
       const request = new SendMessageRequest();
+      console.log("request instance:", request);
+      console.log("typeof request.setChatId:", typeof request.setChatId);
       request.setChatId(chatId);
       request.setUserId(userId);
       request.setMessage(message);
