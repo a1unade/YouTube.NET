@@ -11,16 +11,6 @@
 /* eslint-disable */
 // @ts-nocheck
 
-var jspb = require('google-protobuf');
-var goog = jspb;
-var global =
-    (typeof globalThis !== 'undefined' && globalThis) ||
-    (typeof window !== 'undefined' && window) ||
-    (typeof global !== 'undefined' && global) ||
-    (typeof self !== 'undefined' && self) ||
-    (function () { return this; }).call(null) ||
-    Function('return this')();
-
 goog.exportSymbol('proto.ChatMessageResponse', null, global);
 goog.exportSymbol('proto.JoinChatRequest', null, global);
 goog.exportSymbol('proto.JoinChatResponse', null, global);
@@ -1069,4 +1059,3 @@ proto.ChatMessageResponse.prototype.setIsRead = function(value) {
 };
 
 
-goog.object.extend(exports, proto);
