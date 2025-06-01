@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'package:grpc/grpc.dart';
+import 'package:grpc/grpc_web.dart';
 import 'package:youtube_mobile/src/generated/chat.pbgrpc.dart';
 
 class ChatGrpcClient {
   late final ChatServiceClient _client;
-  final ClientChannel _channel;
+  final GrpcWebClientChannel _channel;
 
   ChatGrpcClient(String host, int port)
-    : _channel = ClientChannel(
-      host,
-      port: port,
-      options: const ChannelOptions(
-        credentials: ChannelCredentials.insecure(),
-      ),
-  ) {
+      : _channel = GrpcWebClientChannel.xhr(
+          Uri.parse('http://$host:$port'),
+        ) {
     _client = ChatServiceClient(_channel);
   }
 
@@ -29,7 +25,6 @@ class ChatGrpcClient {
       ..chatId = chatId
       ..userId = userId
       ..message = message;
-
     return await _client.sendMessage(request);
   }
 

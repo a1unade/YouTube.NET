@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_mobile/screens/premium_page.dart';
+import 'package:youtube_mobile/screens/chat_screen.dart';
 import '../providers/auth_provider.dart';
 import 'login_screen.dart';
 
@@ -107,7 +108,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }),
         const Divider(height: 40),
         _buildTile(Icons.settings, "Настройки"),
-        _buildTile(Icons.help_outline, "Справка и отзыв"),
+        _buildTile(Icons.help_outline, "Поддержка", () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChatScreen(userId: auth.userId ?? ''),
+            ),
+          );
+        }),
         ListTile(
           leading: const Icon(Icons.logout),
           title: const Text("Выйти"),
