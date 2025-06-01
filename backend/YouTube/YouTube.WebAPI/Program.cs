@@ -27,8 +27,6 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
-
-
 builder.Services.AddGrpc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

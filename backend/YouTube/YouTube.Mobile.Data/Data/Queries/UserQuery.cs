@@ -13,10 +13,8 @@ namespace YouTube.Mobile.Data.Data.Queries;
 [ExtendObjectType("Query")]
 public class UserQuery
 {
-    
-    public IAsyncEnumerable<User> GetUsers([Service] IDbContext dbContext) => 
-        dbContext.Users.AsNoTracking().AsAsyncEnumerable();
-    
+    // public IAsyncEnumerable<User> GetUsers([Service] IDbContext dbContext) => 
+    //     dbContext.Users.AsNoTracking().AsAsyncEnumerable();
     
     [GraphQLDescription("Получить пользователя")]
     public async Task<UserInfoResponse> GetUser(

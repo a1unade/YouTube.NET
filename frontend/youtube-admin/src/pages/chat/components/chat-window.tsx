@@ -31,7 +31,6 @@ const ChatWindow = (props: {
   isConnected: boolean;
   chatMessages: ChatMessage[];
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
-  readMessages: (messagesIds: string[], chatId: string) => Promise<void>;
 }) => {
   const {
     chat,
@@ -41,7 +40,6 @@ const ChatWindow = (props: {
     userId,
     chatId,
     chatMessages,
-    readMessages,
     isConnected,
   } = props;
   const [hasJoinedChat, setHasJoinedChat] = useState(false);
@@ -102,30 +100,31 @@ const ChatWindow = (props: {
     }
   }, [fetching, chatId, hasJoinedChat]);
 
-  useEffect(() => {
-    const updateUnreadMessages = async () => {
-      if (chatMessages !== null && chatId !== null) {
-        const unreadMessagesId = chatMessages
-          .filter(
-            (message) =>
-              !message.isRead &&
-              message.senderId !== userId &&
-              message.messageId !== "",
-          )
-          .map((message) => message.messageId);
-
-        if (unreadMessagesId.length > 0) {
-          try {
-            await readMessages(unreadMessagesId, chatId);
-          } catch (error) {
-            console.error("Error marking messages as read:", error);
-          }
-        }
-      }
-    };
-
-    updateUnreadMessages();
-  }, [chatMessages, userId, chatId]);
+  // Фича с прочтением сообщений
+  // useEffect(() => {
+  //   const updateUnreadMessages = async () => {
+  //     if (chatMessages !== null && chatId !== null) {
+  //       const unreadMessagesId = chatMessages
+  //         .filter(
+  //           (message) =>
+  //             !message.isRead &&
+  //             message.senderId !== userId &&
+  //             message.messageId !== "",
+  //         )
+  //         .map((message) => message.messageId);
+  //
+  //       if (unreadMessagesId.length > 0) {
+  //         try {
+  //           await readMessages(unreadMessagesId, chatId);
+  //         } catch (error) {
+  //           console.error("Error marking messages as read:", error);
+  //         }
+  //       }
+  //     }
+  //   };
+  //
+  //   updateUnreadMessages();
+  // }, [chatMessages, userId, chatId]);
 
   useEffect(() => {
     const currentRef = componentRef.current;
