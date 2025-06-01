@@ -1,11 +1,11 @@
 import ChatSingleItem from "./components/chat-single-item.tsx";
 import ChatWindow from "./components/chat-window.tsx";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ChatMessage } from "../../interfaces/chat/chat-message.ts";
-import { useSignalR } from "../../hooks/chat/use-signalr.ts";
 import apiClient from "../../utils/apiClient.ts";
 import { ChatCollectionResponse } from "../../interfaces/chat/chat-collection-response.ts";
+import { useChatTransport } from "../../hooks/chat/use-chat-transport.ts";
 
 const ChatPage = (props: { userId: string | null }) => {
   const { userId } = props;
@@ -18,12 +18,10 @@ const ChatPage = (props: { userId: string | null }) => {
   const [chatList, setChatList] = useState<ChatSingleItem[]>([]);
   const componentRef = useRef<HTMLDivElement | null>(null);
 
-  const navigate = useNavigate();
-  const { joinChat, sendMessage, leaveChat, readMessages, isConnected } =
-    useSignalR({
-      setChatId,
-      setChatMessages,
-    });
+  const { joinChat, sendMessage, isConnected } = useChatTransport({
+    setChatId,
+    setChatMessages,
+  });
 
   useEffect(() => {
     const currentRef = componentRef.current;
@@ -63,14 +61,6 @@ const ChatPage = (props: { userId: string | null }) => {
     }
   }, [fetching]);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      setChatId(null);
-      navigate("/chat");
-      leaveChat(chatId);
-    }
-  };
-
   const handleScroll = (event: Event) => {
     const target = event.target as Document;
     if (
@@ -83,14 +73,6 @@ const ChatPage = (props: { userId: string | null }) => {
       setPage(page + 1);
     }
   };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   return (
     <div className="chat-page-layout">
@@ -118,7 +100,6 @@ const ChatPage = (props: { userId: string | null }) => {
         userId={userId}
         joinChat={joinChat}
         sendMessage={sendMessage}
-        readMessages={readMessages}
         isConnected={isConnected}
         chat={
           chatList !== null
