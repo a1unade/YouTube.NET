@@ -70,6 +70,29 @@ services:
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
+  
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: youtube.clickhouse
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=secret
+    ports:
+      - "8123:8123"   # HTTP interface
+      - "9009:9009"   # Native interface (for some drivers)
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - youtube_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
   busapi:
     build:
       context: .
@@ -214,7 +237,9 @@ volumes:
   db_data:
   payment_db_data:
   minio_data:
+  clickhouse_data:
   data_protection:
+
 
 networks:
   youtube_network:

@@ -37,7 +37,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
         };
 
         var command = new UploadVideoCommand(request);
-        var handler = new UploadVideoHandler(Context, S3Service.Object);
+        var handler = new UploadVideoHandler(Context, S3Service.Object, ClickHouseService.Object);
         var result = await handler.Handle(command, default);
 
         Assert.True(result.IsSuccessfully);
@@ -70,7 +70,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
         };
 
         var command = new UploadVideoCommand(request);
-        var handler = new UploadVideoHandler(Context, S3Service.Object);
+        var handler = new UploadVideoHandler(Context, S3Service.Object, ClickHouseService.Object);
 
         await Assert.ThrowsAsync<ValidationException>(async () =>
         {
@@ -105,7 +105,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
         };
 
         var command = new UploadVideoCommand(request);
-        var handler = new UploadVideoHandler(Context, S3Service.Object);
+        var handler = new UploadVideoHandler(Context, S3Service.Object, ClickHouseService.Object);
 
         var exception = await Assert.ThrowsAsync<NotFoundException>(async () =>
         {
@@ -142,7 +142,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
         };
 
         var command = new UploadVideoCommand(request);
-        var handler = new UploadVideoHandler(Context, S3Service.Object);
+        var handler = new UploadVideoHandler(Context, S3Service.Object, ClickHouseService.Object);
 
         await Assert.ThrowsAsync<ArgumentNullException>(async () =>
         {
@@ -177,7 +177,7 @@ public class PostUploadVideoHandlerTest : TestCommandBase
         };
 
         var command = new UploadVideoCommand(request);
-        var handler = new UploadVideoHandler(Context, S3Service.Object);
+        var handler = new UploadVideoHandler(Context, S3Service.Object, ClickHouseService.Object);
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {

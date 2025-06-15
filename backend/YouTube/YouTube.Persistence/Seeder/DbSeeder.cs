@@ -1,31 +1,40 @@
+using ClickHouse.Client.ADO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using YouTube.Application.Common.Enums;
 using YouTube.Application.Common.Exceptions;
 using YouTube.Application.DTOs.File;
-using YouTube.Application.DTOs.Video;
 using YouTube.Application.Interfaces;
+using YouTube.Domain.ClickHouseEntity;
 using YouTube.Domain.Entities;
 using File = YouTube.Domain.Entities.File;
 
 namespace YouTube.Persistence.Seeder;
 
-public class DbSeeder : IDbSeeder
+public class DbSeeder : IDbSeeder, IDisposable
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly IS3Service _s3Service;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly ClickHouseConnection _clickHouseConnection;
+    private const string ClickHouseTableName = nameof(View);
 
-
-    public DbSeeder(UserManager<User> userManager, RoleManager<Role> roleManager, IS3Service s3Service,
-        IWebHostEnvironment webHostEnvironment)
+    public DbSeeder(
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
+        IS3Service s3Service,
+        IWebHostEnvironment webHostEnvironment,
+        IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _s3Service = s3Service;
         _webHostEnvironment = webHostEnvironment;
+        _clickHouseConnection = new ClickHouseConnection(configuration["ConnectionStrings:ClickHouse"]);
+        _clickHouseConnection.Open();
     }
 
     private static List<CategoryType> _baseCategories = new()
@@ -101,6 +110,9 @@ public class DbSeeder : IDbSeeder
         await SeedPlaylistAsync(context, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await CreateClickHouseTable(cancellationToken);
+        await SeedVideoOnClickHouse(context, cancellationToken);
     }
 
   
@@ -407,6 +419,111 @@ public class DbSeeder : IDbSeeder
 
             await context.Playlists.AddAsync(playlist, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    private async Task CreateClickHouseTable(CancellationToken cancellationToken)
+    {
+        var command =  $"EXISTS TABLE {ClickHouseTableName}";
+        var cmdCheck = _clickHouseConnection.CreateCommand();
+        cmdCheck.CommandText = command;
+        var result = await cmdCheck.ExecuteScalarAsync(cancellationToken);
+        var tableExist = Convert.ToBoolean(result);
+
+        if (tableExist)
+        {
+            Console.WriteLine($"Таблица {ClickHouseTableName} уже существует");
+            return;
+        }
+        
+        var typeMap = new Dictionary<Type, string>
+        {
+            { typeof(Guid), "UUID" },
+            { typeof(string), "String" },
+            { typeof(int), "Int32" },
+            { typeof(long), "Int64" },
+            { typeof(ulong), "UInt64" },
+            { typeof(DateTime), "DateTime" },
+        };
+        
+        var properties = typeof(View).GetProperties();
+        var columnDefinitions = new List<string>();
+
+        foreach (var prop in properties)
+        {
+            var propType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+        
+            if (!typeMap.TryGetValue(propType, out var clickHouseType))
+            {
+                throw new NotSupportedException($"Type '{propType.Name}' is not supported for property '{prop.Name}'");
+            }
+
+            columnDefinitions.Add($"{prop.Name} {clickHouseType}");
+        }
+
+        var sql = $@"
+        CREATE TABLE IF NOT EXISTS {ClickHouseTableName}
+        (
+            {string.Join(",\n            ", columnDefinitions)}
+        )
+        ENGINE = MergeTree()
+        ORDER BY (Id)";  
+
+        await using var cmd = _clickHouseConnection.CreateCommand();
+        cmd.CommandText = sql;
+        await cmd.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private async Task SeedVideoOnClickHouse(IDbContext context, CancellationToken cancellationToken)
+    {
+        var video = await context.Videos
+            .FirstOrDefaultAsync(x => x.Name == "Mohito" && x.Description == "Tamaev Mohito", cancellationToken);
+
+        if (video == null)
+        {
+            return;
+        }
+
+        var checkQuery = $@"SELECT COUNT() FROM {ClickHouseTableName} WHERE VideoId = '{video.Id}'";
+        
+        await using var checkCmd = _clickHouseConnection.CreateCommand();
+        checkCmd.CommandText = checkQuery;
+        var countResult = Convert.ToInt64(await checkCmd.ExecuteScalarAsync(cancellationToken));
+        
+        if (countResult > 0)
+        {
+            Console.WriteLine($"Видео с ID '{video.Id}' уже существует в ClickHouse");
+            return;
+        }
+        
+        var query = $@"
+        INSERT INTO {ClickHouseTableName} 
+        (Id, VideoName, VideoId, ChannelId, ViewCount)
+        VALUES 
+        (
+            generateUUIDv4(), 
+            '{video.Name}', 
+            '{video.Id}', 
+            '{video.ChannelId}', 
+            {0}
+        )";
+
+        await using var cmd = _clickHouseConnection.CreateCommand();
+        cmd.CommandText = query;
+        await cmd.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    public void Dispose()
+    {
+        try
+        {
+            _userManager.Dispose();
+            _roleManager.Dispose();
+            (_clickHouseConnection as IDisposable).Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при освобождении ресурсов: {ex.Message}");
         }
     }
 }

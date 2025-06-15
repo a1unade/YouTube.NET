@@ -12,11 +12,7 @@ public static class ServiceCollectionExtensions
     public static void AddS3Storage(this IServiceCollection services, IConfiguration configuration)
     {
         var options = configuration.GetSection("S3Storage").Get<MinioOptions>()!;
-
-        Console.WriteLine(options.AccessKey);
-        Console.WriteLine(options.EndPoint);
-        Console.WriteLine(options.SecretKey);
-
+        
         services.AddMinio(configureClient => configureClient
             .WithEndpoint(options.EndPoint)
             .WithCredentials(options.AccessKey, options.SecretKey)

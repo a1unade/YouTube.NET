@@ -50,6 +50,8 @@ public class TestCommandBase : IDisposable
     
     protected Mock<IDistributedCache> Cache { get; }
     
+    protected Mock<IClickHouseService> ClickHouseService { get; }
+    
     protected Mock<IS3Service> S3Service { get; }
     
     protected TestCommandBase()
@@ -85,6 +87,8 @@ public class TestCommandBase : IDisposable
         // Мок сервисов 
 
         PlaylistService = new Mock<IPlaylistService>();
+        
+        
 
         PlaylistService.Setup(x => x.CreateDefaultPlaylists(It.IsAny<Channel>(), It.IsAny<CancellationToken>()));
         // Mok S3
@@ -95,6 +99,10 @@ public class TestCommandBase : IDisposable
 
         S3Service.Setup(x => x.GetFileUrlAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync("fawfwafa");
+        
+        // Mock ClickHouse заглушка
+
+        ClickHouseService = new Mock<IClickHouseService>();
 
         // Мок Cache
         Cache = new Mock<IDistributedCache>();
