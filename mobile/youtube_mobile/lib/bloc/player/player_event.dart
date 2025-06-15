@@ -5,3 +5,8 @@ class LoadVideo extends PlayerEvent {
 
   LoadVideo(this.videoId);
 }
+
+class ViewCountUpdated extends PlayerEvent {
+  final int viewCount;
+  ViewCountUpdated(this.viewCount);
+}
