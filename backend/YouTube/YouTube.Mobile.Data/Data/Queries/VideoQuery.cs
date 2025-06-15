@@ -17,7 +17,6 @@ public class VideoQuery
     public async Task<VideoResponse> GetVideo(
         [ID] Guid id,
         [Service] IDbContext context,
-        [Service] IClickHouseService clickHouseService,
         CancellationToken cancellationToken
     )
     {

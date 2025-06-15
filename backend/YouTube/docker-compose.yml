@@ -70,7 +70,6 @@ services:
     volumes:
       - data_protection:/root/.aspnet/DataProtection-Keys
 
-  
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     container_name: youtube.clickhouse
@@ -216,17 +215,29 @@ services:
       retries: 3
 
   rabbit:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3.13-management-alpine
     container_name: youtube.rabbitmq
+
+    volumes:
+      - ./rabbit_enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+     
+      RABBITMQ_ENABLED_PLUGINS_FILE: /etc/rabbitmq/enabled_plugins
+
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5672:5672"     
+      - "15672:15672"   
+      - "15674:15674"   
+      - "61613:61613"  
+
     networks:
       - youtube_network
+
     restart: unless-stopped
+
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "status"]
       interval: 30s

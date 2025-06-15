@@ -19,7 +19,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _pages = [
     HomePage(),
     SubscriptionsScreen(),
-    // PremiumPage(userId: 'user123', balanceId: 'balance456'),
     ProfileScreen()
   ];
 

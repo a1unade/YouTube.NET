@@ -8,6 +8,7 @@ import '../widgets/video_player_widget.dart';
 import '../widgets/channel_info_row.dart';
 import '../widgets/comment_section.dart';
 import '../widgets/video_action_bar.dart';
+import '../services/rabbitmq_service.dart';
 
 class VideoDetailPage extends StatelessWidget {
   final String videoId;
@@ -22,7 +23,8 @@ class VideoDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PlayerBloc(PlayerService())..add(LoadVideo(videoId)),
+      create: (_) => PlayerBloc(PlayerService(), RabbitMqService()..connect())
+        ..add(LoadVideo(videoId)),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -51,7 +53,7 @@ class VideoDetailPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Text(
-                        '${video.viewCount} · ${video.realiseDate}',
+                        '${state.viewCount} · ${video.realiseDate}',
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ),

@@ -1,5 +1,7 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../models/player_video_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PlayerService {
   final HttpLink httpLink = HttpLink(
@@ -49,5 +51,24 @@ class PlayerService {
     }
 
     return PlayerVideo.fromJson(data['video']);
+  }
+
+  Future<bool> incrementView(String videoId) async {
+    final res = await http.post(
+      Uri.parse('http://localhost:8080/Video/IncrementView'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'videoId': formatGuidWithDashes(videoId)}),
+    );
+
+    return res.statusCode >= 200 && res.statusCode < 300;
+  }
+
+  String formatGuidWithDashes(String guidWithoutDashes) {
+    final regex = RegExp(r'^(.{8})(.{4})(.{4})(.{4})(.{12})$');
+    final match = regex.firstMatch(guidWithoutDashes);
+    if (match == null) {
+      throw FormatException('Invalid GUID format');
+    }
+    return '${match[1]}-${match[2]}-${match[3]}-${match[4]}-${match[5]}';
   }
 }
