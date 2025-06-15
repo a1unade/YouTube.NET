@@ -5,6 +5,7 @@ using YouTube.Application.Common.Messages.Error;
 using YouTube.Application.Common.Responses;
 using YouTube.Application.DTOs.File;
 using YouTube.Application.Interfaces;
+using YouTube.Domain.ClickHouseEntity;
 
 namespace YouTube.Application.Features.Video.UploadVideo;
 
@@ -12,11 +13,13 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
 {
     private readonly IDbContext _context;
     private readonly IS3Service _s3Service;
+    private readonly IClickHouseService _clickHouseService;
 
-    public UploadVideoHandler(IDbContext context, IS3Service s3Service)
+    public UploadVideoHandler(IDbContext context, IS3Service s3Service, IClickHouseService clickHouseService)
     {
         _context = context;
         _s3Service = s3Service;
+        _clickHouseService = clickHouseService;
     }
 
     public async Task<BaseResponse> Handle(UploadVideoCommand request, CancellationToken cancellationToken)
@@ -72,8 +75,9 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
                 previewFile = fileToDb;
         }
 
-        await _context.Videos.AddAsync(new Domain.Entities.Video
+        var video = new Domain.Entities.Video
         {
+            Id = Guid.NewGuid(),
             Name = request.Name,
             Description = request.Description,
             ReleaseDate = DateOnly.FromDateTime(DateTime.Today),
@@ -82,9 +86,19 @@ public class UploadVideoHandler : IRequestHandler<UploadVideoCommand, BaseRespon
             PreviewImg = previewFile,
             VideoUrl = videoFile,
             Category = category
-        }, cancellationToken);
+        };
+        await _context.Videos.AddAsync(video, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
+        
+        await _clickHouseService.AddData(new View
+        {
+            Id = Guid.NewGuid(),
+            VideoName = request.Name,
+            VideoId = video.Id,
+            ChannelId = channel.Id,
+            ViewCount = 0
+        }, cancellationToken);
 
         return new BaseResponse { IsSuccessfully = true };
     }

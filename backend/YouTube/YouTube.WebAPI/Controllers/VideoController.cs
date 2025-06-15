@@ -4,6 +4,7 @@ using YouTube.Application.Common.Requests.Base;
 using YouTube.Application.Common.Requests.Video;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Features.Video.GetVideoPagination;
+using YouTube.Application.Features.Video.IncrementView;
 using YouTube.Application.Features.Video.UploadVideo;
 
 namespace YouTube.WebAPI.Controllers;
@@ -17,6 +18,23 @@ public class VideoController : ControllerBase
     public VideoController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    /// <summary>
+    ///  Добавить просмотр на видео
+    /// </summary>
+    /// <param name="request">Запрос</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns></returns>
+    [HttpPost("IncrementView")]
+    public async Task<IActionResult> IncrementView(IncrementViewRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new IncrementViewCommand(request), cancellationToken);
+        
+        if(response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
     }
 
     /// <summary>

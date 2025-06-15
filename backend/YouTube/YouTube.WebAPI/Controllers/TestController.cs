@@ -11,6 +11,7 @@ using YouTube.Application.Common.Requests.Chats;
 using YouTube.Application.DTOs.File;
 using YouTube.Application.Features.Video.GetVideo;
 using YouTube.Application.Interfaces;
+using YouTube.Domain.ClickHouseEntity;
 using YouTube.Domain.Entities;
 using File = YouTube.Domain.Entities.File;
 
@@ -27,9 +28,10 @@ public class TestController : ControllerBase
     private readonly IEmailService _emailService;
     private readonly IS3Service _s3Service;
     private readonly IBus _bus;
+    private readonly IClickHouseService _clickHouseService;
 
     public TestController(IS3Service service, IMediator mediator, IDbContext context, IEmailService emailService,
-        UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus)
+        UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus, IClickHouseService clickHouseService)
     {
         _service = service;
         _mediator = mediator;
@@ -38,6 +40,32 @@ public class TestController : ControllerBase
         _userManager = userManager;
         _s3Service = s3Service;
         _bus = bus;
+        _clickHouseService = clickHouseService;
+    }
+    
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> GetAllFromClickHouse(CancellationToken cancellationToken)
+    {
+        var data = await _clickHouseService.GetData<View>(cancellationToken);
+        
+        return Ok(data);
+    }
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> IncrementClickHouse([FromBody] Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _clickHouseService.IncrementView(id, cancellationToken);
+        
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+       
     }
 
     [HttpGet("[action]")]

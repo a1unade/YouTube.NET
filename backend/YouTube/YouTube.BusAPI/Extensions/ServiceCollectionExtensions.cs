@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         {
             x.SetKebabCaseEndpointNameFormatter();
             x.AddConsumer<ChatConsumer>();
+            //x.AddConsumer<IncrementViewConsumer>();
             
             x.UsingRabbitMq((context, cfg) =>
             {

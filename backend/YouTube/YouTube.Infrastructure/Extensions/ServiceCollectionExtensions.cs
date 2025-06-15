@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IPlaylistService, PlaylistService>()
             .AddScoped<IChatService, ChatService>()
             .AddScoped<IFileService, FileService>()
+            .AddScoped<IClickHouseService, ClickHouseService>()
             .AddSingleton<IChatConnectionManager, ChatConnectionManager>()
             .AddSignalR();
     }
