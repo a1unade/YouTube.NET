@@ -1,8 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Prometheus;
-using Serilog;
-using Serilog.Sinks.SystemConsole.Themes;
 using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
@@ -10,27 +8,29 @@ using YouTube.Infrastructure.Hubs;
 using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
+using YouTube.Shared.Serilog;
 using YouTube.Shared.Telemetry;
 using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog((context, services, configuration) =>
-{
-    configuration
-        .ReadFrom.Configuration(context.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", "WebApi")
-        .WriteTo.Console(
-            // theme: AnsiConsoleTheme.Literate,
-            outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-        .WriteTo.File(
-            path: "Logs/webapp.log",
-            rollingInterval: RollingInterval.Day,
-            retainedFileCountLimit: 7,
-            outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj}{NewLine}{Exception}");
-});
+
+builder.Host.AddSerilog();
+// builder.Host.UseSerilog((context, services, configuration) =>
+// {
+//     configuration
+//         .ReadFrom.Configuration(context.Configuration)
+//         .ReadFrom.Services(services)
+//         .Enrich.FromLogContext()
+//         .Enrich.WithProperty("Application", "WebApi")
+//         .WriteTo.Console(
+//             outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+//         .WriteTo.File(
+//             path: "Logs/webapp.log",
+//             rollingInterval: RollingInterval.Day,
+//             retainedFileCountLimit: 7,
+//             outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {Level:u3}] {Message:lj}{NewLine}{Exception}");
+// });
 
 builder.WebHost.ConfigureKestrel(options =>
 {
