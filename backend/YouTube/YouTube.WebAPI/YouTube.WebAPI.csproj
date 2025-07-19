@@ -31,7 +31,14 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
         <PackageReference Include="Minio.AspNetCore" Version="6.0.1" />
+        <PackageReference Include="prometheus-net" Version="8.2.1" />
+        <PackageReference Include="prometheus-net.AspNetCore" Version="8.2.1" />
+        <PackageReference Include="prometheus-net.SystemMetrics" Version="3.1.0" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.1-dev-02307" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.1-dev-00953" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
         <PackageReference Include="StackExchange.Redis" Version="2.8.37" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
     </ItemGroup>
@@ -48,6 +55,7 @@
       <ProjectReference Include="..\YouTube.Data.S3\YouTube.Data.S3.csproj" />
       <ProjectReference Include="..\YouTube.Infrastructure\YouTube.Infrastructure.csproj" />
       <ProjectReference Include="..\YouTube.Persistence\YouTube.Persistence.csproj" />
+      <ProjectReference Include="..\YouTube.Shared\YouTube.Shared.csproj" />
 
     </ItemGroup>
 

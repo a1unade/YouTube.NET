@@ -1,8 +1,10 @@
 using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Prometheus;
 using YouTube.Payment.Data.Extensions;
 using YouTube.Payment.Data.Tools;
 using YouTube.Payment.Services;
+using YouTube.Shared.Telemetry;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddGrpc();
 builder.Services.AddPaymentDbContext();
 builder.Services.AddLogging(configure => configure.AddConsole());
+builder.Services.AddPrometheus(builder.Configuration);
 
 var app = builder.Build();
 
@@ -40,5 +43,6 @@ catch (Exception ex)
 
 app.UseRouting();
 app.MapGrpcService<PaymentGrpcService>();
-
+app.UseHttpMetrics(); 
+app.MapMetrics(); 
 app.Run();
