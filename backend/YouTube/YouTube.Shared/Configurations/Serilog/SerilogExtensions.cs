@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Serilog;
 
-namespace YouTube.Shared.Serilog;
+namespace YouTube.Shared.Configurations.Serilog;
 
 public static class SerilogExtensions
 {

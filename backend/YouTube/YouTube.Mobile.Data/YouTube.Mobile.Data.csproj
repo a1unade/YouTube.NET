@@ -19,7 +19,7 @@
         <PackageReference Include="HotChocolate.Data" Version="16.0.0-p.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.0-preview.6.25358.103" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     </ItemGroup>
