@@ -243,12 +243,54 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: youtube.prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - youtube_network
+    restart: unless-stopped
+    depends_on:
+      - webapi
+      - mobiledata
+      - busapi
+      - payment
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: youtube.grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - youtube_network
+    restart: unless-stopped
+    depends_on:
+      - prometheus  
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: youtube.postgres-exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:youtube@db:5432/youtube_db?sslmode=disable
+    ports:
+      - "9187:9187"
+    networks:
+      - youtube_network
+    depends_on:
+      - db
+  
 volumes:
   db_data:
   payment_db_data:
   minio_data:
   clickhouse_data:
+  grafana_data:
   data_protection:
 
 

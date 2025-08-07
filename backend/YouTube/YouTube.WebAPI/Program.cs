@@ -1,5 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Prometheus;
 using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
 using YouTube.Infrastructure.Extensions;
@@ -7,20 +8,22 @@ using YouTube.Infrastructure.Hubs;
 using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
+using YouTube.Shared.Serilog;
+using YouTube.Shared.Telemetry;
 using YouTube.WebAPI.Configurations;
 using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.AddSerilog();
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // HTTP/1.1 и HTTP/2 (например, для Swagger, REST API) на 8080
     options.ListenAnyIP(8080, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
-
-    // Чистый HTTP/2 для gRPC на 8081
+    
     options.ListenAnyIP(8081, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
@@ -40,6 +43,7 @@ builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddHostedService<RedisCleanupBackgroundService>();
 
+builder.Services.AddPrometheus(builder.Configuration);
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -48,38 +52,42 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", corsPolicyBuilder =>
     {
-        options.AddPolicy("AllowAll", builder =>
-        {
-            builder
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+        corsPolicyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
+});
     
 var app = builder.Build();
 
 using var scoped = app.Services.CreateScope();
 var migrator = scoped.ServiceProvider.GetRequiredService<Migrator>();
 await migrator.MigrateAsync();
+//app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-// TODO  (Logging)
 app.UseCustomExceptionMiddleware();
-//app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseCors("AllowAll");
 
 app.MapHub<SupportChatHub>("/supportChatHub");
 app.MapGrpcService<GrpcChatService>();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHttpMetrics(); 
+app.MapMetrics(); 
 
 app.MapControllers();
 app.Run();

@@ -13,6 +13,7 @@ namespace YouTube.Mobile.Data.Data.Queries;
 [ExtendObjectType("Query")]
 public class VideoQuery
 {
+    
     [GraphQLDescription("Получить видео по Id")]
     public async Task<VideoResponse> GetVideo(
         [ID] Guid id,

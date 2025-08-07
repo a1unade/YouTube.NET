@@ -29,9 +29,11 @@ public class TestController : ControllerBase
     private readonly IS3Service _s3Service;
     private readonly IBus _bus;
     private readonly IClickHouseService _clickHouseService;
+    private readonly ILogger<TestController> _logger;
 
     public TestController(IS3Service service, IMediator mediator, IDbContext context, IEmailService emailService,
-        UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus, IClickHouseService clickHouseService)
+        UserManager<User> userManager, IMinioClient minioClient, IS3Service s3Service, IBus bus, IClickHouseService clickHouseService,
+        ILogger<TestController> logger)
     {
         _service = service;
         _mediator = mediator;
@@ -41,6 +43,7 @@ public class TestController : ControllerBase
         _s3Service = s3Service;
         _bus = bus;
         _clickHouseService = clickHouseService;
+        _logger = logger;
     }
     
     
@@ -74,6 +77,15 @@ public class TestController : ControllerBase
         var messages = await _context.ChatMessages
             .Include(x => x.File)
             .ToListAsync(cancellationToken);
+        
+        _logger.LogInformation("INfo");
+        _logger.LogWarning("Warning");
+        _logger.LogDebug("Debug");
+        _logger.LogTrace("Trace");
+        _logger.LogError("Eroor");
+        _logger.LogCritical("Critical");
+
+
 
         return Ok(messages);
     }
@@ -129,6 +141,7 @@ public class TestController : ControllerBase
                        .ToListAsync(cancellationToken)
                    ?? throw new NotFoundException();
 
+        
         return Ok(new
         {
             user
