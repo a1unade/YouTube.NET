@@ -4,7 +4,7 @@ using Prometheus;
 using Prometheus.SystemMetrics;
 using YouTube.Shared.Settings;
 
-namespace YouTube.Shared.Telemetry;
+namespace YouTube.Shared.Configurations.Telemetry;
 
 public static class PrometheusExtension
 {

@@ -1,6 +1,8 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 
-namespace YouTube.WebAPI.Configurations;
+namespace YouTube.Shared.Configurations.Redis;
 
 public static class RedisConfigure
 {
@@ -14,5 +16,7 @@ public static class RedisConfigure
         
         services.AddSingleton<IConnectionMultiplexer>(_ =>
             ConnectionMultiplexer.Connect(configuration.GetConnectionString("Redis")!));
+
+        services.AddMemoryCache();
     }
 }

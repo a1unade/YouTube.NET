@@ -4,7 +4,7 @@ using Prometheus;
 using YouTube.Payment.Data.Extensions;
 using YouTube.Payment.Data.Tools;
 using YouTube.Payment.Services;
-using YouTube.Shared.Telemetry;
+using YouTube.Shared.Configurations.Telemetry;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,3 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using YouTube.Persistence.MigrationTools;
 
 namespace YouTube.WebAPI.Configurations;
