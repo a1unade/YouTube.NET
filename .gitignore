@@ -354,5 +354,9 @@ Users account management/appsettings.Development.json
 Users account management/appsettings.json
 Users account management/Properties/launchSettings.json
 
+# appsettings
+appsettings.json
+appsettings.*.json
+
 #test-coverage
 coverage/
