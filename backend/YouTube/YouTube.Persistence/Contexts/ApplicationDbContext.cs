@@ -44,6 +44,8 @@ public sealed class ApplicationDbContext : IdentityDbContext<User, Role, Guid>, 
     
     public DbSet<Link> Links { get; set; }
     
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    
     public IDbContextTransaction? CurrentTransaction
         => Database.CurrentTransaction;
     

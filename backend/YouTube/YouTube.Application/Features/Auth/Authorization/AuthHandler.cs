@@ -18,7 +18,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IUserRepository _userRepository;
-    private readonly IJwtGenerator _jwtGenerator;
+    private readonly IJwtService _jwtService;
     private readonly IEmailService _emailService;
     private readonly IDbContext _context;
     private readonly IPlaylistService _playlistService;
@@ -26,7 +26,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
     public AuthHandler(UserManager<User> userManager,
         SignInManager<User> signInManager,
         IUserRepository userRepository,
-        IJwtGenerator jwtGenerator,
+        IJwtService jwtService,
         IEmailService emailService,
         IDbContext context,
         IPlaylistService playlistService)
@@ -34,7 +34,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
         _userManager = userManager;
         _signInManager = signInManager;
         _userRepository = userRepository;
-        _jwtGenerator = jwtGenerator;
+        _jwtService = jwtService;
         _emailService = emailService;
         _context = context;
         _playlistService = playlistService;
@@ -121,7 +121,8 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             await _signInManager.SignInAsync(user, false);
 
             // Генерируем токен
-            var jwtToken = await _jwtGenerator.GenerateToken(user);
+            var jwtToken = await _jwtService.GenerateAccessToken(user);
+            var refreshToken = await _jwtService.GenerateRefreshToken(user, cancellationToken);
 
             // Фиксируем транзакцию
             await transaction.CommitAsync(cancellationToken);
@@ -130,6 +131,7 @@ public class AuthHandler : IRequestHandler<AuthCommand, AuthResponse>
             {
                 IsSuccessfully = true,
                 Token = jwtToken,
+                RefreshToken = refreshToken.Token,
                 UserId = user.Id
             };
         }

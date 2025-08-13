@@ -158,12 +158,13 @@ public class TestController : ControllerBase
 
         return BadRequest("Pizda");
     }
-
+    
 
     [HttpGet("EmailTest")]
-    [Authorize(Roles = "Admin")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(401)]
+    [Authorize(Roles = "Admin, User")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> EmailTest()
     {
         await _emailService.SendEmailAsync("bulatfri18@gmail.com", "Хуй", "ХУЙ");

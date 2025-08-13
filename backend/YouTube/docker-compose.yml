@@ -2,28 +2,28 @@ version: '3.8'
 
 services:
 
-  mobiledata:
-    build:
-      context: .
-      dockerfile: YouTube.Mobile.Data/Dockerfile
-    container_name: youtube.mobiledata
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8070
-      GraphQL__Endpoint: http://webapi:8080/graphql
-      S3Storage__Endpoint: http://minio:9000
-      S3Storage__AccessKey: minioadmin
-      S3Storage__SecretKey: minioadmin
-    depends_on:
-      webapi:
-        condition: service_started
-      minio:
-        condition: service_started
-    ports:
-      - "8070:8070"
-    networks:
-      - youtube_network
-    restart: unless-stopped
+  # mobiledata:
+  #   build:
+  #     context: .
+  #     dockerfile: YouTube.Mobile.Data/Dockerfile
+  #   container_name: youtube.mobiledata
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     ASPNETCORE_URLS: http://+:8070
+  #     GraphQL__Endpoint: http://webapi:8080/graphql
+  #     S3Storage__Endpoint: http://minio:9000
+  #     S3Storage__AccessKey: minioadmin
+  #     S3Storage__SecretKey: minioadmin
+  #   depends_on:
+  #     webapi:
+  #       condition: service_started
+  #     minio:
+  #       condition: service_started
+  #   ports:
+  #     - "8070:8070"
+  #   networks:
+  #     - youtube_network
+  #   restart: unless-stopped
 
   grpc-web-proxy:
     image: envoyproxy/envoy:v1.25-latest
@@ -50,11 +50,13 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
       REDIS_CONNECTION_STRING: redis:6379
       PaymentService__GrpcEndpoint: http://payment:8085
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=youtube;Username=postgres;Password=Bulat2004
+
     depends_on:
       db:
         condition: service_healthy
-      payment_db:
-        condition: service_healthy
+      # payment_db:
+      #   condition: service_healthy
       redis:
         condition: service_started
       minio:
@@ -92,63 +94,65 @@ services:
       retries: 5
 
 
-  busapi:
-    build:
-      context: .
-      dockerfile: YouTube.BusAPI/Dockerfile
-    container_name: youtube.busapi
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      RabbitOptions_Username: guest
-      RabbitOptions_Password: guest
-      RabbitOptions_Hostname: rabbit
-      REDIS_CONNECTION_STRING: redis:6379
-    depends_on:
-      db:
-        condition: service_healthy
-      payment_db:
-        condition: service_healthy
-      rabbit:
-        condition: service_healthy
-      redis:
-        condition: service_started
-    ports:
-      - "8090:8090"
-    networks:
-      - youtube_network
-    restart: unless-stopped
-    volumes:
-      - data_protection:/root/.aspnet/DataProtection-Keys
+  # busapi:
+  #   build:
+  #     context: .
+  #     dockerfile: YouTube.BusAPI/Dockerfile
+  #   container_name: youtube.busapi
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     RabbitOptions_Username: guest
+  #     RabbitOptions_Password: guest
+  #     RabbitOptions_Hostname: rabbit
+  #     REDIS_CONNECTION_STRING: redis:6379
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     payment_db:
+  #       condition: service_healthy
+  #     rabbit:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_started
+  #   ports:
+  #     - "8090:8090"
+  #   networks:
+  #     - youtube_network
+  #   restart: unless-stopped
+  #   volumes:
+  #     - data_protection:/root/.aspnet/DataProtection-Keys
 
-  payment:
-    build:
-      context: .
-      dockerfile: YouTube.Payment/Dockerfile
-    container_name: youtube.payment
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__PaymentDb: Host=payment_db;Port=5432;Username=postgres;Password=youtube;Database=payment_db;Pooling=true;Timeout=30;CommandTimeout=30
-      ASPNETCORE_URLS: http://+:8085
-    depends_on:
-      payment_db:
-        condition: service_healthy
-    ports:
-      - "8085:8085"
-    networks:
-      - youtube_network
-    restart: unless-stopped
+  # payment:
+  #   build:
+  #     context: .
+  #     dockerfile: YouTube.Payment/Dockerfile
+  #   container_name: youtube.payment
+  #   environment:
+  #     ASPNETCORE_ENVIRONMENT: Development
+  #     ConnectionStrings__PaymentDb: Host=payment_db;Port=5432;Username=postgres;Password=youtube;Database=payment_db;Pooling=true;Timeout=30;CommandTimeout=30
+  #     ASPNETCORE_URLS: http://+:8085
+  #   depends_on:
+  #     payment_db:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8085:8085"
+  #   networks:
+  #     - youtube_network
+  #   restart: unless-stopped
 
   db:
     image: postgres:16
     container_name: youtube.db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: youtube
-      POSTGRES_DB: youtube_db
+      POSTGRES_PASSWORD: Bulat2004
+      POSTGRES_DB: youtube
+      POSTGRES_HOST_AUTH_METHOD: trust
+      
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - youtube_network
     restart: unless-stopped
@@ -158,26 +162,26 @@ services:
       timeout: 5s
       retries: 5
 
-  payment_db:
-    image: postgres:16
-    container_name: youtube.payment_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: youtube
-      POSTGRES_DB: payment_db
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d payment_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-    volumes:
-      - payment_db_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
-    networks:
-      - youtube_network
-    restart: unless-stopped
+  # payment_db:
+  #   image: postgres:16
+  #   container_name: youtube.payment_db
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: youtube
+  #     POSTGRES_DB: payment_db
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres -d payment_db"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 10s
+  #   volumes:
+  #     - payment_db_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5433:5432"
+  #   networks:
+  #     - youtube_network
+  #   restart: unless-stopped
 
   redis:
     image: redis:7-alpine
@@ -256,9 +260,9 @@ services:
     restart: unless-stopped
     depends_on:
       - webapi
-      - mobiledata
-      - busapi
-      - payment
+      # - mobiledata
+      # - busapi
+      # - payment
 
   grafana:
     image: grafana/grafana:latest
@@ -273,21 +277,21 @@ services:
     depends_on:
       - prometheus  
 
-  postgres-exporter:
-    image: prometheuscommunity/postgres-exporter
-    container_name: youtube.postgres-exporter
-    environment:
-      - DATA_SOURCE_NAME=postgresql://postgres:youtube@db:5432/youtube_db?sslmode=disable
-    ports:
-      - "9187:9187"
-    networks:
-      - youtube_network
-    depends_on:
-      - db
+  # postgres-exporter:
+  #   image: prometheuscommunity/postgres-exporter
+  #   container_name: youtube.postgres-exporter
+  #   environment:
+  #     - DATA_SOURCE_NAME=postgresql://postgres:youtube@db:5432/youtube_db?sslmode=disable # Смотри строку подключения
+  #   ports:
+  #     - "9187:9187"
+  #   networks:
+  #     - youtube_network
+  #   depends_on:
+      # - db
   
 volumes:
   db_data:
-  payment_db_data:
+  # payment_db_data:
   minio_data:
   clickhouse_data:
   grafana_data:

@@ -13,14 +13,14 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
 {
     private readonly UserManager<Domain.Entities.User> _userManager;
     private readonly IUserRepository _userRepository;
-    private readonly IJwtGenerator _jwtGenerator;
+    private readonly IJwtService _jwtService;
     private readonly SignInManager<Domain.Entities.User> _signInManager;
 
-    public LoginHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IJwtGenerator jwtGenerator, SignInManager<Domain.Entities.User> signInManager)
+    public LoginHandler(UserManager<Domain.Entities.User> userManager,IUserRepository userRepository, IJwtService jwtService, SignInManager<Domain.Entities.User> signInManager)
     {
         _userManager = userManager;
         _userRepository = userRepository;
-        _jwtGenerator = jwtGenerator;
+        _jwtService = jwtService;
         _signInManager = signInManager;
     }
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -41,8 +41,15 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
 
         await _signInManager.SignInAsync(user, false);
 
-        var jwtToken = await _jwtGenerator.GenerateToken(user); 
+        var jwtToken = await _jwtService.GenerateAccessToken(user);
+        var refreshToken = await _jwtService.GenerateRefreshToken(user, cancellationToken);
 
-        return new AuthResponse { IsSuccessfully = true, Token = jwtToken, UserId = user.Id };
+        return new AuthResponse 
+        { 
+            IsSuccessfully = true, 
+            Token = jwtToken, 
+            RefreshToken = refreshToken.Token,
+            UserId = user.Id
+        };
     }
 }

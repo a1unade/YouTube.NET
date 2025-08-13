@@ -16,4 +16,9 @@ public class AuthResponse : BaseResponse
     /// Jwt токен
     /// </summary>
     public string Token { get; set; } = null!;
+    
+    /// <summary>
+    /// Рефреш токен
+    /// </summary>
+    public string RefreshToken { get; set; } = null!;
 }

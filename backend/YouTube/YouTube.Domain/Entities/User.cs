@@ -46,4 +46,9 @@ public class User : IdentityUser<Guid>
     /// История чатов
     /// </summary>
     public ChatHistory ChatHistory { get; set; } = default!;
+
+    /// <summary>
+    /// Рефреш токены пользователя
+    /// </summary>
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
 }

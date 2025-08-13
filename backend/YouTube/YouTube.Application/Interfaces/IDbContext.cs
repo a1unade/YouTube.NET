@@ -87,6 +87,8 @@ public interface IDbContext
     /// </summary>
     public DbSet<Link> Links { get; set; }
     
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    
     /// <summary>
     /// Начать транзакцию
     /// </summary>

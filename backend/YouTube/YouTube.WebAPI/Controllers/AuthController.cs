@@ -4,6 +4,7 @@ using YouTube.Application.Common.Requests.Auth;
 using YouTube.Application.Features.Auth.Authorization;
 using YouTube.Application.Features.Auth.Login;
 using YouTube.Application.Features.Auth.Logout;
+using YouTube.Application.Features.Auth.RefreshToken;
 
 namespace YouTube.WebAPI.Controllers;
 
@@ -62,6 +63,17 @@ public class AuthController : ControllerBase
         }
 
         return NotFound(result);
+    }
+
+    [HttpPost("RefreshToken")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RefreshTokenCommand(request), cancellationToken);
+        
+        if(response.IsSuccessfully)
+            return Ok(response);
+        
+        return BadRequest(response);
     }
     
     /// <summary>
