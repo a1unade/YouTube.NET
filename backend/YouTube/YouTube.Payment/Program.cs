@@ -18,8 +18,8 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddGrpc();
 builder.Services.AddPaymentDbContext();
-builder.Services.AddLogging(configure => configure.AddConsole());
-builder.Services.AddPrometheus(builder.Configuration);
+//builder.Services.AddLogging(configure => configure.AddConsole());
+//builder.Services.AddPrometheus(builder.Configuration);
 
 var app = builder.Build();
 
@@ -43,6 +43,6 @@ catch (Exception ex)
 
 app.UseRouting();
 app.MapGrpcService<PaymentGrpcService>();
-app.UseHttpMetrics(); 
-app.MapMetrics(); 
+//app.UseHttpMetrics(); 
+//app.MapMetrics(); 
 app.Run();

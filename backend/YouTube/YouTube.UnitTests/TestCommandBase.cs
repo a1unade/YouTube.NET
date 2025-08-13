@@ -33,7 +33,7 @@ public class TestCommandBase : IDisposable
     
     protected Mock<IEmailService> EmailService { get; }
     
-    protected Mock<IJwtGenerator> JwtGenerator { get; }
+    protected Mock<IJwtService> JwtGenerator { get; }
     
     protected Mock<IUserRepository> UserRepository { get; }
     
@@ -80,8 +80,8 @@ public class TestCommandBase : IDisposable
             .Returns("123456");
 
         // Мок JwtGenerator
-        JwtGenerator = new Mock<IJwtGenerator>();
-        JwtGenerator.Setup(x => x.GenerateToken(It.IsAny<User>()))
+        JwtGenerator = new Mock<IJwtService>();
+        JwtGenerator.Setup(x => x.GenerateAccessToken(It.IsAny<User>()))
             .ReturnsAsync("123");
 
         // Мок сервисов 

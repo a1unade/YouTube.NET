@@ -23,7 +23,7 @@ public static class ServiceCollectionExtensions
         services
             .AddTransient<IMediator, Mediator>()
             .AddScoped<IEmailService, EmailService>()
-            .AddScoped<IJwtGenerator, JwtGenerator>()
+            .AddScoped<IJwtService, JwtService>()
             .AddScoped<IPlaylistService, PlaylistService>()
             .AddScoped<IChatService, ChatService>()
             .AddScoped<IFileService, FileService>()

@@ -19,7 +19,7 @@ using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.AddSerilog();
+//builder.Host.AddSerilog();
 
 builder.WebHost.ConfigureKestrel();
 
