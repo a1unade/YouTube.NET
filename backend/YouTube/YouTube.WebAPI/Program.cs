@@ -8,7 +8,9 @@ using YouTube.Infrastructure.Hubs;
 using YouTube.Infrastructure.Services;
 using YouTube.Persistence.Extensions;
 using YouTube.Persistence.MigrationTools;
+using YouTube.Shared.Configurations.Auth;
 using YouTube.Shared.Configurations.Cors;
+using YouTube.Shared.Configurations.Hangfire;
 using YouTube.Shared.Configurations.Kestrel;
 using YouTube.Shared.Configurations.RateLimit;
 using YouTube.Shared.Configurations.Redis;
@@ -19,7 +21,7 @@ using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Host.AddSerilog();
+builder.Host.AddSerilog();
 
 builder.WebHost.ConfigureKestrel();
 
@@ -34,10 +36,11 @@ builder.Services.AddS3Storage(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
 
-builder.Services.AddHostedService<RedisCleanupBackgroundService>();
+builder.Services.AddAuth(builder.Configuration);
 
-builder.Services.AddPrometheus(builder.Configuration);
+//builder.Services.AddPrometheus(builder.Configuration);
 
+builder.Services.AddHangfire(builder.Configuration);
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -71,8 +74,10 @@ app.MapGrpcService<GrpcChatService>();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpMetrics(); 
-app.MapMetrics(); 
+app.RegisterHangfireJobs();
+
+//app.UseHttpMetrics(); 
+//app.MapMetrics(); 
 
 app.MapControllers();
 
