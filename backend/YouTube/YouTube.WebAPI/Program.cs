@@ -1,5 +1,6 @@
 using System.Reflection;
 using AspNetCoreRateLimit;
+using Hangfire;
 using Prometheus;
 using YouTube.Application.Extensions;
 using YouTube.Data.S3.Extensions;
@@ -15,12 +16,10 @@ using YouTube.Shared.Configurations.Kestrel;
 using YouTube.Shared.Configurations.RateLimit;
 using YouTube.Shared.Configurations.Redis;
 using YouTube.Shared.Configurations.Serilog;
-using YouTube.Shared.Configurations.Telemetry;
 using YouTube.WebAPI.Configurations;
-using YouTube.WebAPI.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.ClearProviders();
 builder.Host.AddSerilog();
 
 builder.WebHost.ConfigureKestrel();
@@ -74,13 +73,13 @@ app.MapGrpcService<GrpcChatService>();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.RegisterHangfireJobs();
+app.RegisterHangfireJobs(builder.Configuration);
 
 //app.UseHttpMetrics(); 
 //app.MapMetrics(); 
 
 app.MapControllers();
-
+app.UseHangfireDashboard();
 app.UseIpRateLimiting();
 
 app.Run();

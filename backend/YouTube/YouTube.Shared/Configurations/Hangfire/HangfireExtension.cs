@@ -1,5 +1,4 @@
 ﻿using Hangfire;
-using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +22,7 @@ public static class HangfireExtension
                     SchemaName = "hangfire",
                     PrepareSchemaIfNecessary = true,
                     QueuePollInterval = TimeSpan.FromSeconds(30),
-                    InvisibilityTimeout = TimeSpan.FromHours(1),
+                    InvisibilityTimeout = TimeSpan.FromHours(1)
                 }));
         
         services.AddHangfireServer(options =>
@@ -34,16 +33,21 @@ public static class HangfireExtension
         });
     }
 
-    public static void RegisterHangfireJobs(this IApplicationBuilder app)
+    public static void RegisterHangfireJobs(this IApplicationBuilder app, IConfiguration configuration)
     {
-        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        app.UseHangfireDashboard(configuration["Hangfire:DashboardPath"], new DashboardOptions
         {
-            DashboardTitle = "YouTube Hangfire Dashboard",
-            Authorization = [new LocalRequestsOnlyAuthorizationFilter()]
+            DashboardTitle = configuration["Hangfire:DashboardTitle"]
         });     
         
         RecurringJob.AddOrUpdate<RedisCleanupJob>(
-            "redis-cleanup-job",
+            nameof(RedisCleanupJob),
+            job => job.ExecuteAsync(),
+            Cron.Daily,
+            TimeZoneInfo.Local);
+        
+        RecurringJob.AddOrUpdate<RefreshTokenCleanupJob>(
+            nameof(RefreshTokenCleanupJob),
             job => job.ExecuteAsync(),
             Cron.Daily,
             TimeZoneInfo.Local);

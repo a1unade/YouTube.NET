@@ -8,32 +8,21 @@ using YouTube.Application.Interfaces;
 
 namespace YouTube.Shared.Configurations.Hangfire.Jobs;
 
-public class RedisCleanupJob
+public class RedisCleanupJob(
+    IDbContext context,
+    IDistributedCache distributedCache,
+    IConfiguration configuration,
+    ILogger<RedisCleanupJob> logger) 
+    : IWorker
 {
-    private readonly string _redisConnectionString;
-    private readonly IDbContext _context;
-    private readonly IDistributedCache _distributedCache;
-    private readonly ILogger<RedisCleanupJob> _logger;
-
-    public RedisCleanupJob(
-        IDbContext context,
-        IDistributedCache distributedCache,
-        IConfiguration configuration,
-        ILogger<RedisCleanupJob> logger)
-    {
-        _redisConnectionString = configuration.GetConnectionString("Redis")!;
-        _context = context;
-        _distributedCache = distributedCache;
-        _logger = logger;
-    }
+    private readonly string _redisConnectionString = configuration.GetConnectionString("Redis")!;
 
     [AutomaticRetry(Attempts = 3)]
     [JobDisplayName("Redis Cleanup Job")]
     public async Task ExecuteAsync()
     {
-
         var redisKeys = await GetAllRedisKeysAsync();
-        _logger.LogInformation("Found {Count} keys in Redis", redisKeys.Count);
+        logger.LogInformation("Found {Count} keys in Redis", redisKeys.Count);
 
         var redisFileIds = redisKeys
             .Select(x => x.Replace("file:", ""))
@@ -41,9 +30,10 @@ public class RedisCleanupJob
             .Select(Guid.Parse)
             .ToList();
 
-        if (!redisFileIds.Any()) return;
+        if (!redisFileIds.Any()) 
+            return;
 
-        var existingFileIds = await _context.Files
+        var existingFileIds = await context.Files
             .Where(x => redisFileIds.Contains(x.Id))
             .Select(x => x.Id)
             .ToListAsync();
@@ -53,8 +43,8 @@ public class RedisCleanupJob
         foreach (var fileId in fileIdsToRemove)
         {
             var key = $"file:{fileId}";
-            await _distributedCache.RemoveAsync(key);
-            _logger.LogInformation("Removed Redis key {Key} for missing file {FileId}", key, fileId);
+            await distributedCache.RemoveAsync(key);
+            logger.LogInformation("Removed Redis key {Key} for missing file {FileId}", key, fileId);
         }
     }
 
